@@ -1,0 +1,20 @@
+{% extends "zr/base.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% block navbar %} {% endblock %}
+
+{% block content %}
+
+    <h1>Zdecydujmy razem</h1>
+    <p>Kilka słów o nas</p>
+
+<div class="jumbotron">
+  <div class="container">
+      {% include 'zr/login_form.html' %}
+  </div>
+</div>
+
+
+
+{% endblock %}

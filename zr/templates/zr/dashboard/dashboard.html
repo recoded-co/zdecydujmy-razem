@@ -1,0 +1,20 @@
+{% extends "zr/base.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% block content %}
+
+
+<div class="row">
+  <div class="col-xs-12 col-sm-6 col-md-8">{% trans "Mapa" %}</div>
+  <div class="col-xs-6 col-sm-6 col-md-4">{% trans "Dyskusja" %}</div>
+</div>
+<div class="row">
+  <div class="col-xs-12 col-sm-6 col-md-8">
+        {% include "zr/dashboard/map.html" %}
+  </div>
+  <div class="col-xs-6 col-sm-6 col-md-4">
+      <p>Tutaj będzie czat</p>
+  </div>
+</div>
+{% endblock %}

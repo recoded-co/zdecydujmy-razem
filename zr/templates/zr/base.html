@@ -1,0 +1,55 @@
+{% load i18n %}
+{% load url from future %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans 'Zdecydujmy razem' %}</title>
+    <meta name="description" content="">
+    <meta name="author" content="Dariusz Walczak (darek@recoded.co)">
+    <meta name="author" content="Marcin Radon (marcin.radon@recoded.co)">
+
+    {% block extra_head %}{% endblock %}
+
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link href="/static/css/navbar.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	   <script src="../../assets/js/html5shiv.js"></script>
+	   <script src="../../assets/js/respond.min.js"></script>
+	<![endif]-->
+
+
+    {% block extra_css %}   {% endblock %}
+
+</head>
+
+<body onload="init()">
+	<div class="container">
+
+        {% block navbar %}
+            {% include "zr/navbar.html" %}
+        {% endblock %}
+
+        {% block content %} {% endblock %}
+	
+	    <hr>
+
+        {% block footer %}
+	        <footer>
+                <p>{% trans 'Projek finansowany z ....' %}</p>
+            </footer>
+	    {% endblock %}
+
+	</div>
+	
+ 	<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    
+    {% block extrajs %} {% endblock %}
+
+</body>
+</html>

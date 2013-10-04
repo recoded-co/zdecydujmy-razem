@@ -1,0 +1,46 @@
+{% extends "zr/base.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% block navbar %} {% endblock %}
+
+{% block content %}
+
+    <h1>Zdecydujmy razem</h1>
+    <p>Kilka słów o nas</p>
+
+<div class="jumbotron">
+  <div class="container">
+      <form class="form-signin" method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+            {% if form.errors %}
+                <p>{% trans "Login lub hasło jest niepoprawne." %}</p>
+            {% endif %}
+            <div class="row">
+                <div class="col-xs-6 col-md-6">
+                    <div class="form-group">
+                        <label for="id_{{ form.username.name }}">{% trans "Login lub adres email" %}</label>
+                        <input id="id_{{ form.username.name }}" placeholder="{{ form.username.label }}" maxlength="254" name="{{ form.username.name }}" type="text" class="form-control" autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_{{ form.password1.name }}">{% trans 'Hasło' %}</label>
+                        <input id="id_{{ form.password1.name }}" placeholder="{{ form.password1.label }}" maxlength="254" name="{{ form.password1.name }}" type="password" class="form-control" >
+                    </div>
+                    <div class="form-group">
+                        <label for="id_{{ form.password2.name }}">{% trans 'Potwierdź hasło' %}</label>
+                        <input id="id_{{ form.password2.name }}" placeholder="{{ form.password2.label }}" maxlength="254" name="{{ form.password2.name }}" type="password" class="form-control" >
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-6">
+                </div>
+            </div>
+            <input type="hidden" name="next" value="{{ next }}" />
+            <button type="submit" class="btn  btn-success">{% trans 'Zarejestruj' %}</button>
+            <hr />
+        </form>
+  </div>
+</div>
+
+{% endblock %}
+
+
