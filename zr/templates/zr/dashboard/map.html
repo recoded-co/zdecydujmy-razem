@@ -40,6 +40,11 @@
         map = new OpenLayers.Map('map', {
             projection: 'EPSG:3857',
             layers: [
+                new OpenLayers.Layer.OSM('OSM-mapquest',
+                    ["http://otile1.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.jpg",
+                     "http://otile2.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.jpg",
+                     "http://otile3.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.jpg",
+                     "http://otile4.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.jpg"]),
                 new OpenLayers.Layer.Google(
                     "Google Physical",
                     {type: google.maps.MapTypeId.TERRAIN}
@@ -61,10 +66,20 @@
                 // Google.v3 uses web mercator as projection, so we have to
                 // transform our coordinates
                 .transform('EPSG:4326', 'EPSG:3857'),
-            zoom: 12
+            zoom: 12,
+            controls: [ new OpenLayers.Control.Navigation(),
+                        new OpenLayers.Control.Attribution(),
+                        new OpenLayers.Control.PanZoomBar() ]
         });
         map.addControl(new OpenLayers.Control.LayerSwitcher());
-        map.addControl(new OpenLayers.Control.PanZoomBar());
+        //map.addControl(new OpenLayers.Control.PanZoomBar());
+
+
+
+        //mapOptions.controls.push(new OpenLayers.Control.LayerSwitcher());
+
+
+
 
         var element = document.getElementById("OpenLayers_Control_Zoom_13");
         element.style.visibility='hidden';
