@@ -62,7 +62,7 @@ MIDDLEWARE_CLASSES = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
-    'django-social-auth.social_auth.context_processors.social_auth_by_type_backends',
+    'social_auth.context_processors.social_auth_by_type_backends',
 )
 
 ROOT_URLCONF = 'zdecydujmyrazem.urls'
@@ -85,7 +85,7 @@ INSTALLED_APPS = (
     # Recoded - additional modules
     'bootstrap_toolkit',
     'floppyforms',
-    'django-social-auth.social_auth',
+    'social_auth',
     # Made by Recoded:
     'zr',
 )
