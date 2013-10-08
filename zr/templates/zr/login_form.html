@@ -16,7 +16,9 @@
                 <input id="id_{{ form.password.name }}" placeholder="{{ form.password.label }}" maxlength="254" name="{{ form.password.name }}" type="password" class="form-control" >
             </div>
             <input type="hidden" name="next" value="{{ next }}" />
-            <button type="submit" class="btn  btn-success">{% trans 'Zaloguj' %}</button>
+
+            <button name="zaloguj" type="submit" class="btn  btn-success">{% trans 'Zaloguj' %}</button>
+            <a href="{% url   'forgot_password1' %}">{% trans 'zapomniałem hasła' %}</a>
         </div>
         <div class="col-xs-6 col-md-6">
             <br>
@@ -27,8 +29,8 @@
             <a class="btn btn-warning btn-block" href="{% url 'register' %}">{% trans 'Zarejestruj się' %}</a>
 
             <a class="btn btn-warning btn-block" href="/zr/dashboard">{% trans 'Anonimowy użytkownik' %}</a>
+
         </div>
-    </div>
 
     <hr />
 </form>
