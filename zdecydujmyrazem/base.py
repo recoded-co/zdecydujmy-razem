@@ -86,6 +86,7 @@ INSTALLED_APPS = (
     'bootstrap_toolkit',
     'floppyforms',
     'social_auth',
+    'registration',
     # Made by Recoded:
     'zr',
 )

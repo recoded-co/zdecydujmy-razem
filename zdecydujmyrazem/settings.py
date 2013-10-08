@@ -54,4 +54,10 @@ GOOGLE_OAUTH2_CLIENT_SECRET  = '8t62189JvWZhZs7cm6snrpAd'
 FACEBOOK_APP_ID              = '623947990960027'
 FACEBOOK_API_SECRET          = '6744498d9d894e1f0b8b1d6fff65cf1e'
 
+#TODO: skonfigurować server pocztowy.
+EMAIL_HOST = ''#'smtp.gmail.com'
+EMAIL_PORT = 0#465
+EMAIL_USE_TLS = True
 
+EMAIL_HOST_USER = ''#'my@gmail.com'
+EMAIL_HOST_PASSWORD = ''#'my_emails_password'
