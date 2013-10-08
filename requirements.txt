@@ -2,5 +2,8 @@ django-social-auth==0.7.28
 django-floppyforms==1.1
 python-openid==2.2.5
 oauth2==1.5.211
-django-registration>=0.0
+django-registration
 django-bootstrap-toolkit>=2.15.0
+djangorestframework>=2.3.8
+markdown>=2.3.1
+django-filter>=0.7
