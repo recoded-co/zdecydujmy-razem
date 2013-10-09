@@ -36,7 +36,7 @@ class UserCreationPageView(TemplateView):
             user = User.objects.create_user(form.clean_username(), '', password=form.clean_password2())
             user.save()
             return HttpResponseRedirect(reverse('django.contrib.auth.views.login'))
-        return render_to_response('zr/registration.html', {'form': form }, context_instance=RequestContext(request))
+        return render_to_response('zr/registration.html', { 'form': form }, context_instance=RequestContext(request))
 
 
 class DashboardView(View):
