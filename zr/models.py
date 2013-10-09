@@ -1,5 +1,7 @@
 from django.contrib.gis.db import models
 from django.utils.translation import ugettext as _
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.contrib.auth.models import User
 
 
@@ -43,3 +45,10 @@ class Rate(models.Model):
     user = models.ForeignKey(User)
     like = models.NullBooleanField(null=True, blank=True)
     rate = models.IntegerField(null=True, blank=True)
+
+
+@receiver(post_save, sender=User)
+def email_updater(sender, instance, created, **kwargs):
+    if created:
+        instance.email = instance.username
+        instance.save()

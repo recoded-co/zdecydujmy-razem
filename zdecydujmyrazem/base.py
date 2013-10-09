@@ -86,6 +86,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'social_auth',
     'registration',
+    #'django_extensions',
     # Made by Recoded:
     'zr',
 )
