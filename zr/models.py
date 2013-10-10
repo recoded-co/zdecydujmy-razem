@@ -47,8 +47,8 @@ class Rate(models.Model):
     rate = models.IntegerField(null=True, blank=True)
 
 
-@receiver(post_save, sender=User)
-def email_updater(sender, instance, created, **kwargs):
-    if created:
-        instance.email = instance.username
-        instance.save()
+#@receiver(post_save, sender=User)
+#def email_updater(sender, instance, created, **kwargs):
+#    if created:
+#        instance.email = instance.username
+#        instance.save()
