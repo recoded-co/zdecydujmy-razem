@@ -50,7 +50,7 @@ class Post(models.Model):
 
     def has_likes(self):
         rates = self.rates.all()
-        like_sum = sum([1 if x.like else 0 for x in rates])
+        like_sum = sum([x.rate if x.like else -(x.rate) for x in rates])
         return like_sum
 
 

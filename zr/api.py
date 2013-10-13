@@ -30,10 +30,10 @@ class RateSerializer(ModelSerializer):
 
 class PostSerializer(ModelSerializer):
     rate = serializers.Field(source='has_rate')
-    likes = serializers.Field(source='has_likes')
+    score = serializers.Field(source='has_likes')
     class Meta:
         model = Post
-        fields = ('author', 'parent', 'plan', 'content', 'rate', 'likes')
+        fields = ('id','author', 'parent', 'plan', 'content', 'rate', 'score')
 
 
 
