@@ -2,6 +2,9 @@ from rest_framework import viewsets, routers
 from rest_framework.serializers import ModelSerializer
 from rest_framework import filters
 from rest_framework import generics
+from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer, Serializer
+
 from zr.models import Plan, Configuration, Geometry, Subjects, Post, Rate
 
 class PlanViewSet(viewsets.ModelViewSet):
@@ -19,19 +22,29 @@ class GeometryViewSet(viewsets.ModelViewSet):
 class SubjectsViewSet(viewsets.ModelViewSet):
     model = Subjects
 
+
 class RateSerializer(ModelSerializer):
     class Meta:
         model = Rate
 
+
 class PostSerializer(ModelSerializer):
-    rate = RateSerializer(many=True)
+    rate = serializers.Field(source='has_rate')
+    likes = serializers.Field(source='has_likes')
     class Meta:
         model = Post
+        fields = ('author', 'parent', 'plan', 'content', 'rate', 'likes')
+
 
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+class RateSerializer(ModelSerializer):
+    class Meta:
+        model = Rate
+
 
 class RateViewSet(viewsets.ModelViewSet):
     queryset = Rate.objects.all()

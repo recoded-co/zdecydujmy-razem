@@ -1,10 +1,11 @@
 from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
-from zr.views import HomePageView, DashboardView, UserCreationPageView
+from zr.views import HomePageView, DashboardView, UserCreationPageView #, TestView
 from zr.api import router
 from zr.api import RateListView, PostsListView
 
 urlpatterns = patterns('gxmaps.views',
+    #url(r'^test', TestView.as_view(), name="home"),
     url(r'^dashboard', DashboardView.as_view(), name="home"),
     url(r'^usercreate$', UserCreationPageView.as_view(), name="register"),
     # api

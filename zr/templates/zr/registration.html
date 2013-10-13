@@ -6,28 +6,38 @@
 
 {% block content %}
 
-    <h1>Zdecydujmy razem</h1>
-    <p>Kilka słów o nas</p>
-
 <div class="jumbotron">
   <div class="container">
       <form class="form-signin" method="post" action="{% url 'register' %}">
         {% csrf_token %}
-            {% if form.errors %}
-                <p>{% trans "Adres email lub hasło jest niepoprawne." %}</p>
-            {% endif %}
             <div class="row">
                 <div class="col-xs-6 col-md-6">
                     <div class="form-group">
-                        <label for="id_{{ form.username.name }}">{% trans "Adres email" %}</label>
+                        <label for="id_{{ form.username.name }}">{% trans "Nazwa użytkownika" %}</label>
+                        <div style="color: red">{{ form.username.errors }}</div>
                         <input id="id_{{ form.username.name }}" placeholder="{{ form.username.label }}" maxlength="254" name="{{ form.username.name }}" type="text" class="form-control" autofocus>
                     </div>
                     <div class="form-group">
+                        <label for="id_{{ form.email.name }}">{% trans "Adres email" %}</label>
+                        <div style="color: red">{{ form.email.errors }}</div>
+                        <input id="id_{{ form.email.name }}" placeholder="{{ form.email.label }}" maxlength="254" name="{{ form.email.name }}" type="text" class="form-control" autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_{{ form.firstname.name }}">{% trans "Imię" %}</label>
+                        <input id="id_{{ form.firstname.name }}" placeholder="{{ form.firstname.label }}" maxlength="254" name="{{ form.firstname.name }}" type="text" class="form-control" autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_{{ form.lastname.name }}">{% trans "Nazwisko" %}</label>
+                        <input id="id_{{ form.lastname.name }}" placeholder="{{ form.lastname.label }}" maxlength="254" name="{{ form.lastname.name }}" type="text" class="form-control" autofocus>
+                    </div>
+                    <div class="form-group">
                         <label for="id_{{ form.password1.name }}">{% trans 'Hasło' %}</label>
+                        <div style="color: red">{{ form.password1.errors }}</div>
                         <input id="id_{{ form.password1.name }}" placeholder="{{ form.password1.label }}" maxlength="254" name="{{ form.password1.name }}" type="password" class="form-control" >
                     </div>
                     <div class="form-group">
                         <label for="id_{{ form.password2.name }}">{% trans 'Potwierdź hasło' %}</label>
+                        <div style="color: red">{{ form.password2.errors }}</div>
                         <input id="id_{{ form.password2.name }}" placeholder="{{ form.password2.label }}" maxlength="254" name="{{ form.password2.name }}" type="password" class="form-control" >
                     </div>
                 </div>
