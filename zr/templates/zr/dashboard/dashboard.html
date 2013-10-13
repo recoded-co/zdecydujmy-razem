@@ -20,33 +20,37 @@
   </div>
   <div class="col-xs-6 col-sm-6 col-md-4" ng-app="zd">
       <p>Tutaj jest czat</p>
-      <div ng-controller="apiList">
-          <div>
-             configurations:  {[{configurations|json}]}
-             rates:   {[{rates |json}]}
-             subjects:   {[{ subjects |json }]}
-             posts:   {[{ posts |json }]}
-             geometries:   {[{ geometries |json }]}
-             plans:   {[{ plans |json }]}
+      <div ng-controller="apiList" >
+          <button  ng-click="showAll()">{% trans 'Rozwiń wszystkie' %}</button>
+          <!--<button  ng-click="addVertical()">{% trans 'Dodaj nowy wątek' %}</button>-->
+          <div ng-init="user='{{ user }}'"></div>
+          <div class="media" ng-repeat="post in tree | filter:{parent:null} " class="media-list" ng-include="'tree_item_renderer.html'">
+
           </div>
-          <div ng-init="friends = [
-              {name:'John', age:25, gender:'boy'},
-              {name:'Jessie', age:30, gender:'girl'},
-              {name:'Johanna', age:28, gender:'girl'},
-              {name:'Joy', age:15, gender:'girl'},
-              {name:'Mary', age:28, gender:'girl'},
-              {name:'Peter', age:95, gender:'boy'},
-              {name:'Sebastian', age:50, gender:'boy'},
-              {name:'Erika', age:27, gender:'girl'},
-              {name:'Patrick', age:40, gender:'boy'},
-              {name:'Samantha', age:60, gender:'girl'}
-            ]">
-          <div ng-repeat="zmienna in friends | more:'age':25">
-                    {[{zmienna}]}
-          </div>
+
+            <script type="text/ng-template"  id="tree_item_renderer.html">
+
+                    <div class="media-body"  style="margin-left: 20px;">
+                     <!-- id:{[{ post.id }]}--parent:{[{ post.parent }]} rozwin:{[{ post.rozwin }]}  wszystkie {[{ showallposts }]} user: {[{ user  }]} -->
+                      <p ng-click="comment(post)">{[{ post.content }]}</p>
+                        <button ng-hide="post.nodes.length==0" ng-click="showOneDown(post)">{% trans 'Rozwiń' %}</button>
+                         <button ng-hide="'{{ user }}'=='AnonymousUser'" ng-click="scoreUp(post)"> <span  class="glyphicon glyphicon-thumbs-up"></span></button>
+                         <button ng-hide="'{{ user }}'=='AnonymousUser'" ng-click="scoreDown(post)"> <span ng-click="scoreDown(post)" class="glyphicon glyphicon-thumbs-down"></span></button>{[{ post.score || 0 }]}
+
+                            <textarea ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)" ng-model="post.text" class="form-control" rows="3"></textarea>
+                            <input type="hidden" ng-model="post.plan" value="">
+
+                            <button ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)" ng-click="addDown(post)">{% trans 'Komentarz do wypowiedzi' %}</button>
+                            <button ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)" ng-click="delete(post)">{% trans 'Kasuj' %}</button>
+                            <div ng-hide="!(post.rozwin!=undefined && post.rozwin==true )&& showallposts" >
+                                <div class="media" ng-repeat="post in post.nodes "   ng-include="'tree_item_renderer.html'">
+                                </div>
+                            </div>
+                    </div>
+            </script>
+
 
       </div>
-
   </div>
 </div>
 {% endblock %}
