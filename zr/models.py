@@ -39,9 +39,24 @@ class Post(models.Model):
     plan = models.ForeignKey(Plan, related_name='posts')
     content = models.TextField()
 
+    def has_rate(self):
+        rates = self.rates.all()
+        count = len(rates)
+        if count > 0:
+            rate_sum = sum([x.rate if x.rate else 0 for x in rates])
+            return rate_sum/count
+        else:
+            return 0
+
+    def has_likes(self):
+        rates = self.rates.all()
+        like_sum = sum([1 if x.like else 0 for x in rates])
+        return like_sum
+
+
 
 class Rate(models.Model):
-    post = models.ForeignKey(Post)
+    post = models.ForeignKey(Post, related_name='rates')
     user = models.ForeignKey(User)
     like = models.NullBooleanField(null=True, blank=True)
     rate = models.IntegerField(null=True, blank=True)
