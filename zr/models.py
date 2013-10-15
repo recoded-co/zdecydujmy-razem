@@ -3,12 +3,23 @@ from django.utils.translation import ugettext as _
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
+from django.contrib.gis.geos import WKTWriter
 
 
 class Geometry(models.Model):
     name = models.CharField(max_length=50)
-    poly = models.PolygonField()
+    poly = models.PolygonField(null=True, blank=True)
+    point= models.PointField(null=True, blank=True)
     objects = models.GeoManager()
+
+    def geoElement(self):
+        wkt = WKTWriter()
+        if(self.poly):
+            return wkt.write(self.poly)
+        elif(self.point):
+            return wkt.write(self.point)
+        else:
+            return None
 
 
 class Plan(models.Model):
@@ -38,6 +49,7 @@ class Post(models.Model):
     parent = models.ForeignKey('self', null=True, blank=True, related_name='comments')
     plan = models.ForeignKey(Plan, related_name='posts')
     content = models.TextField()
+    geometry = models.ForeignKey(Geometry, null=True, blank=True)
 
     def has_rate(self):
         rates = self.rates.all()
@@ -52,6 +64,9 @@ class Post(models.Model):
         rates = self.rates.all()
         like_sum = sum([x.rate if x.like else -(x.rate) for x in rates])
         return like_sum
+
+    def author_name(self):
+        return self.author.username;
 
 
 

@@ -14,7 +14,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
     //$scope.subjects = zdServicesFactory.subjects.json();
     jsonToNestedCollection(zdServicesFactory.posts.json(),function(data){
         $scope.tree = data;
-        window.data = data;
     });
     $scope.showallposts = true;
 
@@ -29,7 +28,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
         sendCSRFPost('/zr/api/rates/',$http,$cookies,temp);
     }
     $scope.scoreDown = function(data){
-        console.log('ddddddddddd');
         data.score = data.score - 1;
         var temp = {
             post: data.id,
@@ -58,8 +56,9 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
                 nodes: [],
                 zmiennac:false
             }
-            sendTempToServer(temp,$http,$cookies);
-            data.nodes.unshift(temp);
+            sendTempToServer(temp,$http,$cookies,function(temp){
+                data.nodes.unshift(temp);
+            });
             data.text = "";
             data.zmiennac=false;
     };
@@ -91,8 +90,9 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
             nodes: [],
             zmiennac:false
         }
-        sendTempToServer(temp,$http,$cookies);
-        data.nodes.push(temp);
+        sendTempToServer(temp,$http,$cookies,function(temp){
+                data.nodes.unshift(temp);
+            });
         data.text = "";
         data.zmiennac=false;
     };
@@ -102,7 +102,24 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
         if(userLogedOn($scope.user)){
             data.zmiennac = true;
         }
-    }
+    };
+
+    //method from outside usage
+    $scope.pushCommentIntoScope = function(temp_data,temp_comment){
+          var temp = {
+            author: configuration.getAuthor(),
+            parent: null,
+            plan: configuration.getPlanId(),
+            content: temp_comment,
+            nodes: [],
+            zmiennac:false
+        }
+        sendTempToServer(temp,$http,$cookies,function(temp){
+                $scope.tree.push(temp);
+            });
+          //$scope.tree.$apply();
+          // 606795162
+    };
   }]);
 
 function sendCSRFPost(url,$http,$cookies,data){
@@ -128,25 +145,24 @@ function sendRateToServer($http,$cookies,data){
                 console.log('Error ' + status);
             });
 }
-function sendTempToServer(data,$http,$cookies){
+function sendTempToServer(data,$http,$cookies,callback){
     var thisdata = data;
     $http.defaults.headers.post['X-CSRFToken'] = $cookies['csrftoken'];
     $http.post('/zr/api/posts/',data).
         success(function (data, status, headers, config) {
+                callback(data);
                 thisdata = data;
             }).
         error(function (data, status, headers, config) {
                 console.log('Error ' + status);
             });
 }
-
 var userLogedOn = function(user){
     if(user == "AnonymousUser"){
         return false;
     }
     return true;
 }
-
 var jsonToNestedCollection = function(jsonCollection, callback){
     jsonCollection.$promise.then(function(j){
         var all = {};
@@ -167,5 +183,4 @@ var jsonToNestedCollection = function(jsonCollection, callback){
     });
 }
 
-//'configurations','rates','subjects','posts','geometries','plans',
 

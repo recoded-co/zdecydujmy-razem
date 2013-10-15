@@ -14,13 +14,13 @@
   <div class="col-xs-12 col-sm-6 col-md-8">{% trans "Mapa" %}</div>
   <div class="col-xs-6 col-sm-6 col-md-4">{% trans "Dyskusja" %}</div>
 </div>
-<div class="row">
+<div class="row" ng-app="zd">
   <div class="col-xs-12 col-sm-6 col-md-8">
         {% include "zr/dashboard/map.html" %}
   </div>
-  <div class="col-xs-6 col-sm-6 col-md-4" ng-app="zd">
+  <div class="col-xs-6 col-sm-6 col-md-4" >
       <p>Tutaj jest czat</p>
-      <div ng-controller="apiList" >
+      <div id="div_apiList" ng-controller="apiList" >
           <button  ng-click="showAll()">{% trans 'Rozwiń wszystkie' %}</button>
           <!--<button  ng-click="addVertical()">{% trans 'Dodaj nowy wątek' %}</button>-->
           <div ng-init="user='{{ user }}'"></div>
@@ -30,11 +30,13 @@
             <script type="text/ng-template"  id="tree_item_renderer.html">
 
                     <div class="media-body"  style="margin-left: 20px;">
-                     <!-- id:{[{ post.id }]}--parent:{[{ post.parent }]} rozwin:{[{ post.rozwin }]}  wszystkie {[{ showallposts }]} user: {[{ user  }]} -->
+                      <!--id:{[{ post.id }]}--parent:{[{ post.parent }]} rozwin:{[{ post.rozwin }]}  wszystkie {[{ showallposts }]} user: {[{ user  }]}-->
+                      <em>{[{ post.author_name }]} napisał:</em>
                       <p ng-click="comment(post)">{[{ post.content }]}</p>
                         <button ng-hide="post.nodes.length==0" ng-click="showOneDown(post)">{% trans 'Rozwiń' %}</button>
                          <button ng-hide="'{{ user }}'=='AnonymousUser'" ng-click="scoreUp(post)"> <span  class="glyphicon glyphicon-thumbs-up"></span></button>
-                         <button ng-hide="'{{ user }}'=='AnonymousUser'" ng-click="scoreDown(post)"> <span class="glyphicon glyphicon-thumbs-down"></span></button>{[{ post.score || 0 }]}
+                         <button ng-hide="'{{ user }}'=='AnonymousUser'" ng-click="scoreDown(post)"> <span class="glyphicon glyphicon-thumbs-down"></span></button>
+                         {% trans 'ocena' %}: {[{ post.score || 0 }]}
 
                             <textarea ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)" ng-model="post.text" class="form-control" rows="3"></textarea>
                             <input type="hidden" ng-model="post.plan" value="">

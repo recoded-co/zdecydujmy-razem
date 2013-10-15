@@ -59,6 +59,9 @@ class DashboardView(View):
     def get(self, request):
         return render_to_response('zr/dashboard/dashboard.html', {}, context_instance=RequestContext(request))
 
+
+
+
 """
 class TestView(View):
     def get(self, request):

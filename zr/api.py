@@ -14,9 +14,15 @@ class PlanViewSet(viewsets.ModelViewSet):
 class ConfigurationViewSet(viewsets.ModelViewSet):
     model = Configuration
 
+class GeometrySerializer(ModelSerializer):
+    geoelement = serializers.Field(source='geoElement')
+    class Meta:
+        model = Geometry
+        fields = ('id','name', 'geoelement','poly','point')
 
 class GeometryViewSet(viewsets.ModelViewSet):
-    model = Geometry
+    queryset = Geometry.objects.all()
+    serializer_class = GeometrySerializer
 
 
 class SubjectsViewSet(viewsets.ModelViewSet):
@@ -31,9 +37,10 @@ class RateSerializer(ModelSerializer):
 class PostSerializer(ModelSerializer):
     rate = serializers.Field(source='has_rate')
     score = serializers.Field(source='has_likes')
+    author_name = serializers.Field(source='author_name')
     class Meta:
         model = Post
-        fields = ('id','author', 'parent', 'plan', 'content', 'rate', 'score')
+        fields = ('id','author', 'author_name','parent', 'plan', 'content', 'rate', 'score','geometry')
 
 
 
