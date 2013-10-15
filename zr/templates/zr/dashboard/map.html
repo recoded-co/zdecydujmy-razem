@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load isloged %}
 <script src="http://openlayers.org/dev/OpenLayers.js"></script>
 <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <style type="text/css">
@@ -341,6 +342,7 @@
 </script>
 
 <div id="map" class="smallmap"></div>
+{% if user|isloged %}
       <ul id="controlToggle">
         <li>
             <input type="button" name="type" value="Dodaj punkt" id="pointToggle" onclick="toggleControl(this);" />
@@ -349,7 +351,7 @@
             <input type="button" name="type" value="Dodaj poligon" id="polygonToggle" onclick="toggleControl(this);" />
         </li>
     </ul>
-
+{% endif %}
 <!--
 <div id="search_form">
 	<form name="search_form" action="" method="post">
