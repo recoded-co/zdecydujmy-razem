@@ -7,11 +7,8 @@ var zdControllers = angular.module('zdControllers', ['ngCookies']);
 
 zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFactory',
   function($scope,$http,$cookies,zdServicesFactory ) {
-    //$scope.configurations = zdServicesFactory.configurations.json();
-    //$scope.rates = zdServicesFactory.rates.json();
-    //$scope.geometries = zdServicesFactory.geometries.json();
+
     $scope.plans = zdServicesFactory.plans.json();
-    //$scope.subjects = zdServicesFactory.subjects.json();
     jsonToNestedCollection(zdServicesFactory.posts.json(),function(data){
         $scope.tree = data;
     });
@@ -39,9 +36,12 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
       }
 
     $scope.delete = function(data) {
-        data.nodes = [];
         data.text = "";
         data.zmiennac=false;
+        };
+    $scope.deleteBP = function(base_post) {
+        if(base_post)
+            base_post.text = "";
         };
     $scope.addDown = function(data) {
             if (data.nodes !== undefined)
@@ -53,6 +53,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
                 parent: data.id,
                 plan: configuration.getPlanId(),
                 content: data.text,
+                geometry: data.geometry || null,
                 nodes: [],
                 zmiennac:false
             }
@@ -87,11 +88,12 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
             parent: null,
             plan: configuration.getPlanId(),
             content: data.text,
+            geometry: null,
             nodes: [],
             zmiennac:false
         }
         sendTempToServer(temp,$http,$cookies,function(temp){
-                data.nodes.unshift(temp);
+                $scope.tree.push(temp);
             });
         data.text = "";
         data.zmiennac=false;
@@ -106,11 +108,14 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
 
     //method from outside usage
     $scope.pushCommentIntoScope = function(temp_data,temp_comment){
+        console.log('temp_data');
+        window.temp_data = temp_data;
           var temp = {
             author: configuration.getAuthor(),
             parent: null,
             plan: configuration.getPlanId(),
             content: temp_comment,
+            geometry: temp_data.id || null,
             nodes: [],
             zmiennac:false
         }
@@ -118,7 +123,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
                 $scope.tree.push(temp);
             });
           //$scope.tree.$apply();
-          // 606795162
     };
   }]);
 

@@ -1,0 +1,28 @@
+.delpadding{
+    padding: 0px !important;
+}
+
+.dashbord_map{
+    margin: 0px !important;
+    height: 86%;
+}
+
+div#resizible_jquery{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: inherit;
+}
+
+div.tab-content{
+    border: 1px solid #aaaaaa;
+}
+ /*   border-left-style: outset;
+    border-bottom-style: outset;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height:422px;
+}*/
+
+body{
+    overflow: hidden;
+}

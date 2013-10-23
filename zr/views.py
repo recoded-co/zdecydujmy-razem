@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
+from zr.models import Configuration
 
 
 class LoginForm(UserCreationForm):
@@ -56,8 +57,12 @@ class UserCreationPageView(TemplateView):
 
 class DashboardView(View):
 
+
     def get(self, request):
-        return render_to_response('zr/dashboard/dashboard.html', {}, context_instance=RequestContext(request))
+        plan = request.GET.get('plan',1)
+        context = RequestContext(request)
+        context['configuration'] = Configuration.objects.get(plan=plan)
+        return render_to_response('zr/dashboard/dashboard.html', {}, context_instance=context)
 
 
 

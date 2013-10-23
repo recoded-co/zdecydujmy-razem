@@ -2,51 +2,197 @@
 {% load i18n %}
 {% load url from future %}
 
+{% block extra_head %}
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+{% endblock %}
 
-
-{% block onload %} init() {% endblock %}
-
+{% block onload %} map_init();resize();page_init(); {% endblock %}
+{% block onresize %} resize(); {% endblock %}
+{% load isloged %}
 
 {% block content %}
 
+<script type="text/javascript">
+
+var body = document.getElementsByTagName("body")[0];
+var viewportwidth,viewportheight;
+var margin_gap=20;
+
+
+function resize() {
+
+    if (typeof window.innerWidth != 'undefined') {
+        viewportwidth = window.innerWidth,
+        viewportheight = window.innerHeight
+    }
+    else if (typeof document.documentElement != 'undefined' && typeof document.documentElement.clientWidth != 'undefined' && document.documentElement.clientWidth != 0) {
+        viewportwidth = document.documentElement.clientWidth,
+        viewportheight = document.documentElement.clientHeight
+    }
+    else {
+        viewportwidth = document.getElementsByTagName('body')[0].clientWidth,
+        viewportheight = document.getElementsByTagName('body')[0].clientHeight
+    }
+    body.style.width = viewportwidth+"px";
+    body.style.height = viewportheight+"px";
+
+    var post_box = document.getElementById("resizible_jquery");
+    var map_box = document.getElementById("mapsquare");
+    var middle_man = document.getElementById("middleman");
+    var dashbord_map = document.getElementById("row_box");
+
+
+    post_box.style.left = "0px";
+    if( "{{ configuration.side|dirparser }}"=="left"){
+        post_box.style.marginLeft = margin_gap+"px";
+        map_box.style.width = ""+(dashbord_map.offsetWidth - post_box.offsetWidth - margin_gap -1)+"px";
+    } else {
+        post_box.style.marginRight = margin_gap+"px";
+        map_box.style.width = ""+(dashbord_map.offsetWidth - post_box.offsetWidth - margin_gap -1)+"px";
+    }
+
+}
+
+
+function page_init(){
+    var post_box = document.getElementById("resizible_jquery");
+    var map_box = document.getElementById("mapsquare");
+    var absolut_width = parseInt(document.getElementById("row_box").offsetWidth);
+    //post_box.style.minHeight = "{{ configuration.min }}%";
+    //post_box.style.maxHeight = "{{ configuration.max }}%";
+    post_box.style.width = "{{ configuration.default }}%";
+    map_box.style.width = ""+(99 - parseInt("{{ configuration.default }}") - parseInt((margin_gap*100)/absolut_width))+"%";
+}
+
+$(document).ready(function(){
+    var max,min;
+   $('body').resize(function(){
+       var viewportwidth = parseInt($('#row_box').innerWidth()) - margin_gap -1;
+        max =  parseInt((viewportwidth*parseInt("{{ configuration.max }}"))/100);
+        min =  parseInt((viewportwidth*parseInt("{{ configuration.min }}"))/100);
+       $( "#resizible_jquery" ).resizable({
+          maxWidth: max,
+          minWidth: min,
+          handles: 'e, w'
+        });
+   });
+   $( "#resizible_jquery" ).resizable({
+      maxWidth: max,
+      minWidth: min,
+      handles: 'e, w'
+    });
+});
+
+
+</script>
 
 <div class="row" >
-  <div class="col-xs-12 col-sm-6 col-md-8">{% trans "Mapa" %}</div>
-  <div class="col-xs-6 col-sm-6 col-md-4">{% trans "Dyskusja" %}</div>
+  <div class="col-xs-12 col-sm-6 col-md-8" style="float:{{ configuration.side|dirparser }}">{% trans "Mapa" %}</div>
+  <div class="col-xs-6 col-sm-6 col-md-4">{% trans "Dyskusja:" %}</div>
 </div>
-<div class="row" ng-app="zd">
-  <div class="col-xs-12 col-sm-6 col-md-8">
+
+<div id="row_box" class="row dashbord_map" ng-app="zd">
+
+  <div id="mapsquare" class="col-xs-12 col-sm-6 col-md-8 ui-widget-content delpadding" style="float:{{ configuration.side|dirparser }}">
         {% include "zr/dashboard/map.html" %}
   </div>
-  <div class="col-xs-6 col-sm-6 col-md-4" >
-      <p>Tutaj jest czat</p>
+  <div id="middleman"></div>
+  <div id="resizible_jquery" class="col-xs-6 col-sm-6 col-md-4 delpadding">
       <div id="div_apiList" ng-controller="apiList" >
-          <button  ng-click="showAll()">{% trans 'Rozwiń wszystkie' %}</button>
-          <!--<button  ng-click="addVertical()">{% trans 'Dodaj nowy wątek' %}</button>-->
-          <div ng-init="user='{{ user }}'"></div>
-          <div class="media" ng-repeat="post in tree  " class="media-list" ng-include="'tree_item_renderer.html'">
+          <div data-fade="1" bs-tabs>
+
+              <div data-title="Uwagi szczegółowe">
+
+                    <button  ng-click="showAll()">
+                        {% trans 'Rozwiń wszystkie' %}
+                    </button>
+
+                    <div ng-init="user='{{ user }}'"></div>
+                    <div class="media media-list"   ng-repeat="post in tree | filter:{geometry: '!!'} "
+                                                    ng-include="'tree_item_renderer.html'">
+                    </div>
+              </div>
+              <div data-title="Uwagi do całości">
+                    <button  ng-click="showAll()">
+                        {% trans 'Rozwiń wszystkie' %}
+                    </button>
+                    <button  ng-click="addBasePost = true">{% trans 'Dodaj nowy wątek' %}</button>
+                      <div ng-show="addBasePost">
+
+                          <textarea     ng-model="base_post.text"
+                                        class="form-control"
+                                        rows="3">
+                          </textarea>
+
+                          <button   ng-click="addVertical(base_post);addBasePost = false">
+                                {% trans 'Komentarz do wypowiedzi' %}
+                          </button>
+
+                          <button   ng-click="deleteBP(base_post);addBasePost = false">
+                               {% trans 'Kasuj' %}
+                          </button>
+                      </div>
+
+
+                    <div ng-init="user='{{ user }}'"></div>
+                    <div class="media media-list"   ng-repeat="post in tree | filter:{geometry: null} "
+                                                    ng-include="'tree_item_renderer.html'">
+                    </div>
+              </div>
+
+
           </div>
 
             <script type="text/ng-template"  id="tree_item_renderer.html">
 
                     <div class="media-body"  style="margin-left: 20px;">
-                      <!--id:{[{ post.id }]}--parent:{[{ post.parent }]} rozwin:{[{ post.rozwin }]}  wszystkie {[{ showallposts }]} user: {[{ user  }]}-->
+                      <!--geoID:{[{ post.geometry }]}  id:{[{ post.id }]}--parent:{[{ post.parent }]} rozwin:{[{ post.rozwin }]}  wszystkie {[{ showallposts }]} user: {[{ user  }]}
+                        -->
                       <em>{[{ post.author_name }]} napisał:</em>
+
                       <p ng-click="comment(post)">{[{ post.content }]}</p>
-                        <button ng-hide="post.nodes.length==0" ng-click="showOneDown(post)">{% trans 'Rozwiń' %}</button>
-                         <button ng-hide="'{{ user }}'=='AnonymousUser'" ng-click="scoreUp(post)"> <span  class="glyphicon glyphicon-thumbs-up"></span></button>
-                         <button ng-hide="'{{ user }}'=='AnonymousUser'" ng-click="scoreDown(post)"> <span class="glyphicon glyphicon-thumbs-down"></span></button>
-                         {% trans 'ocena' %}: {[{ post.score || 0 }]}
 
-                            <textarea ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)" ng-model="post.text" class="form-control" rows="3"></textarea>
-                            <input type="hidden" ng-model="post.plan" value="">
+                      <button ng-hide="post.nodes.length==0" ng-click="showOneDown(post)">
+                            {% trans 'Rozwiń' %}
+                      </button>
 
-                            <button ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)" ng-click="addDown(post)">{% trans 'Komentarz do wypowiedzi' %}</button>
-                            <button ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)" ng-click="delete(post)">{% trans 'Kasuj' %}</button>
-                            <div ng-hide="!(post.rozwin!=undefined && post.rozwin==true )&& showallposts" >
-                                <div class="media" ng-repeat="post in post.nodes "   ng-include="'tree_item_renderer.html'">
-                                </div>
-                            </div>
+                      <button ng-hide="'{{ user }}'=='AnonymousUser'"
+                              ng-click="scoreUp(post)">
+                        <span  class="glyphicon glyphicon-thumbs-up"></span>
+                      </button>
+
+                      <button   ng-hide="'{{ user }}'=='AnonymousUser'"
+                                ng-click="scoreDown(post)">
+                        <span class="glyphicon glyphicon-thumbs-down"></span>
+                      </button>
+
+                      {% trans 'ocena' %}: {[{ post.score || 0 }]}
+
+                      <textarea     ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
+                                    ng-model="post.text"
+                                    class="form-control"
+                                    rows="3">
+                      </textarea>
+
+                      <input type="hidden" ng-model="post.plan" value="">
+
+                      <button       ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
+                                    ng-click="addDown(post)">
+                        {% trans 'Komentarz do wypowiedzi' %}
+                      </button>
+                      <button       ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
+                                    ng-click="delete(post)">
+                        {% trans 'Kasuj' %}
+                      </button>
+
+                      <div  ng-hide="!(post.rozwin!=undefined && post.rozwin==true )&& showallposts" >
+                          <div class="media"
+                                ng-repeat="post in post.nodes "
+                                ng-include="'tree_item_renderer.html'">
+                          </div>
+                      </div>
                     </div>
             </script>
 

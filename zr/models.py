@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import WKTWriter
+from django.core.exceptions import ValidationError
 
 
 class Geometry(models.Model):
@@ -42,7 +43,17 @@ class Configuration(models.Model):
     )
     plan = models.ForeignKey(Plan, related_name='configuration')
     side = models.CharField(max_length=1, choices=side)
+    max = models.IntegerField()
+    min = models.IntegerField()
+    default = models.IntegerField()
 
+    def clean(self):
+        if self.max > 100 or self.max < 0:
+            raise ValidationError('max value bad range (0,100)')
+        if self.min > 100 or self.min < 0:
+            raise ValidationError('min value bad range (0,100)')
+        if self.max< self.min:
+            raise ValidationError('max value can not be smolest then min value' )
 
 class Post(models.Model):
     author = models.ForeignKey(User, related_name='posts')

@@ -7,9 +7,16 @@ register = Library()
 
 @register.filter(name='isloged')
 def isloged(arg):
-    print '--------'
-    print arg
-    if arg=='AnonymousUser':
-        return True
-    else:
+    if str(arg) == 'AnonymousUser':
         return False
+    else:
+        return True
+
+@register.filter(name='dirparser')
+def dirparser(arg):
+    if str(arg) == 'L':
+        return 'left'
+    elif arg== 'R':
+        return 'right'
+    else:
+        return 'left'

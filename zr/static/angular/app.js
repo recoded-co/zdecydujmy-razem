@@ -24,7 +24,8 @@ var configuration = appConfiguration();
 var zdApp = angular.module('zd', [
   'ngRoute',
   'zdControllers',
-  'zdServices'
+  'zdServices',
+  '$strap.directives'
 ]);
 
 zdApp.config(function($interpolateProvider) {
