@@ -62,8 +62,6 @@ function page_init(){
     var absolut_width = parseInt(document.getElementById("row_box").offsetWidth);
     console.log("user id :{{ user.id }}");
     configuration.setAuthor('{{ user.id }}');
-    //post_box.style.minHeight = "{{ configuration.min }}%";
-    //post_box.style.maxHeight = "{{ configuration.max }}%";
     post_box.style.width = "{{ configuration.default }}%";
     map_box.style.width = ""+(99 - parseInt("{{ configuration.default }}") - parseInt((margin_gap*100)/absolut_width))+"%";
 }
