@@ -52,7 +52,7 @@ function resize() {
         post_box.style.marginRight = margin_gap+"px";
         map_box.style.width = ""+(dashbord_map.offsetWidth - post_box.offsetWidth - margin_gap -1)+"px";
     }
-
+    map.updateSize();
 }
 
 
@@ -60,6 +60,8 @@ function page_init(){
     var post_box = document.getElementById("resizible_jquery");
     var map_box = document.getElementById("mapsquare");
     var absolut_width = parseInt(document.getElementById("row_box").offsetWidth);
+    console.log("user id :{{ user.id }}");
+    configuration.setAuthor('{{ user.id }}');
     //post_box.style.minHeight = "{{ configuration.min }}%";
     //post_box.style.maxHeight = "{{ configuration.max }}%";
     post_box.style.width = "{{ configuration.default }}%";

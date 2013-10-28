@@ -16,7 +16,7 @@ def isloged(arg):
 def dirparser(arg):
     if str(arg) == 'L':
         return 'left'
-    elif arg== 'R':
+    elif str(arg)== 'R':
         return 'right'
     else:
         return 'left'
