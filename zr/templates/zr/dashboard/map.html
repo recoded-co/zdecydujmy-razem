@@ -103,7 +103,7 @@
         // Draw Points/Polygons on Map
         var layerListeners = {
             featureclick: function(e) {
-                console.log(e.object.name + " says: " + e.feature.id + " clicked.");
+                //console.log(e.object.name + " says: " + e.feature.id + " clicked.");
                 return false;
             }//,
             //featureadded: featureAddedFunction
@@ -125,41 +125,9 @@
                 controlFeatureHandlerPopup(e.feature);
                 return false;
             }
-
-        /*var pointLayer = new OpenLayers.Layer.Vector("Point Layer",{
-            eventListeners: layerListeners
-        });
-
-        var polygonLayer = new OpenLayers.Layer.Vector("Polygon Layer",{
-            eventListeners: layerListeners
-        });*/
-
-        /*,{
-            styleMap: new OpenLayers.StyleMap({
-				        "default": new OpenLayers.Style({
-
-
-				        })
-            })
-        });*/
-        map.addLayers([/*pointLayer, polygonLayer,*/vectors]);
+        map.addLayers([vectors]);
 
         map.addControl(new OpenLayers.Control.MousePosition());
-
-
-
-
-
-        // after placing poing/polygon on map draw option switching off
-        /*var controlFeatureHandlerPoint = function(data){
-
-        }
-        var controlFeatureHandlerPolygon = function(data){
-            drawControls.polygon.deactivate();
-        }
-        var controlFeatureHandlerVector = function(data){
-
-        }*/
 
         // Format wtk for feature geometry processing
         wkt = new OpenLayers.Format.WKT();
@@ -169,6 +137,7 @@
         }
         function controlFeatureHandlerPopup (feature){
             selectedFeature = feature;
+            window.feature = feature;
             popup = new OpenLayers.Popup.FramedCloud("poly",
                                      feature.geometry.getBounds().getCenterLonLat(),
                                      null,
@@ -180,6 +149,7 @@
                                          "<textarea id='popup_comment' rows='3'>" +
                                          "</textarea><br>" +
                                          "<input id='geometry' type='hidden' value='"+displayWKT(feature)+"'/>" +
+                                         "<input id='feature_id' type='hidden' value='"+feature.id+"'/>" +
                                          "</div> " +
                                          "<button onclick='addPopup(this);return false;' >Dodaj</button>" +
                                          "<button onclick='deletePopoup(this);return false;'>Usuń</button>" +
@@ -196,13 +166,13 @@
         }
 
 
-         var selectPolugonControl = new OpenLayers.Control.SelectFeature(vectors,
+        /* var selectPolugonControl = new OpenLayers.Control.SelectFeature(vectors,
         {
             onSelect: console.log('Select'),
             onUnselect: onFeatureUnselect
-        });
-            map.addControl(selectPolugonControl);
-            selectPolugonControl.activate();
+        });*/
+        //    map.addControl(selectPolugonControl);
+        //    selectPolugonControl.activate();
 
         for(var key in drawControls) {
             map.addControl(drawControls[key]);
@@ -335,10 +305,11 @@
         $("#div_apiList").scope().$apply();
     }
     function deletePopoup(data){
+        // get data from popup and send it to server
+        var feature_id = $(data).parent().find('#feature_id').val();
+        vectors.eraseFeatures([vectors.getFeatureById(feature_id)]);
         map.popups[0].destroy();
         }
-
-
 </script>
 
 <div id="map" class="smallmap"></div>

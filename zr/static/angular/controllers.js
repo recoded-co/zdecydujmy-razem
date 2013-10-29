@@ -108,7 +108,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
 
     //method from outside usage
     $scope.pushCommentIntoScope = function(temp_data,temp_comment){
-        console.log('temp_data');
         window.temp_data = temp_data;
           var temp = {
             author: configuration.getAuthor(),

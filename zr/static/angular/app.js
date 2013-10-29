@@ -5,14 +5,14 @@ var appConfiguration = function() {
     var appPlanId='1';
     var appAuthor='1';
     return {
-        //init: function(){
-        //    this.appAuthor=;
-        // },
+        setAuthor: function(authorId){
+            appAuthor=authorId;
+        },
         getAuthor: function() {
             return appAuthor;
         },
         setPlanId: function(temp){
-            this.appPlanId = temp;
+            appPlanId = temp;
         },
         getPlanId: function(){
             return appPlanId;
