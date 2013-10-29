@@ -3,7 +3,7 @@
 
 var appConfiguration = function() {
     var appPlanId='1';
-    var appAuthor='626';
+    var appAuthor='1';
     return {
         //init: function(){
         //    this.appAuthor=;

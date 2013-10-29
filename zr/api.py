@@ -7,6 +7,7 @@ from rest_framework.serializers import ModelSerializer, Serializer
 
 from zr.models import Plan, Configuration, Geometry, Subjects, Post, Rate
 
+
 class PlanViewSet(viewsets.ModelViewSet):
     model = Plan
 
@@ -14,11 +15,13 @@ class PlanViewSet(viewsets.ModelViewSet):
 class ConfigurationViewSet(viewsets.ModelViewSet):
     model = Configuration
 
+
 class GeometrySerializer(ModelSerializer):
     geoelement = serializers.Field(source='geoElement')
     class Meta:
         model = Geometry
-        fields = ('id','name', 'geoelement','poly','point')
+        fields = ('id', 'name', 'geoelement', 'poly', 'point')
+
 
 class GeometryViewSet(viewsets.ModelViewSet):
     queryset = Geometry.objects.all()
@@ -38,15 +41,16 @@ class PostSerializer(ModelSerializer):
     rate = serializers.Field(source='has_rate')
     score = serializers.Field(source='has_likes')
     author_name = serializers.Field(source='author_name')
+
     class Meta:
         model = Post
-        fields = ('id','author', 'author_name','parent', 'plan', 'content', 'rate', 'score','geometry')
-
+        fields = ('id', 'author', 'author_name', 'parent', 'plan', 'content', 'rate', 'score', 'geometry')
 
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
 
 class RateSerializer(ModelSerializer):
     class Meta:
@@ -57,10 +61,12 @@ class RateViewSet(viewsets.ModelViewSet):
     queryset = Rate.objects.all()
     serializer_class = RateSerializer
 
+
 class RateListView(generics.ListAPIView):
     queryset = Rate.objects.all()
     serializer_class = RateSerializer
     filter_backends = (filters.DjangoFilterBackend,)
+
 
 class PostsListView(generics.ListAPIView):
     queryset = Post.objects.all()

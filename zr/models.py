@@ -10,14 +10,14 @@ from django.core.exceptions import ValidationError
 class Geometry(models.Model):
     name = models.CharField(max_length=50)
     poly = models.PolygonField(null=True, blank=True)
-    point= models.PointField(null=True, blank=True)
+    point = models.PointField(null=True, blank=True)
     objects = models.GeoManager()
 
     def geoElement(self):
         wkt = WKTWriter()
-        if(self.poly):
+        if self.poly:
             return wkt.write(self.poly)
-        elif(self.point):
+        elif self.point:
             return wkt.write(self.point)
         else:
             return None
@@ -52,8 +52,9 @@ class Configuration(models.Model):
             raise ValidationError('max value bad range (0,100)')
         if self.min > 100 or self.min < 0:
             raise ValidationError('min value bad range (0,100)')
-        if self.max< self.min:
+        if self.max < self.min:
             raise ValidationError('max value can not be smolest then min value' )
+
 
 class Post(models.Model):
     author = models.ForeignKey(User, related_name='posts')
@@ -78,7 +79,6 @@ class Post(models.Model):
 
     def author_name(self):
         return self.author.username;
-
 
 
 class Rate(models.Model):

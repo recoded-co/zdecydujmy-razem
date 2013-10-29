@@ -20,6 +20,7 @@ class LoginForm(UserCreationForm):
                                widget=forms.TextInput(),
                                label=_(u'last name'), required=False)
 
+
 class HomePageView(TemplateView):
     template_name = "zr/index.html"
 
@@ -56,7 +57,6 @@ class UserCreationPageView(TemplateView):
 
 
 class DashboardView(View):
-
 
     def get(self, request):
         plan = request.GET.get('plan',1)
