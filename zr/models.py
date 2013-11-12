@@ -61,6 +61,7 @@ class Post(models.Model):
     plan = models.ForeignKey(Plan, related_name='posts')
     content = models.TextField()
     geometry = models.ForeignKey(Geometry, null=True, blank=True)
+    date = models.DateField(auto_now=True, blank=True)
 
     def has_rate(self):
         rates = self.rates.all()

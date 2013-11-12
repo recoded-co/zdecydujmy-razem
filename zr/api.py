@@ -40,7 +40,7 @@ class PostSerializer(ModelSerializer):
     author_name = serializers.Field(source='author_name')
     class Meta:
         model = Post
-        fields = ('id','author', 'author_name','parent', 'plan', 'content', 'rate', 'score','geometry')
+        fields = ('id','author', 'author_name','parent', 'plan', 'content', 'rate', 'score','geometry','date')
 
 
 

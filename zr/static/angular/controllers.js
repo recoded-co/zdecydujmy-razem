@@ -59,6 +59,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
             }
             sendTempToServer(temp,$http,$cookies,function(temp){
                 data.nodes.unshift(temp);
+                data.numcom++;
             });
             data.text = "";
             data.zmiennac=false;
@@ -108,7 +109,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
 
     //method from outside usage
     $scope.pushCommentIntoScope = function(temp_data,temp_comment){
-        window.temp_data = temp_data;
           var temp = {
             author: configuration.getAuthor(),
             parent: null,
@@ -123,6 +123,9 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
             });
           //$scope.tree.$apply();
     };
+    $scope.postCompare = function(exp,act){
+        return false
+      };
   }]);
 
 function sendCSRFPost(url,$http,$cookies,data){
@@ -172,6 +175,7 @@ var jsonToNestedCollection = function(jsonCollection, callback){
         var roots = [];
         for(var x in j){
             j[x].nodes = [];
+            j[x].numcom = 0;
             all[j[x].id] = j[x];
         }
         for(var i in all){
@@ -179,8 +183,10 @@ var jsonToNestedCollection = function(jsonCollection, callback){
 
             if( obj.parent == null)
                 roots.push(obj);
-            else
+            else {
                 all[obj.parent].nodes.push(obj);
+                all[obj.parent].numcom++;
+            }
         }
     callback(roots);
     });
