@@ -150,7 +150,7 @@ $(document).ready(function(){
                     <div class="media-body"  style="margin-left: 20px;">
                       <!--geoID:{[{ post.geometry }]}  id:{[{ post.id }]}--parent:{[{ post.parent }]} rozwin:{[{ post.rozwin }]}  wszystkie {[{ showallposts }]} user: {[{ user  }]}
                         -->
-                      <em>{[{ post.author_name }]} napisał:</em>
+                      <em>{[{ post.author_name }]} {% trans 'napisał' %}:</em>
 
                       <p ng-click="comment(post)">{[{ post.content }]}</p>
 
@@ -185,6 +185,13 @@ $(document).ready(function(){
                       <button       ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
                                     ng-click="delete(post)">
                         {% trans 'Kasuj' %}
+                      </button>
+
+                      <button
+                                    ng-hide="post.parent"
+                                    ng-class="{'btn':true, 'btn-xs':true, 'btn-default':post.subscription}"
+                                    ng-click="subscribe(post, post.subscription);post.subscription=!post.subscription;">
+                        {% trans 'Subscribe' %}
                       </button>
 
                       <div  ng-hide="!(post.rozwin!=undefined && post.rozwin==true )&& showallposts" >

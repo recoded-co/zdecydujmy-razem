@@ -123,12 +123,21 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
             });
           //$scope.tree.$apply();
     };
+    $scope.subscribe = function(data, subscribed){
+        console.log(data);
+        var temp = {
+            post: data.id,
+            user: parseInt(configuration.getAuthor()),
+            active: !subscribed // TODO add variable which says what to do, activate | deactivate
+        }
+        sendCSRFPost('/zr/api/subscriptions/',$http, $cookies, temp);
+    }
   }]);
 
 function sendCSRFPost(url,$http,$cookies,data){
     var thisdata = data;
     $http.defaults.headers.post['X-CSRFToken'] = $cookies['csrftoken'];
-    $http.post(url,data).
+    $http.post(url, data).
         success(function (data, status, headers, config) {
                 thisdata = data;
             }).

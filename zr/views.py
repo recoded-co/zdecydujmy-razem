@@ -1,15 +1,15 @@
 from django.views.generic.base import TemplateView, View
+from django.views.generic import ListView, DeleteView
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
-from zr.models import Configuration
-
+from zr.models import Configuration, PostSubscription
+from django.core.urlresolvers import reverse_lazy
 
 class LoginForm(UserCreationForm):
     email = forms.EmailField(widget=forms.TextInput(), required=True)
@@ -65,7 +65,23 @@ class DashboardView(View):
         return render_to_response('zr/dashboard/dashboard.html', {}, context_instance=context)
 
 
+class SubscriptionList(ListView):
+    context_object_name = 'subscriptions'
+    template_name = 'zr/settings/subscriptions.html'
 
+    def get_queryset(self):
+        return PostSubscription.objects.filter(user=self.request.user)
+
+
+class SubscriptionDelete(DeleteView):
+    model = PostSubscription
+    context_object_name = 'object'
+    template_name = 'zr/settings/subscription_confirm_delete.html'
+    success_url = reverse_lazy('subscriptions_list')
+
+    def get_object(self):
+        id = self.kwargs['id']
+        return PostSubscription.objects.filter(id=id, user=self.request.user)
 
 """
 class TestView(View):

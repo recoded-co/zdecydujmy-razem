@@ -1,0 +1,15 @@
+{% extends "zr/base.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% block content %}
+
+<h1>{% trans 'Subscription list:' %}</h1>
+
+<ul>
+    {% for s in subscriptions %}
+    <li>{{ s }} <a href="{% url 'subscriptions_delete' s.id %}">{% trans 'Delete' %}</a></li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

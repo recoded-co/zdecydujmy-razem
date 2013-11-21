@@ -1,0 +1,8 @@
+{% load i18n %}
+{% blocktrans %}
+<h1>There is a new post on {{ plan }}:</h1>
+{% endblocktrans %}
+<p>{{ post_content }}</p>
+{% blocktrans %}
+<h3>Read more on http://{{ current_site }} {% url 'dashboard' %}</h3>
+{% endblocktrans %}
