@@ -6,7 +6,7 @@ from zr.api import RateListView, PostsListView
 
 urlpatterns = patterns('gxmaps.views',
     #url(r'^test', TestView.as_view(), name="home"),
-    url(r'^dashboard', DashboardView.as_view(), name="home"),
+    url(r'^dashboard', DashboardView.as_view(), name="dashboard"),
     url(r'^usercreate$', UserCreationPageView.as_view(), name="register"),
     # api
     url(r'^api/ratefilter', RateListView.as_view()),

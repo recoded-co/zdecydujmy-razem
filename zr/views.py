@@ -23,6 +23,12 @@ class LoginForm(UserCreationForm):
 class HomePageView(TemplateView):
     template_name = "zr/index.html"
 
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            return HttpResponseRedirect(reverse('dashboard'))
+        else:
+            return super(HomePageView,self).get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         from django.contrib.auth.forms import AuthenticationForm
         from zdecydujmyrazem import settings
