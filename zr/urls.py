@@ -4,7 +4,7 @@ from zr.views import HomePageView, DashboardView, UserCreationPageView #, TestVi
 from zr.api import router
 from zr.api import RateListView, PostsListView
 
-urlpatterns = patterns('gxmaps.views',
+urlpatterns = patterns('',
     #url(r'^test', TestView.as_view(), name="home"),
     url(r'^dashboard', DashboardView.as_view(), name="dashboard"),
     url(r'^usercreate$', UserCreationPageView.as_view(), name="register"),
@@ -12,6 +12,7 @@ urlpatterns = patterns('gxmaps.views',
     url(r'^api/ratefilter', RateListView.as_view()),
     url(r'^api/postfilter', PostsListView.as_view()),
     url(r'^api/', include(router.urls), name="api_root"),
+    url(r'^fmen/', include('filemanager.urls')),
     #url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
     url(r'^$', HomePageView.as_view(), name="home"),

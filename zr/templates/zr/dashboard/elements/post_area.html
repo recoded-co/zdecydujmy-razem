@@ -5,10 +5,22 @@
     <em>{[{ post.author_name }]}({[{ post.date | date:'yyyy-MM-dd' }]}) napisał:</em>
 
     <p ng-click="comment(post)">{[{ post.content }]}</p>
+    <ul ng-repeat="item in post.filep">
+        <li>{[{ item.name }]}<a href="{% url 'fm' %}/{[{ item.id }]}" >{% trans 'Załaduj' %}</a></li>
+    </ul>
 
     <button type="button" class="btn btn-xs"  ng-hide="post.nodes.length==0" ng-click="showOneDown(post)">
     {% trans 'Rozwiń' %}
     </button>
+<!--<input class="btn btn-xs" type="file" value="{[{ post.id }]}" multiple ng-model="files" file-change>
+    <br><br>
+    Selected: {[{ files.length }]}
+-->
+    <form name="fupload" action="{% url 'fm' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="post_id" value="{[{ post.id }]}">
+            <p><input class="btn btn-xs" name="datafile" type="file" value="Upload" onchange="this.form.submit();"/></p>
+    </form>
 
     <button type="button" class="btn btn-xs"  ng-hide="'{{ user }}'=='AnonymousUser'"
          ng-click="scoreUp(post)">

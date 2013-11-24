@@ -89,6 +89,7 @@ INSTALLED_APPS = (
     #'django_extensions',
     # Made by Recoded:
     'zr',
+    'filemanager',
 )
 
 # A sample logging configuration. The only tangible logging

@@ -63,15 +63,11 @@ class UserCreationPageView(TemplateView):
 
 class DashboardView(View):
 
-
     def get(self, request):
         plan = request.GET.get('plan',1)
         context = RequestContext(request)
         context['configuration'] = Configuration.objects.get(plan=plan)
         return render_to_response('zr/dashboard/dashboard.html', {}, context_instance=context)
-
-
-
 
 """
 class TestView(View):

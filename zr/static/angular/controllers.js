@@ -5,8 +5,8 @@
 var zdControllers = angular.module('zdControllers', ['ngCookies']);
 //'configurations','rates','subjects','posts','geometries','plans',
 
-zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFactory',
-  function($scope,$http,$cookies,zdServicesFactory ) {
+zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', 'zdServicesFactory','uploadService',
+  function($scope,$http,$cookies, $rootScope,zdServicesFactory, uploadService ) {
 
     $scope.plans = zdServicesFactory.plans.json();
     jsonToNestedCollection(zdServicesFactory.posts.json(),function(data){
@@ -126,6 +126,19 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
     $scope.postCompare = function(exp,act){
         return false
       };
+
+    // FILES upload controll :
+    $scope.files = [];
+
+
+
+    $rootScope.$on('upload:loadstart', function () {
+        console.log('Controller: on `loadstart`');
+    });
+
+    $rootScope.$on('upload:error', function () {
+        console.log('Controller: on `error`');
+    });
   }]);
 
 function sendCSRFPost(url,$http,$cookies,data){
