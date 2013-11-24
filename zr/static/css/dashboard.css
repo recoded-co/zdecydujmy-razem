@@ -2,21 +2,32 @@
     padding: 0px !important;
 }
 
+nav{
+    min-height: 50px;
+    height:8%;
+}
+
+
 .dashbord_map{
     margin: 0px !important;
-    height: 86%;
+    height: 92%;
 }
 
 div#resizible_jquery{
     overflow-y: scroll;
     overflow-x: hidden;
-    height: inherit;
+    height: 100%;
 }
-
-div.tab-content{
+div#mapsquare{
+    height: 100%;
+}
+div#map{
+    height: 100%;
+}
+/* div.tab-content{
     border: 1px solid #aaaaaa;
 }
- /*   border-left-style: outset;
+   border-left-style: outset;
     border-bottom-style: outset;
     overflow-y: scroll;
     overflow-x: hidden;

@@ -24,16 +24,37 @@ var configuration = appConfiguration();
 
 
 function page_init(){
+        console.log(margin_gap);
         var post_box = document.getElementById("resizible_jquery");
         var map_box = document.getElementById("mapsquare");
         var absolut_width = parseInt(document.getElementById("row_box").offsetWidth);
         post_box.style.width = "{{ configuration.default }}%";
-        map_box.style.width = ""+(99 - parseInt("{{ configuration.default }}") - parseInt((margin_gap*100)/absolut_width))+"%";
-   }
+        //map_box.style.width = ""+(99 - parseInt("{{ configuration.default }}") - parseInt((margin_gap*100)/absolut_width))+"%";
+        calibration();
+}
 
 function resize() {
         var body = document.getElementsByTagName("body")[0];
         window.doc = document.getElementsByTagName("body")[0];
+        calibration();
+
+        var post_box = document.getElementById("resizible_jquery");
+        var map_box = document.getElementById("mapsquare");
+        var middle_man = document.getElementById("middleman");
+        var dashbord_map = document.getElementById("row_box");
+
+
+        post_box.style.left = "0px";
+        if( "{{ configuration.side|dirparser }}"=="left"){
+            map_box.style.width = ""+(dashbord_map.offsetWidth - post_box.offsetWidth)+"px";
+        } else {
+            map_box.style.width = ""+(dashbord_map.offsetWidth - post_box.offsetWidth)+"px";
+        }
+    }
+
+function calibration() {
+    var body = document.getElementsByTagName("body")[0];
+
         if (typeof window.innerWidth != 'undefined') {
             viewportwidth = window.innerWidth,
             viewportheight = window.innerHeight
@@ -48,20 +69,4 @@ function resize() {
         }
         body.style.width = viewportwidth+"px";
         body.style.height = viewportheight+"px";
-
-        var post_box = document.getElementById("resizible_jquery");
-        var map_box = document.getElementById("mapsquare");
-        var middle_man = document.getElementById("middleman");
-        var dashbord_map = document.getElementById("row_box");
-
-
-        post_box.style.left = "0px";
-        if( "{{ configuration.side|dirparser }}"=="left"){
-            post_box.style.marginLeft = margin_gap+"px";
-            map_box.style.width = ""+(dashbord_map.offsetWidth - post_box.offsetWidth - margin_gap -1)+"px";
-        } else {
-            post_box.style.marginRight = margin_gap+"px";
-            map_box.style.width = ""+(dashbord_map.offsetWidth - post_box.offsetWidth - margin_gap -1)+"px";
-        }
-        map.updateSize();
-    }
+}

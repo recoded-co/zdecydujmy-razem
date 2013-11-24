@@ -16,6 +16,10 @@
         $(document).ready(function(){
             var max,min;
             configuration.setAuthor('{{ user.id }}');
+            page_init();
+            //$("#dashbord_map").height(viewportheight - $("#navbarId").height());
+            //map._onResize();
+
            $('body').resize(function(){
                var viewportwidth = parseInt($('#row_box').innerWidth()) - margin_gap -1;
                 max =  parseInt((viewportwidth*parseInt("{{ configuration.max }}"))/100);
@@ -102,12 +106,6 @@
 {% block onresize %} resize(); {% endblock %}
 
 {% block content %}
-
-<div class="row" >
-  <div class="col-xs-12 col-sm-6 col-md-8" style="float:{{ configuration.side|dirparser }}">{% trans "Mapa" %}</div>
-  <div class="col-xs-6 col-sm-6 col-md-4">{% trans "Dyskusja:" %}</div>
-</div>
-
 <div id="row_box" class="row dashbord_map" ng-app="zd">
 
   <div id="mapsquare" class="col-xs-12 col-sm-6 col-md-8 ui-widget-content delpadding" style="float:{{ configuration.side|dirparser }}">
@@ -161,7 +159,7 @@
                         {% trans 'Ilość komentarzy: ' %}<input class="form-control input-small" type="number" > -->
                   </div>
                     <div ng-init="user='{{ user }}'"></div>
-                    <div class="media media-list"   ng-repeat="post in tree | filter:{geometry: '!!'} | orderBy:predicate:reverse">
+                    <div class="media media-list"   ng-repeat="post in tree | filter:{geometry: '!!'} | filter:search | orderBy:predicate:reverse">
                         <div ng-include="'tree_item_renderer.html'"></div>
                     </div>
               </div>
@@ -171,15 +169,52 @@
                     {% trans 'Dodaj komentarz' %}
                 </button>
                 <button type="button" class="btn btn-xs"  ng-click="showAll()">
-                    <span class="glyphicon glyphicon-plus"></span>
+                    {% trans 'Rozwiń wszystkie' %}
                 </button>
+
+                   <button type="button" ng-class="{'btn':true, 'btn-xs':true, 'btn-default':!search_box}" ng-init="search_box=true;" ng-click="search_box= !search_box">
+                        {% trans 'Szukaj' %}
+                    </button>
+                    <button type="button" ng-class="{'btn':true, 'btn-xs':true, 'btn-default':!order_box}" ng-init="order_box=true;" ng-click="order_box= !order_box">
+                        {% trans 'Sortuj' %}
+                    </button>
+
+                  <br/>
+                  <div ng-hide="order_box" class="search_box">
+                      <button class="btn btn-success btn-xs"
+                              ng-int="rev_c=true"
+                              ng-click="predicate = 'content'; reverse=!rev_c; rev_c=!rev_c;">
+                          {% trans 'Treść' %}
+                      </button>
+                      <button class="btn btn-danger btn-xs"
+                              ng-int="rev_d=true"
+                              ng-click="predicate = 'date'; reverse=!rev_d; rev_d=!rev_d;">
+                          {% trans 'Data' %}
+                      </button>
+                      <button class="btn btn-warning  btn-xs"
+                              ng-int="rev_sc=true"
+                              ng-click="predicate = 'score'; reverse=!rev_sc; rev_sc=!rev_sc;">
+                          {% trans 'Ocena' %}
+                      </button>
+                      <button class="btn btn-primary btn-xs"
+                              ng-int="rev_nc=true"
+                              ng-click="predicate = 'numcom'; reverse=!rev_nc; rev_nc=!rev_nc;">
+                          {% trans 'Ilość komentarzy' %}
+                      </button>
+                  </div>
+                  <div ng-hide="search_box" class="search_box">
+                        {% trans 'Treść: ' %}<input class="form-control input-sm" ng-model="search.content"><br/>
+                        {% trans 'Data: ' %}<input class="form-control input-sm" type="date" ng-model="search.date">
+                        <!--{% trans 'Ocena: ' %}<input class="form-control input-small" type="number" ng-model="search.score">
+                        {% trans 'Ilość komentarzy: ' %}<input class="form-control input-small" type="number" > -->
+                  </div>
 
                 <div ng-show="addBasePost">
                     <textarea     ng-model="base_post.text"
                                   class="form-control"
                                   rows="3">
                     </textarea>
-                    <div style="float:left">
+                    <div style="float:right">
                           <button type="button" class="btn btn-xs"  ng-click="addVertical(base_post);addBasePost = false">
                                 {% trans 'Zapisz' %}
                           </button>
@@ -187,12 +222,13 @@
                           <button type="button" class="btn btn-xs"  ng-click="deleteBP(base_post);addBasePost = false">
                                {% trans 'Usuń' %}
                           </button>
+                        <br/>
                     </div>
                 </div>
 
 
                     <div ng-init="user='{{ user }}'"></div>
-                    <div class="media media-list"   ng-repeat="post in tree | filter:{geometry: null}"
+                    <div class="media media-list"   ng-repeat="post in tree | filter:{geometry: null}  | filter:search | orderBy:predicate:reverse"
                                                     ng-include="'tree_item_renderer.html'">
                     </div>
               </div>
