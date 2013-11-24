@@ -121,25 +121,29 @@
                     </div>
               </div>
               <div  class="post_content" data-title="Uwagi do całości">
-                    <button type="button" class="btn btn-xs"  ng-click="showAll()">
-                        {% trans 'Rozwiń wszystkie' %}
-                    </button>
-                   <button type="button" class="btn btn-xs"  ng-click="addBasePost = true">{% trans 'Dodaj nowy wątek' %}</button>
-                      <div ng-show="addBasePost">
 
-                          <textarea     ng-model="base_post.text"
-                                        class="form-control"
-                                        rows="3">
-                          </textarea>
+                <button type="button" class="btn btn-xs"  ng-click="addBasePost = true">
+                    {% trans 'Dodaj komentarz' %}
+                </button>
+                <button type="button" class="btn btn-xs"  ng-click="showAll()">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
 
+                <div ng-show="addBasePost">
+                    <textarea     ng-model="base_post.text"
+                                  class="form-control"
+                                  rows="3">
+                    </textarea>
+                    <div style="float:left">
                           <button type="button" class="btn btn-xs"  ng-click="addVertical(base_post);addBasePost = false">
-                                {% trans 'Komentarz do wypowiedzi' %}
+                                {% trans 'Zapisz' %}
                           </button>
 
                           <button type="button" class="btn btn-xs"  ng-click="deleteBP(base_post);addBasePost = false">
-                               {% trans 'Kasuj' %}
+                               {% trans 'Usuń' %}
                           </button>
-                      </div>
+                    </div>
+                </div>
 
 
                     <div ng-init="user='{{ user }}'"></div>
