@@ -24,7 +24,6 @@ var configuration = appConfiguration();
 
 
 function page_init(){
-        console.log(margin_gap);
         var post_box = document.getElementById("resizible_jquery");
         var map_box = document.getElementById("mapsquare");
         var absolut_width = parseInt(document.getElementById("row_box").offsetWidth);
@@ -46,9 +45,9 @@ function resize() {
 
         post_box.style.left = "0px";
         if( "{{ configuration.side|dirparser }}"=="left"){
-            map_box.style.width = ""+(dashbord_map.offsetWidth - post_box.offsetWidth)+"px";
+            map_box.style.width = ""+(dashbord_map.offsetWidth - post_box.offsetWidth -1)+"px";
         } else {
-            map_box.style.width = ""+(dashbord_map.offsetWidth - post_box.offsetWidth)+"px";
+            map_box.style.width = ""+(dashbord_map.offsetWidth - post_box.offsetWidth -1)+"px";
         }
     }
 
