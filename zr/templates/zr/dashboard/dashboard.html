@@ -39,6 +39,15 @@
 {% block extra_css %}
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
     <link href="/static/css/dashboard.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+    <!--[if lte IE 8]>
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
+     <link rel="stylesheet" href="/static/css/L.Control.Zoomslider.ie.css" />
+     <link rel="stylesheet" href="/static/css/leaflet.draw.ie.css" />
+    <![endif]-->
+    <link rel="stylesheet" href="/static/css/L.Control.Zoomslider.css" />
+    <link rel="stylesheet" href="/static/css/leaflet.draw.css" />
+
 {% endblock %}
 
 {% block extrajs %}
@@ -50,6 +59,42 @@
     <script src="/static/angular/services.js"></script>
     <script src="/static/angular/app.js"></script>
     <script src="/static/angular/angular-resource.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+    <script src="http://matchingnotes.com/javascripts/leaflet-google.js"></script> <!-- nowy -->
+    <script src="/static/js/L.Control.Zoomslider.js"></script>
+    <script src="/static/js/leaflet.draw.js" />
+    <script src="/static/js/edit/handler/Edit.Poly.js"></script>
+	<script src="/static/js/edit/handler/Edit.SimpleShape.js"></script>
+	<script src="/static/js/edit/handler/Edit.Circle.js"></script>
+	<script src="/static/js/edit/handler/Edit.Rectangle.js"></script>
+
+	<script src="/static/js/draw/handler/Draw.Feature.js"></script>
+	<script src="/static/js/draw/handler/Draw.Polyline.js"></script>
+	<script src="/static/js/draw/handler/Draw.Polygon.js"></script>
+	<script src="/static/js/draw/handler/Draw.SimpleShape.js"></script>
+	<script src="/static/js/draw/handler/Draw.Rectangle.js"></script>
+	<script src="/static/js/draw/handler/Draw.Circle.js"></script>
+	<script src="/static/js/draw/handler/Draw.Marker.js"></script>
+
+	<script src="/static/js/ext/LatLngUtil.js"></script>
+	<script src="/static/js/ext/GeometryUtil.js"></script>
+	<script src="/static/js/ext/LineUtil.Intersect.js"></script>
+	<script src="/static/js/ext/Polyline.Intersect.js"></script>
+	<script src="/static/js/ext/Polygon.Intersect.js"></script>
+
+	<script src="/static/js/Control.Draw.js"></script>
+	<script src="/static/js/Tooltip.js"></script>
+	<script src="/static/js/Toolbar.js"></script>
+
+	<script src="/static/js/draw/DrawToolbar.js"></script>
+	<script src="/static/js/edit/EditToolbar.js"></script>
+	<script src="/static/js/edit/handler/EditToolbar.Edit.js"></script>
+	<script src="/static/js/edit/handler/EditToolbar.Delete.js"></script>
+
+    <script src="/static/js/wicket.src.js"></script>
+    <script src="/static/js/wicket-leaflet.src.js"></script>
+
+
 {% endblock %}
 
 {% block onload %} map_init();resize();page_init(); {% endblock %}
@@ -65,7 +110,7 @@
 <div id="row_box" class="row dashbord_map" ng-app="zd">
 
   <div id="mapsquare" class="col-xs-12 col-sm-6 col-md-8 ui-widget-content delpadding" style="float:{{ configuration.side|dirparser }}">
-        {% include "zr/dashboard/map.html" %}
+        {% include "zr/dashboard/map2.html" %}
   </div>
   <div id="middleman"></div>
   <div id="resizible_jquery" class="col-xs-6 col-sm-6 col-md-4 delpadding">
