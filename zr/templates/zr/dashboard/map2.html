@@ -70,6 +70,7 @@
 
         var drawnItems = new L.FeatureGroup();
         map.addLayer(drawnItems);
+{% if user|isloged %}
 
 
         var drawControl = new L.Control.Draw({
@@ -100,6 +101,7 @@
 
 		map.addControl(drawControl);
 
+{% endif %}
 		map.on('draw:created', function (e) {
 			var type = e.layerType,
 				layer = e.layer;
@@ -293,16 +295,7 @@
 </script>
 
 <div id="map" class="smallmap"></div>
-{% if user|isloged %}
-      <ul id="controlToggle">
-        <li>
-            <input type="button" name="type" value="Dodaj punkt" id="pointToggle" onclick="toggleControl(this);" />
-        </li>
-        <li>
-            <input type="button" name="type" value="Dodaj poligon" id="polygonToggle" onclick="toggleControl(this);" />
-        </li>
-    </ul>
-{% endif %}
+
 <!--
 <div id="search_form">
 	<form name="search_form" action="" method="post">
