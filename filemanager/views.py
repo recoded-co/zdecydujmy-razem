@@ -35,6 +35,7 @@ class FileManager(View):
             form = DocumentForm(request.POST, request.FILES)
             post = Post.objects.get(id = request.POST['post_id'])
             if form.is_valid() and post:
+                print "vaild!"
                 newfile = PostFileUpload(file = request.FILES['datafile'], post = post, name=str(request.FILES['datafile']))
                 newfile.save()
             # Redirect to the document list after POST
