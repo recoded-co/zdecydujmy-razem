@@ -236,6 +236,61 @@
           </div>
 
             <script type="text/ng-template"  id="tree_item_renderer.html">
+
+                    <div class="media-body"  style="margin-left: 20px;">
+                      <!--geoID:{[{ post.geometry }]}  id:{[{ post.id }]}--parent:{[{ post.parent }]} rozwin:{[{ post.rozwin }]}  wszystkie {[{ showallposts }]} user: {[{ user  }]}
+                        -->
+                      <em>{[{ post.author_name }]} {% trans 'napisał' %}:</em>
+
+                      <p ng-click="comment(post)">{[{ post.content }]}</p>
+
+                      <button ng-hide="post.nodes.length==0" ng-click="showOneDown(post)">
+                            {% trans 'Rozwiń' %}
+                      </button>
+
+                      <button ng-hide="'{{ user }}'=='AnonymousUser'"
+                              ng-click="scoreUp(post)">
+                        <span  class="glyphicon glyphicon-thumbs-up"></span>
+                      </button>
+
+                      <button   ng-hide="'{{ user }}'=='AnonymousUser'"
+                                ng-click="scoreDown(post)">
+                        <span class="glyphicon glyphicon-thumbs-down"></span>
+                      </button>
+
+                      {% trans 'ocena' %}: {[{ post.score || 0 }]}
+
+                      <textarea     ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
+                                    ng-model="post.text"
+                                    class="form-control"
+                                    rows="3">
+                      </textarea>
+
+                      <input type="hidden" ng-model="post.plan" value="">
+
+                      <button       ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
+                                    ng-click="addDown(post)">
+                        {% trans 'Komentarz do wypowiedzi' %}
+                      </button>
+                      <button       ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
+                                    ng-click="delete(post)">
+                        {% trans 'Kasuj' %}
+                      </button>
+
+                      <button
+                                    ng-hide="post.parent"
+                                    ng-class="{'btn':true, 'btn-xs':true, 'btn-default':post.subscription}"
+                                    ng-click="subscribe(post, post.subscription);post.subscription=!post.subscription;">
+                        {% trans 'Subscribe' %}
+                      </button>
+
+                      <div  ng-hide="!(post.rozwin!=undefined && post.rozwin==true )&& showallposts" >
+                          <div class="media"
+                                ng-repeat="post in post.nodes "
+                                ng-include="'tree_item_renderer.html'">
+                          </div>
+                      </div>
+                    </div>
                 {% include "zr/dashboard/elements/post_area.html" %}
             </script>
             <script  type="text/ng-template"  id="search.html">

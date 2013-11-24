@@ -5,19 +5,27 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.contrib.gis.geos import WKTWriter
 from django.core.exceptions import ValidationError
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
+
+from django.conf import settings
+if "notification" in settings.INSTALLED_APPS:
+    from notification import models as notification
+else:
+    notification = None
 
 
 class Geometry(models.Model):
     name = models.CharField(max_length=50)
     poly = models.PolygonField(null=True, blank=True)
-    point= models.PointField(null=True, blank=True)
+    point = models.PointField(null=True, blank=True)
     objects = models.GeoManager()
 
     def geoElement(self):
         wkt = WKTWriter()
-        if(self.poly):
+        if self.poly:
             return wkt.write(self.poly)
-        elif(self.point):
+        elif self.point:
             return wkt.write(self.point)
         else:
             return None
@@ -52,8 +60,9 @@ class Configuration(models.Model):
             raise ValidationError('max value bad range (0,100)')
         if self.min > 100 or self.min < 0:
             raise ValidationError('min value bad range (0,100)')
-        if self.max< self.min:
+        if self.max < self.min:
             raise ValidationError('max value can not be smolest then min value' )
+
 
 class Post(models.Model):
     author = models.ForeignKey(User, related_name='posts')
@@ -61,7 +70,14 @@ class Post(models.Model):
     plan = models.ForeignKey(Plan, related_name='posts')
     content = models.TextField()
     geometry = models.ForeignKey(Geometry, null=True, blank=True)
+    subscriptions = models.ManyToManyField(User, through="PostSubscription", null=True, blank=True)
     date = models.DateField(auto_now=True, blank=True)
+
+    def has_subscription(self, user=None):
+        if user in self.subscriptions.all():
+            return True
+        else:
+            return False
 
     def has_rate(self):
         rates = self.rates.all()
@@ -78,8 +94,13 @@ class Post(models.Model):
         return like_sum
 
     def author_name(self):
-        return self.author.username;
+        return self.author.username
 
+    def get_root(self):
+        if self.parent:
+            return self.parent.get_root()
+        else:
+            return self
 
 
 class Rate(models.Model):
@@ -87,6 +108,40 @@ class Rate(models.Model):
     user = models.ForeignKey(User)
     like = models.NullBooleanField(null=True, blank=True)
     rate = models.IntegerField(null=True, blank=True)
+
+
+class PostSubscription(models.Model):
+    post = models.ForeignKey(Post)
+    user = models.ForeignKey(User)
+    active = models.BooleanField()
+
+    def get_user_subscriptions(self, user):
+        return PostSubscription.objects.filter(user=user, active=True)
+
+    def __unicode__(self):
+        return '%s: %s' % (self.post.author, self.post.content)
+
+
+class WebNotification(models.Model):
+    STATUS = (
+        ('A',_('Alert')),
+        ('AS', _('Alert seen')),
+        ('I', _('Info')),
+        ('IS', _('Info seen')),
+    )
+    user = models.ForeignKey(User)
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = generic.GenericForeignKey('content_type', 'object_id')
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=2, choices=STATUS)
+
+@receiver(post_save, sender=Post)
+def post_notifications(sender, instance, created, **kwargs):
+    root = instance.get_root()
+    subscribed_users = root.subscriptions.all()
+    if notification and len(subscribed_users) > 0:
+        notification.send(subscribed_users, "post_new", {'plan': 'lolo', 'post_content': ''})
 
 
 #@receiver(post_save, sender=User)

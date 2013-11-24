@@ -1,0 +1,8 @@
+{% load i18n %}
+{% blocktrans %}
+There is a new comment to post you are watching on {{ plan }}:
+{% endblocktrans %}
+{{ post_content }}
+{% blocktrans %}
+Read more on http://{{ current_site }}
+{% endblocktrans %}

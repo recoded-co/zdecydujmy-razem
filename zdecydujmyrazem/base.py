@@ -81,6 +81,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     # Recoded - additional modules
+    'notification',
     'bootstrap_toolkit',
     'floppyforms',
     'rest_framework',
@@ -153,3 +154,14 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# email configuration
+EMAIL_HOST = 'mail.recoded.co'
+EMAIL_PORT = '587'
+EMAIL_HOST_USER = 'notification@recoded.co'
+EMAIL_HOST_PASSWORD = '93WibOoo'
+EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = 'ZdecydujmyRazem <notification@recoded.co>'
+NOTIFICATION_QUEUE_ALL = True
+
