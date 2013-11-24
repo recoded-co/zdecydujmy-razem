@@ -28,25 +28,27 @@
     var map, drawControls, selectedFeature,wtk,vectors;
 
     function geolocate(address){
-    /*
+
     	var geocoder = new google.maps.Geocoder();
 		if (geocoder) {
 			geocoder.geocode({ 'address': address+'{{ scope }}', 'region':'pl' }, function (results, status) {
 				if (status == google.maps.GeocoderStatus.OK) {
 					var geometry = results[0].geometry.location;
-					var foundPosition = new OpenLayers.LonLat(geometry.lng(), geometry.lat()).transform(
+                    /*
+                    var foundPosition = new OpenLayers.LonLat(geometry.lng(), geometry.lat()).transform(
 							new OpenLayers.Projection("EPSG:4326"),
                     		map.getProjectionObject()
                     );
                     var zoom = map.getZoom();
                     zoom = 14;
             		map.setCenter(foundPosition, zoom);
-
+                    */
+                    map.setView([geometry.lat(), geometry.lng()], zoom);
          		} else {
             		console.log("Geocoding failed: " + status);
          		}
       		});
-   		}*/
+   		}
     }
 
     function map_init(){
@@ -141,26 +143,6 @@
 			drawnItems.addLayer(layer);
 		});
 
-/*
-
-        function featureAddedFunction(e) {
-                drawControls.point.deactivate();
-                drawControls.polygon.deactivate();
-                controlFeatureHandlerPopup(e.feature);
-                return false;
-            }
-        map.addLayers([vectors]);
-
-        map.addControl(new OpenLayers.Control.MousePosition());
-
-        (...)
-
-        //    selectPolugonControl.activate();
-
-        for(var key in drawControls) {
-            map.addControl(drawControls[key]);
-        }
-*/
 
         addGeometry(function(){
             //vectors.events.register('featureadded','',featureAddedFunction);
