@@ -5,7 +5,7 @@ from rest_framework import generics
 from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer, Serializer
-
+from filemanager.models import PostFileUpload
 from zr.models import Plan, Configuration, Geometry, Subjects, Post, Rate, PostSubscription
 
 router = routers.DefaultRouter()
@@ -47,17 +47,18 @@ class RateSerializer(ModelSerializer):
     class Meta:
         model = Rate
 
+class FileSerializer(ModelSerializer):
+    class Meta:
+        model = PostFileUpload
 
 class PostSerializer(ModelSerializer):
     rate = serializers.Field(source='has_rate')
     score = serializers.Field(source='has_likes')
     author_name = serializers.Field(source='author_name')
-    #subscription = serializers.Field(source='has_subscription')
-
+    filep =  FileSerializer(required=False,many=True)
     class Meta:
         model = Post
-        fields = ('id', 'author', 'author_name', 'parent', 'plan', 'content', 'rate', 'score', 'geometry')
-
+        fields = ('id','author', 'author_name','parent', 'plan', 'content', 'rate', 'score','geometry','date','filep')
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()

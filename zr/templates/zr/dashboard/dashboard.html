@@ -1,147 +1,237 @@
 {% extends "zr/base.html" %}
 {% load i18n %}
 {% load url from future %}
+{% load isloged %}
 
 {% block extra_head %}
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="/static/js/initialization.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        var viewportwidth,viewportheight;
+        var margin_gap=20;
+
+        $(document).ready(function(){
+            var max,min;
+            configuration.setAuthor('{{ user.id }}');
+            page_init();
+            //$("#dashbord_map").height(viewportheight - $("#navbarId").height());
+            //map._onResize();
+
+           $('body').resize(function(){
+               var viewportwidth = parseInt($('#row_box').innerWidth()) - margin_gap -1;
+                max =  parseInt((viewportwidth*parseInt("{{ configuration.max }}"))/100);
+                min =  parseInt((viewportwidth*parseInt("{{ configuration.min }}"))/100);
+               $( "#resizible_jquery" ).resizable({
+                  maxWidth: max,
+                  minWidth: min,
+                  handles: 'e, w'
+                });
+           });
+           $( "#resizible_jquery" ).resizable({
+              maxWidth: max,
+              minWidth: min,
+              handles: 'e, w'
+            });
+        });
+
+    </script>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <link href="/static/css/dashboard.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+    <!--[if lte IE 8]>
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
+     <link rel="stylesheet" href="/static/css/L.Control.Zoomslider.ie.css" />
+     <link rel="stylesheet" href="/static/css/leaflet.draw.ie.css" />
+    <![endif]-->
+    <link rel="stylesheet" href="/static/css/L.Control.Zoomslider.css" />
+    <link rel="stylesheet" href="/static/css/leaflet.draw.css" />
+
+{% endblock %}
+
+{% block extrajs %}
+    <script src="/static/angular/angular.js"></script>
+    <script src="/static/angular/angular-route.js"></script>
+    <script src="/static/angular/angular-cookies.js"></script>
+    <script src="/static/angular/angular-strap.min.js"></script>
+    <script src="/static/angular/controllers.js"></script>
+    <script src="/static/angular/services.js"></script>
+    <script src="/static/angular/app.js"></script>
+    <script src="/static/angular/directives.js"></script>
+    <script src="/static/angular/angular-resource.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+    <script src="http://matchingnotes.com/javascripts/leaflet-google.js"></script> <!-- nowy -->
+    <script src="/static/js/L.Control.Zoomslider.js"></script>
+    <script src="/static/js/Leaflet.draw.js" />
+    <script src="/static/js/edit/handler/Edit.Poly.js"></script>
+	<script src="/static/js/edit/handler/Edit.SimpleShape.js"></script>
+	<script src="/static/js/edit/handler/Edit.Circle.js"></script>
+	<script src="/static/js/edit/handler/Edit.Rectangle.js"></script>
+
+	<script src="/static/js/draw/handler/Draw.Feature.js"></script>
+	<script src="/static/js/draw/handler/Draw.Polyline.js"></script>
+	<script src="/static/js/draw/handler/Draw.Polygon.js"></script>
+	<script src="/static/js/draw/handler/Draw.SimpleShape.js"></script>
+	<script src="/static/js/draw/handler/Draw.Rectangle.js"></script>
+	<script src="/static/js/draw/handler/Draw.Circle.js"></script>
+	<script src="/static/js/draw/handler/Draw.Marker.js"></script>
+
+	<script src="/static/js/ext/LatLngUtil.js"></script>
+	<script src="/static/js/ext/GeometryUtil.js"></script>
+	<script src="/static/js/ext/LineUtil.Intersect.js"></script>
+	<script src="/static/js/ext/Polyline.Intersect.js"></script>
+	<script src="/static/js/ext/Polygon.Intersect.js"></script>
+
+	<script src="/static/js/Control.Draw.js"></script>
+	<script src="/static/js/Tooltip.js"></script>
+	<script src="/static/js/Toolbar.js"></script>
+
+	<script src="/static/js/draw/DrawToolbar.js"></script>
+	<script src="/static/js/edit/EditToolbar.js"></script>
+	<script src="/static/js/edit/handler/EditToolbar.Edit.js"></script>
+	<script src="/static/js/edit/handler/EditToolbar.Delete.js"></script>
+
+    <script src="/static/js/wicket.src.js"></script>
+    <script src="/static/js/wicket-leaflet.src.js"></script>
+
+
 {% endblock %}
 
 {% block onload %} map_init();resize();page_init(); {% endblock %}
 {% block onresize %} resize(); {% endblock %}
-{% load isloged %}
 
 {% block content %}
-
-<script type="text/javascript">
-
-var body = document.getElementsByTagName("body")[0];
-var viewportwidth,viewportheight;
-var margin_gap=20;
-
-
-function resize() {
-
-    if (typeof window.innerWidth != 'undefined') {
-        viewportwidth = window.innerWidth,
-        viewportheight = window.innerHeight
-    }
-    else if (typeof document.documentElement != 'undefined' && typeof document.documentElement.clientWidth != 'undefined' && document.documentElement.clientWidth != 0) {
-        viewportwidth = document.documentElement.clientWidth,
-        viewportheight = document.documentElement.clientHeight
-    }
-    else {
-        viewportwidth = document.getElementsByTagName('body')[0].clientWidth,
-        viewportheight = document.getElementsByTagName('body')[0].clientHeight
-    }
-    body.style.width = viewportwidth+"px";
-    body.style.height = viewportheight+"px";
-
-    var post_box = document.getElementById("resizible_jquery");
-    var map_box = document.getElementById("mapsquare");
-    var middle_man = document.getElementById("middleman");
-    var dashbord_map = document.getElementById("row_box");
-
-
-    post_box.style.left = "0px";
-    if( "{{ configuration.side|dirparser }}"=="left"){
-        post_box.style.marginLeft = margin_gap+"px";
-        map_box.style.width = ""+(dashbord_map.offsetWidth - post_box.offsetWidth - margin_gap -1)+"px";
-    } else {
-        post_box.style.marginRight = margin_gap+"px";
-        map_box.style.width = ""+(dashbord_map.offsetWidth - post_box.offsetWidth - margin_gap -1)+"px";
-    }
-    map.updateSize();
-}
-
-
-function page_init(){
-    var post_box = document.getElementById("resizible_jquery");
-    var map_box = document.getElementById("mapsquare");
-    var absolut_width = parseInt(document.getElementById("row_box").offsetWidth);
-    console.log("user id :{{ user.id }}");
-    configuration.setAuthor('{{ user.id }}');
-    post_box.style.width = "{{ configuration.default }}%";
-    map_box.style.width = ""+(99 - parseInt("{{ configuration.default }}") - parseInt((margin_gap*100)/absolut_width))+"%";
-}
-
-$(document).ready(function(){
-    var max,min;
-   $('body').resize(function(){
-       var viewportwidth = parseInt($('#row_box').innerWidth()) - margin_gap -1;
-        max =  parseInt((viewportwidth*parseInt("{{ configuration.max }}"))/100);
-        min =  parseInt((viewportwidth*parseInt("{{ configuration.min }}"))/100);
-       $( "#resizible_jquery" ).resizable({
-          maxWidth: max,
-          minWidth: min,
-          handles: 'e, w'
-        });
-   });
-   $( "#resizible_jquery" ).resizable({
-      maxWidth: max,
-      minWidth: min,
-      handles: 'e, w'
-    });
-});
-
-
-</script>
-
-<div class="row" >
-  <div class="col-xs-12 col-sm-6 col-md-8" style="float:{{ configuration.side|dirparser }}">{% trans "Mapa" %}</div>
-  <div class="col-xs-6 col-sm-6 col-md-4">{% trans "Dyskusja:" %}</div>
-</div>
-
 <div id="row_box" class="row dashbord_map" ng-app="zd">
 
   <div id="mapsquare" class="col-xs-12 col-sm-6 col-md-8 ui-widget-content delpadding" style="float:{{ configuration.side|dirparser }}">
-        {% include "zr/dashboard/map.html" %}
+        {% include "zr/dashboard/map2.html" %}
   </div>
   <div id="middleman"></div>
   <div id="resizible_jquery" class="col-xs-6 col-sm-6 col-md-4 delpadding">
       <div id="div_apiList" ng-controller="apiList" >
           <div data-fade="1" bs-tabs>
 
-              <div data-title="Uwagi szczegółowe">
+              <div class="post_content" data-title="Uwagi szczegółowe">
 
-                    <button  ng-click="showAll()">
+                    <button type="button" class="btn btn-xs"  ng-click="showAll()">
                         {% trans 'Rozwiń wszystkie' %}
                     </button>
 
-                    <div ng-init="user='{{ user }}'"></div>
-                    <div class="media media-list"   ng-repeat="post in tree | filter:{geometry: '!!'} "
-                                                    ng-include="'tree_item_renderer.html'">
-                    </div>
-              </div>
-              <div data-title="Uwagi do całości">
-                    <button  ng-click="showAll()">
-                        {% trans 'Rozwiń wszystkie' %}
+                    <button type="button" ng-class="{'btn':true, 'btn-xs':true, 'btn-default':!search_box}" ng-init="search_box=true;" ng-click="search_box= !search_box">
+                        {% trans 'Szukaj' %}
                     </button>
-                    <button  ng-click="addBasePost = true">{% trans 'Dodaj nowy wątek' %}</button>
-                      <div ng-show="addBasePost">
+                    <button type="button" ng-class="{'btn':true, 'btn-xs':true, 'btn-default':!order_box}" ng-init="order_box=true;" ng-click="order_box= !order_box">
+                        {% trans 'Sortuj' %}
+                    </button>
 
-                          <textarea     ng-model="base_post.text"
-                                        class="form-control"
-                                        rows="3">
-                          </textarea>
+                  <br/>
+                  <div ng-hide="order_box" class="search_box">
+                      <button class="btn btn-success btn-xs"
+                              ng-int="rev_c=true"
+                              ng-click="predicate = 'content'; reverse=!rev_c; rev_c=!rev_c;">
+                          {% trans 'Treść' %}
+                      </button>
+                      <button class="btn btn-danger btn-xs"
+                              ng-int="rev_d=true"
+                              ng-click="predicate = 'date'; reverse=!rev_d; rev_d=!rev_d;">
+                          {% trans 'Data' %}
+                      </button>
+                      <button class="btn btn-warning  btn-xs"
+                              ng-int="rev_sc=true"
+                              ng-click="predicate = 'score'; reverse=!rev_sc; rev_sc=!rev_sc;">
+                          {% trans 'Ocena' %}
+                      </button>
+                      <button class="btn btn-primary btn-xs"
+                              ng-int="rev_nc=true"
+                              ng-click="predicate = 'numcom'; reverse=!rev_nc; rev_nc=!rev_nc;">
+                          {% trans 'Ilość komentarzy' %}
+                      </button>
+                  </div>
+                  <div ng-hide="search_box" class="search_box">
+                        {% trans 'Treść: ' %}<input class="form-control input-sm" ng-model="search.content"><br/>
+                        {% trans 'Data: ' %}<input class="form-control input-sm" type="date" ng-model="search.date">
+                        <!--{% trans 'Ocena: ' %}<input class="form-control input-small" type="number" ng-model="search.score">
+                        {% trans 'Ilość komentarzy: ' %}<input class="form-control input-small" type="number" > -->
+                  </div>
+                    <div ng-init="user='{{ user }}'"></div>
+                    <div class="media media-list"   ng-repeat="post in tree | filter:{geometry: '!!'} | filter:search | orderBy:predicate:reverse">
+                        <div ng-include="'tree_item_renderer.html'"></div>
+                    </div>
+              </div>
+              <div  class="post_content" data-title="Uwagi do całości">
 
-                          <button   ng-click="addVertical(base_post);addBasePost = false">
-                                {% trans 'Komentarz do wypowiedzi' %}
+                <button type="button" class="btn btn-xs"  ng-click="addBasePost = true">
+                    {% trans 'Dodaj komentarz' %}
+                </button>
+                <button type="button" class="btn btn-xs"  ng-click="showAll()">
+                    {% trans 'Rozwiń wszystkie' %}
+                </button>
+
+                   <button type="button" ng-class="{'btn':true, 'btn-xs':true, 'btn-default':!search_box}" ng-init="search_box=true;" ng-click="search_box= !search_box">
+                        {% trans 'Szukaj' %}
+                    </button>
+                    <button type="button" ng-class="{'btn':true, 'btn-xs':true, 'btn-default':!order_box}" ng-init="order_box=true;" ng-click="order_box= !order_box">
+                        {% trans 'Sortuj' %}
+                    </button>
+
+                  <br/>
+                  <div ng-hide="order_box" class="search_box">
+                      <button class="btn btn-success btn-xs"
+                              ng-int="rev_c=true"
+                              ng-click="predicate = 'content'; reverse=!rev_c; rev_c=!rev_c;">
+                          {% trans 'Treść' %}
+                      </button>
+                      <button class="btn btn-danger btn-xs"
+                              ng-int="rev_d=true"
+                              ng-click="predicate = 'date'; reverse=!rev_d; rev_d=!rev_d;">
+                          {% trans 'Data' %}
+                      </button>
+                      <button class="btn btn-warning  btn-xs"
+                              ng-int="rev_sc=true"
+                              ng-click="predicate = 'score'; reverse=!rev_sc; rev_sc=!rev_sc;">
+                          {% trans 'Ocena' %}
+                      </button>
+                      <button class="btn btn-primary btn-xs"
+                              ng-int="rev_nc=true"
+                              ng-click="predicate = 'numcom'; reverse=!rev_nc; rev_nc=!rev_nc;">
+                          {% trans 'Ilość komentarzy' %}
+                      </button>
+                  </div>
+                  <div ng-hide="search_box" class="search_box">
+                        {% trans 'Treść: ' %}<input class="form-control input-sm" ng-model="search.content"><br/>
+                        {% trans 'Data: ' %}<input class="form-control input-sm" type="date" ng-model="search.date">
+                        <!--{% trans 'Ocena: ' %}<input class="form-control input-small" type="number" ng-model="search.score">
+                        {% trans 'Ilość komentarzy: ' %}<input class="form-control input-small" type="number" > -->
+                  </div>
+
+                <div ng-show="addBasePost">
+                    <textarea     ng-model="base_post.text"
+                                  class="form-control"
+                                  rows="3">
+                    </textarea>
+                    <div style="float:right">
+                          <button type="button" class="btn btn-xs"  ng-click="addVertical(base_post);addBasePost = false">
+                                {% trans 'Zapisz' %}
                           </button>
 
-                          <button   ng-click="deleteBP(base_post);addBasePost = false">
-                               {% trans 'Kasuj' %}
+                          <button type="button" class="btn btn-xs"  ng-click="deleteBP(base_post);addBasePost = false">
+                               {% trans 'Usuń' %}
                           </button>
-                      </div>
+                        <br/>
+                    </div>
+                </div>
 
 
                     <div ng-init="user='{{ user }}'"></div>
-                    <div class="media media-list"   ng-repeat="post in tree | filter:{geometry: null} "
+                    <div class="media media-list"   ng-repeat="post in tree | filter:{geometry: null}  | filter:search | orderBy:predicate:reverse"
                                                     ng-include="'tree_item_renderer.html'">
                     </div>
               </div>
-
 
           </div>
 
@@ -201,8 +291,11 @@ $(document).ready(function(){
                           </div>
                       </div>
                     </div>
+                {% include "zr/dashboard/elements/post_area.html" %}
             </script>
-
+            <script  type="text/ng-template"  id="search.html">
+                {% include "zr/dashboard/elements/popover_search.html" %}
+            </script>
 
       </div>
   </div>

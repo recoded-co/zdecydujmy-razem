@@ -5,8 +5,8 @@
 var zdControllers = angular.module('zdControllers', ['ngCookies']);
 //'configurations','rates','subjects','posts','geometries','plans',
 
-zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFactory',
-  function($scope,$http,$cookies,zdServicesFactory ) {
+zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', 'zdServicesFactory','uploadService',
+  function($scope,$http,$cookies, $rootScope,zdServicesFactory, uploadService ) {
 
     $scope.plans = zdServicesFactory.plans.json();
     jsonToNestedCollection(zdServicesFactory.posts.json(),function(data){
@@ -59,6 +59,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
             }
             sendTempToServer(temp,$http,$cookies,function(temp){
                 data.nodes.unshift(temp);
+                data.numcom++;
             });
             data.text = "";
             data.zmiennac=false;
@@ -108,7 +109,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
 
     //method from outside usage
     $scope.pushCommentIntoScope = function(temp_data,temp_comment){
-        window.temp_data = temp_data;
           var temp = {
             author: configuration.getAuthor(),
             parent: null,
@@ -132,6 +132,22 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies', 'zdServicesFac
         }
         sendCSRFPost('/zr/api/subscriptions/',$http, $cookies, temp);
     }
+    $scope.postCompare = function(exp,act){
+        return false
+      };
+
+    // FILES upload controll :
+    $scope.files = [];
+
+
+
+    $rootScope.$on('upload:loadstart', function () {
+        console.log('Controller: on `loadstart`');
+    });
+
+    $rootScope.$on('upload:error', function () {
+        console.log('Controller: on `error`');
+    });
   }]);
 
 function sendCSRFPost(url,$http,$cookies,data){
@@ -181,6 +197,7 @@ var jsonToNestedCollection = function(jsonCollection, callback){
         var roots = [];
         for(var x in j){
             j[x].nodes = [];
+            j[x].numcom = 0;
             all[j[x].id] = j[x];
         }
         for(var i in all){
@@ -188,8 +205,10 @@ var jsonToNestedCollection = function(jsonCollection, callback){
 
             if( obj.parent == null)
                 roots.push(obj);
-            else
+            else {
                 all[obj.parent].nodes.push(obj);
+                all[obj.parent].numcom++;
+            }
         }
     callback(roots);
     });

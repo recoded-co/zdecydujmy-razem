@@ -1,0 +1,305 @@
+{% load i18n %}
+{% load isloged %}
+
+
+<script src="http://openlayers.org/dev/OpenLayers.js"></script>
+<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<style type="text/css">
+    .smallmap {
+        width: 100%;
+        height: 480px;
+        border: 1px solid #ccc;
+    }
+    .olControlPanel div {
+      position: absolute;
+      left: 12px;
+      top: 22px;
+      display:block;
+      width:  18px;
+      height: 18px;
+      margin: 5px;
+      background-image: url("/static/img/zoom-world-mini.png");
+    }
+</style>
+<script type="text/javascript">
+    var lon = 16.9666667;
+    var lat = 52.4166667;
+    var zoom = 12;
+    var map, drawControls, selectedFeature,wtk,vectors;
+
+    function geolocate(address){
+    /*
+    	var geocoder = new google.maps.Geocoder();
+		if (geocoder) {
+			geocoder.geocode({ 'address': address+'{{ scope }}', 'region':'pl' }, function (results, status) {
+				if (status == google.maps.GeocoderStatus.OK) {
+					var geometry = results[0].geometry.location;
+					var foundPosition = new OpenLayers.LonLat(geometry.lng(), geometry.lat()).transform(
+							new OpenLayers.Projection("EPSG:4326"),
+                    		map.getProjectionObject()
+                    );
+                    var zoom = map.getZoom();
+                    zoom = 14;
+            		map.setCenter(foundPosition, zoom);
+
+         		} else {
+            		console.log("Geocoding failed: " + status);
+         		}
+      		});
+   		}*/
+    }
+
+    function map_init(){
+
+        var osm =
+            L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                attribution: 'Map data © OpenStreetMap contributors',
+                maxZoom: 19,
+                minZoom: 0
+            });
+        //var googleLayer = new L.Google('SATELLITE');
+
+
+        map = L.map('map', {
+            center: new L.LatLng(lat, lon),
+            zoom: zoom,
+            layers: [osm]
+        });
+
+        L.control.layers(osm, null).addTo(map);
+
+        var drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+{% if user|isloged %}
+
+
+        var drawControl = new L.Control.Draw({
+			position: 'topright',
+			draw: {
+				polyline: false,
+				circle: false,
+                rectangle: false,
+
+                polygon: {
+					allowIntersection: true,
+					showArea: true,
+					drawError: {
+						color: '#b00b00',
+						timeout: 1000
+					},
+					shapeOptions: {
+						color: '#bfadf55'
+					}
+				}
+			},
+			edit: {
+				featureGroup: drawnItems,
+				remove: false,
+                edit: false
+			}
+		});
+
+		map.addControl(drawControl);
+
+{% endif %}
+		map.on('draw:created', function (e) {
+			var type = e.layerType,
+				layer = e.layer;
+
+            var wkt = new Wkt.Wkt();
+            var popup_location = null;
+
+			if (type === 'marker') {
+			    layer.bindPopup(popup);
+                popup_location = e.layer._latlng;
+                var point = L.marker(e.layer._latlng);
+                wkt.fromObject(point);
+			}else{
+                popup_location = e.layer._latlngs[0];
+                wkt.fromObject(L.polygon(e.layer._latlngs))
+            }
+
+            console.log(wkt.components);
+            var wkt_string = wkt.write();
+            console.log(wkt_string);
+
+            var popup = L.popup()
+                .setLatLng(popup_location)
+                .setContent("<div>" +
+                                         "<div style='font-size:.8em'> " +
+                                         "<label>Nazwa</label><br>" +
+                                         "<input id='popup_name' type='text'/><br>" +
+                                         "<label>Komentarz</label><br>" +
+                                         "<textarea id='popup_comment' rows='3'>" +
+                                         "</textarea><br>" +
+                                         "<input id='geometry' type='hidden' value='"+wkt_string+"'/>" +
+                                         "<input id='feature_id' type='hidden' value='"+"'/>" +
+                                         "</div> " +
+                                         "<button onclick='addPopup(this);return false;' >Dodaj</button>" +
+                                         "</div>");
+            map.openPopup(popup);
+			drawnItems.addLayer(layer);
+		});
+
+/*
+
+        function featureAddedFunction(e) {
+                drawControls.point.deactivate();
+                drawControls.polygon.deactivate();
+                controlFeatureHandlerPopup(e.feature);
+                return false;
+            }
+        map.addLayers([vectors]);
+
+        map.addControl(new OpenLayers.Control.MousePosition());
+
+        (...)
+
+        //    selectPolugonControl.activate();
+
+        for(var key in drawControls) {
+            map.addControl(drawControls[key]);
+        }
+*/
+
+        addGeometry(function(){
+            //vectors.events.register('featureadded','',featureAddedFunction);
+        });
+
+    }
+
+
+    function setVectorStyle(name,color){
+        return new OpenLayers.StyleMap({
+				        "default": new OpenLayers.Style({
+				            strokeColor: color,
+				            strokeOpacity: .7,
+				            strokeWidth: 1,
+				            fillColor: color,
+				            fillOpacity: .5,
+				            cursor: "pointer"
+				        }),
+				        "temporary": new OpenLayers.Style({
+				            strokeColor: color,
+				            strokeOpacity: 1,
+				            strokeWidth: 2,
+				            fillColor: color,
+				            fillOpacity: .9,
+				            cursor: "pointer",
+				            label: ""+name// "${"+MapLayerList[x]['name_param']+"}"
+				        }),
+				        "select": new OpenLayers.Style({
+				            strokeColor: color,
+				            strokeOpacity: .9,
+				            strokeWidth: 2,
+				            fillColor: color,
+				            fillOpacity: .9,
+				            graphicZIndex: 2,
+				            cursor: "pointer"
+				        })
+        });
+    }
+
+    function addGeometry(callback){
+        $.getJSON( "/zr/api/geometries/?format=json", function( data ) {
+            var count = data.length;
+            $.each(data,function(key,value){
+                parseWKT(value.geoelement,value.name);
+                if(!--count){
+                    callback();
+                }
+            })
+        });
+    }
+
+    function parseWKT(value, name) {
+        var wkt = new Wkt.Wkt();
+        wkt.read(value);
+        var components = wkt.components[0];
+
+        if (Array.isArray(components)){
+            var latlngs = new Array();
+            for (var i in components){
+                var xy = components[i];
+                var latlng = L.latLng(xy.y, xy.x);
+                latlngs.push(L.latLng(xy.y, xy.x));
+            }
+            var polygon = L.polygon(latlngs);
+            polygon.addTo(map);
+        } else{
+            var xy = components;
+            var latlng = L.latLng(xy.y, xy.x);
+            var marker = L.marker(latlng, {});
+            marker.addTo(map);
+        }
+    }
+
+    function toggleControl(element) {
+        var map = {'Dodaj punkt':'point','Dodaj poligon':'polygon'};
+        var control = drawControls[map[element.value]];
+        control.activate();
+    }
+    function stripObj(obj){
+        window.stripObj = obj;
+    }
+    function displayWKT(feature) {
+            var str = wkt.write(feature);
+            return str;
+        }
+    function addPopup(data){
+        // get data from popup and send it to server
+        var temp = {}
+        var temp_geometry = $(data).parent().find('#geometry').val();
+        if (temp_geometry.indexOf('POLYGON')!=-1){
+            temp['poly']=temp_geometry;
+        } else if (temp_geometry.indexOf('POINT')!=-1){
+            temp['point']=temp_geometry;
+        } else {
+            alert('Error: no poly or point data detected!!');
+        }
+        temp['name']=$(data).parent().find('#popup_name').val();
+
+        var comment = $(data).parent().find('#popup_comment').val();
+        if(comment){
+            $.ajax({
+                url : "/zr/api/geometries/",
+                type: "POST",
+                data : temp,
+                headers: {'X-CSRFToken': $.cookie('csrftoken')},
+                success: function(data, textStatus, jqXHR)
+                {
+                    addComentToGeoElement(data,comment);
+                },
+                error: function (jqXHR, textStatus, errorThrown)
+                {
+                    console.log('error: ' + textStatus);
+                }
+            });
+            map.closePopup();
+        } else {
+            alert('comment needed!');
+        }
+    }
+
+    function addComentToGeoElement(data, comment){
+        var pushCommentIntoScope = $("#div_apiList").scope().pushCommentIntoScope;
+        pushCommentIntoScope(data, comment);
+        $("#div_apiList").scope().$apply();
+    }
+    function deletePopoup(data){
+        // get data from popup and send it to server
+        var feature_id = $(data).parent().find('#feature_id').val();
+        vectors.eraseFeatures([vectors.getFeatureById(feature_id)]);
+        map.popups[0].destroy();
+        }
+</script>
+
+<div id="map" class="smallmap"></div>
+
+<!--
+<div id="search_form">
+	<form name="search_form" action="" method="post">
+		<input type="text" id='query' size=50 name="query"/>
+		<input type="button" value="{% trans 'Set map' %}" onClick="javascript: geolocate(this.parentNode.childNodes[1].value);return false;"/>
+	</form>
+</div>-->
