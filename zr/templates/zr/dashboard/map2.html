@@ -97,6 +97,7 @@
                 edit: false
 			}
 		});
+
 		map.addControl(drawControl);
 
 		map.on('draw:created', function (e) {
@@ -139,39 +140,6 @@
 		});
 
 /*
-        var center = new OpenLayers.Control();
-        OpenLayers.Util.extend(center, {
-
-            activate: function (bounds) {
-                // TODO ustawic do pozycji startowej planu nie do zdefiniowanego czegos
-               map.setCenter(new OpenLayers.LonLat(lon, lat)
-                .transform('EPSG:4326', 'EPSG:3857'), zoom);
-            }
-        });
-        // center button panel
-        var panel = new OpenLayers.Control.Panel({defaultControl: center});
-        panel.addControls([center]);
-        map.addControl(panel);
-
-
-        // Draw Points/Polygons on Map
-        var layerListeners = {
-            featureclick: function(e) {
-                //console.log(e.object.name + " says: " + e.feature.id + " clicked.");
-                return false;
-            }//,
-            //featureadded: featureAddedFunction
-        };
-        vectors = new OpenLayers.Layer.Vector("Vector Layer",{
-            eventListeners: layerListeners
-        });
-
-        drawControls = {
-            //point: new OpenLayers.Control.DrawFeature(pointLayer, OpenLayers.Handler.Point),
-            //polygon: new OpenLayers.Control.DrawFeature(polygonLayer,OpenLayers.Handler.Polygon),
-            point: new OpenLayers.Control.DrawFeature(vectors, OpenLayers.Handler.Point),
-            polygon: new OpenLayers.Control.DrawFeature(vectors,OpenLayers.Handler.Polygon)
-        };
 
         function featureAddedFunction(e) {
                 drawControls.point.deactivate();
@@ -183,56 +151,19 @@
 
         map.addControl(new OpenLayers.Control.MousePosition());
 
-        // Format wtk for feature geometry processing
-        wkt = new OpenLayers.Format.WKT();
-        // functions managing select, unselect popups events
-        function onPopupClose(evt) {
-            selectControl.unselect(selectedFeature);
-        }
-        function controlFeatureHandlerPopup (feature){
-            selectedFeature = feature;
-            window.feature = feature;
-            popup = new OpenLayers.Popup.FramedCloud("poly",
-                                     feature.geometry.getBounds().getCenterLonLat(),
-                                     null,
-                                     "<div>" +
-                                         "<div style='font-size:.8em'> " +
-                                         "<label>Nazwa</label><br>" +
-                                         "<input id='popup_name' type='text'/><br>" +
-                                         "<label>Komentarz</label><br>" +
-                                         "<textarea id='popup_comment' rows='3'>" +
-                                         "</textarea><br>" +
-                                         "<input id='geometry' type='hidden' value='"+displayWKT(feature)+"'/>" +
-                                         "<input id='feature_id' type='hidden' value='"+feature.id+"'/>" +
-                                         "</div> " +
-                                         "<button onclick='addPopup(this);return false;' >Dodaj</button>" +
-                                         "<button onclick='deletePopoup(this);return false;'>Usuń</button>" +
-                                     "</div>",
-                                     null, false, undefined);
-            feature.popup = popup;
-            map.addPopup(popup);
+        (...)
 
-        }
-        function onFeatureUnselect(feature) {
-            map.removePopup(feature.popup);
-            feature.popup.destroy();
-            feature.popup = null;
-        }
-
-
-
-        //    map.addControl(selectPolugonControl);
         //    selectPolugonControl.activate();
 
         for(var key in drawControls) {
             map.addControl(drawControls[key]);
         }
+*/
 
         addGeometry(function(){
-            vectors.events.register('featureadded','',featureAddedFunction);
+            //vectors.events.register('featureadded','',featureAddedFunction);
         });
 
-*/
     }
 
 
@@ -279,29 +210,27 @@
         });
     }
 
-    function parseWKT(value,name) {
-            var features = wkt.read(value);
-            var bounds;
-            if(features) {
-                if(features.constructor != Array) {
-                    features = [features];
-                }
-                for(var i=0; i<features.length; ++i) {
-                    if (!bounds) {
-                        bounds = features[i].geometry.getBounds();
-                    } else {
-                        bounds.extend(features[i].geometry.getBounds());
-                    }
+    function parseWKT(value, name) {
+        var wkt = new Wkt.Wkt();
+        wkt.read(value);
+        var components = wkt.components[0];
 
-                }
-                features.name=name;
-
-                vectors.addFeatures(features);
-
-            } else {
-                console.log('Bad WKT!!');
+        if (Array.isArray(components)){
+            var latlngs = new Array();
+            for (var i in components){
+                var xy = components[i];
+                var latlng = L.latLng(xy.y, xy.x);
+                latlngs.push(L.latLng(xy.y, xy.x));
             }
+            var polygon = L.polygon(latlngs);
+            polygon.addTo(map);
+        } else{
+            var xy = components;
+            var latlng = L.latLng(xy.y, xy.x);
+            var marker = L.marker(latlng, {});
+            marker.addTo(map);
         }
+    }
 
     function toggleControl(element) {
         var map = {'Dodaj punkt':'point','Dodaj poligon':'polygon'};
@@ -352,7 +281,7 @@
 
     function addComentToGeoElement(data, comment){
         var pushCommentIntoScope = $("#div_apiList").scope().pushCommentIntoScope;
-        pushCommentIntoScope(data,comment);
+        pushCommentIntoScope(data, comment);
         $("#div_apiList").scope().$apply();
     }
     function deletePopoup(data){

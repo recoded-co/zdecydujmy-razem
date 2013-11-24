@@ -210,6 +210,7 @@ Wkt.Wkt.prototype.fromObject = function (obj) {
  * @method
  */
 Wkt.Wkt.prototype.toObject = function (config) {
+    console.log('toObject');
     return this.construct[this.type].call(this, config);
 };
 

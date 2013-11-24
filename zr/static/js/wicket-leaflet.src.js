@@ -68,6 +68,7 @@ Wkt.Wkt.prototype.construct = {
      * @return              {L.marker}
      */
     point: function (config, component) {
+        console.log('point');
         var coord = component || this.components;
         if (coord instanceof Array) {
             coord = coord[0];
@@ -82,6 +83,7 @@ Wkt.Wkt.prototype.construct = {
      * @return          {L.featureGroup}
      */
     multipoint: function (config) {
+        console.log('other');
         var i,
             layers = [],
             coords = this.components;
@@ -100,6 +102,7 @@ Wkt.Wkt.prototype.construct = {
      * @return              {L.polyline}
      */
     linestring: function (config, component) {
+        console.log('other');
         var coords = component || this.components,
             latlngs = this.coordsToLatLngs(coords);
 
@@ -112,6 +115,7 @@ Wkt.Wkt.prototype.construct = {
      * @return          {L.multiPolyline}
      */
     multilinestring: function (config) {
+        console.log('other');
         var coords = this.components,
             latlngs = this.coordsToLatLngs(coords, 1);
 
@@ -124,6 +128,7 @@ Wkt.Wkt.prototype.construct = {
      * @return              {L.multiPolygon}
      */
     polygon: function (config) {
+        console.log('polygon');
         // Truncate the coordinates to remove the closing coordinate
         var coords = this.trunc(this.components),
             latlngs = this.coordsToLatLngs(coords, 1);
@@ -136,6 +141,7 @@ Wkt.Wkt.prototype.construct = {
      * @return          {L.multiPolygon}
      */
     multipolygon: function (config) {
+        console.log('other');
         // Truncate the coordinates to remove the closing coordinate
         var coords = this.trunc(this.components),
             latlngs = this.coordsToLatLngs(coords, 2);
@@ -149,6 +155,7 @@ Wkt.Wkt.prototype.construct = {
      * @return          {L.featureGroup}
      */
     geometrycollection: function (config) {
+        console.log('other');
         var comps, i, layers;
 
         comps = this.trunc(this.components);
