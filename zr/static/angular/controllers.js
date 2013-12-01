@@ -148,6 +148,10 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     $rootScope.$on('upload:error', function () {
         console.log('Controller: on `error`');
     });
+
+    $rootScope.$on('upload:success', function(xhr){
+
+    });
   }]);
 
 function sendCSRFPost(url,$http,$cookies,data){
