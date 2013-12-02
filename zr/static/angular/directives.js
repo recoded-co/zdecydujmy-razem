@@ -8,11 +8,17 @@ zdApp.directive('fileChange',['uploadService', function (uploadService) {
         element.bind('change', function (event) {
             var files = event.target.files;
             for (var i = 0, length = files.length; i < length; i++) {
-                uploadService.send(files[i],attributes.value, function(data){
-                    var json_data = JSON.parse(data);
-                    $scope.$parent.post.filep.push({name:json_data.name,id:json_data.id});
-                    $scope.$apply();
-                });
+                if(files[i].size < 5242880)
+                    uploadService.send(files[i],$scope.$parent.post.id, function(data){
+                        var json_data = JSON.parse(data);
+                        $scope.$parent.post.filep.push({name:json_data.name,
+                            id:json_data.id,
+                            file:json_data.file});
+                        $scope.$apply();
+                    });
+                else{
+                    alert('plik nie powinien przekraczać 5Mb');
+                }
             }
         });
     };
@@ -46,11 +52,17 @@ zdApp.directive('dropbox',['uploadService', function (uploadService) {
             event.preventDefault();
             var files = event.dataTransfer.files;
             for (var i = 0, length = files.length; i < length; i++) {
-                uploadService.send(files[i],$scope.$parent.post.id, function(data){
-                    var json_data = JSON.parse(data);
-                    $scope.$parent.post.filep.push({name:json_data.name,id:json_data.id});
-                    $scope.$apply();
-                });
+                if(files[i].size < 5242880)
+                    uploadService.send(files[i],$scope.$parent.post.id, function(data){
+                        var json_data = JSON.parse(data);
+                        $scope.$parent.post.filep.push({name:json_data.name,
+                            id:json_data.id,
+                            file:json_data.file});
+                        $scope.$apply();
+                    });
+                else{
+                    alert('plik nie powinien przekraczać 5Mb');
+                }
             }
         };
     };

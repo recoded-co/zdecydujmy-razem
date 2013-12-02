@@ -6,8 +6,9 @@
 
     <p>{[{ post.content }]}</p>
     <ul ng-repeat="item in post.filep">
+        {[{ item }]}
         <li>{[{ item.name }]}
-            <a href="{% url 'fm' %}/{[{ item.id }]}" >
+            <a href="fmen/download/{[{ item.file }]}" >
                 <span class="glyphicon glyphicon-download"></span>
             </a>
         </li>
