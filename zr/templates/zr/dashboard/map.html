@@ -143,8 +143,6 @@
                                      null,
                                      "<div>" +
                                          "<div style='font-size:.8em'> " +
-                                         "<label>Nazwa</label><br>" +
-                                         "<input id='popup_name' type='text'/><br>" +
                                          "<label>Komentarz</label><br>" +
                                          "<textarea id='popup_comment' rows='3'>" +
                                          "</textarea><br>" +
@@ -275,7 +273,7 @@
         } else {
             alert('Error: no poly or point data detected!!');
         }
-        temp['name']=$(data).parent().find('#popup_name').val();
+        temp['name']='noname';
 
         var comment = $(data).parent().find('#popup_comment').val();
         if(comment){

@@ -14,6 +14,9 @@ phonecatServices.factory('zdServicesFactory', ['$resource',
         geometries: $resource('/zr/api/geometries/?:para', {}, {
             json: {method:'GET', params:{para:'format=json'}, isArray:true}
             }),
+        geometries_content: $resource('/zr/api/geometries/:id_param/?:para', {id_param:'@id'}, {
+            get: {method:'GET', params:{para:'format=json'}, isArray:false}
+            }),
         posts: $resource('/zr/api/posts/?:para', {}, {
             json: {method:'GET', params:{para:'format=json'}, isArray:true}
             }),

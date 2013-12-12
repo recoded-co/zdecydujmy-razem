@@ -12,10 +12,25 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     jsonToNestedCollection(zdServicesFactory.posts.json(),function(data){
         $scope.tree = data;
     });
-    $scope.showallposts = true;
+    $scope.predicate='date';
+    $scope.reverse=true;
+    $scope.data_arrow=true;
+
+    var post_buff_id = 0;
+    $scope.zoom_chase = function(post){
+        if(post.parent==null && post_buff_id!=post.id){
+            post_buff_id = post.id;
+            zdServicesFactory.geometries_content.get({id_param:post.geometry}).$promise.then(function(data){
+                console.log("Yeah!!");
+                console.log(data);
+                map.fitBounds(parseWKTbeta(data.geoelement));
+            });
+        }
+    }
 
     $scope.scoreUp = function(data){
         data.score = data.score + 1;
+        data.positive_rate = data.positive_rate + 1;
         var temp = {
             post: data.id,
             user: configuration.getAuthor(),
@@ -26,6 +41,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     }
     $scope.scoreDown = function(data){
         data.score = data.score - 1;
+        data.negative_rate = data.negative_rate -1;
         var temp = {
             post: data.id,
             user: configuration.getAuthor(),
@@ -218,4 +234,23 @@ var jsonToNestedCollection = function(jsonCollection, callback){
     });
 }
 
-
+function parseWKTbeta(value) {
+        var wkt = new Wkt.Wkt();
+        wkt.read(value);
+        var components = wkt.components[0];
+        var bounds
+        if (Array.isArray(components)){
+            var latlngs = new Array();
+            for (var i in components){
+                var xy = components[i];
+                var latlng = L.latLng(xy.y, xy.x);
+                latlngs.push(L.latLng(xy.y, xy.x));
+            }
+            bounds = new L.LatLngBounds(latlngs);
+        } else{
+            var xy = components;
+            var latlng = L.latLng(xy.y, xy.x);
+            bounds = new L.LatLngBounds([latlng]);
+        }
+        return bounds
+    }
