@@ -7,6 +7,9 @@ nav{
     height:8%;
 }
 
+.filedragablearea{
+    background-color: #E1E1E8;
+}
 
 .dashbord_map{
     margin: 0px !important;

@@ -56,9 +56,14 @@ class PostSerializer(ModelSerializer):
     score = serializers.Field(source='has_likes')
     author_name = serializers.Field(source='author_name')
     filep =  FileSerializer(required=False,many=True)
+    positive_rate = serializers.Field(source='like_sum')
+    negative_rate = serializers.Field(source='dislike_sum')
     class Meta:
         model = Post
-        fields = ('id','author', 'author_name','parent', 'plan', 'content', 'rate', 'score','geometry','date','filep')
+        fields = ('id','author', 'author_name',
+                  'parent', 'plan', 'content',
+                  'rate', 'score','geometry',
+                  'date','filep','positive_rate','negative_rate')
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
@@ -69,7 +74,11 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer = PostSerializer(queryset, many=True)
         result = []
         # TODO make this in one query
-        subscribed_posts = [p.post.id for p in PostSubscription().get_user_subscriptions(request.user)]
+
+        if str(request.user) != "AnonymousUser" :
+            subscribed_posts = [p.post.id for p in PostSubscription().get_user_subscriptions(request.user)]
+        else:
+            subscribed_posts = []
         for entry in serializer.data:
             if entry['id'] in subscribed_posts:
                 entry['subscription'] = True

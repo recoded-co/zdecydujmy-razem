@@ -88,6 +88,16 @@ class Post(models.Model):
         else:
             return 0
 
+    def like_sum(self):
+        rates = self.rates.filter(like=True)
+        like_sum = sum([x.rate if x.like else -(x.rate) for x in rates])
+        return like_sum
+
+    def dislike_sum(self):
+        rates = self.rates.filter(like=False)
+        like_sum = sum([x.rate if x.like else -(x.rate) for x in rates])
+        return like_sum
+
     def has_likes(self):
         rates = self.rates.all()
         like_sum = sum([x.rate if x.like else -(x.rate) for x in rates])

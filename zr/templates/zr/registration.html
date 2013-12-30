@@ -31,6 +31,10 @@
                         <input id="id_{{ form.lastname.name }}" placeholder="{{ form.lastname.label }}" maxlength="254" name="{{ form.lastname.name }}" type="text" class="form-control" autofocus>
                     </div>
                     <div class="form-group">
+                        <label for="id_{{ form.zipcode.name }}">{% trans "Kod pocztowy" %}</label>
+                        <input id="id_{{ form.zipcode.name }}" placeholder="{{ form.zipcode.label }}" maxlength="254" name="{{ form.zipcode.name }}" type="text" class="form-control" autofocus>
+                    </div>
+                    <div class="form-group">
                         <label for="id_{{ form.password1.name }}">{% trans 'Hasło' %}</label>
                         <div style="color: red">{{ form.password1.errors }}</div>
                         <input id="id_{{ form.password1.name }}" placeholder="{{ form.password1.label }}" maxlength="254" name="{{ form.password1.name }}" type="password" class="form-control" >

@@ -1,18 +1,22 @@
 {% load i18n %}
 {% load url from future %}
 
-<div class="media-body"  style="margin-left: 20px;margin-right: 20px;">
+<div class="media-body dropbox"  style="margin-left: 20px;margin-right: 20px;" ng-mouseover="zoom_chase(post)">
     <em>{[{ post.author_name }]}({[{ post.date | date:'yyyy-MM-dd' }]}) napisał:</em>
 
     <p>{[{ post.content }]}</p>
     <ul ng-repeat="item in post.filep">
-        <li>{[{ item.name }]}  <a href="{% url 'fm' %}/{[{ item.id }]}" ><span class="glyphicon glyphicon-download"></span></a></li>
+        <li>{[{ item.name }]}
+            <a href="fmen/download/{[{ item.file }]}" >
+                <span class="glyphicon glyphicon-download"></span>
+            </a>
+        </li>
     </ul>
     <button type="button" class="btn btn-xs" ng-click="comment(post)">
     {% trans 'Dodaj komentarz' %}
     </button>
     <button type="button" class="btn btn-xs"  ng-hide="post.nodes.length==0" ng-click="showOneDown(post)">
-    <span class="glyphicon glyphicon-plus"></span>
+    <span class="glyphicon glyphicon-plus" ng-hide="post.rozwin"></span><span class="glyphicon glyphicon-minus" ng-show="post.rozwin"></span>
     </button>
     <button
         ng-hide="post.parent"
@@ -29,16 +33,11 @@
               ng-click="scoreDown(post)">
         <span class="glyphicon glyphicon-thumbs-down"></span>
     </button>
-    {% trans 'ocena' %}: {[{ post.score || 0 }]}  {% trans 'komentarzy' %}: {[{ post.numcom || 0 }]}
-<!--<input class="btn btn-xs" type="file" value="{[{ post.id }]}" multiple ng-model="files" file-change>
+    {% trans 'lubi' %}: {[{ post.positive_rate || 0 }]}
+    {% trans 'nie lubi' %}: {[{ post.negative_rate || 0 }]}
+    {% trans 'komentarzy' %}: {[{ post.numcom || 0 }]}
+    <input class="btn btn-xs" type="file" value="{[{ post.id }]}" multiple file-change>
     <br><br>
-    Selected: {[{ files.length }]}
--->
-    <form name="fupload" action="{% url 'fm' %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="hidden" name="post_id" value="{[{ post.id }]}">
-            <p><input class="btn btn-xs" name="datafile" type="file" value="Upload" onchange="this.form.submit();"/></p>
-    </form>
 
     <textarea     ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
                   ng-model="post.text"
@@ -48,14 +47,14 @@
 
     <input type="hidden" ng-model="post.plan" value=""/>
     <div style="float:right">
-    <button    type="button" class="btn btn-xs" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
-                  ng-click="addDown(post)">
-         {% trans 'Zapisz' %}
-    </button>
-    <button    type="button" class="btn btn-xs" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
-                  ng-click="delete(post)">
-         {% trans 'Usuń' %}
-    </button>
+        <button type="button" class="btn btn-xs" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
+                ng-click="addDown(post)">
+             {% trans 'Zapisz' %}
+        </button>
+        <button    type="button" class="btn btn-xs" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
+                      ng-click="delete(post)">
+            {% trans 'Usuń' %}
+        </button>
     </div>
     <div  ng-hide="!(post.rozwin!=undefined && post.rozwin==true )&& showallposts" >
         <div class="media"
