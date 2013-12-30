@@ -1,6 +1,7 @@
 # Recoded additional settings
 LOGIN_REDIRECT_URL = '/zr/dashboard'
-
+from datetime import date
+INDEX_LAST_UPDATE = date.min
 # Django settings for zdecydujmyrazem project.
 
 DEBUG = True
@@ -90,7 +91,7 @@ INSTALLED_APPS = (
     #'django_extensions',
     # Made by Recoded:
     'zr',
-    'filemanager',
+    'filemanager'
 )
 
 # A sample logging configuration. The only tangible logging
