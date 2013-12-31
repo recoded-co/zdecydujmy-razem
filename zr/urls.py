@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
 from zr.views import HomePageView, DashboardView, UserCreationPageView, SubscriptionList, SubscriptionDelete
 from zr.api import router
-from zr.api import RateListView, PostsListView
+from zr.api import RateListView, PostsListView, geo_search
 
 urlpatterns = patterns('',
     #url(r'^test', TestView.as_view(), name="home"),
@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     # api
     url(r'^api/ratefilter', RateListView.as_view()),
     url(r'^api/postfilter', PostsListView.as_view()),
+    url(r'^api/geosearch/(?P<plan_id>\d+)/?', geo_search, name='geo_search'),
     url(r'^api/', include(router.urls), name="api_root"),
     url(r'^fmen/', include('filemanager.urls')),
     #url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),

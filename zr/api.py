@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer, Serializer
 from filemanager.models import PostFileUpload
 from zr.models import Plan, Configuration, Geometry, Subjects, Post, Rate, PostSubscription
+from django_decorators.decorators import json_response
+from django.views.decorators.csrf import csrf_exempt
 
 router = routers.DefaultRouter()
 
@@ -25,6 +27,7 @@ router.register(r'configurations', ConfigurationViewSet)
 
 class GeometrySerializer(ModelSerializer):
     geoelement = serializers.Field(source='geoElement')
+
     class Meta:
         model = Geometry
         fields = ('id', 'name', 'geoelement', 'poly', 'point')
@@ -33,6 +36,18 @@ class GeometrySerializer(ModelSerializer):
 class GeometryViewSet(viewsets.ModelViewSet):
     queryset = Geometry.objects.all()
     serializer_class = GeometrySerializer
+
+    def pre_save(self, obj):
+        print 'pre_save %s' % str(obj)
+
+    def post_save(self, obj, created=False):
+        print 'post save %s' % str(obj)
+
+    def pre_delete(self, obj):
+        print 'pre delete %s' % str(obj)
+
+    def post_delete(self, obj):
+        print 'post delete %s' % str(obj)
 
 router.register(r'geometries', GeometryViewSet)
 
@@ -58,6 +73,7 @@ class PostSerializer(ModelSerializer):
     filep =  FileSerializer(required=False,many=True)
     positive_rate = serializers.Field(source='like_sum')
     negative_rate = serializers.Field(source='dislike_sum')
+
     class Meta:
         model = Post
         fields = ('id','author', 'author_name',
@@ -140,4 +156,44 @@ class PostSubscriptionViewSet(viewsets.ModelViewSet):
 router.register(r'subscriptions', PostSubscriptionViewSet)
 
 
+@csrf_exempt
+@json_response
+def geo_search(request, plan_id):
+    from django.db.models import Q
+    from django.contrib.gis.geos import fromstr
+    from django.http import HttpResponseBadRequest
+    import json
+    print '>>>>>>>>>'
+    polygon = request.POST.get('wkt', None)
+    if polygon:
+        print polygon
+        try:
+            pnt = fromstr(polygon, srid=4326)
+            print pnt
+            geometries = Geometry.objects.filter(Q(poly__intersects=pnt) | Q(point__intersects=pnt))
+            posts = Post.objects.filter(plan__id=plan_id, geometry__in=geometries)
+            print geometries
+            print posts
+            posts_serialized = PostSerializer(posts, many=True)
+            print posts_serialized.data
+            #json_geometries = GeometrySerializer(geometries, many=True)
+            #print json_geometries.data
+            return posts_serialized.data #json_geometries.data
+        except Exception, e:
+            return json.dumps({'result': 'exception'})
+    else:
+        return HttpResponseBadRequest(json.dumps({'result': 'error'}))
 
+
+
+
+"""
+within
+Availability: PostGIS, Oracle, MySQL, SpatiaLite
+
+Tests if the geometry field is spatially within the lookup geometry.
+
+Example:
+
+Zipcode.objects.filter(poly__within=geom)
+"""

@@ -65,10 +65,11 @@ class UserCreationPageView(TemplateView):
 class DashboardView(View):
 
     def get(self, request):
-        plan = request.GET.get('plan',1)
-        context = RequestContext(request)
-        context['configuration'] = Configuration.objects.get(plan=plan)
-        return render_to_response('zr/dashboard/dashboard.html', {}, context_instance=context)
+        plan_id = request.GET.get('plan', 1)
+        configuration = Configuration.objects.get(plan=plan_id)
+        return render_to_response('zr/dashboard/dashboard.html',
+                                  {'configuration': configuration, 'plan_id': plan_id},
+                                  context_instance=RequestContext(request))
 
 
 class SubscriptionList(ListView):

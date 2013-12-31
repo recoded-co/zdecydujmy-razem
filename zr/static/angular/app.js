@@ -4,6 +4,7 @@
 var appConfiguration = function() {
     var appPlanId='1';
     var appAuthor='1';
+
     return {
         setAuthor: function(authorId){
             appAuthor=authorId;

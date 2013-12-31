@@ -26,6 +26,7 @@
     var lat = 52.4166667;
     var zoom = 12;
     var map, drawControls, selectedFeature,wtk,vectors;
+    var plan_id = parseInt('{{ plan_id }}');
 
     function geolocate(address){
 
@@ -72,8 +73,13 @@
 
         var drawnItems = new L.FeatureGroup();
         map.addLayer(drawnItems);
-{% if user|isloged %}
 
+        var searchItems = new L.FeatureGroup();
+        map.addLayer(searchItems);
+
+        L.control.scale().addTo(map);
+
+{% if user|isloged %}
 
         var drawControl = new L.Control.Draw({
 			position: 'topright',
@@ -90,7 +96,8 @@
 						timeout: 1000
 					},
 					shapeOptions: {
-						color: '#bfadf55'
+						color: '#bfadf55',
+                        dupa: 1
 					}
 				}
 			},
@@ -100,8 +107,20 @@
                 edit: false
 			}
 		});
-
 		map.addControl(drawControl);
+
+
+        var search = new L.Control.Draw({
+			position: 'topright',
+			draw: {
+				polyline: false,
+				circle: false,
+                rectangle: true,
+                marker: false,
+                polygon: false
+            }
+		});
+		map.addControl(search);
 
 {% endif %}
 		map.on('draw:created', function (e) {
@@ -109,36 +128,55 @@
 				layer = e.layer;
 
             var wkt = new Wkt.Wkt();
-            var popup_location = null;
+            if (type === 'rectangle'){ // search
+                var wkt_bb = wkt.fromObject(L.polygon(e.layer._latlngs));
+                var wkt_string = wkt.write();
 
-			if (type === 'marker') {
-			    layer.bindPopup(popup);
-                popup_location = e.layer._latlng;
-                var point = L.marker(e.layer._latlng);
-                wkt.fromObject(point);
-			}else{
-                popup_location = e.layer._latlngs[0];
-                wkt.fromObject(L.polygon(e.layer._latlngs))
+                searchItems.addLayer(layer);
+                layer.on('click', function(e){
+                    searchItems.removeLayer(layer);
+                    // TODO clear search results
+                });
+
+                geoSearch(wkt_string, plan_id, function(data, textStatus, jqXHR) {
+                    // TODO search results callback
+                    console.log(textStatus);
+                    console.log(data); // posts
+                });
+
+            }else{
+                var popup_location = null;
+
+                if (type === 'marker') {
+                    layer.bindPopup(popup);
+                    popup_location = e.layer._latlng;
+                    var point = L.marker(e.layer._latlng);
+                    wkt.fromObject(point);
+                } else if (type === 'polygon'){
+                    popup_location = e.layer._latlngs[0];
+                    wkt.fromObject(L.polygon(e.layer._latlngs))
+                }
+
+                console.log(wkt.components);
+                var wkt_string = wkt.write();
+                console.log(wkt_string);
+
+                var popup = L.popup()
+                    .setLatLng(popup_location)
+                    .setContent("<div>" +
+                                             "<div style='font-size:.8em'> " +
+                                             "<label>Komentarz</label><br>" +
+                                             "<textarea id='popup_comment' rows='3'>" +
+                                             "</textarea><br>" +
+                                             "<input id='geometry' type='hidden' value='"+wkt_string+"'/>" +
+                                             "<input id='feature_id' type='hidden' value='"+"'/>" +
+                                             "</div> " +
+                                             "<button onclick='addPopup(this);return false;' >Dodaj</button>" +
+                                             "</div>");
+                map.openPopup(popup);
+                drawnItems.addLayer(layer);
             }
 
-            console.log(wkt.components);
-            var wkt_string = wkt.write();
-            console.log(wkt_string);
-
-            var popup = L.popup()
-                .setLatLng(popup_location)
-                .setContent("<div>" +
-                                         "<div style='font-size:.8em'> " +
-                                         "<label>Komentarz</label><br>" +
-                                         "<textarea id='popup_comment' rows='3'>" +
-                                         "</textarea><br>" +
-                                         "<input id='geometry' type='hidden' value='"+wkt_string+"'/>" +
-                                         "<input id='feature_id' type='hidden' value='"+"'/>" +
-                                         "</div> " +
-                                         "<button onclick='addPopup(this);return false;' >Dodaj</button>" +
-                                         "</div>");
-            map.openPopup(popup);
-			drawnItems.addLayer(layer);
 		});
 
 
@@ -223,9 +261,9 @@
         window.stripObj = obj;
     }
     function displayWKT(feature) {
-            var str = wkt.write(feature);
-            return str;
-        }
+        var str = wkt.write(feature);
+        return str;
+    }
     function addPopup(data){
         // get data from popup and send it to server
         var temp = {}
@@ -271,15 +309,28 @@
         var feature_id = $(data).parent().find('#feature_id').val();
         vectors.eraseFeatures([vectors.getFeatureById(feature_id)]);
         map.popups[0].destroy();
+    }
+
+    function geoSearch(wkt, plan_id, success_callback){
+        console.log('geosearching:');
+        console.log(wkt);
+        console.log(plan_id);
+        if(wkt){
+            $.ajax({
+                url : '/zr/api/geosearch/'+plan_id+'/',
+                type: 'POST',
+                data : 'wkt='+wkt,
+                //headers: {'X-CSRFToken': $.cookie('csrftoken')},
+                success: success_callback,
+                error: function (jqXHR, textStatus, errorThrown)
+                {
+                    console.log('error: ' + textStatus);
+                }
+            });
+        } else {
+            alert('Search are needed!');
         }
+    }
 </script>
 
 <div id="map" class="smallmap"></div>
-
-<!--
-<div id="search_form">
-	<form name="search_form" action="" method="post">
-		<input type="text" id='query' size=50 name="query"/>
-		<input type="button" value="{% trans 'Set map' %}" onClick="javascript: geolocate(this.parentNode.childNodes[1].value);return false;"/>
-	</form>
-</div>-->
