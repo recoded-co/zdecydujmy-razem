@@ -156,7 +156,7 @@ class PostSubscriptionViewSet(viewsets.ModelViewSet):
 router.register(r'subscriptions', PostSubscriptionViewSet)
 
 
-@csrf_exempt
+#@csrf_exempt
 @json_response
 def geo_search(request, plan_id):
     from django.db.models import Q

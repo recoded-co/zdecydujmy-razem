@@ -320,7 +320,7 @@
                 url : '/zr/api/geosearch/'+plan_id+'/',
                 type: 'POST',
                 data : 'wkt='+wkt,
-                //headers: {'X-CSRFToken': $.cookie('csrftoken')},
+                headers: {'X-CSRFToken': $.cookie('csrftoken')},
                 success: success_callback,
                 error: function (jqXHR, textStatus, errorThrown)
                 {
