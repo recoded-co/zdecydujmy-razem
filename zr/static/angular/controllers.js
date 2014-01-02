@@ -21,8 +21,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
         if(post.parent==null && post_buff_id!=post.id){
             post_buff_id = post.id;
             zdServicesFactory.geometries_content.get({id_param:post.geometry}).$promise.then(function(data){
-                console.log("Yeah!!");
-                console.log(data);
                 map.fitBounds(parseWKTbeta(data.geoelement));
             });
         }
