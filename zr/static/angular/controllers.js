@@ -156,6 +156,26 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     $scope.files = [];
 
 
+    $scope.addPFilter = function(data) {
+        $scope.filterGeoData = new Array();
+        for( var item in data ){
+            $scope.filterGeoData.push(data[item].id);
+        };
+    };
+
+    $scope.geoFilter = function(item) {
+
+        if($scope.filterGeoData == undefined || $scope.filterGeoData.length == 0)
+            return true;
+        else {
+            if($scope.filterGeoData.indexOf(item.id)!=-1){
+                return true;
+            }else {
+                return false;
+            }
+        }
+    };
+
 
     $rootScope.$on('upload:loadstart', function () {
         console.log('Controller: on `loadstart`');

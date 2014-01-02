@@ -135,13 +135,12 @@
                 searchItems.addLayer(layer);
                 layer.on('click', function(e){
                     searchItems.removeLayer(layer);
-                    // TODO clear search results
+                    addPostFilter({});
                 });
 
                 geoSearch(wkt_string, plan_id, function(data, textStatus, jqXHR) {
                     // TODO search results callback
-                    console.log(textStatus);
-                    console.log(data); // posts
+                    addPostFilter(data);
                 });
 
             }else{
@@ -302,6 +301,12 @@
     function addComentToGeoElement(data, comment){
         var pushCommentIntoScope = $("#div_apiList").scope().pushCommentIntoScope;
         pushCommentIntoScope(data, comment);
+        $("#div_apiList").scope().$apply();
+    }
+
+    function addPostFilter(data){
+        var addPFilter = $("#div_apiList").scope().addPFilter;
+        addPFilter(data);
         $("#div_apiList").scope().$apply();
     }
     function deletePopoup(data){

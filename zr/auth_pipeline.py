@@ -20,4 +20,4 @@ def zip_code_backend(backend, details, response, social_user, uid,\
         fout.close()
         profile.photo = url_to_image # depends on where you saved it
         profile.save()
-            """
+    """

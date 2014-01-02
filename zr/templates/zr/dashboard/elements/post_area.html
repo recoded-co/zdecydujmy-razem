@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load url from future %}
 
-<div class="media-body dropbox"  style="margin-left: 20px;margin-right: 20px;" ng-mouseover="zoom_chase(post)">
+<div class="media-body dropbox"  style="margin-left: 20px;margin-right: 20px;" >
     <em>{[{ post.author_name }]}({[{ post.date | date:'yyyy-MM-dd' }]}) napisał:</em>
 
     <p>{[{ post.content }]}</p>
@@ -32,6 +32,10 @@
     <button type="button" class="btn btn-xs"    ng-hide="'{{ user }}'=='AnonymousUser'"
               ng-click="scoreDown(post)">
         <span class="glyphicon glyphicon-thumbs-down"></span>
+    </button>
+    <button type="button" class="btn btn-xs"
+              ng-click="zoom_chase(post)">
+        <span class="glyphicon glyphicon-screenshot"></span>
     </button>
     {% trans 'lubi' %}: {[{ post.positive_rate || 0 }]}
     {% trans 'nie lubi' %}: {[{ post.negative_rate || 0 }]}
