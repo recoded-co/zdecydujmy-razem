@@ -5,6 +5,7 @@
     <em>{[{ post.author_name }]}({[{ post.date | date:'yyyy-MM-dd' }]}) napisał:</em>
 
     <p>{[{ post.content }]}</p>
+    -->>{[{ post.geometry }]}<<--
     <ul ng-repeat="item in post.filep">
         <li>{[{ item.name }]}
             <a href="fmen/download/{[{ item.file }]}" >
@@ -33,7 +34,7 @@
               ng-click="scoreDown(post)">
         <span class="glyphicon glyphicon-thumbs-down"></span>
     </button>
-    <button type="button" class="btn btn-xs"
+    <button ng-hide="post.parent || !post.geometry" type="button" class="btn btn-xs"
               ng-click="zoom_chase(post)">
         <span class="glyphicon glyphicon-screenshot"></span>
     </button>
