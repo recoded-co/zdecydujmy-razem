@@ -101,6 +101,18 @@ class PostViewSet(viewsets.ModelViewSet):
             else:
                 entry['subscription'] = False
             result.append(entry)
+
+        if str(request.user) != "AnonymousUser" :
+            subscribed_rates = [p.post.id for p in Rate().get_user_like(request.user)]
+        else:
+            subscribed_rates = []
+        for entry in serializer.data:
+            if entry['id'] in subscribed_rates:
+                entry['sub_rates'] = True
+            else:
+                entry['sub_rates'] = False
+            result.append(entry)
+
         return Response(result)
 
 router.register(r'posts', PostViewSet)

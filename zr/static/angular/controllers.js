@@ -30,6 +30,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
 
     $scope.scoreUp = function(data){
         data.score = data.score + 1;
+        data.sub_rates = true;
         data.positive_rate = data.positive_rate + 1;
         var temp = {
             post: data.id,
@@ -41,6 +42,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     }
     $scope.scoreDown = function(data){
         data.score = data.score - 1;
+        data.sub_rates = true;
         data.negative_rate = data.negative_rate -1;
         var temp = {
             post: data.id,

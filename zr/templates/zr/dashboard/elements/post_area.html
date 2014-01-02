@@ -24,12 +24,12 @@
         ng-click="subscribe(post, post.subscription);post.subscription=!post.subscription;">
         {% trans 'Subscribe' %}
     </button>
-    <button type="button" class="btn btn-xs"  ng-hide="'{{ user }}'=='AnonymousUser'"
+    <button type="button" class="btn btn-xs"  ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
          ng-click="scoreUp(post)">
          <span  class="glyphicon glyphicon-thumbs-up"></span>
     </button>
 
-    <button type="button" class="btn btn-xs"    ng-hide="'{{ user }}'=='AnonymousUser'"
+    <button type="button" class="btn btn-xs"    ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
               ng-click="scoreDown(post)">
         <span class="glyphicon glyphicon-thumbs-down"></span>
     </button>
