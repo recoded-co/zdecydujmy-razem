@@ -44,15 +44,17 @@
 {% block extra_css %}
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
     <link href="/static/css/dashboard.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css" />
+    <!--<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />-->
     <!--[if lte IE 8]>
-     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" />
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.ie.css" />
      <link rel="stylesheet" href="/static/css/L.Control.Zoomslider.ie.css" />
      <link rel="stylesheet" href="/static/css/leaflet.draw.ie.css" />
     <![endif]-->
     <link rel="stylesheet" href="/static/css/L.Control.Zoomslider.css" />
     <link rel="stylesheet" href="/static/css/leaflet.draw.css" />
-
+    <link rel="stylesheet" href="/static/css/MarkerCluster.css" />
+	<link rel="stylesheet" href="/static/css/MarkerCluster.Default.css" />
 {% endblock %}
 
 {% block extrajs %}
@@ -65,7 +67,8 @@
     <script src="/static/angular/app.js"></script>
     <script src="/static/angular/directives.js"></script>
     <script src="/static/angular/angular-resource.js"></script>
-    <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+    <!--<script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>-->
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js?2"></script>
     <script src="http://matchingnotes.com/javascripts/leaflet-google.js"></script> <!-- nowy -->
     <script src="/static/js/L.Control.Zoomslider.js"></script>
     <script src="/static/js/Leaflet.draw.js" />
@@ -99,6 +102,7 @@
 
     <script src="/static/js/wicket.src.js"></script>
     <script src="/static/js/wicket-leaflet.src.js"></script>
+    <script src="/static/js/leaflet.markercluster-src.js"></script>
 
 
 {% endblock %}

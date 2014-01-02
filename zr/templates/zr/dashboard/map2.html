@@ -1,8 +1,7 @@
 {% load i18n %}
 {% load isloged %}
 
-
-<script src="http://openlayers.org/dev/OpenLayers.js"></script>
+<!--<script src="http://openlayers.org/dev/OpenLayers.js"></script>-->
 <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <style type="text/css">
     .smallmap {
@@ -60,16 +59,26 @@
                 maxZoom: 19,
                 minZoom: 0
             });
-        //var googleLayer = new L.Google('SATELLITE');
 
+        var lmap =
+            L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+                maxZoom: 18
+            });
+
+
+        var baseMaps = {
+            "Open Street Map": osm,
+            "Leaflet Map": lmap
+        };
 
         map = L.map('map', {
             center: new L.LatLng(lat, lon),
             zoom: zoom,
-            layers: [osm]
+            layers: [osm, lmap]
         });
 
-        L.control.layers(osm, null).addTo(map);
+        L.control.layers(baseMaps, null).addTo(map);
 
         var drawnItems = new L.FeatureGroup();
         map.addLayer(drawnItems);
@@ -221,13 +230,80 @@
     function addGeometry(callback){
         $.getJSON( "/zr/api/geometries/?format=json", function( data ) {
             var count = data.length;
+            addMarkers(data);
+            /*
             $.each(data,function(key,value){
                 parseWKT(value.geoelement,value.name);
                 if(!--count){
                     callback();
                 }
             })
+            */
         });
+    }
+
+
+    function _getCentroid(points){
+        var i, j, len, p1, p2, f, area, x, y,
+        // polygon centroid algorithm; only uses the first ring if there are multiple
+        area = x = y = 0;
+        for (i = 0, len = points.length, j = len - 1; i < len; j = i++) {
+            p1 = points[i];
+            p2 = points[j];
+            f = p1.y * p2.x - p2.y * p1.x;
+            x += (p1.x + p2.x) * f;
+            y += (p1.y + p2.y) * f;
+            area += f * 3;
+        }
+        return [x / area, y / area];
+    }
+
+    function addMarkers(data, callback){
+        var count = data.length;
+        var markers = L.markerClusterGroup({showCoverageOnHover: true,
+                                            zoomToBoundsOnClick: true,
+                                            spiderfyOnMaxZoom: true,
+                                            removeOutsideVisibleBounds: true});
+
+		$.each(data,function(key, value){
+			var wkt = new Wkt.Wkt();
+            wkt.read(value.geoelement);
+            var components = wkt.components[0];
+
+            if (Array.isArray(components)){
+                var latlngs = new Array();
+                for (var i in components){
+                    var xy = components[i];
+                    latlngs.push(L.latLng(xy.y, xy.x));
+                }
+                var polygon = L.polygon(latlngs);
+                var centroid = _getCentroid(components);
+                var xy = centroid; //components[0];
+                var latlng = L.latLng(xy[1], xy[0]);
+                //var marker = L.marker(latlng, {});
+                var marker = L.circleMarker(latlng, {radius: 10, fillOpacity: 1});
+                marker.on('mouseover', function(){
+                   polygon.addTo(map);
+                   polygon.on('mouseout', function(){
+                       map.removeLayer(polygon);
+                   });
+                });
+                marker.addTo(map);
+            } else{
+                var xy = components;
+                var latlng = L.latLng(xy.y, xy.x);
+                var marker = L.marker(latlng, {});
+                markers.addLayer(marker);
+            }
+            if(!--count){
+                map.addLayer(markers);
+                if (callback != undefined){
+                    callback();
+                }
+            }
+		});
+
+
     }
 
     function parseWKT(value, name) {
