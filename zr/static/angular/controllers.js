@@ -21,8 +21,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
         if(post.parent==null && post_buff_id!=post.id){
             post_buff_id = post.id;
             zdServicesFactory.geometries_content.get({id_param:post.geometry}).$promise.then(function(data){
-                console.log("Yeah!!");
-                console.log(data);
                 map.fitBounds(parseWKTbeta(data.geoelement));
             });
         }
@@ -30,6 +28,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
 
     $scope.scoreUp = function(data){
         data.score = data.score + 1;
+        data.sub_rates = true;
         data.positive_rate = data.positive_rate + 1;
         var temp = {
             post: data.id,
@@ -41,6 +40,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     }
     $scope.scoreDown = function(data){
         data.score = data.score - 1;
+        data.sub_rates = true;
         data.negative_rate = data.negative_rate -1;
         var temp = {
             post: data.id,
@@ -155,6 +155,26 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     // FILES upload controll :
     $scope.files = [];
 
+
+    $scope.addPFilter = function(data) {
+        $scope.filterGeoData = new Array();
+        for( var item in data ){
+            $scope.filterGeoData.push(data[item].id);
+        };
+    };
+
+    $scope.geoFilter = function(item) {
+
+        if($scope.filterGeoData == undefined || $scope.filterGeoData.length == 0)
+            return true;
+        else {
+            if($scope.filterGeoData.indexOf(item.id)!=-1){
+                return true;
+            }else {
+                return false;
+            }
+        }
+    };
 
 
     $rootScope.$on('upload:loadstart', function () {

@@ -119,6 +119,8 @@ class Rate(models.Model):
     like = models.NullBooleanField(null=True, blank=True)
     rate = models.IntegerField(null=True, blank=True)
 
+    def get_user_like(self, user):
+        return Rate.objects.filter(user=user)
 
 class PostSubscription(models.Model):
     post = models.ForeignKey(Post)

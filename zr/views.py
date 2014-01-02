@@ -19,6 +19,18 @@ class LoginForm(UserCreationForm):
     last_name = forms.CharField(max_length=30,
                                widget=forms.TextInput(),
                                label=_(u'last name'), required=False)
+    zipcode = forms.RegexField(max_length=30,
+                              regex=r'^\d{2}-\d{3}$',
+                               widget=forms.TextInput(),
+                               label=_(u'zip code'), required=True)
+
+class ZipCodeForm(forms.ModelForm):
+    zipcode = forms.RegexField( max_length=30,
+                                regex=r'^\d{2}-\d{3}$',
+                                widget=forms.TextInput(),
+                                label=_(u'zip code'),
+                                required=True)
+
 
 
 class HomePageView(TemplateView):
