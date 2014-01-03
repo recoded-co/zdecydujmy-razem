@@ -55,6 +55,8 @@ body{
     background:white;
     animation:myfirst 3s;
     -webkit-animation:myfirst 3s; /* Safari and Chrome */
+    -moz-animation:myfirst 3s; /* Fx 5+ */
+    -o-animation:myfirst 3s; /* Opera 12+ */
     }
 
 
@@ -68,6 +70,19 @@ body{
 
 @-webkit-keyframes myfirst /* Safari and Chrome */
 {
+0%   {background: white;}
+25%  {background: #f2dede;}
+50%  {background: #f2dede;}
+100% {background: white;}
+}
+
+@-moz-keyframes  myfirst {
+0%   {background: white;}
+25%  {background: #f2dede;}
+50%  {background: #f2dede;}
+100% {background: white;}
+}
+@-o-keyframes  myfirst {
 0%   {background: white;}
 25%  {background: #f2dede;}
 50%  {background: #f2dede;}
