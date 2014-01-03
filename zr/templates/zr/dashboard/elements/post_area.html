@@ -4,7 +4,8 @@
 <div class="media-body dropbox"  style="margin-left: 20px;margin-right: 20px;" >
     <em>{[{ post.author_name }]}({[{ post.date | date:'yyyy-MM-dd' }]}) napisał:</em>
 
-    <p>{[{ post.content }]}</p>
+    <p ng-class="{'select':post.light}">
+        {[{ post.content }]}</p>
     <ul ng-repeat="item in post.filep">
         <li>{[{ item.name }]}
             <a href="fmen/download/{[{ item.file }]}" >

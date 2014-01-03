@@ -11,6 +11,12 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     $scope.plans = zdServicesFactory.plans.json();
     jsonToNestedCollection(zdServicesFactory.posts.json(),function(data){
         $scope.tree = data;
+        $scope.geoHashTree = {};
+        for(var item in data){
+            if(data[item].geometry!==undefined){
+                $scope.geoHashTree[data[item].geometry]=data[item];
+            }
+        }
     });
     $scope.predicate='date';
     $scope.reverse=true;
@@ -136,6 +142,9 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
         }
         sendTempToServer(temp,$http,$cookies,function(temp){
                 $scope.tree.push(temp);
+                if(temp.id!=null){
+                    $scope.geoHashTree[temp.id]=temp;
+                }
             });
           //$scope.tree.$apply();
     };
@@ -161,6 +170,15 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
         for( var item in data ){
             $scope.filterGeoData.push(data[item].id);
         };
+    };
+
+    $scope.postLightOn = function(id) {
+        //$("#mediaList1").animate({scrollTop: 30}, "slow");
+        $scope.geoHashTree[id].light = true;
+    };
+
+    $scope.postLightOff = function(id) {
+        $scope.geoHashTree[id].light = false;
     };
 
     $scope.geoFilter = function(item) {

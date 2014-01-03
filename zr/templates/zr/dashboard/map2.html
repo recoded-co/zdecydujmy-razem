@@ -282,8 +282,12 @@
                 //var marker = L.marker(latlng, {});
                 var marker = L.circleMarker(latlng, {radius: 10, fillOpacity: 1});
                 marker.on('mouseover', function(){
+
                    polygon.addTo(map);
-                   polygon.on('mouseout', function(){
+                   postLightOn(value.id);
+
+                   polygon.on('mouseout', function(e){
+                       postLightOff(value.id);
                        map.removeLayer(polygon);
                    });
                 });
@@ -292,6 +296,16 @@
                 var xy = components;
                 var latlng = L.latLng(xy.y, xy.x);
                 var marker = L.marker(latlng, {});
+                marker.on('mouseover', function(){
+
+                    postLightOn(value.id);
+                    console.log(value.id);
+
+                    marker.on('mouseout', function(){
+                       postLightOff(value.id);
+                       map.removeLayer(polygon);
+                    });
+                });
                 markers.addLayer(marker);
             }
             if(!--count){
@@ -301,9 +315,23 @@
                 }
             }
 		});
-
-
     }
+
+    function postLightOn(id){
+        var LightOn = $("#div_apiList").scope().postLightOn;
+        LightOn(id);
+        $("#div_apiList").scope().$apply();
+        $("#resizible_jquery").animate({scrollTop: $('#'+id).position().top}, "slow");
+        //console.log("-->> "+$('#'+id).offset().top);
+        //console.log("-->> "+$('#'+id).position().top);
+        //console.log("-->> "+$('#resizible_jquery').offset().bottom);
+    };
+
+    function postLightOff(id){
+        var LightOff = $("#div_apiList").scope().postLightOff;
+        LightOff(id);
+        $("#div_apiList").scope().$apply();
+    };
 
     function parseWKT(value, name) {
         var wkt = new Wkt.Wkt();

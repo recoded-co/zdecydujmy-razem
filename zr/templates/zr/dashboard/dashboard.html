@@ -162,7 +162,7 @@
                         {% trans 'Ilość komentarzy: ' %}<input class="form-control input-small" type="number" > -->
                   </div>
                     <div ng-init="user='{{ user }}'"></div>
-                    <div class="media media-list"  ng-repeat="post in tree | filter:{geometry: '!!'} | orderBy:predicate:reverse | filter:search | filter:geoFilter">
+                    <div id="{[{ post.geometry && !post.parent?post.geometry:'none' }]}" class="media media-list"  ng-repeat="post in tree | filter:{geometry: '!!'} | orderBy:predicate:reverse | filter:search | filter:geoFilter">
                         <div ng-include="'tree_item_renderer.html'"></div>
                     </div>
               </div>

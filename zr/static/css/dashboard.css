@@ -50,3 +50,26 @@ body{
     padding-left:5px;
     padding-bottom: 5px;
 }
+
+.select{
+    background:white;
+    animation:myfirst 3s;
+    -webkit-animation:myfirst 3s; /* Safari and Chrome */
+    }
+
+
+@keyframes myfirst
+{
+0%   {background: white;}
+25%  {background: #f2dede;}
+50%  {background: #f2dede;}
+100% {background: white;}
+}
+
+@-webkit-keyframes myfirst /* Safari and Chrome */
+{
+0%   {background: white;}
+25%  {background: #f2dede;}
+50%  {background: #f2dede;}
+100% {background: white;}
+}
