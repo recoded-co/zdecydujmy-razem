@@ -8,21 +8,23 @@
 
 <div class="jumbotron">
   <div class="container">
-      <form class="form-signin" method="post" action="{% url 'zip_code' %}">
+      <form class="form-signin" method="POST" action="{% url 'zipcode_check' %}">
         {% csrf_token %}
             <div class="row">
                 <div class="col-xs-6 col-md-6">
                     <div class="form-group">
                         <label for="id_{{ form.zipcode.name }}">{% trans "Kod pocztowy" %}</label>
                          <div style="color: red">{{ form.zipcode.errors }}</div>
-                        <input id="id_{{ form.zipcode.name }}" placeholder="{{ form.zipcode.label }}" maxlength="254" name="{{ form.zipcode.name }}" type="text" class="form-control" autofocus>
+                        <input id="id_{{ form.zipcode.name }}" placeholder="{{ form.zipcode.label }}"
+                               maxlength="254" name="{{ form.zipcode.name }}"
+                               value="{{ form.zipcode.value| safe }}" type="text" class="form-control" autofocus>
                     </div>
                 </div>
                 <div class="col-xs-6 col-md-6">
                 </div>
             </div>
-            <input type="hidden" name="next" value="{{ next }}" />
-            <button type="submit" class="btn  btn-success">{% trans 'Zarejestruj' %}</button>
+            <input type="hidden" id='id_next' name="next" value="{{ next }}" />
+            <button type="submit" class="btn  btn-success">{% trans 'Zapisz' %}</button>
             <hr />
         </form>
   </div>
