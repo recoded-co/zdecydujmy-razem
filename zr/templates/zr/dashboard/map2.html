@@ -321,7 +321,8 @@
         var LightOn = $("#div_apiList").scope().postLightOn;
         LightOn(id);
         $("#div_apiList").scope().$apply();
-        $("#resizible_jquery").animate({scrollTop: $('#resizible_jquery').scrollTop()+$('#'+id).position().top}, "slow");
+        if($('#'+id).position())
+            $("#resizible_jquery").animate({scrollTop: $('#resizible_jquery').scrollTop()+$('#'+id).position().top}, "slow");
     };
 
     function postLightOff(id){
