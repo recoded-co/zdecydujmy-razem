@@ -15,6 +15,11 @@ else:
     notification = None
 
 
+class Profile(models.Model):
+    user = models.ForeignKey(User)
+    zipcode = models.CharField(max_length=6, null=True, blank=True)
+
+
 class Geometry(models.Model):
     name = models.CharField(max_length=50)
     poly = models.PolygonField(null=True, blank=True)
@@ -154,6 +159,12 @@ def post_notifications(sender, instance, created, **kwargs):
     subscribed_users = root.subscriptions.all()
     if notification and len(subscribed_users) > 0:
         notification.send(subscribed_users, "post_new", {'plan': 'lolo', 'post_content': ''})
+
+@receiver(post_save, sender=User)
+def post_notifications(sender, instance, created, **kwargs):
+    if created:
+        p = Profile(user=instance, zipcode=None)
+        p.save()
 
 
 #@receiver(post_save, sender=User)

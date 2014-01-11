@@ -1,7 +1,11 @@
 # Recoded additional settings
-LOGIN_REDIRECT_URL = '/zr/dashboard'
+LOGIN_REDIRECT_URL = '/zr/settings/zipcode_check'
+HOME_PAGE_URL = '/zr/dashboard'
 from datetime import date
 INDEX_LAST_UPDATE = date.min
+
+AUTH_PROFILE_MODULE = 'zr.Profile'
+
 # Django settings for zdecydujmyrazem project.
 
 DEBUG = True
@@ -130,14 +134,20 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.user.create_user',
     'social_auth.backends.pipeline.social.associate_user',
     'social_auth.backends.pipeline.user.update_user_details',
-    #'auth_pipelines.pipelines.get_user_avatar',
+    #'social_auth.backends.pipeline.misc.save_status_to_session',
+    #'zr.auth_pipeline.get_user_zipcode',
+    #'zr.auth_pipeline.store_user_zipcode',
+
 )
 
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.facebook.FacebookBackend',
+    'social_auth.backends.google.GoogleOAuthBackend',
     'social_auth.backends.google.GoogleOAuth2Backend',
+    'social_auth.backends.google.GoogleBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
+
 
 SOCIAL_AUTH_ENABLED_BACKENDS = ('google', 'facebook')
 

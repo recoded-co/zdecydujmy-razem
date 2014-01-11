@@ -5,11 +5,15 @@ from django.template import RequestContext
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect, HttpResponse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.shortcuts import redirect
+
+from zr.models import Profile
 from zr.models import Configuration, PostSubscription
-from django.core.urlresolvers import reverse_lazy
+from zr.forms import ZipCodeForm
+
 
 class LoginForm(UserCreationForm):
     email = forms.EmailField(widget=forms.TextInput(), required=True)
@@ -23,14 +27,6 @@ class LoginForm(UserCreationForm):
                               regex=r'^\d{2}-\d{3}$',
                                widget=forms.TextInput(),
                                label=_(u'zip code'), required=True)
-
-class ZipCodeForm(forms.ModelForm):
-    zipcode = forms.RegexField( max_length=30,
-                                regex=r'^\d{2}-\d{3}$',
-                                widget=forms.TextInput(),
-                                label=_(u'zip code'),
-                                required=True)
-
 
 
 class HomePageView(TemplateView):
@@ -58,7 +54,7 @@ class UserCreationPageView(TemplateView):
         from zdecydujmyrazem import settings
         context = super(UserCreationPageView, self).get_context_data(**kwargs)
         context['form'] = LoginForm()
-        context['next'] = settings.LOGIN_REDIRECT_URL
+        context['next'] = settings.LOGIN_REDIRECT_URL# TODO czy jest next w parametrach
         return context
 
     def post(self, request):
@@ -70,6 +66,9 @@ class UserCreationPageView(TemplateView):
             user.first_name = form.cleaned_data['first_name']
             user.last_name = form.cleaned_data['last_name']
             user.save()
+            profile = user.get_profile()
+            profile.zipcode = form.cleaned_data['zipcode']
+            profile.save()
             return HttpResponseRedirect(reverse('django.contrib.auth.views.login'))
         return render_to_response('zr/registration.html', {'form': form}, context_instance=RequestContext(request))
 
@@ -102,35 +101,32 @@ class SubscriptionDelete(DeleteView):
         id = self.kwargs['id']
         return PostSubscription.objects.filter(id=id, user=self.request.user)
 
-"""
-class TestView(View):
+
+class ZipcodeCheckView(View):
+
     def get(self, request):
-        from zr.api import SerializePost
-        from zr.models import Post
-        from rest_framework.renderers import JSONRenderer
-        from django.http import HttpResponse
-        import json
-        all = {}
-        roots = []
-        for x in Post.objects.all():
-            all[x.id] = {'obj': x, 'children': []}
-        print all
+        from django.conf import settings
+        user = request.user
 
-        for k, d in all.items():
-            obj = d['obj']
-            if not obj.parent:
-                roots.append(obj)
-            else:
-                all[obj.parent_id]['children'].append(obj)
-        print roots
+        try:
+            profile = user.get_profile()
+        except Profile.DoesNotExist, e:
+            profile = Profile()
+            profile.save()
 
-        post_json = json.dumps(roots)
-        #post = Post.objects.get(id=2)
-        #print post
-        #post_s = SerializePost(post)
-        #print post_s
-        #post_json = post_s.data
-        #print post_json
-        return HttpResponse(JSONRenderer().render(roots), content_type='application/json')
+        next = request.GET.get('next', settings.HOME_PAGE_URL)# TODO hardcoded next
+        if profile and profile.zipcode:
+            return redirect(next)
+        else:
+            form = ZipCodeForm(initial={'zipcode': ''})
+            return render_to_response('zr/zip_code.html', {'form': form, 'next': next}, context_instance=RequestContext(request))
 
-"""
+    def post(self, request):
+        profile = request.user.get_profile()
+        form = ZipCodeForm(request.POST)
+        if form.is_valid():
+            profile.zipcode = form.cleaned_data['zipcode']
+            profile.save()
+            return redirect(request.POST['next'])
+        return render_to_response('zr/zip_code.html', {'form': form, 'next': request.POST['next']}, context_instance=RequestContext(request))
+
