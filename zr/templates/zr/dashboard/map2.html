@@ -149,6 +149,8 @@
 
                 geoSearch(wkt_string, plan_id, function(data, textStatus, jqXHR) {
                     // TODO search results callback
+                    //console.log("---------------");
+                    //console.log(data);
                     addPostFilter(data);
                 });
 
@@ -160,14 +162,16 @@
                     popup_location = e.layer._latlng;
                     var point = L.marker(e.layer._latlng);
                     wkt.fromObject(point);
+
                 } else if (type === 'polygon'){
                     popup_location = e.layer._latlngs[0];
                     wkt.fromObject(L.polygon(e.layer._latlngs))
+
                 }
 
-                console.log(wkt.components);
+                //console.log(wkt.components);
                 var wkt_string = wkt.write();
-                console.log(wkt_string);
+                //console.log(wkt_string);
 
                 var popup = L.popup()
                     .setLatLng(popup_location)
@@ -263,6 +267,9 @@
                                             zoomToBoundsOnClick: true,
                                             spiderfyOnMaxZoom: true,
                                             removeOutsideVisibleBounds: true});
+        map.on("click",function(e){
+            addPostFilter([]);
+        });
 
 		$.each(data,function(key, value){
 			var wkt = new Wkt.Wkt();
@@ -284,13 +291,20 @@
                 marker.on('mouseover', function(){
 
                    polygon.addTo(map);
-                   postLightOn(value.id);
+                   //postLightOn(value.id);
 
                    polygon.on('mouseout', function(e){
-                       postLightOff(value.id);
+                       //postLightOff(value.id);
                        map.removeLayer(polygon);
                    });
                 });
+                marker.on("click", function(e){
+                    addPostFilter([{id:value.geo_id}]);
+                });
+                polygon.on('click', function(e){
+                       addPostFilter([{id:value.geo_id}]);
+                });
+
                 marker.addTo(map);
             } else{
                 var xy = components;
@@ -298,13 +312,16 @@
                 var marker = L.marker(latlng, {});
                 marker.on('mouseover', function(){
 
-                    postLightOn(value.id);
-                    console.log(value.id);
+                    //postLightOn(value.id);
 
                     marker.on('mouseout', function(){
-                       postLightOff(value.id);
+                       //postLightOff(value.id);
                        map.removeLayer(polygon);
                     });
+                });
+                marker.on('click', function(e){
+                       //postLightOn(value.id);
+                       addPostFilter([{id:value.geo_id}]);
                 });
                 markers.addLayer(marker);
             }
@@ -419,9 +436,9 @@
     }
 
     function geoSearch(wkt, plan_id, success_callback){
-        console.log('geosearching:');
-        console.log(wkt);
-        console.log(plan_id);
+        //.log('geosearching:');
+        //console.log(wkt);
+        //console.log(plan_id);
         if(wkt){
             $.ajax({
                 url : '/zr/api/geosearch/'+plan_id+'/',
