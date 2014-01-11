@@ -111,7 +111,7 @@ class ZipcodeCheckView(View):
         try:
             profile = user.get_profile()
         except Profile.DoesNotExist, e:
-            profile = Profile()
+            profile = Profile(user=user)
             profile.save()
 
         next = request.GET.get('next', settings.HOME_PAGE_URL)# TODO hardcoded next
