@@ -24,6 +24,8 @@
     var lon = 16.9666667;
     var lat = 52.4166667;
     var zoom = 12;
+    var after_search_zoom = 18;
+
     var map, drawControls, selectedFeature,wtk,vectors;
     var plan_id = parseInt('{{ plan_id }}');
 
@@ -31,7 +33,7 @@
 
     	var geocoder = new google.maps.Geocoder();
 		if (geocoder) {
-			geocoder.geocode({ 'address': address+'{{ scope }}', 'region':'pl' }, function (results, status) {
+			geocoder.geocode({ 'address': address+',{{ scope }}', 'region':'pl' }, function (results, status) {
 				if (status == google.maps.GeocoderStatus.OK) {
 					var geometry = results[0].geometry.location;
                     /*
@@ -43,7 +45,7 @@
                     zoom = 14;
             		map.setCenter(foundPosition, zoom);
                     */
-                    map.setView([geometry.lat(), geometry.lng()], zoom);
+                    map.setView([geometry.lat(), geometry.lng()], after_search_zoom);
          		} else {
             		console.log("Geocoding failed: " + status);
          		}
