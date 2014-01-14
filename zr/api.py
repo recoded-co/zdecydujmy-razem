@@ -27,10 +27,11 @@ router.register(r'configurations', ConfigurationViewSet)
 
 class GeometrySerializer(ModelSerializer):
     geoelement = serializers.Field(source='geoElement')
+    geo_id = serializers.Field(source='geoId')
 
     class Meta:
         model = Geometry
-        fields = ('id', 'name', 'geoelement', 'poly', 'point')
+        fields = ('id', 'name', 'geoelement', 'geo_id', 'poly', 'point')
 
 
 class GeometryViewSet(viewsets.ModelViewSet):
@@ -177,16 +178,16 @@ def geo_search(request, plan_id):
     import json
     polygon = request.POST.get('wkt', None)
     if polygon:
-        print polygon
+        #print polygon
         try:
             pnt = fromstr(polygon, srid=4326)
-            print pnt
+            #print pnt
             geometries = Geometry.objects.filter(Q(poly__intersects=pnt) | Q(point__intersects=pnt))
             posts = Post.objects.filter(plan__id=plan_id, geometry__in=geometries)
-            print geometries
-            print posts
+            #print geometries
+            #print posts
             posts_serialized = PostSerializer(posts, many=True)
-            print posts_serialized.data
+            #print posts_serialized.data
             #json_geometries = GeometrySerializer(geometries, many=True)
             #print json_geometries.data
             return posts_serialized.data #json_geometries.data

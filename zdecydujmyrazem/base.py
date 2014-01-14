@@ -142,9 +142,9 @@ SOCIAL_AUTH_PIPELINE = (
 
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.facebook.FacebookBackend',
-#    'social_auth.backends.google.GoogleOAuthBackend',
     'social_auth.backends.google.GoogleOAuth2Backend',
-#    'social_auth.backends.google.GoogleBackend',
+    'social_auth.backends.google.GoogleBackend',
+    'zr.backends.backend.EmailAuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 

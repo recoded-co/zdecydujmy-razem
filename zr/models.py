@@ -35,6 +35,12 @@ class Geometry(models.Model):
         else:
             return None
 
+    def geoId(self):
+        posts = Post.objects.filter(geometry=self.id)
+        if posts:
+            return posts[0].id
+        else:
+            return None
 
 class Plan(models.Model):
     name = models.CharField(max_length=50)

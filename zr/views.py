@@ -60,7 +60,19 @@ class UserCreationPageView(TemplateView):
 
     def post(self, request):
         form = LoginForm(request.POST)
+
         if form.is_valid():
+            try:
+                user = User.objects.get(email__iexact = form.cleaned_data['email'])
+                raise User.MultipleObjectsReturned
+            except User.DoesNotExist:
+                pass
+            except User.MultipleObjectsReturned:
+                from django.forms.util import ErrorList
+                errors = form._errors.setdefault("email", ErrorList())
+                errors.append(u"Email alredy exist")
+                return render_to_response('zr/registration.html', {'form': form}, context_instance=RequestContext(request))
+
             user = User.objects.create_user(form.clean_username(),
                                             form.cleaned_data['email'],
                                             password=form.clean_password2())
@@ -114,7 +126,7 @@ class ZipcodeCheckView(View):
         try:
             profile = user.get_profile()
         except Profile.DoesNotExist, e:
-            profile = Profile()
+            profile = Profile(user=user)
             profile.save()
 
         next = request.GET.get('next', settings.HOME_PAGE_URL)# TODO hardcoded next
