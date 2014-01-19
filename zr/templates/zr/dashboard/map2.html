@@ -85,6 +85,7 @@
         map = L.map('map', {
             center: new L.LatLng(lat, lon),
             zoom: zoom,
+            measureControl: true,
             layers: [osm, lmap]
         });
 
@@ -96,7 +97,7 @@
             zoomOutTitle:'Pomniejsz'
         });
         zoom.addTo(map);*/
-
+        //L.control.measure.addTo(map);
 
         L.control.layers(baseMaps, null).addTo(map);
 
@@ -107,6 +108,7 @@
         map.addLayer(searchItems);
 
         L.control.scale().addTo(map);
+        //L.control.measure().addTo(map);
 
 {% if user|isloged %}
         var drawControl = new L.Control.Draw({
