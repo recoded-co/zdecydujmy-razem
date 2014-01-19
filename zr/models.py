@@ -145,6 +145,17 @@ class PostSubscription(models.Model):
         return '%s: %s' % (self.post.author, self.post.content)
 
 
+class TrackEvents(models.Model):
+    category = models.TextField()
+    action = models.TextField(blank=True)
+    opt_label = models.TextField(blank=True)
+    opt_value = models.TextField(blank=True)
+    opt_noninteraction = models.TextField(blank=True)
+    date = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def __unicode__(self):
+        return '%s: %s :  %s' % (self.category, self.action, self.date)
+
 class WebNotification(models.Model):
     STATUS = (
         ('A',_('Alert')),

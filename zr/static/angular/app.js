@@ -26,8 +26,16 @@ var zdApp = angular.module('zd', [
   'ngRoute',
   'zdControllers',
   'zdServices',
-  '$strap.directives'
+  '$strap.directives',
+  'angularytics'
 ]);
+
+zdApp.config(function(AngularyticsProvider) {
+    AngularyticsProvider.setEventHandlers(['Console','DataBase']);
+  }).run(function(Angularytics) {
+    Angularytics.init();
+  });
+
 
 zdApp.config(function($interpolateProvider) {
   $interpolateProvider.startSymbol('{[{');

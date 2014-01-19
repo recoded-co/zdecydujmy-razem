@@ -5,8 +5,8 @@
 var zdControllers = angular.module('zdControllers', ['ngCookies']);
 //'configurations','rates','subjects','posts','geometries','plans',
 
-zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', 'zdServicesFactory','uploadService',
-  function($scope,$http,$cookies, $rootScope,zdServicesFactory, uploadService ) {
+zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', 'zdServicesFactory','uploadService','Angularytics',
+  function($scope,$http,$cookies, $rootScope,zdServicesFactory, uploadService, Angularytics ) {
 
     $scope.plans = zdServicesFactory.plans.json();
     jsonToNestedCollection(zdServicesFactory.posts.json(),function(data){
@@ -206,6 +206,11 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     $rootScope.$on('upload:success', function(xhr){
 
     });
+
+    $scope.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction){
+        Angularytics.trackEvent(category, action, opt_label, opt_value, opt_noninteraction);
+    }
+
   }]);
 
 function sendCSRFPost(url,$http,$cookies,data){

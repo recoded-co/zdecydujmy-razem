@@ -26,6 +26,7 @@
     var zoom = 12;
     var map, drawControls, selectedFeature,wtk,vectors;
     var plan_id = parseInt('{{ plan_id }}');
+    var user = '{{ user }}';
 
     function geolocate(address){
 
@@ -72,11 +73,30 @@
             "Leaflet Map": lmap
         };
 
+
+        /*zoom = L.control.zoom( {
+            position:'topleft',
+            zoomInText:'+',
+            zoomOutText:'-',
+            zoomInTitle:'Powiększ',
+            zoomOutTitle:'Pomniejsz'
+        });*/
+        console.log(zoom);
         map = L.map('map', {
             center: new L.LatLng(lat, lon),
             zoom: zoom,
             layers: [osm, lmap]
         });
+
+        /*zoom = L.control.zoomslider({
+            position:'topleft',
+            zoomInText:'+',
+            zoomOutText:'-',
+            zoomInTitle:'Powiększ',
+            zoomOutTitle:'Pomniejsz'
+        });
+        zoom.addTo(map);*/
+
 
         L.control.layers(baseMaps, null).addTo(map);
 
@@ -89,7 +109,6 @@
         L.control.scale().addTo(map);
 
 {% if user|isloged %}
-
         var drawControl = new L.Control.Draw({
 			position: 'topright',
 			draw: {
@@ -102,11 +121,11 @@
 					showArea: true,
 					drawError: {
 						color: '#b00b00',
-						timeout: 1000
+						timeout: 1000,
+                        message: '<strong>Błąd<strong>'
 					},
 					shapeOptions: {
 						color: '#0033ff',//'#bfadf55',
-                        dupa: 1
 					}
 				}
 			},
@@ -126,13 +145,14 @@
 				circle: false,
                 rectangle: true,
                 marker: false,
-                polygon: false
+                polygon: true
             }
 		});
 		map.addControl(search);
 
 {% endif %}
 		map.on('draw:created', function (e) {
+            console.log(e);
 			var type = e.layerType,
 				layer = e.layer;
 
@@ -143,6 +163,7 @@
 
                 searchItems.addLayer(layer);
                 layer.on('click', function(e){
+                    trackEvent('search rectangle','clicked',user,'','');
                     searchItems.removeLayer(layer);
                     addPostFilter({});
                 });
@@ -158,12 +179,14 @@
                 var popup_location = null;
 
                 if (type === 'marker') {
+                    trackEvent('marker create','clicked',user,'','');
                     layer.bindPopup(popup);
                     popup_location = e.layer._latlng;
                     var point = L.marker(e.layer._latlng);
                     wkt.fromObject(point);
 
                 } else if (type === 'polygon'){
+                    trackEvent('polygon create','clicked',user,'','');
                     popup_location = e.layer._latlngs[0];
                     wkt.fromObject(L.polygon(e.layer._latlngs))
 
@@ -268,6 +291,7 @@
                                             spiderfyOnMaxZoom: true,
                                             removeOutsideVisibleBounds: true});
         map.on("click",function(e){
+            trackEvent('map area','clicked',user,'','');
             addPostFilter([]);
         });
 
@@ -299,9 +323,11 @@
                    });
                 });
                 marker.on("click", function(e){
+                    trackEvent('marker','marker clicked','','','');
                     addPostFilter([{id:value.geo_id}]);
                 });
                 polygon.on('click', function(e){
+                       trackEvent('polygon','clicked',user,'','');
                        addPostFilter([{id:value.geo_id}]);
                 });
 
@@ -321,6 +347,7 @@
                 });
                 marker.on('click', function(e){
                        //postLightOn(value.id);
+                       trackEvent('point','clicked',user,'','');
                        addPostFilter([{id:value.geo_id}]);
                 });
                 markers.addLayer(marker);
@@ -404,6 +431,7 @@
                 headers: {'X-CSRFToken': $.cookie('csrftoken')},
                 success: function(data, textStatus, jqXHR)
                 {
+                    trackEvent('post added','clicked',user,'','');
                     addComentToGeoElement(data,comment);
                 },
                 error: function (jqXHR, textStatus, errorThrown)
@@ -420,6 +448,12 @@
     function addComentToGeoElement(data, comment){
         var pushCommentIntoScope = $("#div_apiList").scope().pushCommentIntoScope;
         pushCommentIntoScope(data, comment);
+        $("#div_apiList").scope().$apply();
+    }
+
+    function trackEvent(category, action, opt_label, opt_value, opt_noninteraction){
+        var track = $("#div_apiList").scope().trackEvent;
+        track(category, action, opt_label, opt_value, opt_noninteraction);
         $("#div_apiList").scope().$apply();
     }
 

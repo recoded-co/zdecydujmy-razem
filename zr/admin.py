@@ -9,3 +9,8 @@ admin.site.register(Configuration)
 admin.site.register(Post)
 admin.site.register(Rate)
 admin.site.register(PostSubscription)
+
+class EventDecoration(admin.ModelAdmin):
+    list_display = ('category', 'action','opt_label','opt_value','opt_noninteraction','date')
+
+admin.site.register(TrackEvents, EventDecoration)

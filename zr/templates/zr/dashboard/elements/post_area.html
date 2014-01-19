@@ -13,29 +13,29 @@
             </a>
         </li>
     </ul>
-    <button type="button" class="btn btn-xs" ng-click="comment(post)">
+    <button type="button" class="btn btn-xs" ng-click="comment(post)  | trackEvent:'Dodaj Komentarz':'Button clicked':user:'':'' ">
     {% trans 'Dodaj komentarz' %}
     </button>
-    <button type="button" class="btn btn-xs"  ng-hide="post.nodes.length==0" ng-click="showOneDown(post)">
+    <button type="button" class="btn btn-xs"  ng-hide="post.nodes.length==0" ng-click="showOneDown(post)  | trackEvent:'Rozwiń':'Button clicked':user ">
     <span class="glyphicon glyphicon-plus" ng-hide="post.rozwin"></span><span class="glyphicon glyphicon-minus" ng-show="post.rozwin"></span>
     </button>
     <button
         ng-hide="post.parent"
         ng-class="{'btn':true, 'btn-xs':true, 'btn-default':post.subscription}"
-        ng-click="subscribe(post, post.subscription);post.subscription=!post.subscription;">
-        {% trans 'Subscribe' %}
+        ng-click="subscribe(post, post.subscription);post.subscription=!post.subscription | trackEvent:'Subskrybuj':'Button clicked':user ">
+        {% trans 'Subskrybuj' %}
     </button>
     <button type="button" class="btn btn-xs"  ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
-         ng-click="scoreUp(post)">
+         ng-click="scoreUp(post) | trackEvent:'score-up':'Button clicked':user ">
          <span  class="glyphicon glyphicon-thumbs-up"></span>
     </button>
 
     <button type="button" class="btn btn-xs"    ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
-              ng-click="scoreDown(post)">
+              ng-click="scoreDown(post) | trackEvent:'score-down':'Button clicked':user ">
         <span class="glyphicon glyphicon-thumbs-down"></span>
     </button>
     <button ng-hide="post.parent || !post.geometry" type="button" class="btn btn-xs"
-              ng-click="zoom_chase(post)">
+              ng-click="zoom_chase(post) | trackEvent:'wyśrodkuj':'Button clicked':user:post.id ">
         <span class="glyphicon glyphicon-screenshot"></span>
     </button>
     {% trans 'lubi' %}: {[{ post.positive_rate || 0 }]}
@@ -53,11 +53,11 @@
     <input type="hidden" ng-model="post.plan" value=""/>
     <div style="float:right">
         <button type="button" class="btn btn-xs" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
-                ng-click="addDown(post)">
+                ng-click="addDown(post) | trackEvent:'Zapisz':'Button clicked':user ">
              {% trans 'Zapisz' %}
         </button>
         <button    type="button" class="btn btn-xs" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
-                      ng-click="delete(post)">
+                      ng-click="delete(post) | trackEvent:'Usuń':'Button clicked':user ">
             {% trans 'Usuń' %}
         </button>
     </div>

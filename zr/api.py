@@ -6,7 +6,7 @@ from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer, Serializer
 from filemanager.models import PostFileUpload
-from zr.models import Plan, Configuration, Geometry, Subjects, Post, Rate, PostSubscription
+from zr.models import Plan, Configuration, Geometry, Subjects, Post, Rate, PostSubscription, TrackEvents
 from django_decorators.decorators import json_response
 from django.views.decorators.csrf import csrf_exempt
 
@@ -167,6 +167,43 @@ class PostSubscriptionViewSet(viewsets.ModelViewSet):
         return self.subscription
 
 router.register(r'subscriptions', PostSubscriptionViewSet)
+
+class TrackEventsSerializer(ModelSerializer):
+    class Meta:
+        model = TrackEvents
+
+class TrackEventsViewSet(viewsets.ModelViewSet):
+    queryset = TrackEvents.objects.all()
+    serializer_class = TrackEventsSerializer
+
+    def get_queryset(self):
+        return TrackEvents.objects.all()
+
+    def list(self, request):
+        queryset = TrackEvents.objects.all()
+        serializer = TrackEventsSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        import json
+        print 'TrackEventsViewSet create'
+        print str(request.POST)
+        data = json.loads(request.raw_post_data)
+        labels = ['category','action','opt_label','opt_value','opt_noninteraction']
+        inputs = {}
+        for item in labels:
+            if item in data:
+                inputs[item]=data[item]
+            else:
+                inputs[item]=''
+        trackevent = TrackEvents.objects.create(**inputs)
+        self.trackevent = trackevent
+        return super(TrackEventsViewSet, self).update(request, args, kwargs)
+
+    def get_object_or_none(self ):
+        return self.trackevent
+
+router.register(r'track', TrackEventsViewSet)
 
 
 #@csrf_exempt
