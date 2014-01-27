@@ -206,12 +206,12 @@ L.Control.Measure = L.Control.extend({
 	},
 
 	_updateTooltipDistance: function(total, difference) {
-		var totalRound = this._round(total),
-			differenceRound = this._round(difference);
+		var totalRound = (total/1000).toFixed(2),
+			differenceRound = (difference/1000).toFixed(2);
 
-		var text = '<div class="leaflet-measure-tooltip-total">' + totalRound + ' nm</div>';
+		var text = '<div class="leaflet-measure-tooltip-total">' + totalRound + ' km</div>';
 		if(differenceRound > 0 && totalRound != differenceRound) {
-			text += '<div class="leaflet-measure-tooltip-difference">(+' + differenceRound + ' nm)</div>';
+			text += '<div class="leaflet-measure-tooltip-difference">(+' + differenceRound + ' km)</div>';
 		}
 
 		this._tooltip._icon.innerHTML = text;
@@ -230,7 +230,29 @@ L.Control.Measure = L.Control.extend({
 				this._finishPath();
 			}
 		}
-	}
+	},
+    _conv: function(distance, isMetric) {
+    var distanceStr;
+
+    if (isMetric) {
+      // show metres when distance is < 1km, then show km
+      if (distance > 1000) {
+        distanceStr = (distance / 1000).toFixed(2) + ' km';
+      } else {
+        distanceStr = Math.ceil(distance) + ' m';
+      }
+    } else {
+      distance *= 1.09361;
+
+      if (distance > 1760) {
+        distanceStr = (distance / 1760).toFixed(2) + ' miles';
+      } else {
+        distanceStr = Math.ceil(distance) + ' yd';
+      }
+    }
+
+    return distanceStr;
+    }
 });
 
 L.Map.mergeOptions({

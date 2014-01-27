@@ -186,8 +186,6 @@ class TrackEventsViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         import json
-        print 'TrackEventsViewSet create'
-        print str(request.POST)
         data = json.loads(request.raw_post_data)
         labels = ['category','action','opt_label','opt_value','opt_noninteraction']
         inputs = {}
