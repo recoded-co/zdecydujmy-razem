@@ -67,10 +67,16 @@
                 maxZoom: 18
             });
 
+        var mbmap =
+            L.tileLayer('http://{s}.tiles.mapbox.com/v3/mmlodkowski.gpl722i4/{z}/{x}/{y}.png', {
+                attribution: "<a href='http://mapbox.com/about/maps' target='_blank'>Terms & Feedback</a>",
+                maxZoom: 18
+            });
 
         var baseMaps = {
             "Open Street Map": osm,
-            "Leaflet Map": lmap
+            "Leaflet Map": lmap,
+            "MaxBox": mbmap
         };
 
 
