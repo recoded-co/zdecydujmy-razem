@@ -91,8 +91,8 @@
         map = L.map('map', {
             center: new L.LatLng(lat, lon),
             zoom: zoom,
-            measureControl: true,
             measurePolygonControl: true,
+            measureControl: true,
             layers: [osm, lmap]
         });
 
@@ -154,7 +154,7 @@
 				circle: false,
                 rectangle: true,
                 marker: false,
-                polygon: true
+                polygon: false
             }
 		});
 		map.addControl(search);
