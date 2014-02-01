@@ -58,19 +58,23 @@
             L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 attribution: 'Map data © OpenStreetMap contributors',
                 maxZoom: 19,
-                minZoom: 0
+                minZoom: 0,
+                legend: LEGEND
             });
 
         var lmap =
             L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
                 attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                maxZoom: 18
+                maxZoom: 18,
+                legend: LEGEND
             });
 
         var mbmap =
             L.tileLayer('http://{s}.tiles.mapbox.com/v3/mmlodkowski.gpl722i4/{z}/{x}/{y}.png', {
                 attribution: "<a href='http://mapbox.com/about/maps' target='_blank'>Terms & Feedback</a>",
-                maxZoom: 18
+                maxZoom: 18,
+                legend: LEGEND,
+                openLegendOnLoad: true
             });
 
         var baseMaps = {
@@ -89,11 +93,14 @@
         });*/
         console.log(zoom);
         map = L.map('map', {
+            attributionControl: false,
+            editInOSMControl: true,
+            editInOSMControlOptions: {position: 'topleft'},
             center: new L.LatLng(lat, lon),
             zoom: zoom,
             measurePolygonControl: true,
             measureControl: true,
-            layers: [osm, lmap]
+            layers: [osm, lmap, mbmap]
         });
 
         /*zoom = L.control.zoomslider({
@@ -117,6 +124,21 @@
         L.control.scale().addTo(map);
         //L.control.measure().addTo(map);
 
+
+    /*
+      * var map = L.map('map', {attributionControl: false, editInOSMControl: true, editInOSMControlOptions: {position: 'topleft'}}).setView(startPoint, 13),
+    tilelayer = L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+    {maxZoom: 20,
+    legend: LEGEND, openLegendOnLoad: true, attribution: 'Data \u00a9 <a href="http://www.openstreetmap.org/copyright"> OpenStreetMap Contributors </a> Tiles \u00a9 HOT'}).addTo(map),
+    hash = new L.Hash(map);
+    legend = (new L.Control.TileLegend()).addTo(map);
+        var legendControl = (new L.Control.TileLegend()).addTo(map);
+
+    */
+    var legendControl = (new L.Control.TileLegend()).addTo(map);
+    //legend = new L.TileLegend(map, osm, L.DomUtil.get('leaflet-control-tilelegend-container'), LEGEND);
+    // legend.open();
+
 {% if user|isloged %}
         var drawControl = new L.Control.Draw({
 			position: 'topright',
@@ -134,7 +156,7 @@
                         message: '<strong>Błąd<strong>'
 					},
 					shapeOptions: {
-						color: '#0033ff',//'#bfadf55',
+						color: '#0033ff'//'#bfadf55',
 					}
 				}
 			},
@@ -179,8 +201,6 @@
 
                 geoSearch(wkt_string, plan_id, function(data, textStatus, jqXHR) {
                     // TODO search results callback
-                    //console.log("---------------");
-                    //console.log(data);
                     addPostFilter(data);
                 });
 

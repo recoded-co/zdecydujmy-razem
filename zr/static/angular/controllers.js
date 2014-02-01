@@ -21,6 +21,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     $scope.predicate='date';
     $scope.reverse=true;
     $scope.data_arrow=true;
+    $scope.showallposts=true;
 
     var post_buff_id = 0;
     $scope.zoom_chase = function(post){
@@ -85,6 +86,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
             });
             data.text = "";
             data.zmiennac=false;
+            $scope.showOneDown(data);
     };
     $scope.showOneDown = function(data){
         if(data.rozwin==undefined || data.rozwin==false){
@@ -167,9 +169,15 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
 
     $scope.addPFilter = function(data) {
         $scope.filterGeoData = new Array();
+        if(data!={}){
+            $scope.showAll();
+        }
+
+
         for( var item in data ){
             $scope.filterGeoData.push(data[item].id);
         };
+
     };
 
     $scope.postLightOn = function(id) {

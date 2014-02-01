@@ -1,68 +1,80 @@
 {% load i18n %}
 {% load url from future %}
 
-<div class="media-body dropbox"  style="margin-left: 20px;margin-right: 20px;" >
-    <em>{[{ post.author_name }]}({[{ post.date | date:'yyyy-MM-dd' }]}) napisał:</em>
+<div class="media-body dropbox new_margin"  style="margin-left: 20px;margin-right: 20px;" >
+    <div ng-class="{'post':post.nodes==null,'sub_post':post.nodes!=null}">
+        <p ng-class="{'select':post.light}">
+            {[{ post.content }]}</p>
+        <ul ng-repeat="item in post.filep">
+            <li>{[{ item.name }]}
+                <a href="fmen/download/{[{ item.file }]}" >
+                    <span class="glyphicon glyphicon-download"></span>
+                </a>
+            </li>
+        </ul>
+        <hr>
+        <em>{[{ post.author_name }]}</em>({[{ post.date | date:'yyyy-MM-dd' }]})
+        {% trans 'Za' %}: {[{ post.positive_rate || 0 }]}
+        {% trans 'Przeciw' %}: {[{ post.negative_rate || 0 }]}
+        {% trans 'Komentarzy' %}: {[{ post.numcom || 0 }]}<button type="button" class="btn btn-xs allign_right" ng-click="post.showTools=!post.showTools" ><span class="glyphicon glyphicon-flash" ></span></button><br>
+        <div ng-show="post.showTools==true">
+            <button type="button" class="btn btn-xs" ng-click="comment(post)  | trackEvent:'Dodaj Komentarz':'Button clicked':user:'':'' ">
+            {% trans 'Dodaj komentarz' %}
+            </button>
+            <button type="button" class="btn btn-xs"  ng-hide="post.nodes.length==0" ng-click="showOneDown(post)  | trackEvent:'Rozwiń':'Button clicked':user " ng-disabled="!showallposts">
+                <span ng-if="showallposts" class="glyphicon glyphicon-plus" ng-hide="post.rozwin"></span>
+                <span ng-if="showallposts" class="glyphicon glyphicon-minus" ng-show="post.rozwin"></span>
+                <span ng-if="!showallposts" class="glyphicon glyphicon-minus" ></span>
+            </button>
+            <button
+                ng-hide="post.parent"
+                ng-class="{'btn':true, 'btn-xs':true, 'btn-default':post.subscription}"
+                ng-click="subscribe(post, post.subscription);post.subscription=!post.subscription | trackEvent:'Subskrybuj':'Button clicked':user ">
+                {% trans 'Śledzę' %}
+            </button>
+            <button type="button" class="btn btn-xs"  ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
+                 ng-click="scoreUp(post) | trackEvent:'score-up':'Button clicked':user ">
+                 <span  class="glyphicon glyphicon-thumbs-up"></span>
+            </button>
 
-    <p ng-class="{'select':post.light}">
-        {[{ post.content }]}</p>
-    <ul ng-repeat="item in post.filep">
-        <li>{[{ item.name }]}
-            <a href="fmen/download/{[{ item.file }]}" >
-                <span class="glyphicon glyphicon-download"></span>
-            </a>
-        </li>
-    </ul>
-    <button type="button" class="btn btn-xs" ng-click="comment(post)  | trackEvent:'Dodaj Komentarz':'Button clicked':user:'':'' ">
-    {% trans 'Dodaj komentarz' %}
-    </button>
-    <button type="button" class="btn btn-xs"  ng-hide="post.nodes.length==0" ng-click="showOneDown(post)  | trackEvent:'Rozwiń':'Button clicked':user ">
-    <span class="glyphicon glyphicon-plus" ng-hide="post.rozwin"></span><span class="glyphicon glyphicon-minus" ng-show="post.rozwin"></span>
-    </button>
-    <button
-        ng-hide="post.parent"
-        ng-class="{'btn':true, 'btn-xs':true, 'btn-default':post.subscription}"
-        ng-click="subscribe(post, post.subscription);post.subscription=!post.subscription | trackEvent:'Subskrybuj':'Button clicked':user ">
-        {% trans 'Subskrybuj' %}
-    </button>
-    <button type="button" class="btn btn-xs"  ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
-         ng-click="scoreUp(post) | trackEvent:'score-up':'Button clicked':user ">
-         <span  class="glyphicon glyphicon-thumbs-up"></span>
-    </button>
+            <button type="button" class="btn btn-xs"    ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
+                      ng-click="scoreDown(post) | trackEvent:'score-down':'Button clicked':user ">
+                <span class="glyphicon glyphicon-thumbs-down"></span>
+            </button>
+            <button ng-hide="post.parent || !post.geometry" type="button" class="btn btn-xs"
+                      ng-click="zoom_chase(post) | trackEvent:'wyśrodkuj':'Button clicked':user:post.id ">
+                <span class="glyphicon glyphicon-screenshot"></span>
+            </button>
 
-    <button type="button" class="btn btn-xs"    ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
-              ng-click="scoreDown(post) | trackEvent:'score-down':'Button clicked':user ">
-        <span class="glyphicon glyphicon-thumbs-down"></span>
-    </button>
-    <button ng-hide="post.parent || !post.geometry" type="button" class="btn btn-xs"
-              ng-click="zoom_chase(post) | trackEvent:'wyśrodkuj':'Button clicked':user:post.id ">
-        <span class="glyphicon glyphicon-screenshot"></span>
-    </button>
-    {% trans 'lubi' %}: {[{ post.positive_rate || 0 }]}
-    {% trans 'nie lubi' %}: {[{ post.negative_rate || 0 }]}
-    {% trans 'komentarzy' %}: {[{ post.numcom || 0 }]}
-    <input class="btn btn-xs" type="file" value="{[{ post.id }]}" multiple file-change>
-    <br><br>
+            <!--<button class="btn btn-xs"><span class="glyphicon glyphicon-upload"><input style="visibility:hidden; width: 1px;" type="file" value="{[{ post.id }]}" multiple file-change /></span></button>-->
 
-    <textarea     ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
-                  ng-model="post.text"
-                  class="form-control"
-                  rows="3">
-    </textarea>
+            <div class="fileinput fileinput-new" data-provides="fileinput">
+              <button type="button" class="btn btn-xs btn-file"><span class="glyphicon glyphicon-upload"></span><input name="..." type="file" value="{[{ post.id }]}" multiple file-change /></button>
+            </div>
+        </div>
 
-    <input type="hidden" ng-model="post.plan" value=""/>
-    <div style="float:right">
-        <button type="button" class="btn btn-xs" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
-                ng-click="addDown(post) | trackEvent:'Zapisz':'Button clicked':user ">
-             {% trans 'Zapisz' %}
-        </button>
-        <button    type="button" class="btn btn-xs" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
-                      ng-click="delete(post) | trackEvent:'Usuń':'Button clicked':user ">
-            {% trans 'Usuń' %}
-        </button>
+
+
+        <textarea     ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
+                      ng-model="post.text"
+                      class="form-control"
+                      rows="3">
+        </textarea>
+
+        <input type="hidden" ng-model="post.plan" value=""/>
+        <div class="allign_right">
+            <button type="button" class="btn btn-xs" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
+                    ng-click="addDown(post) | trackEvent:'Zapisz':'Button clicked':user ">
+                 {% trans 'Zapisz' %}
+            </button>
+            <button    type="button" class="btn btn-xs" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
+                          ng-click="delete(post) | trackEvent:'Usuń':'Button clicked':user ">
+                {% trans 'Usuń' %}
+            </button>
+        </div>
     </div>
     <div  ng-hide="!(post.rozwin!=undefined && post.rozwin==true )&& showallposts" >
-        <div class="media"
+        <div class="media new_margin"
              ng-repeat="post in post.nodes "
              ng-include="'tree_item_renderer.html'">
         </div>

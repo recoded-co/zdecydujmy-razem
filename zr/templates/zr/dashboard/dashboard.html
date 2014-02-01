@@ -55,7 +55,9 @@
     <link rel="stylesheet" href="/static/css/leaflet.draw.css" />
     <link rel="stylesheet" href="/static/css/MarkerCluster.css" />
 	<link rel="stylesheet" href="/static/css/MarkerCluster.Default.css" />
-    <link rel="stylesheet" href="/static/js//leaflet.measure/leaflet.measure/leaflet.measure.css" />
+    <link rel="stylesheet" href="/static/js/leaflet.measure/leaflet.measure/leaflet.measure.css" />
+    <link rel="stylesheet" href="/static/css/jasny-bootstrap.min.css"/>
+    <link rel="stylesheet" href="/static/js/Leaflet.TileLegend/Leaflet.TileLegend.css"/>
 
 {% endblock %}
 
@@ -98,6 +100,8 @@
 	<script src="/static/js/Control.Draw.js"></script>
 	<script src="/static/js/Tooltip.js"></script>
 	<script src="/static/js/Toolbar.js"></script>
+    <script src="/static/js/legende.js"></script>
+    <script src="/static/js/Leaflet.TileLegend/Leaflet.TileLegend.js"></script>
 
 
 	<script src="/static/js/draw/DrawToolbar.js"></script>
@@ -112,6 +116,7 @@
     <script src="/static/angular/bower_components/angularytics/src/trackEventFilter.js"></script>
     <script src="/static/js/leaflet.measure/leaflet.measure/leaflet.measure.js"></script>
     <script src="/static/js/leaflet.measure/leaflet.measure.polygon/leaflet.measure.polygon.js"></script>
+    <script src="/static/js/jasny-bootstrap.min.js"></script>
 
 
 {% endblock %}
@@ -133,7 +138,8 @@
               <div class="post_content" data-title="Uwagi szczegółowe">
 
                     <button type="button" class="btn btn-xs"  ng-click="showAll()|trackEvent:'Rozwiń wszystkie':'Button clicked':user:'':'' ">
-                        {% trans 'Rozwiń wszystkie' %}
+                        <span ng-show="showallposts">{% trans 'Rozwiń wszystkie' %}</span>
+                        <span ng-hide="showallposts">{% trans 'Zwiń wszystkie' %}</span>
                     </button>
 
                     <button type="button" ng-class="{'btn':true, 'btn-xs':true, 'btn-default':!search_box}" ng-init="search_box=true;" ng-click="search_box = !search_box  | trackEvent:'Szukaj':'Button clicked':user:'':''  "  >
@@ -151,9 +157,8 @@
                     <button class="btn btn-warning  btn-xs"
                               ng-int="rev_sc=true;score_arrow=true;"
                               ng-click="predicate = 'score'; reverse=!rev_sc; rev_sc=!rev_sc;score_arrow=!score_arrow | trackEvent:'Ocena':'Button clicked':user ">
-                          {% trans 'Ocena' %}
-                            <span class="glyphicon glyphicon-arrow-down" ng-hide="score_arrow"></span>
-                            <span class="glyphicon glyphicon-arrow-up" ng-show="score_arrow"></span>
+                            <span ng-hide="score_arrow">{% trans 'Ilość na nie' %}</span>
+                            <span ng-show="score_arrow">{% trans 'Ilość na tak' %}</span>
                     </button>
 
                     <button class="btn btn-primary btn-xs"
@@ -171,7 +176,7 @@
                         {% trans 'Ilość komentarzy: ' %}<input class="form-control input-small" type="number" > -->
                   </div>
                     <div ng-init="user='{{ user }}'"></div>
-                    <div id="{[{ post.geometry && !post.parent?post.geometry:'none' }]}" class="media media-list"  ng-repeat="post in tree | filter:{geometry: '!!'} | orderBy:predicate:reverse | filter:search | filter:geoFilter">
+                    <div id="{[{ post.geometry && !post.parent?post.geometry:'none' }]}" class="media media-list new_margin"  ng-repeat="post in tree | filter:{geometry: '!!'} | orderBy:predicate:reverse | filter:search | filter:geoFilter">
                         <div ng-include="'tree_item_renderer.html'"></div>
                     </div>
               </div>
@@ -231,7 +236,7 @@
 
 
                     <div ng-init="user='{{ user }}'"></div>
-                    <div class="media media-list"   ng-repeat="post in tree | filter:{geometry: null}  | filter:search | orderBy:predicate:reverse"
+                    <div class="media media-list new_margin"   ng-repeat="post in tree | filter:{geometry: null}  | filter:search | orderBy:predicate:reverse"
                                                     ng-include="'tree_item_renderer.html'">
                     </div>
               </div>
