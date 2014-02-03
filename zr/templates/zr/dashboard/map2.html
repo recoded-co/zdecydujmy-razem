@@ -196,7 +196,7 @@
                 layer.on('click', function(e){
                     trackEvent('search rectangle','clicked',user,'','');
                     searchItems.removeLayer(layer);
-                    addPostFilter({});
+                    addPostFilter(undefined);
                 });
 
                 geoSearch(wkt_string, plan_id, function(data, textStatus, jqXHR) {
@@ -321,7 +321,7 @@
                                             removeOutsideVisibleBounds: true});
         map.on("click",function(e){
             trackEvent('map area','clicked',user,'','');
-            addPostFilter([]);
+            addPostFilter(undefined);
         });
 
 		$.each(data,function(key, value){

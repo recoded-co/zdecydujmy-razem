@@ -48,7 +48,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     $scope.scoreDown = function(data){
         data.score = data.score - 1;
         data.sub_rates = true;
-        data.negative_rate = data.negative_rate -1;
+        data.negative_rate = data.negative_rate + 1;
         var temp = {
             post: data.id,
             user: configuration.getAuthor(),
@@ -169,11 +169,11 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
 
     $scope.addPFilter = function(data) {
         $scope.filterGeoData = new Array();
-        if(data!={}){
+        if(data!==undefined){
+            console.log(data);
+            console.log('$scope.showAll();');
             $scope.showAll();
         }
-
-
         for( var item in data ){
             $scope.filterGeoData.push(data[item].id);
         };

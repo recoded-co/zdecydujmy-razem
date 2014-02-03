@@ -106,7 +106,7 @@ class Post(models.Model):
 
     def dislike_sum(self):
         rates = self.rates.filter(like=False)
-        like_sum = sum([x.rate if x.like else -(x.rate) for x in rates])
+        like_sum = sum([x.rate if x.like else x.rate for x in rates])
         return like_sum
 
     def has_likes(self):

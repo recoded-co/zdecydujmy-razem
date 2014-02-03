@@ -2,7 +2,8 @@
 {% load url from future %}
 
 <div class="media-body dropbox new_margin"  style="margin-left: 20px;margin-right: 20px;" >
-    <div ng-class="{'post':post.nodes==null,'sub_post':post.nodes!=null}">
+    <div ng-class="{'post':post.parent==null,'sub_post':post.parent!=null}">
+
         <p ng-class="{'select':post.light}">
             {[{ post.content }]}</p>
         <ul ng-repeat="item in post.filep">
@@ -16,15 +17,18 @@
         <em>{[{ post.author_name }]}</em>({[{ post.date | date:'yyyy-MM-dd' }]})
         {% trans 'Za' %}: {[{ post.positive_rate || 0 }]}
         {% trans 'Przeciw' %}: {[{ post.negative_rate || 0 }]}
-        {% trans 'Komentarzy' %}: {[{ post.numcom || 0 }]}<button type="button" class="btn btn-xs allign_right" ng-click="post.showTools=!post.showTools" ><span class="glyphicon glyphicon-flash" ></span></button><br>
-        <div ng-show="post.showTools==true">
+        {% trans 'Komentarzy' %}: {[{ post.numcom || 0 }]}
+        <!--<button type="button" class="btn btn-xs allign_right" ng-click="post.showTools=!post.showTools" ><span class="glyphicon glyphicon-flash" ></span></button>-->
+        <br>
+        <!--<div ng-show="post.showTools==true">-->
+        <div>
             <button type="button" class="btn btn-xs" ng-click="comment(post)  | trackEvent:'Dodaj Komentarz':'Button clicked':user:'':'' ">
             {% trans 'Dodaj komentarz' %}
             </button>
             <button type="button" class="btn btn-xs"  ng-hide="post.nodes.length==0" ng-click="showOneDown(post)  | trackEvent:'Rozwiń':'Button clicked':user " ng-disabled="!showallposts">
-                <span ng-if="showallposts" class="glyphicon glyphicon-plus" ng-hide="post.rozwin"></span>
-                <span ng-if="showallposts" class="glyphicon glyphicon-minus" ng-show="post.rozwin"></span>
-                <span ng-if="!showallposts" class="glyphicon glyphicon-minus" ></span>
+                <span ng-if="showallposts==true" class="glyphicon glyphicon-plus" ng-hide="post.rozwin"></span>
+                <span ng-if="showallposts==true" class="glyphicon glyphicon-minus" ng-show="post.rozwin"></span>
+                <span ng-if="showallposts==false" class="glyphicon glyphicon-minus" ></span>
             </button>
             <button
                 ng-hide="post.parent"
@@ -73,8 +77,8 @@
             </button>
         </div>
     </div>
-    <div  ng-hide="!(post.rozwin!=undefined && post.rozwin==true )&& showallposts" >
-        <div class="media new_margin"
+    <div class="tab_border" ng-hide="!(post.rozwin!=undefined && post.rozwin==true )&& showallposts" >
+        <div ng-class="{'media':true, 'main-post':post.parent==null,'sub_post':post.parent!=null}"
              ng-repeat="post in post.nodes "
              ng-include="'tree_item_renderer.html'">
         </div>
