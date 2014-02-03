@@ -170,9 +170,9 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     $scope.addPFilter = function(data) {
         $scope.filterGeoData = new Array();
         if(data!==undefined){
-            console.log(data);
-            console.log('$scope.showAll();');
             $scope.showAll();
+        }else{
+            $scope.showallposts = true;
         }
         for( var item in data ){
             $scope.filterGeoData.push(data[item].id);
