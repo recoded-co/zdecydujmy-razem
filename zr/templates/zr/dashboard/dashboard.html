@@ -58,7 +58,8 @@
     <link rel="stylesheet" href="/static/js/leaflet.measure/leaflet.measure/leaflet.measure.css" />
     <link rel="stylesheet" href="/static/css/jasny-bootstrap.min.css"/>
     <link rel="stylesheet" href="/static/js/LeafletTileLegend/Leaflet.TileLegend.css"/>
-    <link rel="stylesheet" href="/static/js/bootstrap-datepicker/css/datepicker.css"/>
+    <link rel="stylesheet" href="/static/angular/bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css"/>
+    <!--<link rel="stylesheet" href="/static/js/bootstrap-datepicker/css/datepicker.css"/>-->
 {% endblock %}
 
 {% block extrajs %}
@@ -66,6 +67,9 @@
     <script src="/static/angular/angular-route.js"></script>
     <script src="/static/angular/angular-cookies.js"></script>
     <script src="/static/angular/angular-strap.min.js"></script>
+    <script src="/static/angular/filters.js"></script>
+    <script src="/static/angular/bower_components/moment/moment.js"></script>
+    <script src="/static/angular/bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
     <script src="/static/angular/controllers.js"></script>
     <script src="/static/angular/services.js"></script>
     <script src="/static/angular/app.js"></script>
@@ -116,26 +120,6 @@
     <script src="/static/js/leaflet.measure/leaflet.measure/leaflet.measure.js"></script>
     <script src="/static/js/leaflet.measure/leaflet.measure.polygon/leaflet.measure.polygon.js"></script>
     <script src="/static/js/jasny-bootstrap.min.js"></script>
-    <script src="/static/js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-    <script>
-    $(document).ready(function(){
-        $(".input-group.date").datepicker({})
-                .on('changeDate', function(ev) {
-                    //$("#div_apiList").scope().search = {};
-                    //$("#div_apiList").scope().search.data = (ev.date.getMonth()+1)+'/'+ev.date.getDate()+'/'+(ev.date.getYear()%100);
-                    //console.log("---->>> "+ev.date.getUTCDate());
-                    //var search = $("#div_apiList").scope().search.data;
-                    //search = ev.date;
-                    //$("#dateInput").val(ev.date.getUTCDate());
-
-                    //$("#div_apiList").scope().$apply();
-                    //console.log("changed date");
-                    //console.log(ev);
-                    //console.log(ev.date.getDate());
-                });
-    });
-    </script>
-
 {% endblock %}
 
 {% block onload %} map_init();resize();page_init(); {% endblock %}
@@ -190,16 +174,18 @@
 
                     <div ng-hide="search_box" class="search_box">
                             {% trans 'Treść: ' %}<input class="form-control input-sm" ng-model="search.content"><br/>
-                            <div class="form-group row">
-                              <div class="col-xs-8">
-                                {% trans 'Data' %}:
-                                <div class="input-group date" id="dp3" data-date="02-03-2014" data-date-format="mm-dd-yyyy" >
-                                  <input ng-model="search.date" class="form-control" type="text" value="02-03-2014"  >
-                                  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                                </div>
-                              </div>
+                            <div class="dropdown">
+                                {% trans 'Data: ' %}<a class="dropdown-toggle my-toggle-select" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="">
+                                    <div class="input-append"><input type="hidden" class="input-large" data-ng-model="searchdate.date"><span class="add-on">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                    </span>{[{ searchdate.date | date:'yyyy-MM-dd' }]}<span class="glyphicon glyphicon-remove" ng-click="searchdate.date='' "></span>
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                    <datetimepicker data-ng-model="searchdate.date"
+                                                    data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select', startView:'day', minView:'day' }"></datetimepicker>
+                                </ul>
                             </div>
-
                         <!--<input id="dateInput" class="form-control input-sm" type="date" ng-model="search.date" ng-hide="false">
                         -->
                             <!--{% trans 'Ocena: ' %}<input class="form-control input-small" type="number" ng-model="search.score">
@@ -209,7 +195,7 @@
                   </div>
                     <div id="{[{ post.geometry && !post.parent?post.geometry:'none' }]}"
                          ng-class="{'media':true,'media-list':true, 'main-post':post.parent==null,'child-post':post.parent!=null}"
-                         ng-repeat="post in tree | filter:{geometry: '!!'} | orderBy:predicate:reverse | filter:search | filter:geoFilter">
+                         ng-repeat="post in tree | filter:{geometry: '!!'} | orderBy:predicate:reverse | filter:search | searchdate:searchdate | filter:geoFilter">
                         <div ng-include="'tree_item_renderer.html'"></div>
                     </div>
 
@@ -251,17 +237,20 @@
                         </button>
 
                         <div ng-hide="search_box" class="search_box">
-                                {% trans 'Treść: ' %}<input class="form-control input-sm" ng-model="search.content"><br/>
-                                <div class="form-group row">
-                                  <div class="col-xs-8">
-                                    {% trans 'Data' %}:
-                                    <div class="input-group date" id="dp3" data-date="02-03-2014" data-date-format="mm-dd-yyyy" >
-                                      <input ng-model="search.date" class="form-control" type="text" value="02-03-2014"  >
-                                      <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                                    </div>
-                                  </div>
+                               {% trans 'Treść: ' %}<input class="form-control input-sm" ng-model="search.content"><br/>
+                               <div class="dropdown">
+                                   {% trans 'Data: ' %}
+                                    <a class="dropdown-toggle my-toggle-select" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="">
+                                        <div class="input-append"><input type="hidden" class="input-large" data-ng-model="searchdate.date"><span class="add-on">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </span>{[{ searchdate.date | date:'yyyy-MM-dd' }]}<span class="glyphicon glyphicon-remove" ng-click="searchdate.date='' "></span>
+                                        </div>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                        <datetimepicker data-ng-model="searchdate.date"
+                                                        data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select', startView:'day', minView:'day' }"></datetimepicker>
+                                    </ul>
                                 </div>
-                        </div>
 
                         <div ng-show="addBasePost">
                             <textarea     ng-model="base_post.text"

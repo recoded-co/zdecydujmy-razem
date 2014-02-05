@@ -14,7 +14,7 @@
             </li>
         </ul>
         <hr>
-        <em>{[{ post.author_name }]}</em>({[{ post.date | date:'yyyy-MM-dd' }]})
+        <em>{[{ post.author_name }]}</em>({[{ post.date | fromToday }]})
         {% trans 'Za' %}: {[{ post.positive_rate || 0 }]}
         {% trans 'Przeciw' %}: {[{ post.negative_rate || 0 }]}
         {% trans 'Komentarzy' %}: {[{ post.numcom || 0 }]}
@@ -25,7 +25,7 @@
             <button type="button" class="btn btn-xs" ng-click="comment(post)  | trackEvent:'Dodaj Komentarz':'Button clicked':user:'':'' ">
             {% trans 'Dodaj komentarz' %}
             </button>
-            <button type="button" class="btn btn-xs"  ng-hide="post.nodes.length==0" ng-click="showOneDown(post)  | trackEvent:'Rozwiń':'Button clicked':user " ng-disabled="!showallposts">
+            <button type="button" class="btn btn-xs"  ng-if="post.nodes.length>0" ng-click="showOneDown(post)  | trackEvent:'Rozwiń':'Button clicked':user " ng-disabled="!showallposts">
                 <span ng-if="showallposts==true" class="glyphicon glyphicon-plus" ng-hide="post.rozwin"></span>
                 <span ng-if="showallposts==true" class="glyphicon glyphicon-minus" ng-show="post.rozwin"></span>
                 <span ng-if="showallposts==false" class="glyphicon glyphicon-minus" ></span>

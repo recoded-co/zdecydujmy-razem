@@ -122,6 +122,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
             });
         data.text = "";
         data.zmiennac=false;
+        data.rozwin = true;
     };
     //$scope.tree = zdServicesFactory.posts.json();
 
