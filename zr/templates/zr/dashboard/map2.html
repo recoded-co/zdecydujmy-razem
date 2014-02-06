@@ -25,9 +25,9 @@
     var lat = 52.4166667;
     var zoom = 12;
     var after_search_zoom = 18;
-
-    var map, drawControls, selectedFeature,wtk,vectors;
+    var map, drawControls, selectedFeature,wtk,vectors,layerWaitingRoom;
     var plan_id = parseInt('{{ plan_id }}');
+    var user = '{{ user }}';
 
     function geolocate(address){
 
@@ -54,35 +54,50 @@
     }
 
     function map_init(){
-
         var osm =
             L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 attribution: 'Map data © OpenStreetMap contributors',
                 maxZoom: 19,
-                minZoom: 0
+                minZoom: 0,
+                legend: LEGEND
             });
 
         var lmap =
             L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
                 attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                maxZoom: 18
+                maxZoom: 18,
+                legend: LEGEND
             });
 
+        var mbmap =
+            L.tileLayer('http://{s}.tiles.mapbox.com/v3/mmlodkowski.gpl722i4/{z}/{x}/{y}.png', {
+                attribution: "<a href='http://mapbox.com/about/maps' target='_blank'>Terms & Feedback</a>",
+                maxZoom: 18,
+                legend: LEGEND,
+                openLegendOnLoad: true
+            });
 
         var baseMaps = {
             "Open Street Map": osm,
-            "Leaflet Map": lmap
+            "Leaflet Map": lmap,
+            "MapBox": mbmap
         };
 
         map = L.map('map', {
+            attributionControl: false,
+            editInOSMControl: true,
+            editInOSMControlOptions: {position: 'topleft'},
             center: new L.LatLng(lat, lon),
             zoom: zoom,
-            layers: [osm, lmap]
+            measurePolygonControl: true,
+            measureControl: true,
+            layers: [osm, lmap, mbmap]
         });
 
         L.control.layers(baseMaps, null).addTo(map);
 
         var drawnItems = new L.FeatureGroup();
+        layerWaitingRoom = new Array();
         map.addLayer(drawnItems);
 
         var searchItems = new L.FeatureGroup();
@@ -90,8 +105,9 @@
 
         L.control.scale().addTo(map);
 
-{% if user|isloged %}
+        var legendControl = (new L.Control.TileLegend()).addTo(map);
 
+{% if user|isloged %}
         var drawControl = new L.Control.Draw({
 			position: 'topright',
 			draw: {
@@ -104,11 +120,11 @@
 					showArea: true,
 					drawError: {
 						color: '#b00b00',
-						timeout: 1000
+						timeout: 1000,
+                        message: '<strong>Błąd<strong>'
 					},
 					shapeOptions: {
-						color: '#0033ff',//'#bfadf55',
-                        dupa: 1
+						color: '#0033ff'//'#bfadf55',
 					}
 				}
 			},
@@ -135,8 +151,9 @@
 
 {% endif %}
 		map.on('draw:created', function (e) {
+            console.log(e);
 			var type = e.layerType,
-				layer = e.layer;
+                    layer = e.layer;
 
             var wkt = new Wkt.Wkt();
             if (type === 'rectangle'){ // search
@@ -145,30 +162,34 @@
 
                 searchItems.addLayer(layer);
                 layer.on('click', function(e){
+                    trackEvent('search rectangle','clicked',user,'','');
                     searchItems.removeLayer(layer);
-                    addPostFilter({});
+                    addPostFilter(undefined);
                 });
 
                 geoSearch(wkt_string, plan_id, function(data, textStatus, jqXHR) {
                     // TODO search results callback
-                    //console.log("---------------");
-                    //console.log(data);
-                    addPostFilter(data);
+                    if(data.length>0){
+                        addPostFilter(data);
+                    }else{
+                        addPostFilter([{id:-1}]);
+                    }
                 });
 
             }else{
                 var popup_location = null;
 
                 if (type === 'marker') {
+                    trackEvent('marker create','clicked',user,'','');
                     layer.bindPopup(popup);
                     popup_location = e.layer._latlng;
                     var point = L.marker(e.layer._latlng);
                     wkt.fromObject(point);
 
                 } else if (type === 'polygon'){
+                    trackEvent('polygon create','clicked',user,'','');
                     popup_location = e.layer._latlngs[0];
                     wkt.fromObject(L.polygon(e.layer._latlngs))
-
                 }
 
                 //console.log(wkt.components);
@@ -188,11 +209,11 @@
                                              "<button onclick='addPopup(this);return false;' >Dodaj</button>" +
                                              "</div>");
                 map.openPopup(popup);
+                layerWaitingRoom.push(layer);
                 drawnItems.addLayer(layer);
             }
 
 		});
-
 
         addGeometry(function(){
             //vectors.events.register('featureadded','',featureAddedFunction);
@@ -270,7 +291,15 @@
                                             spiderfyOnMaxZoom: true,
                                             removeOutsideVisibleBounds: true});
         map.on("click",function(e){
-            addPostFilter([]);
+            trackEvent('map area','clicked',user,'','');
+            if(layerWaitingRoom){
+                while(layerWaitingRoom){
+                    map.removeLayer(layerWaitingRoom.pop());
+                }
+            }
+
+
+            addPostFilter(undefined);
         });
 
 		$.each(data,function(key, value){
@@ -301,9 +330,11 @@
                    });
                 });
                 marker.on("click", function(e){
+                    trackEvent('marker','marker clicked','','','');
                     addPostFilter([{id:value.geo_id}]);
                 });
                 polygon.on('click', function(e){
+                       trackEvent('polygon','clicked',user,'','');
                        addPostFilter([{id:value.geo_id}]);
                 });
 
@@ -323,6 +354,7 @@
                 });
                 marker.on('click', function(e){
                        //postLightOn(value.id);
+                       trackEvent('point','clicked',user,'','');
                        addPostFilter([{id:value.geo_id}]);
                 });
                 markers.addLayer(marker);
@@ -386,6 +418,7 @@
     }
     function addPopup(data){
         // get data from popup and send it to server
+        console.log(data);
         var temp = {}
         var temp_geometry = $(data).parent().find('#geometry').val();
         if (temp_geometry.indexOf('POLYGON')!=-1){
@@ -406,6 +439,7 @@
                 headers: {'X-CSRFToken': $.cookie('csrftoken')},
                 success: function(data, textStatus, jqXHR)
                 {
+                    trackEvent('post added','clicked',user,'','');
                     addComentToGeoElement(data,comment);
                 },
                 error: function (jqXHR, textStatus, errorThrown)
@@ -414,6 +448,7 @@
                 }
             });
             map.closePopup();
+            layerWaitingRoom = new Array();
         } else {
             alert('comment needed!');
         }
@@ -422,6 +457,12 @@
     function addComentToGeoElement(data, comment){
         var pushCommentIntoScope = $("#div_apiList").scope().pushCommentIntoScope;
         pushCommentIntoScope(data, comment);
+        $("#div_apiList").scope().$apply();
+    }
+
+    function trackEvent(category, action, opt_label, opt_value, opt_noninteraction){
+        var track = $("#div_apiList").scope().trackEvent;
+        track(category, action, opt_label, opt_value, opt_noninteraction);
         $("#div_apiList").scope().$apply();
     }
 
@@ -438,9 +479,7 @@
     }
 
     function geoSearch(wkt, plan_id, success_callback){
-        //.log('geosearching:');
-        //console.log(wkt);
-        //console.log(plan_id);
+
         if(wkt){
             $.ajax({
                 url : '/zr/api/geosearch/'+plan_id+'/',

@@ -82,7 +82,7 @@ class Post(models.Model):
     content = models.TextField()
     geometry = models.ForeignKey(Geometry, null=True, blank=True)
     subscriptions = models.ManyToManyField(User, through="PostSubscription", null=True, blank=True)
-    date = models.DateField(auto_now=True, blank=True)
+    date = models.DateTimeField(auto_now=True, blank=True)
 
     def has_subscription(self, user=None):
         if user in self.subscriptions.all():
@@ -106,7 +106,7 @@ class Post(models.Model):
 
     def dislike_sum(self):
         rates = self.rates.filter(like=False)
-        like_sum = sum([x.rate if x.like else -(x.rate) for x in rates])
+        like_sum = sum([x.rate if x.like else x.rate for x in rates])
         return like_sum
 
     def has_likes(self):
@@ -144,6 +144,17 @@ class PostSubscription(models.Model):
     def __unicode__(self):
         return '%s: %s' % (self.post.author, self.post.content)
 
+
+class TrackEvents(models.Model):
+    category = models.TextField()
+    action = models.TextField(blank=True)
+    opt_label = models.TextField(blank=True)
+    opt_value = models.TextField(blank=True)
+    opt_noninteraction = models.TextField(blank=True)
+    date = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def __unicode__(self):
+        return '%s: %s :  %s' % (self.category, self.action, self.date)
 
 class WebNotification(models.Model):
     STATUS = (

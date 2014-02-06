@@ -107,7 +107,11 @@ L.Control.Zoomslider = (function () {
 				link = L.DomUtil.create('a', classDef, container);
 
 			link.href = '#';
-			link.title = 'Zoom ' + zoomDir;
+            if(zoomDir == 'in'){
+                link.title = 'Powiększ';
+            } else if(zoomDir == 'out'){
+                link.title = 'Pomniejsz';
+            }
 
 			L.DomEvent.on(link, 'click', L.DomEvent.preventDefault);
 

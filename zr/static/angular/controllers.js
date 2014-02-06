@@ -5,8 +5,8 @@
 var zdControllers = angular.module('zdControllers', ['ngCookies']);
 //'configurations','rates','subjects','posts','geometries','plans',
 
-zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', 'zdServicesFactory','uploadService',
-  function($scope,$http,$cookies, $rootScope,zdServicesFactory, uploadService ) {
+zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', 'zdServicesFactory','uploadService','Angularytics',
+  function($scope,$http,$cookies, $rootScope,zdServicesFactory, uploadService, Angularytics ) {
 
     $scope.plans = zdServicesFactory.plans.json();
     jsonToNestedCollection(zdServicesFactory.posts.json(),function(data){
@@ -21,6 +21,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     $scope.predicate='date';
     $scope.reverse=true;
     $scope.data_arrow=true;
+    $scope.showallposts=true;
 
     var post_buff_id = 0;
     $scope.zoom_chase = function(post){
@@ -47,7 +48,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     $scope.scoreDown = function(data){
         data.score = data.score - 1;
         data.sub_rates = true;
-        data.negative_rate = data.negative_rate -1;
+        data.negative_rate = data.negative_rate + 1;
         var temp = {
             post: data.id,
             user: configuration.getAuthor(),
@@ -85,6 +86,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
             });
             data.text = "";
             data.zmiennac=false;
+            $scope.showOneDown(data);
     };
     $scope.showOneDown = function(data){
         if(data.rozwin==undefined || data.rozwin==false){
@@ -120,6 +122,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
             });
         data.text = "";
         data.zmiennac=false;
+        data.rozwin = true;
     };
     //$scope.tree = zdServicesFactory.posts.json();
 
@@ -149,7 +152,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
           //$scope.tree.$apply();
     };
     $scope.subscribe = function(data, subscribed){
-        console.log(data);
         var temp = {
             post: data.id,
             user: parseInt(configuration.getAuthor()),
@@ -167,10 +169,18 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
 
     $scope.addPFilter = function(data) {
         $scope.filterGeoData = new Array();
-        for( var item in data ){
-            $scope.filterGeoData.push(data[item].id);
-        };
+        if(data!==undefined){
+            $scope.showallposts = false;
+            for( var item in data ){
+                $scope.filterGeoData.push(data[item].id);
+            };
+        }else{
+            $scope.showallposts = true;
+            $scope.filterGeoData=[];
+        }
     };
+
+
 
     $scope.postLightOn = function(id) {
         //$("#mediaList1").animate({scrollTop: 30}, "slow");
@@ -179,19 +189,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
 
     $scope.postLightOff = function(id) {
         $scope.geoHashTree[id].light = false;
-    };
-
-    $scope.geoFilter = function(item) {
-
-        if($scope.filterGeoData == undefined || $scope.filterGeoData.length == 0)
-            return true;
-        else {
-            if($scope.filterGeoData.indexOf(item.id)!=-1){
-                return true;
-            }else {
-                return false;
-            }
-        }
     };
 
 
@@ -206,6 +203,11 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     $rootScope.$on('upload:success', function(xhr){
 
     });
+
+    $scope.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction){
+        Angularytics.trackEvent(category, action, opt_label, opt_value, opt_noninteraction);
+    }
+
   }]);
 
 function sendCSRFPost(url,$http,$cookies,data){

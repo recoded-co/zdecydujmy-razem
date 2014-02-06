@@ -1,0 +1,21 @@
+{
+  "name": "zd",
+  "version": "0.0.0",
+  "homepage": "https://github.com/recoded-co/zdecydujmy-razem",
+  "authors": [
+    "recoded.co"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-cookies": "~1.0.8",
+    "angular-resource-unstable": "~1.1.5",
+    "angular-strap": "~0.7.7",
+    "angularytics": "~0.2.3"
+  }
+}

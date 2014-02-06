@@ -50,4 +50,50 @@ body{
     padding-left:5px;
     padding-bottom: 5px;
 }
-
+.post{
+    margin-bottom: 6px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 0px !important;
+    margin-right: 5px !important;
+    padding: 5px;
+    background-color: #BBDCF7;
+}
+.sub_post{
+    margin-bottom: 2px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-left: 0px !important;
+    margin-right: 5px !important;
+    padding: 5px;
+}
+.tab_border{
+    margin-bottom: 0px;
+    margin-left: 15px !important;
+    margin-right: 0px !important;
+    padding: 0px;
+}
+.new_margin{
+    margin-left: 5px !important;
+    margin-right: 0px !important;
+    margin-top:0px !important;
+}
+.main-post{
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    margin-top:0px !important;
+}
+.child-post{
+    margin-left: 15px !important;
+    margin-right: 0px !important;
+    margin-top:0px !important;
+}
+.post-list{
+    margin-bottom:4px;
+}
+hr {
+    margin:0px;
+}
+.allign_right{
+    float:right;
+}
