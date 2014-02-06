@@ -28,15 +28,23 @@ angular.module('searchFilters', []).filter('searchdate', function() {
 angular.module('dateTools', []).filter('fromToday', function() {
   return function(inputA) {
     if (!angular.isUndefined(inputA)) {
-        var then = getDate(inputA), // month is zero based
-            now  = new Date;               // no arguments -> current date
-        var diff = Math.round((now - then) / (1000 * 60 * 60 * 24));
-        if(diff==0){
-            return 'dziś';
-        } else if(diff==1){
-            return '1 dzień';
+        var then = getFullDate(inputA), // month is zero based
+            now  = new Date;
+        var days = Math.round((now - then) / (1000 * 60 * 60 * 24)),
+            hrest = Math.round((now - then) % (1000 * 60 * 60 * 24)),
+            mrest = Math.round((now - then) % (1000 * 60 * 60));
+        var hours = Math.floor(hrest / (1000 * 60 * 60));
+        var minutes = Math.floor(mrest / (1000 * 60 ));
+        if(days<1){
+            if(hours==0){
+                return minutes+" minut temu";
+            } else {
+                return hours+" godzin temu";
+            }
+        } else if(days==1){
+            return days+" dzień temu";
         } else {
-            return diff+" dni";
+            return days+" dni temu";
         }
     } else {
         return 'brak daty';
@@ -62,7 +70,8 @@ angular.module('geoFilter', []).filter('geoFilter', function() {
 });
 
 function getDate(text){
-    var temp = text.split('-');
+    //2013-11-23T23:00:00Z
+    var temp = text.split(/[-T:Z]/);
     var date = new Date(0);
     date.setYear(parseInt(temp[0]));
     date.setMonth(parseInt(temp[1])-1);
@@ -70,6 +79,19 @@ function getDate(text){
     date.setHours(0);
     date.setMinutes(0);
     date.setSeconds(0);
+    date.setMilliseconds(0);
+    return date;
+}
+
+function getFullDate(text){
+    var temp = text.split(/[-T:Z]/);
+    var date = new Date(0);
+    date.setYear(parseInt(temp[0]));
+    date.setMonth(parseInt(temp[1])-1);
+    date.setDate(parseInt(temp[2]));
+    date.setHours(parseInt(temp[3]));
+    date.setMinutes(parseInt(temp[4]));
+    date.setSeconds(parseInt(temp[5]));
     date.setMilliseconds(0);
     return date;
 }

@@ -13,6 +13,7 @@
             </li>
         </ul>
         <hr>
+        --{[{ post.date }]}--<br>
         <em>{[{ post.author_name }]}</em>({[{ post.date | fromToday }]})
         {% trans 'Za' %}: {[{ post.positive_rate || 0 }]}
         {% trans 'Przeciw' %}: {[{ post.negative_rate || 0 }]}
