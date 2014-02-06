@@ -3,7 +3,6 @@
 
 <div class="media-body dropbox new_margin"  style="margin-left: 20px;margin-right: 20px;" >
     <div ng-class="{'post':post.parent==null,'sub_post':post.parent!=null}">
-
         <p ng-class="{'select':post.light}">
             {[{ post.content }]}</p>
         <ul ng-repeat="item in post.filep">
@@ -77,7 +76,7 @@
             </button>
         </div>
     </div>
-    <div class="tab_border" ng-hide="!(post.rozwin!=undefined && post.rozwin==true )&& showallposts" >
+    <div ng-if="post.nodes" class="tab_border" ng-hide="!(post.rozwin!=undefined && post.rozwin==true )&& showallposts" >
         <div ng-class="{'media':true, 'main-post':post.parent==null,'sub_post':post.parent!=null}"
              ng-repeat="post in post.nodes "
              ng-include="'tree_item_renderer.html'">

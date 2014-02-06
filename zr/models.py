@@ -82,7 +82,7 @@ class Post(models.Model):
     content = models.TextField()
     geometry = models.ForeignKey(Geometry, null=True, blank=True)
     subscriptions = models.ManyToManyField(User, through="PostSubscription", null=True, blank=True)
-    date = models.DateField(auto_now=True, blank=True)
+    date = models.DateTimeField(auto_now=True, blank=True)
 
     def has_subscription(self, user=None):
         if user in self.subscriptions.all():

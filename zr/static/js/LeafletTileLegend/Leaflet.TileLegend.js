@@ -150,12 +150,10 @@ L.Control.TileLegend = L.Control.Attribution.extend({
         } else {
             L.DomEvent.on(this._container, 'click', L.DomEvent.stopPropagation);
         }
-        console.log("onAdd");
 
         map
             .on('layeradd', this._eventWrapper(this._update), this)
             .on('layerremove', this._eventWrapper(this._update), this);
-        console.log("onAdd after");
         this._eventWrapper(this._update)();
 
         return this._container;
@@ -171,7 +169,6 @@ L.Control.TileLegend = L.Control.Attribution.extend({
     },
 
     onRemove: function (map) {
-        console.log("onRemove");
         map
             .off('layeradd', this._eventWrapper(this._update), this)
             .off('layerremove', this._eventWrapper(this._update), this);
@@ -179,7 +176,6 @@ L.Control.TileLegend = L.Control.Attribution.extend({
     },
 
     setPrefix: function (prefix) {
-        console.log("setPrefix");
         this.options.prefix = prefix;
         this._eventWrapper(this._update)();
         return this;

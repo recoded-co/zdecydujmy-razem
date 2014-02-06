@@ -152,7 +152,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
           //$scope.tree.$apply();
     };
     $scope.subscribe = function(data, subscribed){
-        console.log(data);
         var temp = {
             post: data.id,
             user: parseInt(configuration.getAuthor()),
@@ -171,15 +170,17 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     $scope.addPFilter = function(data) {
         $scope.filterGeoData = new Array();
         if(data!==undefined){
-            $scope.showAll();
+            $scope.showallposts = false;
+            for( var item in data ){
+                $scope.filterGeoData.push(data[item].id);
+            };
         }else{
             $scope.showallposts = true;
+            $scope.filterGeoData=[];
         }
-        for( var item in data ){
-            $scope.filterGeoData.push(data[item].id);
-        };
-
     };
+
+
 
     $scope.postLightOn = function(id) {
         //$("#mediaList1").animate({scrollTop: 30}, "slow");
@@ -188,19 +189,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
 
     $scope.postLightOff = function(id) {
         $scope.geoHashTree[id].light = false;
-    };
-
-    $scope.geoFilter = function(item) {
-
-        if($scope.filterGeoData == undefined || $scope.filterGeoData.length == 0)
-            return true;
-        else {
-            if($scope.filterGeoData.indexOf(item.id)!=-1){
-                return true;
-            }else {
-                return false;
-            }
-        }
     };
 
 

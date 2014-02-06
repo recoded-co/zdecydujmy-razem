@@ -30,7 +30,8 @@ var zdApp = angular.module('zd', [
   'angularytics',
   'ui.bootstrap.datetimepicker',
   'searchFilters',
-  'dateTools'
+  'dateTools',
+  'geoFilter'
 ]);
 
 zdApp.config(function(AngularyticsProvider) {

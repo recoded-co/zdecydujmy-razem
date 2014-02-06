@@ -24,7 +24,7 @@
     var lon = 16.9666667;
     var lat = 52.4166667;
     var zoom = 12;
-    var map, drawControls, selectedFeature,wtk,vectors;
+    var map, drawControls, selectedFeature,wtk,vectors,layerWaitingRoom;
     var plan_id = parseInt('{{ plan_id }}');
     var user = '{{ user }}';
 
@@ -35,15 +35,6 @@
 			geocoder.geocode({ 'address': address+'{{ scope }}', 'region':'pl' }, function (results, status) {
 				if (status == google.maps.GeocoderStatus.OK) {
 					var geometry = results[0].geometry.location;
-                    /*
-                    var foundPosition = new OpenLayers.LonLat(geometry.lng(), geometry.lat()).transform(
-							new OpenLayers.Projection("EPSG:4326"),
-                    		map.getProjectionObject()
-                    );
-                    var zoom = map.getZoom();
-                    zoom = 14;
-            		map.setCenter(foundPosition, zoom);
-                    */
                     map.setView([geometry.lat(), geometry.lng()], zoom);
          		} else {
             		console.log("Geocoding failed: " + status);
@@ -53,7 +44,6 @@
     }
 
     function map_init(){
-
         var osm =
             L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 attribution: 'Map data © OpenStreetMap contributors',
@@ -83,15 +73,6 @@
             "MapBox": mbmap
         };
 
-
-        /*zoom = L.control.zoom( {
-            position:'topleft',
-            zoomInText:'+',
-            zoomOutText:'-',
-            zoomInTitle:'Powiększ',
-            zoomOutTitle:'Pomniejsz'
-        });*/
-        console.log(zoom);
         map = L.map('map', {
             attributionControl: false,
             editInOSMControl: true,
@@ -103,41 +84,18 @@
             layers: [osm, lmap, mbmap]
         });
 
-        /*zoom = L.control.zoomslider({
-            position:'topleft',
-            zoomInText:'+',
-            zoomOutText:'-',
-            zoomInTitle:'Powiększ',
-            zoomOutTitle:'Pomniejsz'
-        });
-        zoom.addTo(map);*/
-        //L.control.measure.addTo(map);
-
         L.control.layers(baseMaps, null).addTo(map);
 
         var drawnItems = new L.FeatureGroup();
+        layerWaitingRoom = new Array();
         map.addLayer(drawnItems);
 
         var searchItems = new L.FeatureGroup();
         map.addLayer(searchItems);
 
         L.control.scale().addTo(map);
-        //L.control.measure().addTo(map);
 
-
-    /*
-      * var map = L.map('map', {attributionControl: false, editInOSMControl: true, editInOSMControlOptions: {position: 'topleft'}}).setView(startPoint, 13),
-    tilelayer = L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
-    {maxZoom: 20,
-    legend: LEGEND, openLegendOnLoad: true, attribution: 'Data \u00a9 <a href="http://www.openstreetmap.org/copyright"> OpenStreetMap Contributors </a> Tiles \u00a9 HOT'}).addTo(map),
-    hash = new L.Hash(map);
-    legend = (new L.Control.TileLegend()).addTo(map);
         var legendControl = (new L.Control.TileLegend()).addTo(map);
-
-    */
-    var legendControl = (new L.Control.TileLegend()).addTo(map);
-    //legend = new L.TileLegend(map, osm, L.DomUtil.get('leaflet-control-tilelegend-container'), LEGEND);
-    // legend.open();
 
 {% if user|isloged %}
         var drawControl = new L.Control.Draw({
@@ -185,7 +143,7 @@
 		map.on('draw:created', function (e) {
             console.log(e);
 			var type = e.layerType,
-				layer = e.layer;
+                    layer = e.layer;
 
             var wkt = new Wkt.Wkt();
             if (type === 'rectangle'){ // search
@@ -201,7 +159,11 @@
 
                 geoSearch(wkt_string, plan_id, function(data, textStatus, jqXHR) {
                     // TODO search results callback
-                    addPostFilter(data);
+                    if(data.length>0){
+                        addPostFilter(data);
+                    }else{
+                        addPostFilter([{id:-1}]);
+                    }
                 });
 
             }else{
@@ -218,7 +180,6 @@
                     trackEvent('polygon create','clicked',user,'','');
                     popup_location = e.layer._latlngs[0];
                     wkt.fromObject(L.polygon(e.layer._latlngs))
-
                 }
 
                 //console.log(wkt.components);
@@ -238,11 +199,11 @@
                                              "<button onclick='addPopup(this);return false;' >Dodaj</button>" +
                                              "</div>");
                 map.openPopup(popup);
+                layerWaitingRoom.push(layer);
                 drawnItems.addLayer(layer);
             }
 
 		});
-
 
         addGeometry(function(){
             //vectors.events.register('featureadded','',featureAddedFunction);
@@ -321,6 +282,13 @@
                                             removeOutsideVisibleBounds: true});
         map.on("click",function(e){
             trackEvent('map area','clicked',user,'','');
+            if(layerWaitingRoom){
+                while(layerWaitingRoom){
+                    map.removeLayer(layerWaitingRoom.pop());
+                }
+            }
+
+
             addPostFilter(undefined);
         });
 
@@ -440,6 +408,7 @@
     }
     function addPopup(data){
         // get data from popup and send it to server
+        console.log(data);
         var temp = {}
         var temp_geometry = $(data).parent().find('#geometry').val();
         if (temp_geometry.indexOf('POLYGON')!=-1){
@@ -469,6 +438,7 @@
                 }
             });
             map.closePopup();
+            layerWaitingRoom = new Array();
         } else {
             alert('comment needed!');
         }
@@ -499,9 +469,7 @@
     }
 
     function geoSearch(wkt, plan_id, success_callback){
-        //.log('geosearching:');
-        //console.log(wkt);
-        //console.log(plan_id);
+
         if(wkt){
             $.ajax({
                 url : '/zr/api/geosearch/'+plan_id+'/',

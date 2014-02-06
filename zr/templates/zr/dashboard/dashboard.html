@@ -195,7 +195,7 @@
                   </div>
                     <div id="{[{ post.geometry && !post.parent?post.geometry:'none' }]}"
                          ng-class="{'media':true,'media-list':true, 'main-post':post.parent==null,'child-post':post.parent!=null}"
-                         ng-repeat="post in tree | filter:{geometry: '!!'} | orderBy:predicate:reverse | filter:search | searchdate:searchdate | filter:geoFilter">
+                         ng-repeat="post in tree | filter:{geometry: '!!'} | orderBy:predicate:reverse | filter:search | searchdate:searchdate | geoFilter:filterGeoData">
                         <div ng-include="'tree_item_renderer.html'"></div>
                     </div>
 

@@ -44,6 +44,23 @@ angular.module('dateTools', []).filter('fromToday', function() {
   };
 });
 
+angular.module('geoFilter', []).filter('geoFilter', function() {
+  return function(items,filterGeoData) {
+      var tempList = new Array();
+
+      if(filterGeoData == undefined || filterGeoData.length == 0){
+          return items;
+      } else {
+          angular.forEach(items,function(item){
+                if(filterGeoData.indexOf(item.id)!=-1){
+                    tempList.push(item);
+                }
+          });
+          return tempList;
+      }
+    };
+});
+
 function getDate(text){
     var temp = text.split('-');
     var date = new Date(0);
