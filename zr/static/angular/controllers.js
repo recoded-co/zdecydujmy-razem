@@ -17,6 +17,9 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
                 $scope.geoHashTree[data[item].geometry]=data[item];
             }
         }
+        angular.forEach(document.getElementsByClassName("post-list"),function(item){
+            item.style.visibility="visible";
+        });
     });
     $scope.predicate='date';
     $scope.reverse=true;
