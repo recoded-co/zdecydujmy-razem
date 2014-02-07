@@ -76,7 +76,7 @@
             </button>
         </div>
     </div>
-    <div ng-if="post.nodes" class="tab_border" ng-hide="!(post.rozwin!=undefined && post.rozwin==true )&& showallposts" >
+    <div ng-if="post.nodes.length>0" class="tab_border" ng-hide="!(post.rozwin!=undefined && post.rozwin==true )&& showallposts" >
         <div ng-class="{'media':true, 'main-post':post.parent==null,'sub_post':post.parent!=null}"
              ng-repeat="post in post.nodes "
              ng-include="'tree_item_renderer.html'">
