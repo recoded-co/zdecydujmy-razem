@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from django.views.generic.base import TemplateView, View
 from django.views.generic import ListView, DeleteView
 from django.shortcuts import render_to_response
@@ -90,8 +91,10 @@ class DashboardView(View):
     def get(self, request):
         plan_id = request.GET.get('plan', 1)
         configuration = Configuration.objects.get(plan=plan_id)
+        # scope = configuration.scope # TODO!!!!!
+        scope = 'Poznań'
         return render_to_response('zr/dashboard/dashboard.html',
-                                  {'configuration': configuration, 'plan_id': plan_id},
+                                  {'configuration': configuration, 'plan_id': plan_id, 'scope': scope},
                                   context_instance=RequestContext(request))
 
 

@@ -142,9 +142,9 @@ SOCIAL_AUTH_PIPELINE = (
 
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.facebook.FacebookBackend',
-    'social_auth.backends.google.GoogleOAuthBackend',
     'social_auth.backends.google.GoogleOAuth2Backend',
     'social_auth.backends.google.GoogleBackend',
+    'zr.backends.backend.LowercaseAuthenticationBackend',
     'zr.backends.backend.EmailAuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
@@ -153,11 +153,11 @@ AUTHENTICATION_BACKENDS = (
 SOCIAL_AUTH_ENABLED_BACKENDS = ('google', 'facebook')
 
 SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
-SOCIAL_AUTH_UID_LENGTH = 32
-SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 32
-SOCIAL_AUTH_NONCE_SERVER_URL_LENGTH = 32
-SOCIAL_AUTH_ASSOCIATION_SERVER_URL_LENGTH = 32
-SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 32
+#SOCIAL_AUTH_UID_LENGTH = 32 # default 255
+#SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 32 # default 255
+#SOCIAL_AUTH_NONCE_SERVER_URL_LENGTH = 32  # default 255
+#SOCIAL_AUTH_ASSOCIATION_SERVER_URL_LENGTH = 32 # default 255
+#SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 32 # default 255
 
 LOGIN_URL          = '/social_auth/login/'
 #LOGIN_REDIRECT_URL = '/'

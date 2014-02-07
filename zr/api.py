@@ -211,7 +211,6 @@ def geo_search(request, plan_id):
     from django.contrib.gis.geos import fromstr
     from django.http import HttpResponseBadRequest
     import json
-    #print '>>>>>>>>>'
     polygon = request.POST.get('wkt', None)
     if polygon:
         #print polygon
