@@ -19,6 +19,27 @@
       margin: 5px;
       background-image: url("/static/img/zoom-world-mini.png");
     }
+
+    .marker-cluster-small-pol {
+        background-color: rgba(0, 0, 226, 0.6);
+        }
+    .marker-cluster-small-pol div {
+        background-color: rgba(0, 0, 204, 0.6);
+        }
+
+    .marker-cluster-medium-pol {
+        background-color: rgba(0, 0, 211, 0.6);
+        }
+    .marker-cluster-medium-pol div {
+        background-color: rgba(0, 0, 194, 0.6);
+        }
+
+    .marker-cluster-large-pol {
+        background-color: rgba(0, 0, 156, 0.6);
+        }
+    .marker-cluster-large-pol div {
+        background-color: rgba(0, 0, 128, 0.6);
+        }
 </style>
 <script type="text/javascript">
     var lon = 16.9666667;
@@ -286,10 +307,33 @@
 
     function addMarkers(data, callback){
         var count = data.length;
-        var markers = L.markerClusterGroup({showCoverageOnHover: true,
+        var markers = L.markerClusterGroup({showCoverageOnHover: false,
                                             zoomToBoundsOnClick: true,
                                             spiderfyOnMaxZoom: true,
                                             removeOutsideVisibleBounds: true});
+        var polygon_markers = L.markerClusterGroup({
+                                            showCoverageOnHover: true,
+                                            zoomToBoundsOnClick: true,
+                                            spiderfyOnMaxZoom: true,
+                                            removeOutsideVisibleBounds: true,
+
+                                            iconCreateFunction: function(cluster) {
+                                            var childCount = cluster.getChildCount();
+
+                                            var c = ' marker-cluster-';
+                                            if (childCount < 10) {
+                                                c += 'small';
+                                            } else if (childCount < 100) {
+                                                c += 'medium';
+                                            } else {
+                                                c += 'large';
+                                            }
+
+                                            return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'marker-cluster ' + c + '-pol', iconSize: new L.Point(40, 40) });
+                                            }
+                                });
+
+
         map.on("click",function(e){
             trackEvent('map area','clicked',user,'','');
             if(layerWaitingRoom){
@@ -338,7 +382,8 @@
                        addPostFilter([{id:value.geo_id}]);
                 });
 
-                marker.addTo(map);
+                //marker.addTo(map);
+                polygon_markers.addLayer(marker);
             } else{
                 var xy = components;
                 var latlng = L.latLng(xy.y, xy.x);
@@ -361,6 +406,7 @@
             }
             if(!--count){
                 map.addLayer(markers);
+                map.addLayer(polygon_markers);
                 if (callback != undefined){
                     callback();
                 }
