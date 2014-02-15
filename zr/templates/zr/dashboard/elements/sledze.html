@@ -1,0 +1,76 @@
+{% load i18n %}
+{% load url from future %}
+{% load isloged %}
+<div  class="post_content">
+    <div class="post-list"  style="visibility: hidden;">
+        <button type="button" class="btn btn-xs"  ng-click="addBasePost = true  | trackEvent:'Dodaj komentarz':'Button clicked':user ">
+            {% trans 'Dodaj komentarz' %}
+        </button>
+        <button type="button" ng-class="{'btn':true, 'btn-xs':true, 'btn-default':!search_box}" ng-init="search_box=true;" ng-click="search_box = !search_box  | trackEvent:'Szukaj':'Button clicked':user:'':''  "  >
+            {% trans 'Szukaj' %}
+        </button>
+        <button type="button" class="btn btn-xs"  ng-click="showAll()  | trackEvent:'Rozwiń wszystkie':'Button clicked':user ">
+            {% trans 'Rozwiń wszystkie' %}
+        </button>
+        <button class="btn btn-danger btn-xs"
+                      ng-int="rev_d=true;"
+                      ng-click="predicate = 'date'; reverse=rev_d; rev_d=!rev_d;data_arrow= !data_arrow  | trackEvent:'Data':'Button clicked':user ">
+                  {% trans 'Data' %}
+                    <span class="glyphicon glyphicon-arrow-down" ng-hide="data_arrow"></span>
+                    <span class="glyphicon glyphicon-arrow-up" ng-show="data_arrow"></span>
+        </button>
+        <button class="btn btn-warning  btn-xs"
+                      ng-int="rev_sc=true;score_arrow=true;"
+                      ng-click="predicate = 'score'; reverse=!rev_sc; rev_sc=!rev_sc;score_arrow=!score_arrow  | trackEvent:'Ocena':'Button clicked':user ">
+                  {% trans 'Ocena' %}
+                    <span class="glyphicon glyphicon-arrow-down" ng-hide="score_arrow"></span>
+                    <span class="glyphicon glyphicon-arrow-up" ng-show="score_arrow"></span>
+        </button>
+        <button class="btn btn-primary btn-xs"
+                      ng-int="rev_nc=true;numcom_arrow=true;"
+                      ng-click="predicate = 'numcom'; reverse=!rev_nc; rev_nc=!rev_nc;numcom_arrow=!numcom_arrow  | trackEvent:'Ilość komentarzy':'Button clicked':user ">
+                  {% trans 'Ilość komentarzy' %}
+                    <span class="glyphicon glyphicon-arrow-down" ng-hide="numcom_arrow"></span>
+                    <span class="glyphicon glyphicon-arrow-up" ng-show="numcom_arrow"></span>
+        </button>
+
+        <div ng-hide="search_box" class="search_box">
+               {% trans 'Treść: ' %}<input class="form-control input-sm" ng-model="search.content"><br/>
+               <div class="dropdown">
+                   {% trans 'Data: ' %}
+                    <a class="dropdown-toggle my-toggle-select" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="">
+                        <div class="input-append"><input type="hidden" class="input-large" data-ng-model="searchdate.date"><span class="add-on">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </span>{[{ searchdate.date | date:'yyyy-MM-dd' }]}<span class="glyphicon glyphicon-remove" ng-click="searchdate.date='' "></span>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <datetimepicker data-ng-model="searchdate.date"
+                                        data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select', startView:'day', minView:'day' }"></datetimepicker>
+                    </ul>
+                </div>
+
+        <div ng-show="addBasePost">
+            <textarea     ng-model="base_post.text"
+                          class="form-control"
+                          rows="3">
+            </textarea>
+            <div style="float:right">
+                  <button type="button" class="btn btn-xs"  ng-click="addVertical(base_post);addBasePost = false  | trackEvent:'Zapisz':'Button clicked':user ">
+                        {% trans 'Zapisz' %}
+                  </button>
+
+                  <button type="button" class="btn btn-xs"  ng-click="deleteBP(base_post);addBasePost = false  | trackEvent:'Usuń':'Button clicked':user ">
+                       {% trans 'Usuń' %}
+                  </button>
+                <br/>
+            </div>
+        </div>
+        <div ng-init="user='{{ user }}'"></div>
+    </div>
+    <div    ng-class="{'media':true,'media-list':true, 'main-post':post.parent==null,'child-post':post.parent!=null}"
+            ng-repeat="post in tree | filter:{geometry: null}  | filter:search | orderBy:predicate:reverse"
+            ng-include="'tree_item_renderer.html'">
+    </div>
+</div>
+</div>

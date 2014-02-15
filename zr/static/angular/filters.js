@@ -55,7 +55,6 @@ angular.module('dateTools', []).filter('fromToday', function() {
 angular.module('geoFilter', []).filter('geoFilter', function() {
   return function(items,filterGeoData) {
       var tempList = new Array();
-
       if(filterGeoData == undefined || filterGeoData.length == 0){
           return items;
       } else {

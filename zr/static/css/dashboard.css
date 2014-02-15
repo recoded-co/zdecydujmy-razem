@@ -1,3 +1,72 @@
+button{
+    background:#CCCACA;
+}
+
+button:hover, button:focus{
+    background: #959496;
+}
+
+.btnred{
+    background:#ED1C24;
+}
+
+.btnred:hover, .red:focus{
+    background: #A60011;
+}
+
+.btnblue{
+    background:#2B95A4;
+}
+
+.btnblue:hover, .red:focus{
+    background: #1C6771;
+}
+
+.btnwhite{
+    font-size: 14px !important;
+    background:#ffffff;
+}
+
+.btnwhite:hover{
+    font-size: 14px !important;
+    background:#ffffff;
+}
+
+.btngrey{
+    font-size: 14px;
+    color:#757574 !important;
+    margin-right:5px;
+}
+
+.btngrey:hover{
+    font-size: 14px;
+    color:#00B8B3 !important;
+    margin-right:5px;
+}
+
+
+.btnsea{
+    font-family: bold;
+    font-size: 14px !important;
+    color: #00c7a2 !important;
+}
+
+.btnsea:hover{
+    font-family: bold;
+    font-size: 14px !important;
+    color:#03897f !important;
+}
+
+.fontBB{
+    font-family:bold;
+    color:#757574 !important;
+}
+
+.fontBB:hover{
+    font-family:bold;
+    color:#03897F !important;
+}
+
 .delpadding{
     padding: 0px !important;
 }
@@ -7,13 +76,78 @@ nav{
     height:8%;
 }
 
+.nav-tabs > li.active > a{
+    border: 0px  solid transparent;
+    padding-bottom: 8px;
+}
+
+.nav-tabs > li.active {
+padding-top:0px;
+color: #555555;
+background-color: #ffffff;
+border-right: 1px  solid #DDDDDD;
+border-top: 8px  solid #2B95A4;
+border-bottom-color: transparent;
+cursor: default;
+border-radius: 0;
+padding-bottom: 0px;
+    bottom:-1px;
+}
+
+.nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+color: #555555;
+background-color: #ffffff;
+border: 0px  solid transparent;
+border-bottom-color: transparent;
+cursor: default;
+border-radius: 0;
+padding-bottom: 7px;
+bottom: -1px;
+}
+
+
+.nav-tabs > li > a:hover, .nav-tabs > li > a:focus {
+
+color: #555555;
+background-color: #ffffff;
+border: 0px  solid transparent;
+border-bottom-color: transparent;
+cursor: default;
+padding-bottom: 7px;
+}
+
+.nav-tabs > li > a{
+    border-right: 0px solid #555555;
+    border-radius: 0;
+    padding-top: 15px;
+    padding-bottom: 3px;
+}
+
+.nav > li > a:hover {
+    bacground: #ffffff;
+}
+
+.nav-tabs > li  {
+    padding-top:8px;
+    border-right: 1px  solid #DDDDDD;
+    padding-bottom:0px;
+}
+
+.toolbox{
+    height:50px;
+    border-bottom:1px  solid #DDDDDD;
+    padding-top:14px;
+    padding-bootom:15px;
+}
+
+
 .filedragablearea{
     background-color: #E1E1E8;
 }
 
 .dashbord_map{
     margin: 0px !important;
-    height: 92%;
+    height: 100%;
 }
 
 div#resizible_jquery{
@@ -27,6 +161,31 @@ div#mapsquare{
 div#map{
     height: 100%;
 }
+
+.left{
+    display:block;
+    float:left;
+}
+
+.right{
+    display:block;
+    float:right;
+}
+.double-input .form-control {
+    border-right-width: 0px;
+}
+.double-input .form-control:focus {
+    border-right-width: 1px;
+}
+
+.input-group-sm > .form-control, .input-group-sm > .input-group-addon, .input-group-sm > .input-group-btn > .btn {
+height: 23px;
+padding: 2px 8px;
+font-size: 12px;
+line-height: 1.5;
+
+}
+
 /* div.tab-content{
     border: 1px solid #aaaaaa;
 }
@@ -46,30 +205,32 @@ body{
 }
 
 .post_content{
-    padding-top:5px;
-    padding-left:5px;
-    padding-bottom: 5px;
+    padding-top:0px;
+    padding-left:0px;
+    padding-bottom: 0px;
+    padding-right: 0px;
 }
 .post{
     margin-bottom: 6px;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;*/
     margin-left: 0px !important;
-    margin-right: 5px !important;
-    padding: 5px;
-    background-color: #BBDCF7;
+    margin-right: 0px !important;
+    /*padding: 5px;*/
+    background-color: #ffffff;
 }
 .sub_post{
+    margin-top:13px;
     margin-bottom: 2px;
     border-radius: 5px;
     border: 1px solid #ccc;
-    margin-left: 0px !important;
+    margin-left: 5px !important;
     margin-right: 5px !important;
-    padding: 5px;
+    padding: 10px 5px;
 }
 .tab_border{
     margin-bottom: 0px;
-    margin-left: 15px !important;
+    margin-left: 0px !important;
     margin-right: 0px !important;
     padding: 0px;
 }
@@ -79,12 +240,17 @@ body{
     margin-top:0px !important;
 }
 .main-post{
+    border-top: 10px solid #00c7a2;
+    padding-top:10px;
+    width:100%;
+    left:30px;
     margin-left: 0px !important;
     margin-right: 0px !important;
     margin-top:0px !important;
 }
+
 .child-post{
-    margin-left: 15px !important;
+    margin-left: 5px !important;
     margin-right: 0px !important;
     margin-top:0px !important;
 }
@@ -96,4 +262,32 @@ hr {
 }
 .allign_right{
     float:right;
+}
+.tab-post{
+    display: table;
+    width:100%;
+}
+.tab-post ul{
+  display: table-row;
+}
+.tab-post ul li{
+  display: table-cell;
+}
+
+.tab-post ul li img{
+    margin:0px 10px;
+}
+
+.head-autor {
+    font-size: 13px;
+    color:#00b38b;
+    margin-bottom:10px;
+}
+.post-content {
+    font-family: Segoe UI Light;
+    color: #000000;
+    font-size: 20px;
+}
+.dotedline{
+    border-bottom: 1px dotted  #757574;
 }
