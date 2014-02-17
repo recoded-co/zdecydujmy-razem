@@ -79,6 +79,7 @@ nav{
 .nav-tabs > li.active > a{
     border: 0px  solid transparent;
     padding-bottom: 8px;
+    overflow: hidden;
 }
 
 .nav-tabs > li.active {
