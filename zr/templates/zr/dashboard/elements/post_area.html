@@ -48,19 +48,18 @@
                     <button  class="btn btn-xs btngrey btnwhite"
                             ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
                             ng-click="scoreUp(post) | trackEvent:'score-up':'Button clicked':user ">
-                            <span  class="glyphicon glyphicon-thumbs-up"></span> <span style="font-family:bold;">{[{ post.positive_rate || 0 }]}</span> {% trans 'za' %}
+                            <span  class="glyphicon glyphicon-thumbs-up"></span> <span>{[{ post.positive_rate || 0 }]}</span> {% trans 'za' %}
                     </button>
-
                     <button  class="btn btn-xs btngrey btnwhite"
                          ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
                               ng-click="scoreDown(post) | trackEvent:'score-down':'Button clicked':user ">
-                            <span class="glyphicon glyphicon-thumbs-down"></span> <span style="">{[{ post.negative_rate || 0 }]}</span> {% trans 'przeciw' %}
+                            <span class="glyphicon glyphicon-thumbs-down"></span> <span>{[{ post.negative_rate || 0 }]}</span> {% trans 'przeciw' %}
 
                     </button>
-                    <button ng-hide="'{{ user }}'=='AnonymousUser'" class="btn btn-xs btnsea btnwhite" ng-click="comment(post)  | trackEvent:'Dodaj Komentarz':'Button clicked':user:'':''">
+                    <button ng-hide="'{{ user }}'=='AnonymousUser'" class="btn btn-xs btnsea btnwhite" ng-click="comment(post) | trackEvent:'Dodaj Komentarz':'Button clicked':user:'':''">
                         <span class="glyphicon glyphicon-comment"></span>{% trans 'skomentuj' %}
                     </button>
-                </div>
+            </div>
 
         </div>
 

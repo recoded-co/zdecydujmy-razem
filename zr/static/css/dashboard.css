@@ -46,24 +46,22 @@ button:hover, button:focus{
 
 
 .btnsea{
-    font-family: bold;
     font-size: 14px !important;
     color: #00c7a2 !important;
 }
 
 .btnsea:hover{
-    font-family: bold;
     font-size: 14px !important;
     color:#03897f !important;
 }
 
 .fontBB{
-    font-family:bold;
+    font-weight:bold;
     color:#757574 !important;
 }
 
 .fontBB:hover{
-    font-family:bold;
+    font-weight:bold;
     color:#03897F !important;
 }
 
@@ -285,7 +283,6 @@ hr {
     margin-bottom:10px;
 }
 .post-content {
-    font-family: Segoe UI Light;
     color: #000000;
     font-size: 20px;
 }
