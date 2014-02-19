@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import redirect
 
 from zr.models import Profile
-from zr.models import Configuration, PostSubscription
+from zr.models import Configuration, PostSubscription, Plan
 from zr.forms import ZipCodeForm
 
 
@@ -91,10 +91,9 @@ class DashboardView(View):
     def get(self, request):
         plan_id = request.GET.get('plan', 1)
         configuration = Configuration.objects.get(plan=plan_id)
-        # scope = configuration.scope # TODO!!!!!
-        scope = 'Poznań'
+        plan = Plan.objects.get(id=plan_id)
         return render_to_response('zr/dashboard/dashboard.html',
-                                  {'configuration': configuration, 'plan_id': plan_id, 'scope': scope},
+                                  {'configuration': configuration, 'plan_id': plan_id, 'plan': plan},
                                   context_instance=RequestContext(request))
 
 

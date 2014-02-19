@@ -40,10 +40,11 @@
         }
 </style>
 <script type="text/javascript">
-    var lon = 16.9666667; // TODO get this from plan configuration
-    var lat = 52.4166667; // TODO get this from plan configuration
-    var zoom = 12;
-    var after_search_zoom = 18;
+    var lon = parseFloat("{{ plan.center.x|escapejs }}");
+    var lat = parseFloat("{{ plan.center.y|escapejs }}");
+    var scope = "{{ plan.geocoding_scope }}";
+    var zoom = parseInt("{{ plan.zoom_level }}")
+    var after_search_zoom = parseInt("{{ plan.after_search_zoom }}");
     var map, drawControls, selectedFeature,wtk,vectors,layerWaitingRoom;
     var plan_id = parseInt('{{ plan_id }}');
     var user = '{{ user }}';
@@ -52,7 +53,7 @@
 
     	var geocoder = new google.maps.Geocoder();
 		if (geocoder) {
-			geocoder.geocode({ 'address': address+',{{ scope }}', 'region':'pl' }, function (results, status) {
+			geocoder.geocode({ 'address': address+','+scope, 'region':'pl' }, function (results, status) {
 				if (status == google.maps.GeocoderStatus.OK) {
 					var geometry = results[0].geometry.location;
                     map.setView([geometry.lat(), geometry.lng()], after_search_zoom);

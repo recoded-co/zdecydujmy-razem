@@ -44,9 +44,11 @@ class Geometry(models.Model):
 
 class Plan(models.Model):
     name = models.CharField(max_length=50)
-    area = models.PolygonField()
+    center = models.PointField()
     geometries = models.ManyToManyField(Geometry, through='Subjects')
     zoom_level = models.IntegerField()
+    after_search_zoom = models.IntegerField()
+    geocoding_scope = models.CharField(max_length=50, blank=True, null=True)
 
 
 class Subjects(models.Model):
