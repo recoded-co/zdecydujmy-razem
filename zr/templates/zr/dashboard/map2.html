@@ -1,7 +1,5 @@
 {% load i18n %}
 {% load isloged %}
-
-<!--<script src="http://openlayers.org/dev/OpenLayers.js"></script>-->
 <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <style type="text/css">
     .smallmap {
@@ -42,8 +40,8 @@
         }
 </style>
 <script type="text/javascript">
-    var lon = 16.9666667;
-    var lat = 52.4166667;
+    var lon = 16.9666667; // TODO get this from plan configuration
+    var lat = 52.4166667; // TODO get this from plan configuration
     var zoom = 12;
     var after_search_zoom = 18;
     var map, drawControls, selectedFeature,wtk,vectors,layerWaitingRoom;
@@ -57,15 +55,6 @@
 			geocoder.geocode({ 'address': address+',{{ scope }}', 'region':'pl' }, function (results, status) {
 				if (status == google.maps.GeocoderStatus.OK) {
 					var geometry = results[0].geometry.location;
-                    /*
-                    var foundPosition = new OpenLayers.LonLat(geometry.lng(), geometry.lat()).transform(
-							new OpenLayers.Projection("EPSG:4326"),
-                    		map.getProjectionObject()
-                    );
-                    var zoom = map.getZoom();
-                    zoom = 14;
-            		map.setCenter(foundPosition, zoom);
-                    */
                     map.setView([geometry.lat(), geometry.lng()], after_search_zoom);
          		} else {
             		console.log("Geocoding failed: " + status);
@@ -112,7 +101,7 @@
             zoom: zoom,
             measurePolygonControl: true,
             measureControl: true,
-            layers: [osm, lmap, mbmap]
+            layers: [mbmap]
         });
 
         L.control.layers(baseMaps, null).addTo(map);
