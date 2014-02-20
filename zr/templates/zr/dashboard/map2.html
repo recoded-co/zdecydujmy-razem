@@ -105,6 +105,13 @@
             layers: [mbmap]
         });
 
+        var jsonlayer = L.geoJson();
+        map.addLayer(jsonlayer);
+        $.getJSON("{% url 'subjects_geojson' plan.id %}", function (data) {
+            console.log(data);
+            jsonlayer.addData(data);
+        });
+
         L.control.layers(baseMaps, null).addTo(map);
 
         var drawnItems = new L.FeatureGroup();
@@ -225,7 +232,9 @@
             }
 
 		});
-
+        addBasePlan(plan_id, function(){
+           console.log("gotta");
+        });
         addGeometry(function(){
             //vectors.events.register('featureadded','',featureAddedFunction);
         });
@@ -264,7 +273,40 @@
         });
     }
 
+
+    function addBasePlan(plan_id, callback){
+
+
+        // TODO !!!! pass plan id here, right now you get all data from all plans in the system
+        /*
+        $.getJSON("/zr/api/subjects/"+plan_id+"?format=json", function( data ) {
+            console.log("got data from the server about polygons");
+            console.log(data)
+            var polygons = [];
+
+            for (var x in data){
+                var p = data[x];
+                console.log(">");
+                console.log(p);
+                var p_wkt = p.geom;
+                console.log(p_wkt);
+                var wkt = new Wkt.Wkt();
+                wkt.read(p_wkt);
+                polygons.push(wkt.toObject());
+            }
+
+            L.featureGroup(polygons)
+                .bindPopup('Hello world!')
+                .on('click', function() { alert('Clicked on a group!'); })
+                .addTo(map);
+        }); */
+    }
+    /**
+     * TODO add polygon method
+     * @param callback
+     */
     function addGeometry(callback){
+        // TODO !!!! pass plan id here, right now you get all data from all plans in the system
         $.getJSON( "/zr/api/geometries/?format=json", function( data ) {
             var count = data.length;
             addMarkers(data);

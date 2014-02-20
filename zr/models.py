@@ -42,19 +42,46 @@ class Geometry(models.Model):
         else:
             return None
 
+
 class Plan(models.Model):
     name = models.CharField(max_length=50)
     center = models.PointField()
-    geometries = models.ManyToManyField(Geometry, through='Subjects')
     zoom_level = models.IntegerField()
     after_search_zoom = models.IntegerField()
     geocoding_scope = models.CharField(max_length=50, blank=True, null=True)
 
+    def __unicode__(self):
+        return self.name
 
-class Subjects(models.Model):
-    geometry = models.ForeignKey(Geometry)
-    plan = models.ForeignKey(Plan)
+
+class Subject(models.Model):
     label = models.CharField(max_length=50, null=True, blank=True)
+    plan = models.ForeignKey(Plan, null=True, blank=True)
+
+    def __unicode__(self):
+        return self.label
+
+
+class SubjectFeat(models.Model):
+    subject = models.ForeignKey(Subject)
+    geom = models.PolygonField(srid=4326)
+
+    def getId(self):
+        return self.id
+
+    def getGeom(self):
+        wkt = WKTWriter()
+        if self.geom:
+            return wkt.write(self.geom)
+        else:
+            return None
+
+
+class SubjectFeatProperty(models.Model):
+    feat = models.ForeignKey(SubjectFeat, related_name="properties")
+    key = models.CharField(max_length=50)
+    value = models.TextField()
+
 
 
 class Configuration(models.Model):
@@ -157,6 +184,7 @@ class TrackEvents(models.Model):
 
     def __unicode__(self):
         return '%s: %s :  %s' % (self.category, self.action, self.date)
+
 
 class WebNotification(models.Model):
     STATUS = (

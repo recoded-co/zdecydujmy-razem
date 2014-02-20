@@ -5,10 +5,14 @@ from rest_framework import generics
 from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer, Serializer
+from rest_framework.renderers import JSONRenderer
 from filemanager.models import PostFileUpload
-from zr.models import Plan, Configuration, Geometry, Subjects, Post, Rate, PostSubscription, TrackEvents
+from zr.models import Plan, Configuration, Geometry, Post, Rate, PostSubscription, TrackEvents
+from zr.models import Subject, SubjectFeat, SubjectFeatProperty
 from django_decorators.decorators import json_response
 from django.views.decorators.csrf import csrf_exempt
+from djgeojson.views import GeoJSONLayerView
+
 
 router = routers.DefaultRouter()
 
@@ -51,12 +55,6 @@ class GeometryViewSet(viewsets.ModelViewSet):
         print 'post delete %s' % str(obj)
 
 router.register(r'geometries', GeometryViewSet)
-
-
-class SubjectsViewSet(viewsets.ModelViewSet):
-    model = Subjects
-
-router.register(r'subjects', SubjectsViewSet)
 
 
 class RateSerializer(ModelSerializer):
@@ -168,9 +166,11 @@ class PostSubscriptionViewSet(viewsets.ModelViewSet):
 
 router.register(r'subscriptions', PostSubscriptionViewSet)
 
+
 class TrackEventsSerializer(ModelSerializer):
     class Meta:
         model = TrackEvents
+
 
 class TrackEventsViewSet(viewsets.ModelViewSet):
     queryset = TrackEvents.objects.all()
@@ -216,15 +216,9 @@ def geo_search(request, plan_id):
         #print polygon
         try:
             pnt = fromstr(polygon, srid=4326)
-            #print pnt
             geometries = Geometry.objects.filter(Q(poly__intersects=pnt) | Q(point__intersects=pnt))
             posts = Post.objects.filter(plan__id=plan_id, geometry__in=geometries)
-            #print geometries
-            #print posts
             posts_serialized = PostSerializer(posts, many=True)
-            #print posts_serialized.data
-            #json_geometries = GeometrySerializer(geometries, many=True)
-            #print json_geometries.data
             return posts_serialized.data #json_geometries.data
         except Exception, e:
             return json.dumps({'result': 'exception'})
@@ -232,15 +226,22 @@ def geo_search(request, plan_id):
         return HttpResponseBadRequest(json.dumps({'result': 'error'}))
 
 
+class SubjectsSerializer(ModelSerializer):
+    id = serializers.Field(source='getId')
+    geom = serializers.Field(source='getGeom')
+
+    class Meta:
+        model = SubjectFeat
+        fields = ('id', 'geom')
 
 
-"""
-within
-Availability: PostGIS, Oracle, MySQL, SpatiaLite
+class BasePlanJson(GeoJSONLayerView):
 
-Tests if the geometry field is spatially within the lookup geometry.
+    def get_queryset(self):
+        if 'plan_id' in self.kwargs:
+            plan_id = self.kwargs['plan_id']
+            subjects = Subject.objects.filter(plan__id=plan_id)
+            sfs = SubjectFeat.objects.filter(subject__in=subjects)
 
-Example:
-
-Zipcode.objects.filter(poly__within=geom)
-"""
+            return sfs
+        return SubjectFeat.objects.all()
