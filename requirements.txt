@@ -12,3 +12,4 @@ django-notification
 django_decorators
 simplejson
 django-geojson
+djangorestframework-gis

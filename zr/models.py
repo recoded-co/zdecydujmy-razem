@@ -78,10 +78,9 @@ class SubjectFeat(models.Model):
 
 
 class SubjectFeatProperty(models.Model):
-    feat = models.ForeignKey(SubjectFeat, related_name="properties")
+    feat = models.ForeignKey(SubjectFeat, related_name="feat_description")
     key = models.CharField(max_length=50)
     value = models.TextField()
-
 
 
 class Configuration(models.Model):

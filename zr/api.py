@@ -6,6 +6,7 @@ from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer, Serializer
 from rest_framework.renderers import JSONRenderer
+from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from filemanager.models import PostFileUpload
 from zr.models import Plan, Configuration, Geometry, Post, Rate, PostSubscription, TrackEvents
 from zr.models import Subject, SubjectFeat, SubjectFeatProperty
@@ -245,3 +246,24 @@ class BasePlanJson(GeoJSONLayerView):
 
             return sfs
         return SubjectFeat.objects.all()
+
+
+class SubjectFeatPropertySerializer(ModelSerializer):
+    class Meta:
+        model = SubjectFeatProperty
+        fields = ('key', 'value')
+
+class SubjectFeatSerializer(GeoFeatureModelSerializer):
+    feat_description = SubjectFeatPropertySerializer(many=True) #serializers.RelatedField(many=True)
+
+    class Meta:
+        model = SubjectFeat
+        geo_field = "geom"
+        fields = ('id', 'subject', 'geom', 'feat_description')
+
+
+
+class SubjectFeatList(generics.ListAPIView):
+    queryset = SubjectFeat.objects.all()
+    serializer_class = SubjectFeatSerializer
+

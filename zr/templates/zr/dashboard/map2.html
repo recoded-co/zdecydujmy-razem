@@ -105,14 +105,43 @@
             layers: [mbmap]
         });
 
-        var jsonlayer = L.geoJson();
-        map.addLayer(jsonlayer);
-        $.getJSON("{% url 'subjects_geojson' plan.id %}", function (data) {
-            console.log(data);
-            jsonlayer.addData(data);
+
+        var planMapStyle = {
+            "color": "#e74c3c",
+            "weight": 5,
+            "opacity": 0.65
+        }
+
+        var basePlanLayer = L.geoJson([], {
+           style: planMapStyle,
+           onEachFeature: function (feature, layer) {
+               var pcontent = '';
+               feature.properties.feat_description.forEach(function(o){
+                   if (o.value !== ''){
+                    pcontent += "<h5>"+ o.key+"</h5><p>"+o.value+"</p>";
+                   }
+               });
+               var popup = L.popup({
+                   "maxHeight": 200
+               });
+               popup.setContent(pcontent);
+               layer.bindPopup(popup);
+           }
         });
 
-        L.control.layers(baseMaps, null).addTo(map);
+        map.addLayer(basePlanLayer); // city plan base layer
+
+        $.getJSON("{% url 'subjects_geojson' plan.id %}", function (data) {
+            basePlanLayer.addData(data);
+            basePlanLayer.bringToBack();
+        });
+
+
+        var additionalLayers = {
+            //"Propozycja planu": basePlanLayer
+        }
+
+        L.control.layers(baseMaps, additionalLayers, {'collapsed':false}).addTo(map);
 
         var drawnItems = new L.FeatureGroup();
         layerWaitingRoom = new Array();
@@ -232,11 +261,14 @@
             }
 
 		});
-        addBasePlan(plan_id, function(){
-           console.log("gotta");
-        });
-        addGeometry(function(){
+
+        addGeometry(function(markers){
             //vectors.events.register('featureadded','',featureAddedFunction);
+            /*
+            for (k in markers){
+                additionalLayers[k]=markers[k];
+                additionalLayers[k].bringToFront();
+            }*/
         });
 
     }
@@ -273,34 +305,6 @@
         });
     }
 
-
-    function addBasePlan(plan_id, callback){
-
-
-        // TODO !!!! pass plan id here, right now you get all data from all plans in the system
-        /*
-        $.getJSON("/zr/api/subjects/"+plan_id+"?format=json", function( data ) {
-            console.log("got data from the server about polygons");
-            console.log(data)
-            var polygons = [];
-
-            for (var x in data){
-                var p = data[x];
-                console.log(">");
-                console.log(p);
-                var p_wkt = p.geom;
-                console.log(p_wkt);
-                var wkt = new Wkt.Wkt();
-                wkt.read(p_wkt);
-                polygons.push(wkt.toObject());
-            }
-
-            L.featureGroup(polygons)
-                .bindPopup('Hello world!')
-                .on('click', function() { alert('Clicked on a group!'); })
-                .addTo(map);
-        }); */
-    }
     /**
      * TODO add polygon method
      * @param callback
@@ -309,7 +313,9 @@
         // TODO !!!! pass plan id here, right now you get all data from all plans in the system
         $.getJSON( "/zr/api/geometries/?format=json", function( data ) {
             var count = data.length;
-            addMarkers(data);
+            addMarkers(data, function(layers){
+                callback(layers);
+            });
             /*
             $.each(data,function(key,value){
                 parseWKT(value.geoelement,value.name);
@@ -441,6 +447,7 @@
                 }
             }
 		});
+        callback({'punkty':markers, 'poligony':polygon_markers});
     }
 
     function postLightOn(id){
