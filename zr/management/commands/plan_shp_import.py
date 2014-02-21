@@ -34,12 +34,8 @@ class Command(BaseCommand):
         file_path = args[1] # args[2] == file path
 
         subject, created = Subject.objects.get_or_create(label=plan_name)
-
-
         shp_file = os.path.abspath(file_path)
         ds = DataSource(shp_file)
-
-        self.stdout.write('%s' % str(ds))
 
         for layer in ds:
             properties = layer.fields
