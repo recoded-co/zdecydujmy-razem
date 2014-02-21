@@ -12,7 +12,6 @@ from zr.models import Plan, Configuration, Geometry, Post, Rate, PostSubscriptio
 from zr.models import Subject, SubjectFeat, SubjectFeatProperty
 from django_decorators.decorators import json_response
 from django.views.decorators.csrf import csrf_exempt
-from djgeojson.views import GeoJSONLayerView
 
 
 router = routers.DefaultRouter()
@@ -227,27 +226,6 @@ def geo_search(request, plan_id):
         return HttpResponseBadRequest(json.dumps({'result': 'error'}))
 
 
-class SubjectsSerializer(ModelSerializer):
-    id = serializers.Field(source='getId')
-    geom = serializers.Field(source='getGeom')
-
-    class Meta:
-        model = SubjectFeat
-        fields = ('id', 'geom')
-
-
-class BasePlanJson(GeoJSONLayerView):
-
-    def get_queryset(self):
-        if 'plan_id' in self.kwargs:
-            plan_id = self.kwargs['plan_id']
-            subjects = Subject.objects.filter(plan__id=plan_id)
-            sfs = SubjectFeat.objects.filter(subject__in=subjects)
-
-            return sfs
-        return SubjectFeat.objects.all()
-
-
 class SubjectFeatPropertySerializer(ModelSerializer):
     class Meta:
         model = SubjectFeatProperty
@@ -260,8 +238,6 @@ class SubjectFeatSerializer(GeoFeatureModelSerializer):
         model = SubjectFeat
         geo_field = "geom"
         fields = ('id', 'subject', 'geom', 'feat_description')
-
-
 
 class SubjectFeatList(generics.ListAPIView):
     queryset = SubjectFeat.objects.all()

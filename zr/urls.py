@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from zr.views import HomePageView, DashboardView, UserCreationPageView, SubscriptionList, SubscriptionDelete
 from zr.views import ZipcodeCheckView
 from zr.api import router
-from zr.api import RateListView, PostsListView, geo_search, BasePlanJson, SubjectFeatList
+from zr.api import RateListView, PostsListView, geo_search, SubjectFeatList
 
 urlpatterns = patterns('',
     #url(r'^test', TestView.as_view(), name="home"),
@@ -13,7 +13,6 @@ urlpatterns = patterns('',
     url(r'^api/ratefilter', RateListView.as_view()),
     url(r'^api/postfilter', PostsListView.as_view()),
     url(r'^api/geosearch/(?P<plan_id>\d+)/?', geo_search, name='geo_search'),
-    url(r'^api/subjects3/(?P<plan_id>\d+)/?$', BasePlanJson.as_view(), name='subjects_geojson3'),
     url(r'^api/subjects/(?P<plan_id>\d+)/?$', SubjectFeatList.as_view(), name='subjects_geojson'),
     url(r'^api/', include(router.urls), name="api_root"),
 
