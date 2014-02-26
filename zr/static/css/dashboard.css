@@ -202,14 +202,19 @@ body{
 .search_box{
     margin:5px;
 }
+.post_content_test{
 
-.post_content{
+}
+.post_content_test_testing{
     padding-top:0px;
     padding-left:0px;
     padding-bottom: 0px;
     padding-right: 0px;
 }
 .post{
+
+}
+.post_testing{
     margin-bottom: 6px;
     border-radius: 5px;
     /*border: 1px solid #ccc;*/
@@ -219,6 +224,9 @@ body{
     background-color: #ffffff;
 }
 .sub_post{
+
+}
+.sub_post_testing{
     margin-top:13px;
     margin-bottom: 2px;
     border-radius: 5px;
@@ -239,6 +247,8 @@ body{
     margin-top:0px !important;
 }
 .main-post{
+}
+.main-post_testing{
     border-top: 10px solid #00c7a2;
     padding-top:10px;
     width:100%;
@@ -288,4 +298,17 @@ hr {
 }
 .dotedline{
     border-bottom: 1px dotted  #757574;
+}
+
+.blue{
+    background-color: blue;
+}
+.red{
+    background-color: red;
+}
+.yellow{
+    background-color: darkkhaki;
+}
+.green{
+    background-color: darkgreen;
 }

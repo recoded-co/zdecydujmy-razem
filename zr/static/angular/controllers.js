@@ -92,6 +92,8 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
             $scope.showOneDown(data);
     };
     $scope.showOneDown = function(data){
+        console.log("showOneDown:");
+        console.log(data);
         if(data.rozwin==undefined || data.rozwin==false){
             data.rozwin=true;
         } else {
