@@ -3,6 +3,7 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework import filters
 from rest_framework import generics
 from rest_framework import serializers
+from rest_framework import mixins
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer, Serializer
 from rest_framework.renderers import JSONRenderer
@@ -69,7 +70,7 @@ class PostSerializer(ModelSerializer):
     rate = serializers.Field(source='has_rate')
     score = serializers.Field(source='has_likes')
     author_name = serializers.Field(source='author_name')
-    filep =  FileSerializer(required=False,many=True)
+    filep =  FileSerializer(required=False, many=True)
     positive_rate = serializers.Field(source='like_sum')
     negative_rate = serializers.Field(source='dislike_sum')
 
@@ -89,8 +90,8 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer = PostSerializer(queryset, many=True)
         result = []
         # TODO make this in one query
-
-        if str(request.user) != "AnonymousUser" :
+        # TODO do it right!
+        if str(request.user) != "AnonymousUser":
             subscribed_posts = [p.post.id for p in PostSubscription().get_user_subscriptions(request.user)]
         else:
             subscribed_posts = []
@@ -146,25 +147,93 @@ class SubscriptionSerializer(ModelSerializer):
         model = PostSubscription
 
 
+class SubscriptionList(mixins.ListModelMixin,
+                  mixins.CreateModelMixin,
+                  generics.GenericAPIView):
+
+    queryset = PostSubscription.objects.all()
+    serializer_class = SubscriptionSerializer
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated():
+            return PostSubscription.objects.filter(user=self.request.user)
+        else:
+            from django.core.exceptions import PermissionDenied
+            raise PermissionDenied('You can only subscribe for yourself')
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        from django.core.exceptions import PermissionDenied
+        user_id = int(request.DATA['user'])
+        post_id = int(request.DATA['post'])
+        if request.user.is_authenticated() and user_id == request.user.id:
+            try:
+                subscriptions = PostSubscription.objects.filter(user=request.user, post__id=post_id)
+                for s in subscriptions:
+                    s.delete()
+            except PostSubscription.DoesNotExist:
+                pass
+            return self.create(request, args, kwargs)
+        else:
+            raise PermissionDenied('You have to be logged in and you can only subscribe for yourself')
+
+class SubscriptionDetail(mixins.RetrieveModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.DestroyModelMixin,
+                    generics.GenericAPIView):
+
+    queryset = PostSubscription.objects.all()
+    serializer_class = SubscriptionSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        user_id = int(request.DATA['user'])
+        if request.user.id == user_id:
+            return self.update(request, *args, **kwargs)
+        else:
+            from django.core.exceptions import PermissionDenied
+            raise PermissionDenied('You can edit only yours subscription')
+
+    def delete(self, request, *args, **kwargs):
+        user_id = int(request.DATA['user'])
+        if request.user.id == user_id:
+            return self.destroy(request, *args, **kwargs)
+        else:
+            from django.core.exceptions import PermissionDenied
+            raise PermissionDenied('You can remove only yours subscriptions')
+
+"""
+
 class PostSubscriptionViewSet(viewsets.ModelViewSet):
     queryset = PostSubscription.objects.all()
     serializer_class = SubscriptionSerializer
 
     def get_queryset(self):
-        return PostSubscription.objects.filter(user=self.request.user)
+        from django.core.exceptions import PermissionDenied
+        if self.request.user.is_authenticated():
+            return PostSubscription.objects.filter(user=self.request.user)
+        else:
+            raise PermissionDenied('You can only subscribe for yourself')
 
     def create(self, request, *args, **kwargs):
-        import json
-        data = json.loads(request.raw_post_data)
-        post = Post.objects.get(id=data['post'])
-        subscription, created = PostSubscription.objects.get_or_create(user=request.user, post=post)
-        self.subscription = subscription
-        return super(PostSubscriptionViewSet, self).update(request, args, kwargs)
+        user_id = int(request.DATA['user'])
+        print '%s vs %s' % (user_id, request.user.id)
+        if user_id != request.user.id:
+            from django.core.exceptions import PermissionDenied
+            raise PermissionDenied('You can only subscribe for yourself')
 
-    def get_object_or_none(self ):
-        return self.subscription
+        post_id = int(request.DATA['post'])
+        if PostSubscription.objects.filter(user__id=user_id, post__id=post_id).exists():
+            return super(PostSubscriptionViewSet, self).update(request, args, kwargs)
+        else:
+            return super(PostSubscriptionViewSet, self).create(request, args, kwargs)
+"""
 
-router.register(r'subscriptions', PostSubscriptionViewSet)
+#router.register(r'subscriptions', PostSubscriptionViewSet)
 
 
 class TrackEventsSerializer(ModelSerializer):
@@ -198,7 +267,7 @@ class TrackEventsViewSet(viewsets.ModelViewSet):
         self.trackevent = trackevent
         return super(TrackEventsViewSet, self).update(request, args, kwargs)
 
-    def get_object_or_none(self ):
+    def get_object_or_none(self, request, *args, **kwargs):
         return self.trackevent
 
 router.register(r'track', TrackEventsViewSet)

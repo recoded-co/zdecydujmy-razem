@@ -14,6 +14,10 @@ admin.site.register(SubjectFeatProperty)
 
 
 class EventDecoration(admin.ModelAdmin):
-    list_display = ('category', 'action','opt_label','opt_value','opt_noninteraction','date')
+    date_hierarchy = 'date'
+    list_display = ('category', 'action', 'opt_label', 'opt_value', 'opt_noninteraction', 'date')
+    list_filter = ('category', 'action')
+    search_fields = ['category', 'action'] #['foreign_key__related_fieldname'] TODO dodac usera
+
 
 admin.site.register(TrackEvents, EventDecoration)
