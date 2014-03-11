@@ -115,6 +115,9 @@ class PostViewSet(viewsets.ModelViewSet):
 
         return Response(result)
 
+    def create(self, request, *args, **kwargs):
+        return super(PostViewSet, self).create(request, *args, **kwargs)
+
 router.register(r'posts', PostViewSet)
 
 
@@ -254,21 +257,18 @@ class TrackEventsViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
-        import json
-        data = json.loads(request.raw_post_data)
-        labels = ['category','action','opt_label','opt_value','opt_noninteraction']
+        from rest_framework import status
+        from rest_framework.response import Response
+        data = request.DATA
+        labels = ['category', 'action', 'opt_label', 'opt_value', 'opt_noninteraction']
         inputs = {}
         for item in labels:
             if item in data:
-                inputs[item]=data[item]
+                inputs[item] = data[item]
             else:
-                inputs[item]=''
+                inputs[item] = ''
         trackevent = TrackEvents.objects.create(**inputs)
-        self.trackevent = trackevent
-        return super(TrackEventsViewSet, self).update(request, args, kwargs)
-
-    def get_object_or_none(self, request, *args, **kwargs):
-        return self.trackevent
+        return Response(TrackEventsSerializer(trackevent).data, status=status.HTTP_201_CREATED)
 
 router.register(r'track', TrackEventsViewSet)
 
