@@ -51,7 +51,11 @@
 
     </div>
 {[{ showallposts }]}
-    <button ng-hide="showallposts" type="button" onclick="clearGeoSearchFilter()" class="btn btn-xs btn-danger" ng-click="showAll()|trackEvent:'Rozwiń wszystkie':'Button clicked':user:'':'' ">
+    <button ng-hide="showallposts"
+            type="button"
+            onclick="clearGeoSearchFilter()"
+            class="btn btn-xs btn-danger"
+            ng-click="showallposts=true;showAll()|trackEvent:'Rozwiń wszystkie':'Button clicked':user:'':'' ">
         <span>{% trans 'Rozwiń wszystkie' %}</span>
     </button>
 
