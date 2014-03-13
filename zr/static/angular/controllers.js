@@ -101,6 +101,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
         }
     };
     $scope.showAll = function(){
+        console.log("showAll()");
         $scope.showallposts = true;
         $scope.filterGeoData=[];
         /*
