@@ -8,6 +8,10 @@ var zdControllers = angular.module('zdControllers', ['ngCookies']);
 zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', 'zdServicesFactory','uploadService','Angularytics',
   function($scope,$http,$cookies, $rootScope,zdServicesFactory, uploadService, Angularytics ) {
 
+    $scope.$watch('showallposts', function() {
+            console.log("showallposts changed! "+$scope.showallposts);
+    });
+
     $scope.plans = zdServicesFactory.plans.json();
     jsonToNestedCollection(zdServicesFactory.posts.json(),function(data){
         $scope.tree = data;
@@ -104,6 +108,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
         console.log("showAll()");
         $scope.showallposts = true;
         $scope.filterGeoData=[];
+
         /*
           if($scope.showallposts == false){
               $scope.showallposts = true;
