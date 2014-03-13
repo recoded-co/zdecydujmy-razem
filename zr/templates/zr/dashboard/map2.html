@@ -51,12 +51,11 @@
     var search_filter_layer = undefined;
 
     function clearGeoSearchFilter(){
-        console.log(">>>>>>>>>888888");
         trackEvent('search rectangle','clicked',user,'','');
         if (search_filter_layer){
             search_filter_layer.clearLayers();
         }
-        addPostFilter(undefined);
+        //addPostFilter(undefined);
     }
 
     function geolocate(address){
