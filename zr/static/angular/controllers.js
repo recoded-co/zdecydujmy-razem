@@ -101,11 +101,15 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
         }
     };
     $scope.showAll = function(){
+        $scope.filterGeoData=[];
+        $scope.searchdate.date='';
+        $scope.showallposts = true;
+        /*
           if($scope.showallposts == false){
               $scope.showallposts = true;
           }else{
               $scope.showallposts = false;
-          }
+          }*/
       };
     $scope.addVertical = function(data) {
         if (data.nodes !== undefined)

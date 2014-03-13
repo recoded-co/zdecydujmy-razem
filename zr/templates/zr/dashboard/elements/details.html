@@ -35,8 +35,8 @@
                         <input type="hidden" class="input-large" data-ng-model="searchdate.date">
                             <span class="add-on">
                         <i class="glyphicon glyphicon-calendar"></i><b class="caret"></b>
-                    </span><!--{[{ searchdate.date | date:'yyyy-MM-dd' }]}-->
-                        <!--<span class="glyphicon glyphicon-remove" ng-click="searchdate.date='' "></span>-->
+                    </span>{[{ searchdate.date | date:'yyyy-MM-dd' }]}
+                            <span ng-hide="!searchdate.date" class="glyphicon glyphicon-remove" ng-click="searchdate.date='' "></span>
                     </div>
 
                 </button>
@@ -52,13 +52,13 @@
     </div>
 
 
-<!--
 
-    <button type="button" class="btn btn-xs"  ng-click="showAll()|trackEvent:'Rozwiń wszystkie':'Button clicked':user:'':'' ">
-        <span ng-show="showallposts">{% trans 'Rozwiń wszystkie' %}</span>
-        <span ng-hide="showallposts">{% trans 'Zwiń wszystkie' %}</span>
+
+    <button ng-hide="showallposts" type="button" onclick="clearGeoSearchFilter()" class="btn btn-xs btn-danger" ng-click="showAll()|trackEvent:'Rozwiń wszystkie':'Button clicked':user:'':'' ">
+        <span>{% trans 'Rozwiń wszystkie' %}</span>
     </button>
 
+<!--
     <button type="button" ng-class="{'btn':true, 'btn-xs':true, 'btn-default':!search_box}" ng-init="search_box=true;" ng-click="search_box = !search_box  | trackEvent:'Szukaj':'Button clicked':user:'':''  "  >
         {% trans 'Szukaj' %}
     </button>

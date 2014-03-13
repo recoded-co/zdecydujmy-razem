@@ -48,6 +48,16 @@
     var map, drawControls, selectedFeature,wtk,vectors,layerWaitingRoom;
     var plan_id = parseInt('{{ plan_id }}');
     var user = '{{ user }}';
+    var search_filter_layer = undefined;
+
+    function clearGeoSearchFilter(){
+        console.log(">>>>>>>>>888888");
+        trackEvent('search rectangle','clicked',user,'','');
+        if (search_filter_layer){
+            search_filter_layer.clearLayers();
+        }
+        addPostFilter(undefined);
+    }
 
     function geolocate(address){
 
@@ -148,6 +158,7 @@
         map.addLayer(drawnItems);
 
         var searchItems = new L.FeatureGroup();
+        search_filter_layer = searchItems;
         map.addLayer(searchItems);
 
         L.control.scale().addTo(map);
