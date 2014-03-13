@@ -7,7 +7,7 @@ var zdControllers = angular.module('zdControllers', ['ngCookies']);
 
 zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', 'zdServicesFactory','uploadService','Angularytics',
   function($scope,$http,$cookies, $rootScope,zdServicesFactory, uploadService, Angularytics ) {
-
+    console.log("starting scope");
     $scope.$watch('showallposts', function() {
             console.log("showallposts changed! "+$scope.showallposts);
     });
@@ -194,8 +194,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
         }
     };
 
-
-
     $scope.postLightOn = function(id) {
         //$("#mediaList1").animate({scrollTop: 30}, "slow");
         $scope.geoHashTree[id].light = true;
@@ -204,7 +202,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     $scope.postLightOff = function(id) {
         $scope.geoHashTree[id].light = false;
     };
-
 
     $rootScope.$on('upload:loadstart', function () {
         console.log('Controller: on `loadstart`');

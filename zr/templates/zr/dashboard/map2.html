@@ -51,13 +51,7 @@
     var search_filter_layer = undefined;
 
 
-    function clearGeoSearchFilter(){
-        trackEvent('search rectangle','clicked',user,'','');
-        if (search_filter_layer){
-            search_filter_layer.clearLayers();
-        }
-        addPostFilter(undefined);
-    }
+
 
     function geolocate(address){
 
@@ -461,6 +455,14 @@
         callback({'punkty':markers, 'poligony':polygon_markers});
     }
 
+    function clearGeoSearchFilter(){
+        trackEvent('search rectangle','clicked',user,'','');
+        if (search_filter_layer){
+            search_filter_layer.clearLayers();
+        }
+        addPostFilter(undefined);
+        $("#div_apiList").scope().$apply();
+    }
     function postLightOn(id){
         var LightOn = $("#div_apiList").scope().postLightOn;
         LightOn(id);
