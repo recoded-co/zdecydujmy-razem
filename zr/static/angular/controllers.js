@@ -7,6 +7,10 @@ var zdControllers = angular.module('zdControllers', ['ngCookies']);
 
 zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', 'zdServicesFactory','uploadService','Angularytics',
   function($scope,$http,$cookies, $rootScope,zdServicesFactory, uploadService, Angularytics ) {
+    console.log("starting scope");
+    $scope.$watch('showallposts', function() {
+            console.log("showallposts changed! "+$scope.showallposts);
+    });
 
     $scope.plans = zdServicesFactory.plans.json();
     jsonToNestedCollection(zdServicesFactory.posts.json(),function(data){
@@ -101,11 +105,16 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
         }
     };
     $scope.showAll = function(){
+        console.log("showAll()");
+        $scope.showallposts = true;
+        $scope.filterGeoData=[];
+
+        /*
           if($scope.showallposts == false){
               $scope.showallposts = true;
           }else{
               $scope.showallposts = false;
-          }
+          }*/
       };
     $scope.addVertical = function(data) {
         if (data.nodes !== undefined)
@@ -185,8 +194,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
         }
     };
 
-
-
     $scope.postLightOn = function(id) {
         //$("#mediaList1").animate({scrollTop: 30}, "slow");
         $scope.geoHashTree[id].light = true;
@@ -195,7 +202,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
     $scope.postLightOff = function(id) {
         $scope.geoHashTree[id].light = false;
     };
-
 
     $rootScope.$on('upload:loadstart', function () {
         console.log('Controller: on `loadstart`');

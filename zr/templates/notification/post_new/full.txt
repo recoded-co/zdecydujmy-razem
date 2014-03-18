@@ -1,8 +1,2 @@
-{% load i18n %}
-{% blocktrans %}
-There is a new post on {{ plan }}:
-{% endblocktrans %}
+{% load i18n %}{% blocktrans %}There is a new post on {{ plan }}:{% endblocktrans %}
 {{ post_content }}
-{% blocktrans %}
-Read more on http://{{ current_site }}
-{% endblocktrans %}

@@ -150,7 +150,11 @@ class Post(models.Model):
             return self.parent.get_root()
         else:
             return self
-
+    """
+    def save(self, *args, **kwargs):
+        print 'save is calling'
+        return super(Post, self).save(*args, **kwargs)
+    """
 
 class Rate(models.Model):
     post = models.ForeignKey(Post, related_name='rates')
@@ -160,6 +164,7 @@ class Rate(models.Model):
 
     def get_user_like(self, user):
         return Rate.objects.filter(user=user)
+
 
 class PostSubscription(models.Model):
     post = models.ForeignKey(Post)
@@ -200,14 +205,15 @@ class WebNotification(models.Model):
     status = models.CharField(max_length=2, choices=STATUS)
 
 @receiver(post_save, sender=Post)
-def post_notifications(sender, instance, created, **kwargs):
+def post_notifications(sender, instance, created, raw, using, update_fields, **kwargs):
     root = instance.get_root()
     subscribed_users = root.subscriptions.all()
     if notification and len(subscribed_users) > 0:
-        notification.send(subscribed_users, "post_new", {'plan': 'lolo', 'post_content': ''})
+        print 'notify: %s' % str(subscribed_users)
+        notification.send(subscribed_users, "post_new", {'plan': instance.plan, 'post_content': instance.content})
 
 @receiver(post_save, sender=User)
-def post_notifications(sender, instance, created, **kwargs):
+def ZipCodeUpdate(sender, instance, created, **kwargs):
     if created:
         p = Profile(user=instance, zipcode=None)
         p.save()
