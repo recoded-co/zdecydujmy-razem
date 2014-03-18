@@ -1,6 +1,6 @@
 L.Control.MeasurePolygon = L.Control.extend({
 	options: {
-		position: 'topleft'
+		position: 'topright'
 	},
 
 	onAdd: function (map) {

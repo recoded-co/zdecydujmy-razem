@@ -1,13 +1,13 @@
 L.Control.Measure = L.Control.extend({
 	options: {
-		position: 'topleft'
+		position: 'topright'
 	},
 
 	onAdd: function (map) {
-		var className = 'leaflet-control-zoom leaflet-bar leaflet-control',
+		var className = 'leaflet-control-draw leaflet-bar leaflet-control',
 		    container = L.DomUtil.create('div', className);
 
-		this._createButton('&#8674;', 'Miarka', 'leaflet-control-measure leaflet-bar-part leaflet-bar-part-top-and-bottom', container, this._toggleMeasure, this);
+		this._createButton('&#8674;', 'Miarka', 'leaflet-control-measure-ruler leaflet-bar-part leaflet-bar-part-top-and-bottom', container, this._toggleMeasure, this);
 
 		return container;
 	},

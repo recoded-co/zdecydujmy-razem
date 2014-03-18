@@ -5,9 +5,6 @@
     <div class="post-list"  style="visibility: hidden;">
     <div class="toolbox">
         <span class="left">
-            <button type="button" class="btn btn-xs  btnsea btnwhite"  ng-click="addBasePost = true  | trackEvent:'Dodaj komentarz':'Button clicked':user ">
-                <span class="glyphicon glyphicon-comment"></span>{% trans ' dodaj' %}
-            </button>
             <button id="date_button" class="btn btn-xs"
                   ng-int="rev_d=true;"
                   ng-click="predicate = 'date'; reverse=rev_d; rev_d=!rev_d;data_arrow= !data_arrow |trackEvent:'button Data':'Button clicked':user:'':'' ">
@@ -21,6 +18,9 @@
                 {% trans 'Ilość komentarzy' %}
                     <span class="glyphicon glyphicon-arrow-down" ng-hide="numcom_arrow"></span>
                     <span class="glyphicon glyphicon-arrow-up" ng-show="numcom_arrow"></span>
+            </button>
+               <button type="button" class="btn btn-xs"  ng-click="addBasePost = true  | trackEvent:'Dodaj komentarz':'Button clicked':user ">
+                <span class="glyphicon glyphicon-comment"></span>{% trans ' dodaj' %}
             </button>
         </span>
         <span class="right" style="width:50%;">

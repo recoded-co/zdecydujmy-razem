@@ -8,10 +8,36 @@ button:hover, button:focus{
 
 .btnred{
     background:#ED1C24;
+    color: white; 
+    font-size: 12px;
+    font-variant: normal;
+    font-family: "source_sans_prolight";
+    margin-left: 90px;
+
+
+}
+.map_popup .btnred
+{
+  margin-left: 90px !important; 
+  color: white;
+
+}
+
+.sub_post .btnred{
+    background:#ED1C24;
+    color: white;
+    font-family: "source_sans_prolight";
+    margin-left: 0px;
 }
 
 .btnred:hover, .red:focus{
     background: #A60011;
+    color:white !important;
+}
+
+.btn:hover
+{
+  color:white !important;
 }
 
 .btnblue{
@@ -44,7 +70,10 @@ button:hover, button:focus{
     margin-right:5px;
 }
 
-
+.media
+{
+  margin-top: 0px !important;
+}
 .btnsea{
     font-size: 14px !important;
     color: #00c7a2 !important;
@@ -134,9 +163,7 @@ padding-bottom: 7px;
 
 .toolbox{
     height:50px;
-    border-bottom:1px  solid #DDDDDD;
     padding-top:14px;
-    padding-bootom:15px;
 }
 
 
@@ -169,6 +196,11 @@ div#map{
 .right{
     display:block;
     float:right;
+    
+}
+div.right
+{
+    font-family: "source_sans_proitalic";
 }
 .double-input .form-control {
     border-right-width: 0px;
@@ -271,6 +303,7 @@ hr {
 }
 .allign_right{
     float:right;
+    margin-right: 2%;
 }
 .tab-post{
     display: table;
@@ -279,22 +312,20 @@ hr {
 .tab-post ul{
   display: table-row;
 }
-.tab-post ul li{
-  display: table-cell;
-}
 
 .tab-post ul li img{
     margin:0px 10px;
 }
 
 .head-autor {
-    font-size: 13px;
-    color:#00b38b;
-    margin-bottom:10px;
+                font-family: "source_sans_prolight";
+                font-size:  1em;                
+                color: #00BA80;
 }
 .post-content {
-    color: #000000;
-    font-size: 20px;
+    margin-top:-10px;
+    font-family: "source_sans_prosemibold";
+    font-size: 1.2em;
 }
 .dotedline{
     border-bottom: 1px dotted  #757574;
@@ -312,3 +343,837 @@ hr {
 .green{
     background-color: darkgreen;
 }
+
+/*edit teodr @ katalpa*/
+     #nav-tabs-menu a
+           {
+           padding: 0px !important;
+           font-family: "source_sans_prolight";
+          font-size: 1.2em;
+          color:#000000;
+          text-align: center;
+           }
+           #nav-tabs-menu li.active a
+           {
+           padding-top:  8px !important;
+           border-top: 8px solid #00BAB1 !important;
+           }
+           #nav-tabs-menu li.open > .dropdown-menu
+           {
+              width: 100% !important;
+              padding-top: 0px;
+              padding-bottom: 0px;
+           }
+           #nav-tabs-menu li.open > .dropdown-menu li
+           {
+              width: 100% !important;
+              height: 40px;
+              border-top: 0px;
+              border-bottom: 1px solid #66624A;
+              padding-top: 8px;
+           }
+            #nav-tabs-menu li.open > .dropdown-menu li:last-child
+           {
+              border-bottom: 0px solid #66624A;
+           }
+            ul.dropdown-menu li
+           {
+             
+               width: 100%;
+            
+           }
+           #nav-tabs-menu li.open > ul.dropdown-menu a
+           {
+              border: none !important;
+             
+             
+              text-align: center;
+              height: 40px;
+           }
+            #nav-tabs-menu li.open > ul.dropdown-menu a:hover
+           {
+              border: none !important; 
+              text-align: center;
+              background-color: #FFFFFF;
+              text-decoration: underline;
+           }
+           .nav-tabs
+           {
+            position: fixed;
+            z-index: 11;
+            border-bottom: solid 2px #66624A !important;
+           }
+           .nav-tabs i
+           {
+            padding-right: 3px;
+           }
+           .nav .open > a, .nav .open > a:hover, .nav .open > a:focus
+           {
+            background-color: white !important;
+           }
+           ul.nav.nav-tabs
+           {
+            width: 100%;
+            background-color: white;
+           }
+           .nav-tabs  li
+           {
+            background-color: white;
+            width: 23%;
+            height: 50px;
+            border-right : solid 1px #66624A !important;
+            padding-top: 16px;
+           }
+           .nav-tabs > li.active
+           {
+            border-top: none !important;
+            bottom: 0px !important;
+           }
+           .nav-tabs > li.active a
+           {
+               padding-top: 8px
+           }
+           .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus
+           {
+            bottom:0px !important;
+           }
+           .nav-tabs li.active a
+           {
+           
+            margin-right: 0px;
+            padding-top: 8px !important;
+            height: 51px !important;
+           }
+           .nav-tabs li a
+           {
+            border: none !important;
+           }
+           .nav-tabs  li:first-child
+           {
+            width: 25%;
+           }
+           .nav-tabs  li:last-child
+           {
+            width: 29%;
+           }
+           .nav-tabs i.fa.fa-comments.fa-fw
+           {
+            display: inline !important;
+           }
+           .tab-pane
+           {
+           padding-top: 140px;
+           }
+           .toolbox
+           {
+            margin-top: -90px;
+            position: fixed;
+            background-color: white;
+            z-index: 10;
+           }
+         
+        
+                          /*container represents buttons and input just below tabbed navigation*/
+           
+           
+            .toolbox button
+            {
+                font-family: "source_sans_prolight";
+                
+            }
+       
+            .toolbox span.left
+            {
+                margin-top: -2px;
+                margin-left: 4%;  
+            }
+            .toolbox span.left .glyphicon
+            {
+                font-size: 9px !important;
+            }
+            .toolbox span.right
+            {  
+                margin-right: 2%;
+            }
+            .toolbox span.right button
+            {
+                height: 30px !important;
+                background-color: white;
+                border: solid 1px #ccc;
+            }
+            .toolbox span.right input
+            {
+                height: 30px !important;
+                background-color: white;
+            }
+              span.right .input-group-sm > .form-control, .input-group-sm > .input-group-addon, .input-group-sm > .input-group-btn > .btn
+            
+            {
+                margin-top: -4px;
+                border: solid 1px #ccc;
+                background-color: #ffffff;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                height: 30px;
+            }
+
+            .post-list
+            {
+                border-bottom: solid 1px transparent;
+                margin-bottom: 0px !important;
+            }
+            /*main post styling*/
+            div.main-post
+            {             
+                position: relative;
+                margin-top: -40px !important;
+                padding-bottom: 35px;
+
+            }
+            div.dotedline
+            {
+                border-bottom: 1px dotted #757574;
+            }
+            div.main-post:nth-last-child(3n+1)
+            {
+                border-top: solid 10px #00c7a2;
+            }
+            div.main-post:nth-last-child(3n+3)
+            {
+                border-top: solid 10px #66624A;
+
+            }
+            div.main-post:nth-last-child(3n+2)
+            {
+                border-top: solid 10px #EC1E22;
+            }
+            /*:first-of-type of type is used to ensure that we style correct element*/ 
+            div.main-post ul:first-of-type
+            {
+                list-style-type: none;
+                padding-top: 10px;
+                padding-left: 15px;
+            }
+            div.main-post ul:first-of-type li:first-of-type img
+            {
+                width: 40px;
+                height: 40px;               
+            }
+            div.main-post span.left
+            {
+                display: block; 
+                float: left;
+            }
+             div.post span.left
+            {
+                display: block; 
+                float: left;
+                margin-left: 80px;
+            }
+
+            div.main-post span.right
+            {
+                display: block; 
+                float: right;
+                position: absolute;
+                top:10px;
+                right: 10px;
+            }
+            div.main-post span.right button
+            {
+                background-color: #FFFFFF;
+                margin-right: 0px;
+            }
+            div.main-post span.right button:hover
+            {
+                color:#00BA80;
+            }
+            div.post .glyphicon-screenshot
+            {
+                font-size: 15px !important;
+            }
+            div.post .glyphicon-pushpin
+            {
+                font-size: 15px !important;
+            }
+            #subscriptions div.tab-post, #all div.tab-post
+            {
+                margin-top: 0px !important;
+                padding-top: 13px;
+                border-top: solid 10px #00c7a2;
+            }
+          #subscriptions div.post > img
+            {
+                margin-top:13px !important;
+
+            }
+            .head-autor
+            {
+                font-size: 1em;
+                font-family: "source_sans_prolight";
+                color: #00BA80;
+            }
+            div.post
+            {
+              margin-right: 2%;
+              
+
+            }
+           
+            div.main-post p.head-autor
+            {
+                
+                font-family: "source_sans_prolight";
+                font-size:  1em;                
+                color: #00BA80;
+
+            }
+            div.main-post p.post-content
+            {
+                
+                margin-top: -5px;
+                font-family: "source_sans_prosemibold";
+                font-size: 1.2em;
+            }
+            div.main-post div.left
+            {
+                float:left;
+                font-family: "source_sans_proitalic";
+                margin-left: 10px;
+            }
+            div.main-post div.right
+            {
+                float:right;
+                font-family: "source_sans_proitalic";
+            }
+            div.main-post div.right > div.fileinput-new
+            {
+                display: inline;
+            }
+            div.main-post div.allign_right
+            {
+                float:right;
+            }
+            div.sub_post
+            {
+                position: relative;
+                border: solid 1px #989898;
+                margin-left: 60px;
+                margin-right: 2%;
+                border-radius: 15px;
+                padding-right: 1%;
+
+            }
+            div.tab-post 
+            {
+                margin-top: 13px;
+                margin-bottom: -5px;
+            }
+            div.sub_post p.post-content
+            {
+                font-family: "source_sans_prolight";
+                font-size: 1.1em;               
+                width: 90%;
+                margin-left: 10px;
+                margin-top: -8px;
+            }
+            div.sub_post p.head-autor
+            {
+                margin-left: 10px;
+                margin-top:  5px;
+            }
+            div.sub_post span.left
+            {
+             
+                margin-top: 5px;
+                margin-right: 2%;
+             }
+
+            div.sub_post.sub_post_lv2 span.left
+            {
+                width: 86%;
+                margin-left: 90px;
+                margin-top: 5px;
+                border: solid 1px #989898;
+                border-radius: 15px;
+            }
+            div.sub_post span.right
+            {
+                display: none;
+            }
+            div.post button:hover, div.sub_post button:hover
+            {
+                color: #00BAB1;
+            }
+            div.post div.right button.btnsea , div.sub_post div.right button.btnsea
+            {
+                color: #00BAB1;
+                font-weight: bold;
+            }
+            div.post div.right button.btnsea span.glyphicon,  div.sub_post div.right button.btnsea span.glyphicon
+            {
+               margin-right: 5px;
+            }
+            div.post div.left button,div.post div.right button,div.sub_post div.left button,div.sub_post div.right button
+            {
+                background-color: #FFFFFF;
+            }
+            div.allign_right button
+            {
+                margin-top: 5px;
+            }
+            .sub_post_lv2 > textarea:nth-child(4)
+            {
+                margin-left: 90px;
+                border-radius: 15px !important;
+                width: 86% !important;
+            }
+            button.btnblue
+            {
+
+                background-color: #2B95A3;
+                color:#FFFFFF;
+            }
+            div.allign_right button.btnblue:hover
+            {
+                background-color: #1C6771;
+                color:#FFFFFF;
+            }
+            button.btnred
+            {
+                background-color: #F41824;
+                color:#FFFFFF;
+
+            }
+            div.allign_right button.btnred:hover
+            {
+                background-color: #A60011;
+                color:#FFFFFF;
+            }
+            li.nav-tabs
+            {
+              width: 23%;
+            }
+            li.nav-tabs:last-child
+            {
+               width: 31%;
+            }
+            #map-search
+            {
+                position: absolute;
+                border-collapse: separate;
+                z-index: 10;
+                width: 310px;
+                right: 330px;
+                top: 20px;
+            }
+            #map-search input
+            {
+                height: 30px;
+            }
+            #map-search button
+            {
+                margin-top: 0px;
+                height: 30px;
+            }
+          div.sub_post span.glyphicon-paperclip
+             {
+                display: none;
+             }
+             #all .post-list, #subscriptions .post-list
+             {
+              border-bottom: none;
+             }
+              .post-list div.allign_right
+             {
+              
+              margin-top: -20px;
+              margin-left: 11%;
+             }
+             .main-post textarea
+             {
+              width: 92%;
+      
+              float: right;
+             }
+             .sub_post textarea,  .post-list textarea
+             {
+              width: 85%;
+              
+              margin-right: 2%;
+             }
+             .post-list textarea
+             {
+               margin-left: 4%;
+               margin-bottom: 20px;
+             }
+             .sub_post textarea{
+              float: right;
+             }
+
+             /* map area */
+             //teodor@katalpa 
+div.leaflet-top.leaflet-left
+           {
+               margin-top: 10%;
+           }
+           div.leaflet-top.leaflet-left a
+               {
+                background-color: rgba(0,0,0,0.6);
+                color: #FFFFFF;
+                border-radius: 0px;
+                font-size: 20px;
+                width: 40px;
+                height: 40px;
+                padding-top: 7px;
+               }
+                div.leaflet-top.leaflet-left a:hover
+               {
+                background-color: #00c7a2;
+                
+               }
+                div.leaflet-control-layers
+                {
+                    box-shadow: none;
+                }
+               div.leaflet-control-layers.leaflet-control
+               {
+                   width: 310px;
+                   margin-top: -20px;
+                   background-color: transparent;
+               }
+               div.leaflet-control-layers-separator
+               {
+                display: none;
+               }
+               div.leaflet-control-layers.leaflet-control input,div.leaflet-control-layers.leaflet-control span
+               {
+                   display: inline-block;
+                   margin-left: 4px;
+               }
+                
+               
+               div.leaflet-control-layers-base
+               {
+                    background-color: rgba(0,0,0,0.6);
+                    float: left;
+                    width: 310px;
+                    height: 50px;
+                    padding-top: 15px;
+                    text-align: center;
+               }
+               div.leaflet-control-layers-base label
+               {
+                    color: white;
+                    font-family: 'source_sans_prolight';
+                    font-weight: normal;
+                    display: inline-block;
+                    margin-left: 10px;
+                    margin-right: 10px;
+                    text-align: center;
+
+               }
+               
+               div.leaflet-control-layers-base label:first-child:before
+               {
+                 content: "Mapy bazowe:  ";
+                 color:white;
+                 font-weight: bold;
+                }
+
+                
+                 div.leaflet-control-layers-overlays:before
+               {
+                 content: "Mapy tematyczne:  ";
+                 color: black;
+                 font-weight: bold;
+                 margin-top: -15px;
+                 margin-left: 12px;
+                 width: 310px;
+                 display: block;
+                
+                }    
+                 div.leaflet-control-layers-overlays label
+               {
+                    background-color: #FFFFFF;
+                    color: #000;
+                    font-family: 'source_sans_prolight';
+                    font-weight: normal;
+                    display: inline-block;
+                    padding-left: 20px;
+                    width: 50%;
+                    margin-bottom: 0px;
+               }
+                  
+               div.leaflet-control-zoomslider-wrap
+               {
+                background-color: rgba(0,0,0,0.6);
+               }
+               div.leaflet-control-zoomslider-body
+               {
+                border: none;
+                background-color: #FFFFFF;
+                color: #FFFFFF;
+                width: 1px;
+               }
+               div.leaflet-control-layers-overlays {
+               float: left;
+               background-color: #FFFFFF;
+               width: 310px;
+               height: 75px;
+               padding-top: 19px;
+           }
+ .leaflet-draw-toolbar
+ {
+  width: 40px;
+ }
+ .leaflet-draw-toolbar a
+ {
+  float: right;
+ }
+  .leaflet-draw-toolbar a:hover
+ {
+   position: relative;
+ }
+ .leaflet-draw-toolbar a[title]:hover:after
+ {
+content: attr(title);
+height: 40px;
+color: white;
+position: absolute;
+display: block;
+right: 47px;
+width: 120px;
+text-align: center;
+color: black;
+padding-top: 6px;
+padding-right: 6px;
+padding-left: 5px;
+border-radius: 8px;
+background-image: url('/static/images/arrow_right_wide.png');
+ }
+
+div
+div.leaflet-bar a.leaflet-draw-draw-polygon
+{
+ 
+  background-image: url('/static/images/planuj-05.png');
+  background-size: 40px 40px;
+  background-position: 0px;
+background-color: rgba(0,0,0,0.6);
+width: 40px;
+height: 40px;
+}
+
+div.leaflet-bar a.leaflet-draw-draw-polygon:hover
+{
+ 
+  background-image: url('/static/images/planuj-05.png'),url('/static/images/planuj-11.png');
+  background-size: 40px 40px, 47px 40px;
+  background-position: 7px 0px,0px 0px;
+  width: 47px;
+  background-color: transparent;
+  border: none;
+
+}
+div.leaflet-bar a.leaflet-draw-draw-polyline
+{
+ 
+  background-image: url('/static/images/planuj-07.png');
+  background-size: 40px 40px;
+  background-position: 0px;
+  background-color: rgba(0,0,0,0.6);
+  width: 40px;
+  height: 40px;
+}
+div.leaflet-bar a.leaflet-draw-draw-polyline:hover
+{
+ 
+  background-image: url('/static/images/planuj-07.png'),url('/static/images/planuj-11.png');
+  background-size: 40px 40px, 47px 40px;
+  background-position: 7px 0px,0px 0px;
+  width: 47px;
+  background-color: transparent;
+  border: none;
+}
+div.leaflet-bar a.leaflet-draw-draw-marker
+{
+  
+background-image: url('/static/images/planuj-06.png');
+background-size: 40px 40px;
+background-position: 0px;
+background-color: rgba(0,0,0,0.6);
+width: 40px;
+height: 40px;
+}  
+div.leaflet-bar a.leaflet-draw-draw-marker:hover
+{
+    background-image: url('/static/images/planuj-06.png'),url('/static/images/planuj-11.png');
+    background-size: 40px 40px, 47px 40px;
+  background-position: 7px 0px,0px 0px;
+  width: 47px;
+  background-color: transparent;
+  border: none;
+}
+div.leaflet-bar a.leaflet-draw-draw-rectangle
+{
+  background-image: url('/static/images/planuj-08.png');
+  background-size: 40px 40px;
+  background-position: 0px 0px;
+  background-color: rgba(0,0,0,0.6);
+  width: 40px;
+  height: 40px;
+
+}
+
+div.leaflet-draw-toolbar a.leaflet-draw-draw-rectangle:hover
+{
+  background-image: url('/static/images/planuj-08.png'),url('/static/images/planuj-11.png');
+  background-size: 40px 40px, 47px 40px;
+  background-position: 7px 0px,0px 0px;
+  width: 47px;
+  background-color: transparent;
+  border: none;
+}
+div.leaflet-bar a.leaflet-control-measure
+{
+  background-image: url('/static/images/planuj-09.png');
+  background-size: 40px 40px;
+  background-position: 0px;
+  color:transparent;
+  position: absolute;
+  right: 0px;
+  bottom: -370px;
+  background-color: rgba(0,0,0,0.6);
+  width: 40px;
+  height: 40px;
+}
+div.leaflet-bar a.leaflet-control-measure:hover
+{
+  background-image: url('/static/images/planuj-09.png'),url('/static/images/planuj-11.png');
+   background-size: 40px 40px, 47px 40px;
+  background-position: 7px 0px,0px 0px;
+  width: 47px;
+  background-color: transparent;
+  border: none;
+
+}
+div.leaflet-bar a.leaflet-control-measure-ruler
+{
+  background-image: url('/static/images/planuj-10.png');
+  background-size: 40px 40px;
+  background-position: 0px 0px;
+  color:transparent;
+  position: absolute;
+  right: 0px;
+  bottom:-430px;
+  background-color: rgba(0,0,0,0.6);
+width: 40px;
+height: 40px;
+}
+div.leaflet-bar a.leaflet-control-measure-ruler:hover
+{
+  background-image: url('/static/images/planuj-10.png'),url('/static/images/planuj-11.png');
+  background-size: 40px 40px, 47px 40px;
+  background-position: 7px 0px,0px 0px;
+  width: 47px;
+  background-color: transparent;
+  border: none;
+}
+
+.tab_border .tab_border div.sub_post
+{
+  margin-left: 80px;
+}
+.tab_border .tab_border .tab_border div.sub_post
+{
+  margin-left: 100px;
+}
+.tab_border .tab_border .tab_border .tab_border div.sub_post
+{
+  margin-left: 120px;
+}
+.add_comment
+{
+  margin-top: 20px;
+}
+.add_comment textarea
+{
+  margin-right: 2%;
+}
+@font-face 
+{
+    font-family: 'fontawesome';
+    src: url('/static/fonts/fontawesome-webfont.eot'); /* IE 5-8 */ 
+    src: local('☺'),             /* sneakily trick IE */
+        url('/static/fonts/fontawesome-webfont.woff') format('woff'),    /* FF 3.6, Chrome 5, IE9 */
+        url('/static/fonts/fontawesome-webfont.ttf') format('truetype'), /* Opera, Safari */
+        url('/static/fonts/fontawesome-webfont#font') format('svg'); /* iOS */
+}
+@font-face 
+{
+    font-family: 'source_sans_proitalic';
+    src: url('/static/fonts/sourcesanspro-italic-webfont.eot');
+    src: url('/static/fonts/sourcesanspro-italic-webfont.eot?#iefix') format('embedded-opentype'),
+        url('/static/fonts/sourcesanspro-italic-webfont.woff') format('woff'),
+        url('/static/fonts/sourcesanspro-italic-webfont.ttf') format('truetype'),
+        url('sourcesanspro-italic-webfont.svg#source_sans_proitalic') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'source_sans_prolight';
+    src: url('/static/fonts/sourcesanspro-light-webfont.eot');
+    src: url('/static/fonts/sourcesanspro-light-webfont.eot?#iefix') format('embedded-opentype'),
+        url('/static/fonts/sourcesanspro-light-webfont.woff') format('woff'),
+        url('/static/fonts/sourcesanspro-light-webfont.ttf') format('truetype'),
+        url('/static/fonts/sourcesanspro-light-webfont.svg#source_sans_prolight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'source_sans_prosemibold';
+    src: url('/static/fonts/sourcesanspro-semibold-webfont.eot');
+    src: url('/static/fonts/sourcesanspro-semibold-webfont.eot?#iefix') format('embedded-opentype'),
+        url('/static/fonts/sourcesanspro-semibold-webfont.woff') format('woff'),
+        url('/static/fonts/sourcesanspro-semibold-webfont.ttf') format('truetype'),
+        url('/static/fonts/sourcesanspro-semibold-webfont.svg#source_sans_prosemibold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+//teodor@katalpa
+.map_popup
+{
+  font-family: 'source_sans_prolight';
+  font-size: 0.8em;
+  font-weight: normal;
+
+}
+.map_popup label
+{
+  font-family: 'source_sans_prolight';
+  font-size: 1em;
+  font-weight: normal;
+}
+.map_popup button
+{
+  height: 25px;
+}
+.map_popup textarea;
+{
+border:none;
+}
+textarea#popup_comment
+{
+ border: none !important;
+ font-family: 'source_sans_prolight';
+ font-size: 1.1em;
+ color: black;
+ width: 143px !important;
+ border-bottom: 1px solid #ccc;
+
+}
+/**/

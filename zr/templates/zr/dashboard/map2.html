@@ -2,6 +2,7 @@
 {% load isloged %}
 <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <style type="text/css">
+
     .smallmap {
         width: 100%;
         height: 480px;
@@ -39,6 +40,7 @@
         background-color: rgba(0, 0, 128, 0.6);
         }
 </style>
+
 <script type="text/javascript">
     var lon = parseFloat("{{ plan.center.x|escapejs }}");
     var lat = parseFloat("{{ plan.center.y|escapejs }}");
@@ -89,10 +91,33 @@
             });
 
         var baseMaps = {
-            "Open Street Map": osm,
+           // "Open Street Map": osm,
             "Leaflet Map": lmap,
             "MapBox": mbmap
         };
+              var mpzp =
+                                L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
+                                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+                                        maxZoom: 18,
+                                });
+                                var studium = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
+                                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+                                        maxZoom: 18,
+                                });
+                                var strukturaWlasnosci = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
+                                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+                                        maxZoom: 18,
+                                });
+                                var wynikiAnkiet = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
+                                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+                                        maxZoom: 18,
+                                });
+                                var overlayMaps = {
+                                "MPZP": mpzp,
+                                        "Studium": studium,
+                                        "Struktura własności": strukturaWlasnosci,
+                                        "Wyniki ankiet": wynikiAnkiet
+                                };
 
         map = L.map('map', {
             attributionControl: false,
@@ -140,8 +165,9 @@
         var additionalLayers = {
             //"Propozycja planu": basePlanLayer
         }
+        //L.control.layers(baseMaps, additionalLayers, {'collapsed':false}).addTo(map);
 
-        L.control.layers(baseMaps, additionalLayers, {'collapsed':false}).addTo(map);
+        L.control.layers(baseMaps, overlayMaps, {'collapsed':false}).addTo(map);
 
         var drawnItems = new L.FeatureGroup();
         layerWaitingRoom = new Array();
@@ -155,14 +181,12 @@
         var legendControl = (new L.Control.TileLegend()).addTo(map);
 
 {% if user|isloged %}
+// edit teodor @ katalpa
         var drawControl = new L.Control.Draw({
 			position: 'topright',
 			draw: {
-				polyline: false,
 				circle: false,
-                rectangle: false,
-
-                polygon: {
+          polygon: {
 					allowIntersection: false,
 					showArea: true,
 					drawError: {
@@ -172,7 +196,9 @@
 					},
 					shapeOptions: {
 						color: '#0033ff'//'#bfadf55',
-					}
+					},
+        polyline: true,  
+        rectangle: true,
 				}
 			},
 			edit: {
@@ -184,17 +210,17 @@
 		map.addControl(drawControl);
 
 
-        var search = new L.Control.Draw({
-			position: 'topright',
-			draw: {
-				polyline: false,
-				circle: false,
-                rectangle: true,
-                marker: false,
-                polygon: false
-            }
-		});
-		map.addControl(search);
+  //       var search = new L.Control.Draw({
+		// 	position: 'topright',
+		// 	draw: {
+		// 		polyline: true,
+		// 		circle: false,
+  //               rectangle: true,
+  //               marker: false,
+  //               polygon: false
+  //           }
+		// });
+		//map.addControl(search); // edit teodor @ katalpa
 
 {% endif %}
 		map.on('draw:created', function (e) {
@@ -246,14 +272,14 @@
                 var popup = L.popup()
                     .setLatLng(popup_location)
                     .setContent("<div>" +
-                                             "<div style='font-size:.8em'> " +
-                                             "<label>Komentarz</label><br>" +
-                                             "<textarea id='popup_comment' rows='3'>" +
-                                             "</textarea><br>" +
+                                             "<div class='map_popup'> " +
+                                             "<textarea placeholder='Komentarz' id='popup_comment' rows='3'>" +
+                                             "</textarea ><br>" +
                                              "<input id='geometry' type='hidden' value='"+wkt_string+"'/>" +
                                              "<input id='feature_id' type='hidden' value='"+"'/>" +
                                              "</div> " +
-                                             "<button onclick='addPopup(this);return false;' >Dodaj</button>" +
+                                             "<hr>" +
+                                             "<button class='btnred btn btn-xs' onclick='addPopup(this);return false;' >publikuj</button>" +
                                              "</div>");
                 map.openPopup(popup);
                 layerWaitingRoom.push(layer);
@@ -365,8 +391,9 @@
                                                 } else {
                                                     c += 'large';
                                                 }
+                                                  return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'marker-cluster ' + c + '-pol', iconSize: new L.Point(40, 49) });
 
-                                                return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'marker-cluster ' + c + '-pol', iconSize: new L.Point(40, 40) });
+                                                // return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'marker-cluster ' + c + '-pol', iconSize: new L.Point(40, 40) });
                                             }
                                 });
 
@@ -396,18 +423,27 @@
                 var centroid = _getCentroid(components);
                 var xy = centroid; //components[0];
                 var latlng = L.latLng(xy[1], xy[0]);
-                //var marker = L.marker(latlng, {});
-                var marker = L.circleMarker(latlng, {radius: 10, fillOpacity: 1});
-                marker.on('mouseover', function(){
+                var baloonMarker = L.icon({
+                     iconUrl: '/static/images/balonik_1.png',
+                     iconSize:     [30, 26], // size of the icon
+                     iconAnchor:   [0, 26], // point of the icon which will correspond to marker's location
+                     popupAnchor:  [-3, -26] // point from which the popup should open relative to the 
+                    })
+                    
+                 var marker = L.marker(latlng, {});
+                //var marker = L.circleMarker(latlng, {radius: 10, fillOpacity: 1});
+                  var marker = L.marker(latlng, {icon: baloonMarker});
+                
+                   marker.on('mouseover', function(){
+                    polygon.addTo(map);
+                    postLightOn(value.id);
 
-                   polygon.addTo(map);
-                   //postLightOn(value.id);
-
-                   polygon.on('mouseout', function(e){
-                       //postLightOff(value.id);
+                    polygon.on('mouseout', function(e){
+                    postLightOff(value.id);
                        map.removeLayer(polygon);
-                   });
+                    });
                 });
+               
                 marker.on("click", function(e){
                     trackEvent('marker','marker clicked','','','');
                     addPostFilter([{id:value.geo_id}]);

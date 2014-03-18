@@ -15,16 +15,27 @@
 
         $(document).ready(function(){
             var max,min;
+            var navSidebarWidth =  $('#resizible_jquery').width();
+            $('ul.nav-tabs').css('width',navSidebarWidth+"px");
+            $('.toolbox').css('width',navSidebarWidth+"px");
             configuration.setAuthor('{{ user.id }}');
             configuration.setPlanId('{{ plan_id }}');
             page_init();
+                                              
+            $(window).resize(function(){
+             var navSidebarWidth =  $('#resizible_jquery').width();
+             $('ul.nav-tabs').css('width',navSidebarWidth+"px");
+             $('.toolbox').css('width',navSidebarWidth+"px");
+             
+            });
             //$("#dashbord_map").height(viewportheight - $("#navbarId").height());
             //map._onResize();
-
+           
            $('body').resize(function(){
                var viewportwidth = parseInt($('#row_box').innerWidth()) - margin_gap -1;
                 max =  parseInt((viewportwidth*parseInt("{{ configuration.max }}"))/100);
                 min =  parseInt((viewportwidth*parseInt("{{ configuration.min }}"))/100);
+              
                $( "#resizible_jquery" ).resizable({
                   maxWidth: max,
                   minWidth: min,
@@ -37,8 +48,14 @@
               handles: 'e, w'
             });
         });
+       
+        </script>
 
-    </script>
+         
+   <style>
+           
+      
+   </style>
 {% endblock %}
 
 {% block extra_css %}
@@ -131,15 +148,12 @@
 
 {% block content %}
 <div id="row_box" class="row dashbord_map" ng-app="zd">
-
-  <div id="mapsquare" class="col-xs-12 col-sm-6 col-md-8 ui-widget-content delpadding" style="float:{{ configuration.side|dirparser }}">
-        {% include "zr/dashboard/map2.html" %}
-  </div>
+   
   <div id="middleman"></div>
-  <div id="resizible_jquery" class="col-xs-6 col-sm-6 col-md-4 delpadding">
+  <div id="resizible_jquery" class="col-xs-12 col-sm-6 col-md-5 delpadding" style="float:right;">
       <div id="div_apiList" ng-controller="apiList" >
 
-      <ul class="nav nav-tabs">
+      <ul id="nav-tabs-menu" class="nav nav-tabs">
           <li class="active"><a href="#details" data-toggle="tab"><i class="fa fa-comments fa-fw"></i>SZCZEGÓŁY</a></li>
           <li><a href="#subscriptions" data-toggle="tab"><i class="fa fa-thumb-tack fa-fw"></i>ŚLEDZĘ</a></li>
           <li><a href="#all" data-toggle="tab"><i class="fa fa-square fa-fw"></i>CAŁOŚĆ</a></li>
@@ -183,4 +197,16 @@
             </script>
   </div>
 </div>
+  <div id="mapsquare" class="col-xs-12 col-sm-6 col-md-8 ui-widget-content delpadding" style="float:{{ configuration.side|dirparser }}">
+  <!-- <div id="mapsquare" class="col-xs-12 col-sm-6 col-md-7 ui-widget-content delpadding"> -->
+        <div id="map-search" class="input-group input-group-sm double-input">
+                <input class="form-control ng-pristine ng-valid" >
+
+            <div class="input-group-btn">
+                <button class="btn " style="border-right-width: 0px;border-radius: 0px;"><i class="fa fa-search fa-fw" on-click="geolocation()"></i>szukaj</button>
+            </div>
+
+            </div>
+        {% include "zr/dashboard/map2.html" %}
+  </div>
 {% endblock %}

@@ -2,7 +2,7 @@
 {% load url from future %}
 <div ng-class="{'tab-post':true, 'dotedline':post.parent==null}">
     <ul>
-        <li style="width:60px" > <!-- start here -->
+        <li> <!-- start here -->
                 <img style="position:absolute;"
                         src="/static/images/face.jpeg" alt="avatar" width="40px" height="40px" class="img-circle">
         </li>
@@ -46,6 +46,7 @@
                             </button>
                         </div>
                         <div class="right">
+                         <button type="button" class="btn btn-xs btn-file btnwhite btngrey" ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"><span class="glyphicon glyphicon-paperclip"></span><input name="..." type="file" value="{[{ post.id }]}" multiple file-change /></button>
                             <button  class="btn btn-xs btngrey btnwhite"
                                 ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
                                 ng-click="scoreUp(post) | trackEvent:'score-up':'Button clicked':user ">
@@ -61,6 +62,13 @@
                             </button>
                         </div>
                     </div>
+             
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+           <div class="add_comment">
                     <textarea ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
                               ng-model="post.text"
                               class="form-control"
@@ -78,10 +86,6 @@
                               ng-click="addDown(post) | trackEvent:'Zapisz':'Button clicked':user ">{% trans 'publikuj' %}
                         </button>
                     </div>
-                </div>
-            </div>
-        </li>
-    </ul>
 </div>
 
 <div ng-if="post.nodes.length>0" class="tab_border" ng-hide="!(post.rozwin!=undefined && post.rozwin==true) && showallposts" >

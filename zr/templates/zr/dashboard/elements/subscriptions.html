@@ -4,10 +4,7 @@
 <div  class="post_content">
     <div class="post-list"  style="visibility: hidden;">
     <div class="toolbox">
-        <span class="left">
-            <button type="button" class="btn btn-xs  btnsea btnwhite"  ng-click="addBasePost = true  | trackEvent:'Dodaj komentarz':'Button clicked':user ">
-                <span class="glyphicon glyphicon-comment"></span>{% trans ' dodaj' %}
-            </button>
+        <span class="left">        
             <button id="date_button" class="btn btn-xs"
                   ng-int="rev_d=true;"
                   ng-click="predicate = 'date'; reverse=rev_d; rev_d=!rev_d;data_arrow= !data_arrow |trackEvent:'button Data':'Button clicked':user:'':'' ">
