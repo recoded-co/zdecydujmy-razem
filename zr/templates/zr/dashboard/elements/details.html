@@ -5,6 +5,14 @@
   <div class="post-list" style="visibility: hidden;">
     <div class="toolbox">
         <span class="left">
+            <button ng-hide="showallposts"
+                type="button"
+                onclick="clearGeoSearchFilter()"
+                class="btn btn-xs btn-danger"
+                ng-click="showAll()|trackEvent:'Rozwiń wszystkie':'Button clicked':user:'':'' ">
+                <span>{% trans 'Rozwiń wszystkie' %}</span>
+            </button>
+
             <button id="date_button" class="btn btn-xs"
                   ng-int="rev_d=true;"
                   ng-click="predicate = 'date'; reverse=rev_d; rev_d=!rev_d;data_arrow= !data_arrow |trackEvent:'button Data':'Button clicked':user:'':'' ">
@@ -20,6 +28,7 @@
                     <span class="glyphicon glyphicon-arrow-down" ng-hide="numcom_arrow"></span>
                     <span class="glyphicon glyphicon-arrow-up" ng-show="numcom_arrow"></span>
             </button>
+
         </span>
         <span class="right" style="width:50%;">
             <div class="input-group input-group-sm double-input">
@@ -48,15 +57,7 @@
             </div>
             </div>
         </span>
-
     </div>
-    <button ng-hide="showallposts"
-            type="button"
-            onclick="clearGeoSearchFilter()"
-            class="btn btn-xs btn-danger"
-            ng-click="showAll()|trackEvent:'Rozwiń wszystkie':'Button clicked':user:'':'' ">
-        <span>{% trans 'Rozwiń wszystkie' %}</span>
-    </button>
 
 <!--
     <button type="button" ng-class="{'btn':true, 'btn-xs':true, 'btn-default':!search_box}" ng-init="search_box=true;" ng-click="search_box = !search_box  | trackEvent:'Szukaj':'Button clicked':user:'':''  "  >
