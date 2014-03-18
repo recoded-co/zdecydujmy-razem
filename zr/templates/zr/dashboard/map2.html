@@ -54,7 +54,6 @@
 
 
 
-
     function geolocate(address){
 
     	var geocoder = new google.maps.Geocoder();
@@ -69,6 +68,11 @@
       		});
    		}
     }
+
+    $( "#map-search-button").click(function(){
+        var address = $( "#map-search-input").val();
+        geolocate(address);
+    })
 
     function map_init(){
         var osm =
