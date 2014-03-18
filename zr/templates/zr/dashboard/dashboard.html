@@ -164,7 +164,6 @@
                   <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
-                  <li><a href="{% url 'subscriptions_list' %}">{% trans "Subscriptions" %}</a></li>
                   <li><a href="{% url 'django.contrib.auth.views.logout_then_login' %}">{% trans "Wyloguj" %}</a></li>
               </ul>
           </li>
@@ -174,6 +173,7 @@
           <div class="tab-pane active" id="details" >
                 {% include "zr/dashboard/elements/details.html" %}
           </div>
+
           <div class="tab-pane" id="subscriptions">
                 {% include "zr/dashboard/elements/subscriptions.html" %}
           </div>

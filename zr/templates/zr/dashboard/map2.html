@@ -58,7 +58,7 @@
 
     	var geocoder = new google.maps.Geocoder();
 		if (geocoder) {
-			geocoder.geocode({ 'address': address+','+scope, 'region':'pl' }, function (results, status) {
+			geocoder.geocode({ 'address': address, 'region':'pl' }, function (results, status) {
 				if (status == google.maps.GeocoderStatus.OK) {
 					var geometry = results[0].geometry.location;
                     map.setView([geometry.lat(), geometry.lng()], after_search_zoom);
@@ -73,6 +73,7 @@
         var address = $( "#map-search-input").val();
         geolocate(address);
     })
+    $( "#map-search-input").val(scope+', ');
 
     function map_init(){
         var osm =
@@ -438,17 +439,15 @@
                      iconAnchor:   [0, 26], // point of the icon which will correspond to marker's location
                      popupAnchor:  [-3, -26] // point from which the popup should open relative to the 
                     })
-                    
-                 var marker = L.marker(latlng, {});
-                //var marker = L.circleMarker(latlng, {radius: 10, fillOpacity: 1});
-                  var marker = L.marker(latlng, {icon: baloonMarker});
+
+                var marker = L.marker(latlng, {icon: baloonMarker});
                 
-                   marker.on('mouseover', function(){
+                marker.on('mouseover', function(){
                     polygon.addTo(map);
-                    postLightOn(value.id);
+                    //postLightOn(value.id); // scrolls comments to current point
 
                     polygon.on('mouseout', function(e){
-                    postLightOff(value.id);
+                       //postLightOff(value.id); // revers scroll after mouseover
                        map.removeLayer(polygon);
                     });
                 });
@@ -462,7 +461,6 @@
                        addPostFilter([{id:value.geo_id}]);
                 });
 
-                //marker.addTo(map);
                 polygon_markers.addLayer(marker);
             } else{
                 var xy = components;

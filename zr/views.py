@@ -96,7 +96,7 @@ class DashboardView(View):
                                   {'configuration': configuration, 'plan_id': plan_id, 'plan': plan},
                                   context_instance=RequestContext(request))
 
-
+"""
 class SubscriptionList(ListView):
     context_object_name = 'subscriptions'
     template_name = 'zr/settings/subscriptions.html'
@@ -114,7 +114,7 @@ class SubscriptionDelete(DeleteView):
     def get_object(self):
         id = self.kwargs['id']
         return PostSubscription.objects.filter(id=id, user=self.request.user)
-
+"""
 
 class ZipcodeCheckView(View):
 
