@@ -195,8 +195,7 @@
         var drawControl = new L.Control.Draw({
 			position: 'topright',
 			draw: {
-				circle: false,
-          polygon: {
+                polygon: {
 					allowIntersection: false,
 					showArea: true,
 					drawError: {
@@ -206,10 +205,11 @@
 					},
 					shapeOptions: {
 						color: '#0033ff'//'#bfadf55',
-					},
-        polyline: true,  
-        rectangle: true,
-				}
+					}
+                },
+                polyline: false,
+                rectangle: true,
+                circle: false
 			},
 			edit: {
 				featureGroup: drawnItems,

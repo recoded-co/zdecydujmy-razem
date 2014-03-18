@@ -5,6 +5,7 @@
   <div class="post-list" style="visibility: hidden;">
     <div class="toolbox">
         <span class="left">
+
             <button ng-hide="showallposts"
                 type="button"
                 onclick="clearGeoSearchFilter()"
@@ -13,7 +14,7 @@
                 <span>{% trans 'Rozwiń wszystkie' %}</span>
             </button>
 
-            <button id="date_button" class="btn btn-xs"
+            <button ng-hide="!showallposts" id="date_button" class="btn btn-xs"
                   ng-int="rev_d=true;"
                   ng-click="predicate = 'date'; reverse=rev_d; rev_d=!rev_d;data_arrow= !data_arrow |trackEvent:'button Data':'Button clicked':user:'':'' ">
               {% trans 'Data' %}
@@ -21,15 +22,15 @@
                 <span class="glyphicon glyphicon-arrow-up" ng-show="data_arrow"></span>
             </button>
 
-            <button class="btn btn-xs"
+            <button ng-hide="!showallposts" class="btn btn-xs"
                       ng-int="rev_nc=true;numcom_arrow=true;"
                       ng-click="predicate = 'numcom'; reverse=!rev_nc; rev_nc=!rev_nc;numcom_arrow=!numcom_arrow  | trackEvent:'Ilość komentarzy':'Button clicked':user ">
                   {% trans 'Ilość komentarzy' %}
                     <span class="glyphicon glyphicon-arrow-down" ng-hide="numcom_arrow"></span>
                     <span class="glyphicon glyphicon-arrow-up" ng-show="numcom_arrow"></span>
             </button>
-
         </span>
+
         <span class="right" style="width:50%;">
             <div class="input-group input-group-sm double-input">
                 <input class="form-control" ng-model="search.content" placeholder="Znajdź kontekst rozmowy">

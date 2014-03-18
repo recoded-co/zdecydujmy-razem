@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
-from zr.views import HomePageView, DashboardView, UserCreationPageView #, SubscriptionList, SubscriptionDelete
+from zr.views import HomePageView, DashboardView, UserCreationPageView
 from zr.views import ZipcodeCheckView
 from zr.api import router
 from zr.api import RateListView, PostsListView, geo_search, SubjectFeatList, SubscriptionDetail
@@ -22,9 +22,6 @@ urlpatterns = patterns('',
 
     url(r'^fmen/', include('filemanager.urls')),
     #url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    # subscriptions
-    #url(r'^settings/subscription/(?P<id>\d+)/delete/', SubscriptionDelete.as_view(), name="subscriptions_delete"),
-    #url(r'^settings/subscriptions', SubscriptionList.as_view(), name="subscriptions_list"),
 
     url(r'^settings/zipcode_check', ZipcodeCheckView.as_view(), name='zipcode_check'),
     url(r'^api/postfilter', PostsListView.as_view()),

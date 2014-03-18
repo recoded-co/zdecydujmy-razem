@@ -202,6 +202,12 @@ div.right
 {
     font-family: "source_sans_proitalic";
 }
+
+.form-control{
+    font-family: "source_sans_prosemibold";
+    font-size: 1.2em;
+}
+
 .double-input .form-control {
     border-right-width: 0px;
 }
@@ -937,32 +943,36 @@ div.leaflet-top.leaflet-left
  }
  .leaflet-draw-toolbar a[title]:hover:after
  {
-content: attr(title);
-height: 40px;
-color: white;
-position: absolute;
-display: block;
-right: 47px;
-width: 120px;
-text-align: center;
-color: black;
-padding-top: 6px;
-padding-right: 6px;
-padding-left: 5px;
-border-radius: 8px;
-background-image: url('/static/images/arrow_right_wide.png');
+    content: attr(title);
+    height: 40px;
+    color: white;
+    position: absolute;
+    display: block;
+    right: 47px;
+    width: 120px;
+    text-align: center;
+    color: black;
+    padding-top: 6px;
+    padding-right: 6px;
+    padding-left: 5px;
+    border-radius: 8px;
+    background-image: url('/static/images/arrow_right_wide.png');
  }
 
 div
 div.leaflet-bar a.leaflet-draw-draw-polygon
 {
  
-  background-image: url('/static/images/planuj-05.png');
-  background-size: 40px 40px;
-  background-position: 0px;
-background-color: rgba(0,0,0,0.6);
-width: 40px;
-height: 40px;
+    background-image: url('/static/images/planuj-05.png');
+    background-size: 40px 40px;
+    background-position: 0px;
+    background-color: rgba(0,0,0,0.6);
+    width: 40px;
+    height: 40px;
+
+    position: absolute;
+    right: 0px;
+    bottom: -80px;
 }
 
 div.leaflet-bar a.leaflet-draw-draw-polygon:hover
@@ -975,6 +985,7 @@ div.leaflet-bar a.leaflet-draw-draw-polygon:hover
   background-color: transparent;
   border: none;
 
+
 }
 div.leaflet-bar a.leaflet-draw-draw-polyline
 {
@@ -985,6 +996,7 @@ div.leaflet-bar a.leaflet-draw-draw-polyline
   background-color: rgba(0,0,0,0.6);
   width: 40px;
   height: 40px;
+
 }
 div.leaflet-bar a.leaflet-draw-draw-polyline:hover
 {
@@ -999,31 +1011,36 @@ div.leaflet-bar a.leaflet-draw-draw-polyline:hover
 div.leaflet-bar a.leaflet-draw-draw-marker
 {
   
-background-image: url('/static/images/planuj-06.png');
-background-size: 40px 40px;
-background-position: 0px;
-background-color: rgba(0,0,0,0.6);
-width: 40px;
-height: 40px;
+    background-image: url('/static/images/planuj-06.png');
+    background-size: 40px 40px;
+    background-position: 0px;
+    background-color: rgba(0,0,0,0.6);
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: 0px;
+    bottom: -40px;
 }  
 div.leaflet-bar a.leaflet-draw-draw-marker:hover
 {
     background-image: url('/static/images/planuj-06.png'),url('/static/images/planuj-11.png');
     background-size: 40px 40px, 47px 40px;
-  background-position: 7px 0px,0px 0px;
-  width: 47px;
-  background-color: transparent;
-  border: none;
+    background-position: 7px 0px,0px 0px;
+    width: 47px;
+    background-color: transparent;
+    border: none;
 }
 div.leaflet-bar a.leaflet-draw-draw-rectangle
 {
-  background-image: url('/static/images/planuj-08.png');
-  background-size: 40px 40px;
-  background-position: 0px 0px;
-  background-color: rgba(0,0,0,0.6);
-  width: 40px;
-  height: 40px;
-
+    background-image: url('/static/images/planuj-08.png');
+    background-size: 40px 40px;
+    background-position: 0px 0px;
+    background-color: rgba(0,0,0,0.6);
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: 0px;
+    bottom: -215px;
 }
 
 div.leaflet-draw-toolbar a.leaflet-draw-draw-rectangle:hover
@@ -1034,6 +1051,7 @@ div.leaflet-draw-toolbar a.leaflet-draw-draw-rectangle:hover
   width: 47px;
   background-color: transparent;
   border: none;
+
 }
 div.leaflet-bar a.leaflet-control-measure
 {
@@ -1043,7 +1061,7 @@ div.leaflet-bar a.leaflet-control-measure
   color:transparent;
   position: absolute;
   right: 0px;
-  bottom: -370px;
+  bottom: -420px;
   background-color: rgba(0,0,0,0.6);
   width: 40px;
   height: 40px;
@@ -1066,7 +1084,7 @@ div.leaflet-bar a.leaflet-control-measure-ruler
   color:transparent;
   position: absolute;
   right: 0px;
-  bottom:-430px;
+  bottom:-390px;
   background-color: rgba(0,0,0,0.6);
 width: 40px;
 height: 40px;

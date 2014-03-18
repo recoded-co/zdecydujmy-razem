@@ -96,25 +96,6 @@ class DashboardView(View):
                                   {'configuration': configuration, 'plan_id': plan_id, 'plan': plan},
                                   context_instance=RequestContext(request))
 
-"""
-class SubscriptionList(ListView):
-    context_object_name = 'subscriptions'
-    template_name = 'zr/settings/subscriptions.html'
-
-    def get_queryset(self):
-        return PostSubscription.objects.filter(user=self.request.user)
-
-
-class SubscriptionDelete(DeleteView):
-    model = PostSubscription
-    context_object_name = 'object'
-    template_name = 'zr/settings/subscription_confirm_delete.html'
-    success_url = reverse_lazy('subscriptions_list')
-
-    def get_object(self):
-        id = self.kwargs['id']
-        return PostSubscription.objects.filter(id=id, user=self.request.user)
-"""
 
 class ZipcodeCheckView(View):
 
