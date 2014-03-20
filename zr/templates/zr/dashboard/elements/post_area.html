@@ -22,10 +22,11 @@
                                 <span class="glyphicon glyphicon-screenshot"></span>
                             </button>
                             <button ng-hide="post.parent"
-                                ng-class="{'btn':true, 'btn-xs':true, 'btn-default':post.subscription, 'btnwhite':true, 'btngrey':true}"
+                                ng-class="{'btn':true, 'btn-xs':true, 'btnwhite':true, 'btngrey':true}"
                                 ng-click="subscribe(post, post.subscription);post.subscription=!post.subscription | trackEvent:'Subskrybuj':'Button clicked':user ">
                                 <!-- TODO add pushed pin in case of subscription -->
-                                <span class="glyphicon glyphicon-pushpin"></span>
+                                <span ng-hide="post.parent==null && !post.subscription" class="glyphicon glyphicon-pushpin"></span>
+                                <span ng-hide="post.parent==null && post.subscription" class="glyphicon glyphicon-envelope"></span>
                             </button>
                         </span>
                     </div>

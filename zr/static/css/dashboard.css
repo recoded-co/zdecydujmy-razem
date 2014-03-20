@@ -839,10 +839,10 @@ hr {
                 background-color: rgba(0,0,0,0.6);
                 color: #FFFFFF;
                 border-radius: 0px;
-                font-size: 20px;
+                /*font-size: 20px;*/
                 width: 40px;
                 height: 40px;
-                padding-top: 7px;
+                /*padding-top: 7px;*/
                }
 
             div.leaflet-top.leaflet-left a:hover
