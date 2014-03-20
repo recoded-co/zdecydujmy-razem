@@ -76,6 +76,8 @@
     $( "#map-search-input").val(scope+', ');
 
     function map_init(){
+
+
         var osm =
             L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 attribution: 'Map data © OpenStreetMap contributors',
@@ -99,34 +101,54 @@
                 openLegendOnLoad: true
             });
 
+    /*
+    var mbmap =
+            L.tileLayer('http://www.poznan.pl/tilecache/tilecache.cgi/1.0.0/poznan_studium/1/{z}/{x}/{y}.png', {
+                attribution: "<a href='http://mapbox.com/about/maps' target='_blank'>Terms & Feedback</a>",
+                maxZoom: 18,
+                legend: LEGEND,
+                openLegendOnLoad: true
+            });
+    */
+  /*
+        var mbmap = L.tileLayer.wms("http://www.poznan.pl/tilecache/tilecache.cgi?", {
+            layers: ['poznan_studium'],
+            format: 'image/png',
+            attribution: "Weather data © 2012 IEM Nexrad"
+        });
+*/
+
+
+
+
         var baseMaps = {
            // "Open Street Map": osm,
             "Leaflet Map": lmap,
             "MapBox": mbmap
         };
-              var mpzp =
-                                L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
-                                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                                        maxZoom: 18,
-                                });
-                                var studium = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
-                                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                                        maxZoom: 18,
-                                });
-                                var strukturaWlasnosci = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
-                                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                                        maxZoom: 18,
-                                });
-                                var wynikiAnkiet = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
-                                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                                        maxZoom: 18,
-                                });
-                                var overlayMaps = {
-                                "MPZP": mpzp,
-                                        "Studium": studium,
-                                        "Struktura własności": strukturaWlasnosci,
-                                        "Wyniki ankiet": wynikiAnkiet
-                                };
+        var mpzp =
+                L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+                        maxZoom: 18,
+                });
+                var studium = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+                        maxZoom: 18,
+                });
+                var strukturaWlasnosci = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+                        maxZoom: 18,
+                });
+                var wynikiAnkiet = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+                        maxZoom: 18,
+                });
+                var overlayMaps = {
+                "MPZP": mpzp,
+                        "Studium": studium,
+                        "Struktura własności": strukturaWlasnosci,
+                        "Wyniki ankiet": wynikiAnkiet
+                };
 
         map = L.map('map', {
             attributionControl: false,
@@ -134,7 +156,7 @@
             editInOSMControlOptions: {position: 'topleft'},
             center: new L.LatLng(lat, lon),
             zoom: zoom,
-            measurePolygonControl: true,
+            //measurePolygonControl: true,
             measureControl: true,
             layers: [mbmap]
         });
@@ -177,7 +199,6 @@
         //L.control.layers(baseMaps, additionalLayers, {'collapsed':false}).addTo(map);
 
         L.control.layers(baseMaps, overlayMaps, {'collapsed':false}).addTo(map);
-
         var drawnItems = new L.FeatureGroup();
         layerWaitingRoom = new Array();
         map.addLayer(drawnItems);
@@ -409,7 +430,7 @@
 
 
         map.on("click",function(e){
-            trackEvent('map area','clicked',user,'','');
+            //trackEvent('map area','clicked',user,'','');
             if(layerWaitingRoom){
                 while(layerWaitingRoom){
                     map.removeLayer(layerWaitingRoom.pop());
@@ -477,7 +498,7 @@
                 });
                 marker.on('click', function(e){
                        //postLightOn(value.id);
-                       trackEvent('point','clicked',user,'','');
+                       //trackEvent('point','clicked',user,'','');
                        addPostFilter([{id:value.geo_id}]);
                 });
                 markers.addLayer(marker);

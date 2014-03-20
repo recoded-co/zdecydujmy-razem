@@ -355,9 +355,9 @@ hr {
            {
            padding: 0px !important;
            font-family: "source_sans_prolight";
-          font-size: 1.2em;
-          color:#000000;
-          text-align: center;
+           font-size: 1.2em;
+           color:#000000;
+           text-align: center;
            }
            #nav-tabs-menu li.active a
            {
@@ -512,7 +512,7 @@ hr {
                 height: 30px !important;
                 background-color: white;
             }
-              span.right .input-group-sm > .form-control, .input-group-sm > .input-group-addon, .input-group-sm > .input-group-btn > .btn
+            span.right .input-group-sm > .form-control, .input-group-sm > .input-group-addon, .input-group-sm > .input-group-btn > .btn
             
             {
                 margin-top: -4px;
@@ -819,11 +819,11 @@ hr {
 
              /* map area */
              //teodor@katalpa 
-div.leaflet-top.leaflet-left
-           {
+            div.leaflet-top.leaflet-left
+            {
                margin-top: 10%;
-           }
-           div.leaflet-top.leaflet-left a
+            }
+            div.leaflet-top.leaflet-left a
                {
                 background-color: rgba(0,0,0,0.6);
                 color: #FFFFFF;
@@ -833,10 +833,25 @@ div.leaflet-top.leaflet-left
                 height: 40px;
                 padding-top: 7px;
                }
-                div.leaflet-top.leaflet-left a:hover
+
+            div.leaflet-top.leaflet-right a
+               {
+                background-color: rgba(0,0,0,0.6);
+                color: #FFFFFF;
+                border-radius: 0px;
+                font-size: 20px;
+                width: 40px;
+                height: 40px;
+                padding-top: 7px;
+               }
+
+            div.leaflet-top.leaflet-left a:hover
                {
                 background-color: #00c7a2;
-                
+               }
+            div.leaflet-top.leaflet-right a:hover
+               {
+                background-color: #00c7a2;
                }
                 div.leaflet-control-layers
                 {
@@ -888,7 +903,7 @@ div.leaflet-top.leaflet-left
                 }
 
                 
-                 div.leaflet-control-layers-overlays:before
+               div.leaflet-control-layers-overlays:before
                {
                  content: "Mapy tematyczne:  ";
                  color: black;
@@ -958,7 +973,24 @@ div.leaflet-top.leaflet-left
     border-radius: 8px;
     background-image: url('/static/images/arrow_right_wide.png');
  }
-
+.leaflet-control a[title]:hover:after
+ {
+    content: attr(title);
+    height: 40px;
+    color: white;
+    position: absolute;
+    display: block;
+    right: 47px;
+    width: 120px;
+    text-align: center;
+    text-size: small;
+    color: black;
+    padding-top: 6px;
+    padding-right: 6px;
+    padding-left: 5px;
+    border-radius: 8px;
+    background-image: url('/static/images/arrow_right_wide.png');
+ }
 div
 div.leaflet-bar a.leaflet-draw-draw-polygon
 {
@@ -1040,7 +1072,7 @@ div.leaflet-bar a.leaflet-draw-draw-rectangle
     height: 40px;
     position: absolute;
     right: 0px;
-    bottom: -215px;
+    top: 195px;
 }
 
 div.leaflet-draw-toolbar a.leaflet-draw-draw-rectangle:hover
@@ -1053,6 +1085,7 @@ div.leaflet-draw-toolbar a.leaflet-draw-draw-rectangle:hover
   border: none;
 
 }
+
 div.leaflet-bar a.leaflet-control-measure
 {
   background-image: url('/static/images/planuj-09.png');
@@ -1061,21 +1094,41 @@ div.leaflet-bar a.leaflet-control-measure
   color:transparent;
   position: absolute;
   right: 0px;
-  bottom: -420px;
-  background-color: rgba(0,0,0,0.6);
-  width: 40px;
-  height: 40px;
+  top: 400px;
+
 }
 div.leaflet-bar a.leaflet-control-measure:hover
 {
   background-image: url('/static/images/planuj-09.png'),url('/static/images/planuj-11.png');
-   background-size: 40px 40px, 47px 40px;
+  background-size: 40px 40px, 47px 40px;
   background-position: 7px 0px,0px 0px;
   width: 47px;
   background-color: transparent;
   border: none;
 
 }
+div.leaflet-bar .leaflet-control-draw-measure{
+    background-image: url('/static/images/planuj-10.png');
+    background-size: 40px 40px;
+    background-position: 0px 0px;
+    color:transparent;
+    position: absolute;
+    right:0px;
+    top:360px;
+}
+
+div.leaflet-bar a.leaflet-control-draw-measure:hover
+{
+  background-image: url('/static/images/planuj-10.png'),url('/static/images/planuj-11.png');
+  background-size: 40px 40px, 47px 40px;
+  background-position: 7px 0px,0px 0px;
+  width: 47px;
+  background-color: transparent;
+  border: none;
+
+}
+
+/*
 div.leaflet-bar a.leaflet-control-measure-ruler
 {
   background-image: url('/static/images/planuj-10.png');
@@ -1098,7 +1151,7 @@ div.leaflet-bar a.leaflet-control-measure-ruler:hover
   background-color: transparent;
   border: none;
 }
-
+*/
 .tab_border .tab_border div.sub_post
 {
   margin-left: 80px;

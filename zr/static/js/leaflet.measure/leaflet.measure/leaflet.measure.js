@@ -4,10 +4,11 @@ L.Control.Measure = L.Control.extend({
 	},
 
 	onAdd: function (map) {
+        console.log("onAdd");
 		var className = 'leaflet-control-draw leaflet-bar leaflet-control',
 		    container = L.DomUtil.create('div', className);
 
-		this._createButton('&#8674;', 'Miarka', 'leaflet-control-measure-ruler leaflet-bar-part leaflet-bar-part-top-and-bottom', container, this._toggleMeasure, this);
+		this._createButton('&#8674;', 'Pomiar odległości', 'leaflet-control-measure-ruler leaflet-bar-part leaflet-bar-part-top-and-bottom', container, this._toggleMeasure, this);
 
 		return container;
 	},
@@ -40,6 +41,7 @@ L.Control.Measure = L.Control.extend({
 	},
 
 	_startMeasuring: function() {
+        console.log("_startMeasuring");
 		this._oldCursor = this._map._container.style.cursor;
 		this._map._container.style.cursor = 'crosshair';
 
@@ -62,6 +64,7 @@ L.Control.Measure = L.Control.extend({
 	},
 
 	_stopMeasuring: function() {
+        console.log("_stopMeasuring");
 		this._map._container.style.cursor = this._oldCursor;
 
 		L.DomEvent
@@ -82,6 +85,7 @@ L.Control.Measure = L.Control.extend({
 	},
 
 	_mouseMove: function(e) {
+        console.log("_mouse move");
 		if(!e.latlng || !this._lastPoint) {
 			return;
 		}
@@ -110,6 +114,7 @@ L.Control.Measure = L.Control.extend({
 	},
 
 	_mouseClick: function(e) {
+        console.log("mouse click");
 		// Skip if no coordinates
 		if(!e.latlng) {
 			return;
@@ -222,6 +227,7 @@ L.Control.Measure = L.Control.extend({
 	},
 
 	_onKeyDown: function (e) {
+        console.log("_onKeyDown "+e);
 		if(e.keyCode == 27) {
 			// If not in path exit measuring mode, else just finish path
 			if(!this._lastPoint) {

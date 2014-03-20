@@ -4,6 +4,7 @@ L.Control.MeasurePolygon = L.Control.extend({
 	},
 
 	onAdd: function (map) {
+
 		var className = 'leaflet-control-zoom leaflet-bar leaflet-control',
 		    container = L.DomUtil.create('div', className);
 
