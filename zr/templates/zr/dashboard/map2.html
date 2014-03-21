@@ -129,46 +129,21 @@
         var mpzp =
                 L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
                 attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                        maxZoom: 18,
+                        maxZoom: 18
                 });
                 var studium = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
                 attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                        maxZoom: 18,
+                        maxZoom: 18
                 });
                 var strukturaWlasnosci = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
                 attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                        maxZoom: 18,
+                        maxZoom: 18
                 });
                 var wynikiAnkiet = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
                 attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                        maxZoom: 18,
+                        maxZoom: 18
                 });
-                var overlayMaps = {
-                "MPZP": mpzp,
-                        "Studium": studium,
-                        "Struktura własności": strukturaWlasnosci,
-                        "Wyniki ankiet": wynikiAnkiet
-                };
 
-        map = L.map('map', {
-            attributionControl: false,
-            editInOSMControl: true,
-            editInOSMControlOptions: {position: 'topleft'},
-            center: new L.LatLng(lat, lon),
-            zoom: zoom,
-            //measurePolygonControl: true,
-            measureControl: true,
-            layers: [mbmap],
-            minZoom: 1,
-            maxZoom: 17
-        });
-
-
-        var planMapStyle = {
-            "color": "#e74c3c",
-            "weight": 5,
-            "opacity": 0.65
-        }
 
         var basePlanLayer = L.geoJson([], {
            style: planMapStyle,
@@ -187,7 +162,36 @@
            }
         });
 
+
+        var overlayMaps = {
+        "MPZP": basePlanLayer,
+                "Studium": studium,
+                "Struktura własności": strukturaWlasnosci,
+                "Wyniki ankiet": wynikiAnkiet
+        };
+
+        map = L.map('map', {
+            attributionControl: false,
+            editInOSMControl: true,
+            editInOSMControlOptions: {position: 'topleft'},
+            center: new L.LatLng(lat, lon),
+            zoom: zoom,
+            //measurePolygonControl: true,
+            measureControl: true,
+            layers: [mbmap],
+            minZoom: 1,
+            maxZoom: 17
+        });
+
         map.addLayer(basePlanLayer); // city plan base layer
+
+
+        var planMapStyle = {
+            "color": "#e74c3c",
+            "weight": 5,
+            "opacity": 0.65
+        }
+
 
         $.getJSON("{% url 'subjects_geojson' plan.id %}", function (data) {
             basePlanLayer.addData(data);
