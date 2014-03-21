@@ -88,9 +88,9 @@ function getFullDate(text){
     date.setYear(parseInt(temp[0]));
     date.setMonth(parseInt(temp[1])-1);
     date.setDate(parseInt(temp[2]));
-    date.setHours(parseInt(temp[3]));
-    date.setMinutes(parseInt(temp[4]));
-    date.setSeconds(parseInt(temp[5]));
-    date.setMilliseconds(0);
+    //date.setHours(parseInt(temp[3]));
+    //date.setMinutes(parseInt(temp[4]));
+    //date.setSeconds(parseInt(temp[5]));
+    //date.setMilliseconds(0);
     return date;
 }
