@@ -38,13 +38,21 @@ class Command(BaseCommand):
         ds = DataSource(shp_file)
 
         for layer in ds:
+            print 'layer start'
+            print layer
             properties = layer.fields
             for feature in layer:
+                print 'layer feature'
+                print feature
                 if feature.geom_type == 'Polygon':
-                    sf = SubjectFeat(subject=subject, geom=self.marcator_wkt_to_point(feature.geom.wkt))
+                    print 'Polygon'
+                    #sf = SubjectFeat(subject=subject, geom=self.marcator_wkt_to_point(feature.geom.wkt))
+                    sf = SubjectFeat(subject=subject, geom=feature.geom.wkt)
                     sf.save()
 
                     for p in properties:
                         sfp = SubjectFeatProperty(feat=sf, key=p, value=feature.get(p))
                         sfp.save()
+                else:
+                    print 'NON POLYGON!'
         self.stdout.write('... done!')
