@@ -1072,7 +1072,7 @@ div.leaflet-bar a.leaflet-draw-draw-rectangle
     height: 40px;
     position: absolute;
     right: 0px;
-    top: 195px;
+    top: 184px;
 }
 
 div.leaflet-draw-toolbar a.leaflet-draw-draw-rectangle:hover
@@ -1090,12 +1090,13 @@ div.leaflet-bar a.leaflet-control-measure
 {
   background-image: url('/static/images/planuj-09.png');
   background-size: 40px 40px;
-  background-position: 0px;
+  background-position: 0px 0px;
   color:transparent;
   position: absolute;
   right: 0px;
-  top: 400px;
-
+  top: 390px;
+  font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+  margin-top: 0px;
 }
 div.leaflet-bar a.leaflet-control-measure:hover
 {
@@ -1105,7 +1106,7 @@ div.leaflet-bar a.leaflet-control-measure:hover
   width: 47px;
   background-color: transparent;
   border: none;
-
+  font: 12px/2 "Helvetica Neue", Arial, Helvetica, sans-serif;
 }
 div.leaflet-bar .leaflet-control-draw-measure{
     background-image: url('/static/images/planuj-10.png');
@@ -1115,6 +1116,7 @@ div.leaflet-bar .leaflet-control-draw-measure{
     position: absolute;
     right:0px;
     top:360px;
+    border-bottom: 1px solid white !important;
 }
 
 div.leaflet-bar a.leaflet-control-draw-measure:hover
@@ -1124,7 +1126,7 @@ div.leaflet-bar a.leaflet-control-draw-measure:hover
   background-position: 7px 0px,0px 0px;
   width: 47px;
   background-color: transparent;
-  border: none;
+  border: none !important;
 
 }
 
@@ -1139,8 +1141,8 @@ div.leaflet-bar a.leaflet-control-measure-ruler
   right: 0px;
   bottom:-390px;
   background-color: rgba(0,0,0,0.6);
-width: 40px;
-height: 40px;
+  width: 40px;
+  height: 40px;
 }
 div.leaflet-bar a.leaflet-control-measure-ruler:hover
 {

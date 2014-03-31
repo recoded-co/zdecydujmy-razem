@@ -5,16 +5,16 @@ L.Control.MeasurePolygon = L.Control.extend({
 
 	onAdd: function (map) {
 
-		var className = 'leaflet-control-zoom leaflet-bar leaflet-control',
+		var className = 'leaflet-bar leaflet-control',
 		    container = L.DomUtil.create('div', className);
 
-		this._createButton('&#9674;', 'Pomiar obszaru', 'leaflet-control-measure leaflet-bar-part leaflet-bar-part-top-and-bottom', container, this._toggleMeasure, this);
+		this._createButton('', 'Pomiar obszaru', 'leaflet-control-measure leaflet-bar-part leaflet-bar-part-top-and-bottom', container, this._toggleMeasure, this);
 
 		return container;
 	},
 
 	_createButton: function (html, title, className, container, fn, context) {
-		var link = L.DomUtil.create('a', className, container);
+		var link = L.DomUtil.create('a', 'leaflet-control-measure', container);
 		link.innerHTML = html;
 		link.href = '#';
 		link.title = title;
@@ -96,6 +96,10 @@ L.Control.MeasurePolygon = L.Control.extend({
 		} else {
 			this._layerPaintPathTemp.spliceLatLngs(0, 2, this._lastPoint, e.latlng);
 		}
+
+        if(this._tooltip) {
+			this._updatePosition(e.latlng);
+        }
 	},
 
 	_mouseClick: function(e) {
@@ -119,6 +123,11 @@ L.Control.MeasurePolygon = L.Control.extend({
 			this._layerPaintPath.addLatLng(e.latlng);
 		}
 
+        if(!this._tooltip){
+            this._createTooltip(e.latlng);
+            var text = '<div class="leaflet-measure-tooltip-message">Kliknij, aby kontynuować rysowanie. Kliknij podwójnie, aby zamknąć obszar.</div>';
+		    this._tooltip._icon.innerHTML = text;
+        }
 		// Upate the end marker to the current location
 		if(this._lastCircle) {
 			this._layerPaint.removeLayer(this._lastCircle);
@@ -142,7 +151,8 @@ L.Control.MeasurePolygon = L.Control.extend({
 
 	_finishPath: function(e) {
         if(this._areaPoints && this._areaPoints.length>2){
-            this._createTooltip();
+            this._updateTooltipPosition();
+            this._updateTooltipDistance();
         }
 		// Remove the last end marker as well as the last (moving tooltip)
 		if(this._lastCircle) {
@@ -167,8 +177,10 @@ L.Control.MeasurePolygon = L.Control.extend({
         this._areaPoints = new Array();;
 	},
 	
-	_createTooltip: function() {
-        var position = this._lastPositionAdded;
+	_createTooltip: function(position) {
+        if(position === undefined){
+            position = this._lastPositionAdded;
+        }
 		var icon = L.divIcon({
 			className: 'leaflet-measure-tooltip',
 			iconAnchor: [-5, -5]
@@ -177,12 +189,15 @@ L.Control.MeasurePolygon = L.Control.extend({
 			icon: icon,
 			clickable: false
 		}).addTo(this._layerPaint);
-        this._updateTooltipPosition();
-        this._updateTooltipDistance();
+        //this._updateTooltipPosition();
+        //this._updateTooltipDistance();
 	},
 
 	_updateTooltipPosition: function() {
 		this._tooltip.setLatLng(this._lastPositionAdded);
+	},
+    _updatePosition: function(position) {
+		this._tooltip.setLatLng(position);
 	},
 
 	_updateTooltipDistance: function() {

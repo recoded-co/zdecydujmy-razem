@@ -140,7 +140,6 @@ L.Map.addInitHook(function () {
 
 
 L.Control.measureControl = function (options) {
-    console.log("measureControl");
     return new L.Control.MeasureControl(options);
 };
 

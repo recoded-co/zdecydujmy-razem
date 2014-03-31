@@ -4,17 +4,16 @@ L.Control.Measure = L.Control.extend({
 	},
 
 	onAdd: function (map) {
-        console.log("onAdd");
-		var className = 'leaflet-control-draw leaflet-bar leaflet-control',
+		var className = 'leaflet-bar leaflet-control',
 		    container = L.DomUtil.create('div', className);
 
-		this._createButton('&#8674;', 'Pomiar odległości', 'leaflet-control-measure-ruler leaflet-bar-part leaflet-bar-part-top-and-bottom', container, this._toggleMeasure, this);
+		this._createButton('', 'Pomiar odległości', 'leaflet-control-measure-ruler leaflet-bar-part leaflet-bar-part-top-and-bottom', container, this._toggleMeasure, this);
 
 		return container;
 	},
 
 	_createButton: function (html, title, className, container, fn, context) {
-		var link = L.DomUtil.create('a', className, container);
+		var link = L.DomUtil.create('a', 'leaflet-control-draw-measure', container);
 		link.innerHTML = html;
 		link.href = '#';
 		link.title = title;
@@ -41,7 +40,6 @@ L.Control.Measure = L.Control.extend({
 	},
 
 	_startMeasuring: function() {
-        console.log("_startMeasuring");
 		this._oldCursor = this._map._container.style.cursor;
 		this._map._container.style.cursor = 'crosshair';
 
@@ -64,7 +62,6 @@ L.Control.Measure = L.Control.extend({
 	},
 
 	_stopMeasuring: function() {
-        console.log("_stopMeasuring");
 		this._map._container.style.cursor = this._oldCursor;
 
 		L.DomEvent
@@ -85,7 +82,6 @@ L.Control.Measure = L.Control.extend({
 	},
 
 	_mouseMove: function(e) {
-        console.log("_mouse move");
 		if(!e.latlng || !this._lastPoint) {
 			return;
 		}
@@ -114,7 +110,6 @@ L.Control.Measure = L.Control.extend({
 	},
 
 	_mouseClick: function(e) {
-        console.log("mouse click");
 		// Skip if no coordinates
 		if(!e.latlng) {
 			return;
@@ -196,7 +191,11 @@ L.Control.Measure = L.Control.extend({
 	},
 	
 	_createTooltip: function(position) {
-		var icon = L.divIcon({
+        if(this._tooltip){
+            var text = this._tooltip._icon.innerHTML.split('<div class="leaflet-measure-tooltip-message">')[0];
+            this._tooltip._icon.innerHTML = text;
+        }
+        var icon = L.divIcon({
 			className: 'leaflet-measure-tooltip',
 			iconAnchor: [-5, -5]
 		});
@@ -211,12 +210,13 @@ L.Control.Measure = L.Control.extend({
 	},
 
 	_updateTooltipDistance: function(total, difference) {
-		var totalRound = (total/1000).toFixed(2),
+        var totalRound = (total/1000).toFixed(2),
 			differenceRound = (difference/1000).toFixed(2);
 
 		var text = '<div class="leaflet-measure-tooltip-total">' + totalRound + ' km</div>';
 		if(differenceRound > 0 && totalRound != differenceRound) {
 			text += '<div class="leaflet-measure-tooltip-difference">(+' + differenceRound + ' km)</div>';
+            text += '<div class="leaflet-measure-tooltip-message">Kliknij, aby kontynuować rysowanie. Kliknij podwójnie, aby zakończyć.</div>';
 		}
 
 		this._tooltip._icon.innerHTML = text;
@@ -227,7 +227,6 @@ L.Control.Measure = L.Control.extend({
 	},
 
 	_onKeyDown: function (e) {
-        console.log("_onKeyDown "+e);
 		if(e.keyCode == 27) {
 			// If not in path exit measuring mode, else just finish path
 			if(!this._lastPoint) {
