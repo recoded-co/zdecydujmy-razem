@@ -6,7 +6,7 @@ admin.autodiscover()
 
 
 urlpatterns = patterns('',
-
+    url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'media'}),
     url(r'^zr/', include('zr.urls')),
 
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'zr/index.html'}),

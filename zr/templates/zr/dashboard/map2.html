@@ -193,7 +193,7 @@
         }
 
 
-        $.getJSON("{% url 'subjects_geojson' plan.id %}", function (data) {
+        $.getJSON("{% url subjects_geojson plan.id %}", function (data) {
             basePlanLayer.addData(data);
             basePlanLayer.bringToBack();
         });
@@ -216,6 +216,29 @@
         L.control.scale().addTo(map);
 
         var legendControl = (new L.Control.TileLegend()).addTo(map);
+
+        //remote control switch functions
+        map.remoteControlSwitchOff = function(){
+            console.log('map.remoteControlSwitchOff');
+            if(map.remoteControlSwitch!=undefined && map.remoteControlContent!=undefined){
+                console.log('remote execute');
+                map.remoteControlSwitch.call(map.remoteControlContent);
+                map.remoteControlSwitch = undefined;
+                map.remoteControlContent = undefined;
+            }
+            console.log('end 1');
+        }
+        map.setRemoteControlSwitch = function (content,method){
+            console.log('map.setRemoteControlSwitch');
+            map.remoteControlSwitch = method;
+            map.remoteControlContent = content;
+            console.log('end 2');
+        }
+        map.clearControlSwitch = function (){
+            map.remoteControlSwitch = undefined;
+            map.remoteControlContent = undefined;
+        }
+
 
 {% if user|isloged %}
 // edit teodor @ katalpa
@@ -323,7 +346,29 @@
                 drawnItems.addLayer(layer);
             }
 
-		});
+		}).on('draw:drawstart',function(e){
+            console.log(e);
+            var type = e.layerType;
+            map.remoteControlSwitchOff();
+
+            if (type === 'rectangle'){
+                L.DomUtil.addClass(e.target._container, 'leaflet-control-rectangle-on');
+            } else if(type === 'marker') {
+                L.DomUtil.addClass(e.target._container, 'leaflet-control-marker-on');
+            } else if(type==='polygon'){
+                L.DomUtil.addClass(e.target._container, 'leaflet-control-polygon-on');
+            }
+        }).on('draw:drawstop',function(e){
+            var type = e.layerType;
+
+            if (type === 'rectangle'){
+                L.DomUtil.removeClass(e.target._container, 'leaflet-control-rectangle-on');
+            } else if(type === 'marker') {
+                L.DomUtil.removeClass(e.target._container, 'leaflet-control-marker-on');
+            } else if(type==='polygon'){
+                L.DomUtil.removeClass(e.target._container, 'leaflet-control-polygon-on');
+            }
+        });
 
         addGeometry(function(markers){
             //vectors.events.register('featureadded','',featureAddedFunction);

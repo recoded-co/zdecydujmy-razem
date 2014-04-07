@@ -12,15 +12,11 @@ button:hover, button:focus{
     font-size: 12px;
     font-variant: normal;
     font-family: "source_sans_prolight";
-    margin-left: 90px;
-
-
 }
-.map_popup .btnred
+.leaflet-popup-content .btnred
 {
   margin-left: 90px !important; 
   color: white;
-
 }
 
 .sub_post .btnred{
@@ -991,7 +987,6 @@ hr {
     border-radius: 8px;
     background-image: url('/static/images/arrow_right_wide.png');
  }
-div
 div.leaflet-bar a.leaflet-draw-draw-polygon
 {
  
@@ -1030,6 +1025,15 @@ div.leaflet-bar a.leaflet-draw-draw-polyline
   height: 40px;
 
 }
+div.leaflet-control-polygon-on a.leaflet-draw-draw-polygon
+{
+    background-image: url('/static/images/planuj-05.png'),url('/static/images/planuj-11.png') !important;
+    background-size: 40px 40px, 47px 40px !important;
+    background-position: 7px 0px,0px 0px !important;
+    width: 47px !important;
+    background-color: transparent !important;
+    border: none !important;
+}
 div.leaflet-bar a.leaflet-draw-draw-polyline:hover
 {
  
@@ -1062,6 +1066,18 @@ div.leaflet-bar a.leaflet-draw-draw-marker:hover
     background-color: transparent;
     border: none;
 }
+
+div.leaflet-control-marker-on a.leaflet-draw-draw-marker
+{
+    background-image: url('/static/images/planuj-06.png'),url('/static/images/planuj-11.png') !important;
+    background-size: 40px 40px, 47px 40px !important;
+    background-position: 7px 0px,0px 0px !important;
+    width: 47px !important;
+    background-color: transparent !important;
+    border: none !important;
+}
+
+
 div.leaflet-bar a.leaflet-draw-draw-rectangle
 {
     background-image: url('/static/images/planuj-08.png');
@@ -1073,6 +1089,15 @@ div.leaflet-bar a.leaflet-draw-draw-rectangle
     position: absolute;
     right: 0px;
     top: 184px;
+}
+div.leaflet-control-rectangle-on a.leaflet-draw-draw-rectangle
+{
+    background-image: url('/static/images/planuj-08.png'),url('/static/images/planuj-11.png') !important;
+    background-size: 40px 40px, 47px 40px !important;
+    background-position: 7px 0px,0px 0px !important;
+    width: 47px !important;
+    background-color: transparent !important;
+    border: none !important;
 }
 
 div.leaflet-draw-toolbar a.leaflet-draw-draw-rectangle:hover
@@ -1116,7 +1141,7 @@ div.leaflet-bar .leaflet-control-draw-measure{
     position: absolute;
     right:0px;
     top:360px;
-    border-bottom: 1px solid white !important;
+    border-bottom: 1px solid #ccc !important;
 }
 
 div.leaflet-bar a.leaflet-control-draw-measure:hover
@@ -1129,6 +1154,24 @@ div.leaflet-bar a.leaflet-control-draw-measure:hover
   border: none !important;
 
 }
+
+div.leaflet-control-measure-on a.leaflet-control-draw-measure{
+	background-image: url('/static/images/planuj-10.png'),url('/static/images/planuj-11.png') !important;
+	background-size: 40px 40px, 47px 40px  !important;
+    background-position: 7px 0px,0px 0px  !important;
+    width: 47px  !important;
+    background-color: transparent !important;
+    border: none !important;
+    }
+
+div.leaflet-control-measure-on a.leaflet-control-measure{
+	background-image: url('/static/images/planuj-09.png'),url('/static/images/planuj-11.png') !important;
+	background-size: 40px 40px, 47px 40px  !important;
+    background-position: 7px 0px,0px 0px  !important;
+    width: 47px  !important;
+    background-color: transparent !important;
+    border: none !important;
+    }
 
 /*
 div.leaflet-bar a.leaflet-control-measure-ruler
@@ -1217,7 +1260,6 @@ div.leaflet-bar a.leaflet-control-measure-ruler:hover
     font-style: normal;
 }
 
-//teodor@katalpa
 .map_popup
 {
   font-family: 'source_sans_prolight';
@@ -1235,7 +1277,7 @@ div.leaflet-bar a.leaflet-control-measure-ruler:hover
 {
   height: 25px;
 }
-.map_popup textarea;
+.map_popup textarea
 {
 border:none;
 }

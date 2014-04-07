@@ -1,10 +1,11 @@
 {% load i18n %}
 {% load url from future %}
+{% load avatar_tags %}
 <div ng-class="{'tab-post':true, 'dotedline':post.parent==null}">
     <ul>
         <li> <!-- start here -->
-                <img style="position:absolute;"
-                        src="/static/images/face.jpeg" alt="avatar" width="40px" height="40px" class="img-circle">
+            <img style="position:absolute;"
+                        src="{[{ post.avatar_url }]}" alt="{[{ post.avatar_alt }]}" width="40px" height="40px" class="img-circle">
         </li>
         <li>
             <div class="media-body dropbox new_margin"> <!--   style="margin-left: 0px;margin-right: 0px;"  -->

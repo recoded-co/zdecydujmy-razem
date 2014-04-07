@@ -8,7 +8,6 @@ L.Control.Measure = L.Control.extend({
 		    container = L.DomUtil.create('div', className);
 
 		this._createButton('', 'Pomiar odległości', 'leaflet-control-measure-ruler leaflet-bar-part leaflet-bar-part-top-and-bottom', container, this._toggleMeasure, this);
-
 		return container;
 	},
 
@@ -28,17 +27,27 @@ L.Control.Measure = L.Control.extend({
 	},
 
 	_toggleMeasure: function () {
+        console.log('Linijka');
 		this._measuring = !this._measuring;
+        //check remote switcher in case that other control is still on
+        this._map.remoteControlSwitchOff();
 
-		if(this._measuring) {
-			L.DomUtil.addClass(this._container, 'leaflet-control-measure-on');
+        if(this._measuring) {
+            //arm remote switcher
+            this._map.setRemoteControlSwitch(this,this._remoteSwitchOff);
+
+            L.DomUtil.addClass(this._container, 'leaflet-control-measure-on');
 			this._startMeasuring();
 		} else {
-			L.DomUtil.removeClass(this._container, 'leaflet-control-measure-on');
+            L.DomUtil.removeClass(this._container, 'leaflet-control-measure-on');
 			this._stopMeasuring();
 		}
-	},
 
+	},
+    _remoteSwitchOff: function(){
+        L.DomUtil.removeClass(this._container, 'leaflet-control-measure-on');
+		this._stopMeasuring();
+    },
 	_startMeasuring: function() {
 		this._oldCursor = this._map._container.style.cursor;
 		this._map._container.style.cursor = 'crosshair';

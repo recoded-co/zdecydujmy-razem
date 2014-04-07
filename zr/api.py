@@ -5,14 +5,21 @@ from rest_framework import generics
 from rest_framework import serializers
 from rest_framework import mixins
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.serializers import ModelSerializer, Serializer
 from rest_framework.renderers import JSONRenderer
+from django.contrib.auth.models import User
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from filemanager.models import PostFileUpload
 from zr.models import Plan, Configuration, Geometry, Post, Rate, PostSubscription, TrackEvents
 from zr.models import Subject, SubjectFeat, SubjectFeatProperty
 from django_decorators.decorators import json_response
 from django.views.decorators.csrf import csrf_exempt
+from avatar.util import get_default_avatar_url
+from avatar.templatetags.avatar_tags import avatar_url
+from django.utils import six
+
+from django.contrib.auth.models import User
 
 
 router = routers.DefaultRouter()
@@ -81,6 +88,8 @@ class PostSerializer(ModelSerializer):
                   'rate', 'score','geometry',
                   'date','filep','positive_rate','negative_rate')
 
+
+
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -96,6 +105,12 @@ class PostViewSet(viewsets.ModelViewSet):
         else:
             subscribed_posts = []
         for entry in serializer.data:
+            user = User.objects.get(username=entry['author_name'])
+            alt = six.text_type(user)
+            url = avatar_url(user, 40)
+            entry['avatar_url']=url
+            entry['avatar_alt']=alt
+
             if entry['id'] in subscribed_posts:
                 entry['subscription'] = True
             else:
@@ -311,4 +326,35 @@ class SubjectFeatSerializer(GeoFeatureModelSerializer):
 class SubjectFeatList(generics.ListAPIView):
     queryset = SubjectFeat.objects.all()
     serializer_class = SubjectFeatSerializer
+
+"""
+class UserCountView(APIView):
+
+    renderer_classes = (JSONRenderer)
+
+    def get(self, request, format=None):
+        user = User.objects.get(name=request.POST['user_name']);
+
+        if not isinstance(user, get_user_model()):
+            try:
+                user = get_user(user)
+                alt = six.text_type(user)
+                url = avatar_url(user, size)
+            except get_user_model().DoesNotExist:
+                url = get_default_avatar_url()
+                alt = _("Default Avatar")
+        else:
+            alt = six.text_type(user)
+            url = avatar_url(user, size)
+        context = dict(kwargs, **{
+            'user': user,
+            'url': url,
+            'alt': alt,
+            'size': size,
+        })
+
+
+        content = {'avatar_url': user_count}
+        return Response(content)
+"""
 

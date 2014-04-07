@@ -5,9 +5,11 @@ from zr.views import ZipcodeCheckView
 from zr.api import router
 from zr.api import RateListView, PostsListView, geo_search, SubjectFeatList, SubscriptionDetail
 from zr.api import SubscriptionList as ApiSubscriptionList
+from zr.views import change2
 
 urlpatterns = patterns('',
     #url(r'^test', TestView.as_view(), name="home"),
+
     url(r'^dashboard', DashboardView.as_view(), name="dashboard"),
     url(r'^usercreate$', UserCreationPageView.as_view(), name="register"),
     # api
@@ -25,6 +27,7 @@ urlpatterns = patterns('',
 
     url(r'^settings/zipcode_check', ZipcodeCheckView.as_view(), name='zipcode_check'),
     url(r'^api/postfilter', PostsListView.as_view()),
-
+    url(r'^fff/$', change2, name='avatar_change2'),
+    url(r'^avatar/', include('avatar.urls')),
     url(r'^$', HomePageView.as_view(), name="home"),
 )

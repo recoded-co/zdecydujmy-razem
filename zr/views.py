@@ -14,7 +14,13 @@ from django.shortcuts import redirect
 from zr.models import Profile
 from zr.models import Configuration, PostSubscription, Plan
 from zr.forms import ZipCodeForm
-
+from avatar.models import Avatar
+from avatar.forms import PrimaryAvatarForm, DeleteAvatarForm, UploadAvatarForm
+from avatar.views import _get_avatars, _get_next
+from django.contrib import messages
+from avatar.signals import avatar_updated
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
 class LoginForm(UserCreationForm):
     email = forms.EmailField(widget=forms.TextInput(), required=True)
@@ -125,3 +131,40 @@ class ZipcodeCheckView(View):
             return redirect(request.POST['next'])
         return render_to_response('zr/zip_code.html', {'form': form, 'next': request.POST['next']}, context_instance=RequestContext(request))
 
+@login_required
+def change2(request, extra_context=None, next_override=None,
+           upload_form=UploadAvatarForm, primary_form=PrimaryAvatarForm,
+           *args, **kwargs):
+    if extra_context is None:
+        extra_context = {}
+    avatar, avatars = _get_avatars(request.user)
+    if avatar:
+        kwargs = {'initial': {'choice': avatar.id}}
+    else:
+        kwargs = {}
+    upload_avatar_form = upload_form(user=request.user, **kwargs)
+    primary_avatar_form = primary_form(request.POST or None,
+                                       user=request.user,
+                                       avatars=avatars, **kwargs)
+    if request.method == "POST":
+        updated = False
+        if 'choice' in request.POST and primary_avatar_form.is_valid():
+            avatar = Avatar.objects.get(
+                id=primary_avatar_form.cleaned_data['choice'])
+            avatar.primary = True
+            avatar.save()
+            updated = True
+            messages.success(request, _("Successfully updated your avatar."))
+        if updated:
+            avatar_updated.send(sender=Avatar, user=request.user, avatar=avatar)
+        return redirect(next_override or _get_next(request))
+
+    context = {
+        'avatar': avatar,
+        'avatars': avatars,
+        'upload_avatar_form': upload_avatar_form,
+        'primary_avatar_form': primary_avatar_form,
+        'next': next_override or _get_next(request)
+    }
+    context.update(extra_context)
+    return render(request, 'zr/avatar/change.html', context)

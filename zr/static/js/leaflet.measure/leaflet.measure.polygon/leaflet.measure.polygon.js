@@ -29,9 +29,16 @@ L.Control.MeasurePolygon = L.Control.extend({
 	},
 
 	_toggleMeasure: function () {
+        console.log('Polygon');
 		this._measuring = !this._measuring;
+        //check remote switcher in case that other control is still on
+        this._map.remoteControlSwitchOff();
 
-		if(this._measuring) {
+        if(this._measuring) {
+
+            //arm remote switcher
+            this._map.setRemoteControlSwitch(this,this._remoteSwitchOff);
+
 			L.DomUtil.addClass(this._container, 'leaflet-control-measure-on');
 			this._startMeasuring();
 		} else {
@@ -39,7 +46,10 @@ L.Control.MeasurePolygon = L.Control.extend({
 			this._stopMeasuring();
 		}
 	},
-
+    _remoteSwitchOff: function() {
+        L.DomUtil.removeClass(this._container, 'leaflet-control-measure-on');
+		this._stopMeasuring();
+    },
 	_startMeasuring: function() {
 		this._oldCursor = this._map._container.style.cursor;
 		this._map._container.style.cursor = 'crosshair';
