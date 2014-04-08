@@ -199,7 +199,7 @@ AUTO_GENERATE_AVATAR_SIZES = (40,)
 AVATAR_STORAGE_DIR = 'avatar/'
 
 #    A boolean determining whether to default to the Gravatar service if no Avatar instance is found in the system for the given user. Defaults to True.
-AVATAR_GRAVATAR_BACKUP = False
+AVATAR_GRAVATAR_BACKUP = True
 
 #   The default URL to default to if AVATAR_GRAVATAR_BACKUP is set to False and there is no Avatar instance found in the system for the given user.
 AVATAR_DEFAULT_URL = '/images/anonymous.jpg'
