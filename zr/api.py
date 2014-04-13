@@ -18,7 +18,8 @@ from django.views.decorators.csrf import csrf_exempt
 from avatar.util import get_default_avatar_url
 from avatar.templatetags.avatar_tags import avatar_url
 from django.utils import six
-
+from django.db import connection
+from django.core.paginator import Paginator, EmptyPage
 from django.contrib.auth.models import User
 
 
@@ -29,6 +30,7 @@ class PlanViewSet(viewsets.ModelViewSet):
     model = Plan
 
 router.register(r'plans', PlanViewSet)
+
 
 
 class ConfigurationViewSet(viewsets.ModelViewSet):
@@ -73,6 +75,8 @@ class FileSerializer(ModelSerializer):
     class Meta:
         model = PostFileUpload
 
+
+
 class PostSerializer(ModelSerializer):
     rate = serializers.Field(source='has_rate')
     score = serializers.Field(source='has_likes')
@@ -87,8 +91,6 @@ class PostSerializer(ModelSerializer):
                   'parent', 'plan', 'content',
                   'rate', 'score','geometry',
                   'date','filep','positive_rate','negative_rate')
-
-
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
@@ -131,20 +133,81 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response(result)
 
     def create(self, request, *args, **kwargs):
+        print args
+        print kwargs
         return super(PostViewSet, self).create(request, *args, **kwargs)
 
 router.register(r'posts', PostViewSet)
 
+class NPost(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def list(self, request, *args, **kwargs):
+
+        parent = request.QUERY_PARAMS.get('parent','None')
+        type = request.QUERY_PARAMS.get('type','date')
+        direction = self.parseToBoolean(request.QUERY_PARAMS.get('direction',True))
+        round = int(request.QUERY_PARAMS.get('round',1))
+
+        cursor = connection.cursor()
+        sql = 'SELECT id , \
+               (select count(*) from zr_post where parent_id = a.id) as numcom \
+               FROM zr_post as a '
+
+        parent_sql = ''
+        params = []
+
+        if parent != 'None':
+            sql += 'where parent_id = %s '
+            params.append(parent)
+        else :
+            sql += 'where parent_id is null '
+
+        order_by_sql = ' '
+        if type == 'date' :
+            if direction :
+                sql += 'order by date '
+            else :
+                sql += 'order by date desc '
+        elif type == 'com':
+            if direction :
+                sql += 'order by numcom '
+            else :
+                sql += 'order by numcom desc '
+
+        cursor.execute(sql, params)
+        row = cursor.fetchall()
+        paginator = Paginator(row,2);
+
+        try:
+            actuall_item_list = paginator.page(round).object_list
+        except EmptyPage:
+            return Response([])
+
+        queryset = Post.objects.filter(pk__in = [item[0] for item in actuall_item_list])
+        serializer = PostSerializer(queryset, many=True)
+
+        temp_ret = []
+        for entry, numcom in zip(serializer.data,actuall_item_list):
+            entry['numcom']=int(numcom[1])
+            temp_ret.append(entry)
+
+        return Response(temp_ret)
+
+    def parseToBoolean(self, str):
+        if str == 'True':
+            return True
+        else :
+            return False
 
 class RateSerializer(ModelSerializer):
     class Meta:
         model = Rate
 
-
 class RateViewSet(viewsets.ModelViewSet):
     queryset = Rate.objects.all()
     serializer_class = RateSerializer
-
 
 class RateListView(generics.ListAPIView):
     queryset = Rate.objects.all()

@@ -5,25 +5,105 @@
 var zdControllers = angular.module('zdControllers', ['ngCookies']);
 //'configurations','rates','subjects','posts','geometries','plans',
 
-zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', 'zdServicesFactory','uploadService','Angularytics',
-  function($scope,$http,$cookies, $rootScope,zdServicesFactory, uploadService, Angularytics ) {
+zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope', 'zdServicesFactory','uploadService','Angularytics','postFactory',
+  function($scope, $http, $cookies, $rootScope, zdServicesFactory, uploadService, Angularytics, postFactory ) {
+
     $scope.$watch('showallposts', function() {
             console.log("showallposts changed! "+$scope.showallposts);
     });
 
-    $scope.plans = zdServicesFactory.plans.json();
-    jsonToNestedCollection(zdServicesFactory.posts.json(),function(data){
-        $scope.tree = data;
-        $scope.geoHashTree = {};
-        for(var item in data){
-            if(data[item].geometry!==undefined){
-                $scope.geoHashTree[data[item].geometry]=data[item];
+    function postState(){
+        return {
+            round:1,
+            reachEnd:false
+        }
+    }
+
+    var postHandler = function(servHandler){
+        var servHandler = servHandler;
+        var type = 'date';
+        var direction = 'True';
+        var brPostState = {'None': postState() }
+        return{
+            sortByDate: function(){
+                type = 'date';
+            },
+            sortByNumComments: function(){
+                type = 'com';
+            },
+            setDirection: function(temp){
+                if(temp === true)
+                    direction = "True";
+                else
+                    direction = "False";
+            },
+            // params: parent_id = number or 'None' if root level
+            getPostList: function(parent_id, callback){
+                if( brPostState[parent_id] === undefined){
+                    brPostState[parent_id] = postState();
+                }
+                servHandler.query({
+                    type:type,
+                    round:''+brPostState[parent_id].round,
+                    format:'json',
+                    parent:parent_id,
+                    direction:direction}).$promise.then( function (data){
+                        if(!brPostState[parent_id].reachEnd)
+                            callback(data);
+                        if(data.length<2){
+                            brPostState[parent_id].reachEnd = true;
+                        } else {
+                            brPostState[parent_id].round++;
+                        }
+                    });
             }
         }
-        angular.forEach(document.getElementsByClassName("post-list"),function(item){
-            item.style.visibility="visible";
-        });
+    }
+
+    var tree = postHandler(postFactory.newPostAll);
+    tree.sortByNumComments();
+    tree.setDirection(false);
+    tree.getPostList('None',function(data){
+       $scope.tree = data;
     });
+
+    $scope.addMorePosts = function(post,root) {
+        console.log(root);
+        if(post.parent == null){
+            tree.getPostList('None',function(data){
+                $scope.tree = $scope.tree.concat(data);
+            });
+        }else{
+            tree.getPostList(post.parent,function(data){
+                root.nodes = root.nodes.concat(data);
+            });
+        }
+    };
+
+    $scope.showOneDown = function(data){
+        console.log("showOneDown:");
+        console.log(data);
+        if(data.nodes === undefined){
+            console.log('1');
+            tree.getPostList(data.id,function(post_list){
+                console.log(post_list);
+                data.nodes = []
+                data.nodes = data.nodes.concat(post_list);
+            });
+        } else if(data.nodes.length < 2){
+            console.log('2');
+            tree.getPostList(data.id,function(post_list){
+                data.nodes = []
+                data.nodes = data.nodes.concat(post_list);
+            });
+        }
+        if(data.rozwin==undefined || data.rozwin==false){
+            data.rozwin=true;
+        } else {
+            data.rozwin=false;
+        }
+    };
+
     $scope.predicate='date';
     $scope.reverse=true;
     $scope.data_arrow=true;
@@ -94,6 +174,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
             data.zmiennac=false;
             $scope.showOneDown(data);
     };
+
     $scope.showOneDown = function(data){
         if(data.rozwin==undefined || data.rozwin==false){
             data.rozwin=true;
@@ -101,6 +182,7 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
             data.rozwin=false;
         }
     };
+
     $scope.showAll = function(){
         $scope.showallposts = true;
         $scope.filterGeoData=[];
