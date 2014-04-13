@@ -83,8 +83,8 @@
             <div ng-init="user='{{ user }}'"></div>
         </div>
         <div    ng-class="{'media':true,'media-list':true, 'main-post':post.parent==null,'child-post':post.parent!=null}"
-                    ng-repeat="post in tree | filter:{geometry: null}  | filter:search | orderBy:predicate:reverse"
-                                            ng-include="'tree_item_renderer.html'">
+                ng-repeat="post in tree"
+                ng-include="'tree_item_renderer.html'">
         </div>
     </div>
 

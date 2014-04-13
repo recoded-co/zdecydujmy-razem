@@ -7,6 +7,7 @@ from django.contrib.gis.geos import WKTWriter
 from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.db import connection
 
 from django.conf import settings
 if "notification" in settings.INSTALLED_APPS:
@@ -150,7 +151,11 @@ class Post(models.Model):
             return self.parent.get_root()
         else:
             return self
-    """
+
+"""
+    def numcom(self):
+        return self.pk #cursor.fetchone()
+
     def save(self, *args, **kwargs):
         print 'save is calling'
         return super(Post, self).save(*args, **kwargs)

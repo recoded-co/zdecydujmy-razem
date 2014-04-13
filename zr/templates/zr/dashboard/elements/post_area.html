@@ -40,7 +40,7 @@
                     </ul>
                     <div style="display: inline-block; width: 100%;">
                         <div class="left">
-                            <button type="button" class="btn btn-xs btnwhite btngrey"  ng-if="post.nodes.length>0" ng-click="showOneDown(post)  | trackEvent:'Rozwiń':'Button clicked':user " ng-disabled="!showallposts">
+                            <button type="button" class="btn btn-xs btnwhite btngrey"  ng-if="post.numcom   >0" ng-click="showOneDown(post)  | trackEvent:'Rozwiń':'Button clicked':user " ng-disabled="!showallposts">
                                 <i ng-if="showallposts==true" ng-hide="post.rozwin" class="fa fa-caret-up"></i>
                                 <i ng-if="showallposts==true" ng-show="post.rozwin" class="fa fa-caret-down"></i>
                                 <i ng-if="showallposts==false" ng-show="post.rozwin" class="fa fa-caret-down"></i>
@@ -66,10 +66,12 @@
                     </div>
              
                     </div>
+
                 </div>
-            </div>
-        </li>
-    </ul>
+              </li>
+        </ul>
+    </div>
+
            <div class="add_comment">
                     <textarea ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
                               ng-model="post.text"
@@ -88,11 +90,14 @@
                               ng-click="addDown(post) | trackEvent:'Zapisz':'Button clicked':user ">{% trans 'publikuj' %}
                         </button>
                     </div>
-</div>
-
-<div ng-if="post.nodes.length>0" class="tab_border" ng-hide="!(post.rozwin!=undefined && post.rozwin==true) && showallposts" >
-    <div ng-repeat="post in post.nodes "
-         ng-include="'tree_item_renderer.html'">
     </div>
-</div>
+    <div ng-if="post.nodes.length>0" class="tab_border" ng-hide="!(post.rozwin!=undefined && post.rozwin==true) && showallposts" >
+        <div ng-repeat="post in post.nodes ">
+            <div ng-include="'tree_item_renderer.html'" ></div>
+            <div ng-if="$last">
+                <button ng-click="addMorePosts(post,$parent.$parent.$parent.$parent.post)" class="btn btn-xs">Kolejne</button>
+            </div>
+        </div>
+    </div>
+
 
