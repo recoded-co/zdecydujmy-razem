@@ -32,7 +32,7 @@ USE_TZ = True
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -188,3 +188,18 @@ EMAIL_USE_SSL = False
 DEFAULT_FROM_EMAIL = 'ZdecydujmyRazem <notification@recoded.co>'
 NOTIFICATION_QUEUE_ALL = True
 
+#Avatar
+
+AUTO_GENERATE_AVATAR_SIZES = (40,)
+
+#The method to use when resizing images, based on the options available in PIL. Defaults to Image.ANTIALIAS.
+#AVATAR_RESIZE_METHOD
+
+#The directory under MEDIA_ROOT to store the images. If using a non-filesystem storage device, this will simply be appended to the beginning of the file name.
+AVATAR_STORAGE_DIR = 'avatar/'
+
+#    A boolean determining whether to default to the Gravatar service if no Avatar instance is found in the system for the given user. Defaults to True.
+AVATAR_GRAVATAR_BACKUP = True
+
+#   The default URL to default to if AVATAR_GRAVATAR_BACKUP is set to False and there is no Avatar instance found in the system for the given user.
+AVATAR_DEFAULT_URL = '/images/anonymous.jpg'

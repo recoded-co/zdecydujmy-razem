@@ -193,7 +193,7 @@
         }
 
 
-        $.getJSON("{% url subjects_geojson plan.id %}", function (data) {
+        $.getJSON("{% url 'subjects_geojson' plan.id %}", function (data) {
             basePlanLayer.addData(data);
             basePlanLayer.bringToBack();
         });
