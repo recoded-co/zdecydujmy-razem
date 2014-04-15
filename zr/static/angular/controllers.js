@@ -12,6 +12,10 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
             console.log("showallposts changed! "+$scope.showallposts);
     });
 
+    Angularytics.trackPageView = function(url) {
+        $scope.url = url;
+    }
+
     function postState(){
         return {
             round:1,
@@ -19,11 +23,12 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
         }
     }
 
-    var postHandler = function(servHandler){
+    var postHandler = function(servHandler,geo){
         var servHandler = servHandler;
         var type = 'date';
         var direction = 'True';
         var brPostState = {'None': postState() }
+        var geometry = geo;
         return{
             sortByDate: function(){
                 type = 'date';
@@ -43,6 +48,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
                     brPostState[parent_id] = postState();
                 }
                 servHandler.query({
+                    geometry: geometry,
                     type:type,
                     round:''+brPostState[parent_id].round,
                     format:'json',
@@ -60,12 +66,21 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
         }
     }
 
-    var tree = postHandler(postFactory.newPostAll);
-    tree.sortByNumComments();
-    tree.setDirection(false);
-    tree.getPostList('None',function(data){
-       $scope.tree = data;
+    var tree = null;
+
+    $scope.$watch('url', function() {
+        if($scope.url=='/all'){
+            tree = postHandler(postFactory.newPostAll,'None');
+        } else if($scope.url=='/details'){
+            tree = postHandler(postFactory.newPostAll,'notNone');
+        } else if($scope.url=='/subscriptions'){
+            $scope.tree = [];
+        }
+        tree.getPostList('None',function(data){
+               $scope.tree = data;
+        });
     });
+    tree = postHandler(postFactory.newPostAll,'notNone');
 
     $scope.addMorePosts = function(post,root) {
         console.log(root);

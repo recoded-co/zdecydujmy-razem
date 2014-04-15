@@ -133,8 +133,6 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response(result)
 
     def create(self, request, *args, **kwargs):
-        print args
-        print kwargs
         return super(PostViewSet, self).create(request, *args, **kwargs)
 
 router.register(r'posts', PostViewSet)
@@ -146,13 +144,17 @@ class NPost(generics.ListAPIView):
     def list(self, request, *args, **kwargs):
 
         parent = request.QUERY_PARAMS.get('parent','None')
+        geometry = request.QUERY_PARAMS.get('geometry', 'None')
         type = request.QUERY_PARAMS.get('type','date')
         direction = self.parseToBoolean(request.QUERY_PARAMS.get('direction',True))
         round = int(request.QUERY_PARAMS.get('round',1))
 
+        print parent,geometry,type,direction,round
+
         cursor = connection.cursor()
-        sql = 'SELECT id , \
-               (select count(*) from zr_post where parent_id = a.id) as numcom \
+        sql = 'SELECT id ,  \
+               (select count(*) from zr_post where parent_id = a.id) as numcom, \
+               geometry_id \
                FROM zr_post as a '
 
         parent_sql = ''
@@ -163,6 +165,17 @@ class NPost(generics.ListAPIView):
             params.append(parent)
         else :
             sql += 'where parent_id is null '
+
+        if geometry == 'None':
+            sql += ' and geometry_id is null '
+        elif geometry == 'notNone':
+            sql += ' and geometry_id is not null '
+        else :
+            try:
+                if int(geometry)>0:
+                    sql += ' and geometry_id = ' + int(geometry)  + ' '
+            except ValueError:
+                print 'ValueError'
 
         order_by_sql = ' '
         if type == 'date' :
@@ -175,8 +188,9 @@ class NPost(generics.ListAPIView):
                 sql += 'order by numcom '
             else :
                 sql += 'order by numcom desc '
-
+        print sql
         cursor.execute(sql, params)
+
         row = cursor.fetchall()
         paginator = Paginator(row,2);
 
@@ -194,6 +208,7 @@ class NPost(generics.ListAPIView):
             temp_ret.append(entry)
 
         return Response(temp_ret)
+
 
     def parseToBoolean(self, str):
         if str == 'True':
