@@ -122,13 +122,17 @@
 
                   <button type="button" class="btn btn-xs"  ng-click="deleteBP(base_post);addBasePost = false  | trackEvent:'Usuń':'Button clicked':user ">
                        {% trans 'Usuń' %}
-                  </button>-->
+                  </button>
+            </div>-->
                 <br/>
             </div>
             <div ng-init="user='{{ user }}'"></div>
         </div>
         <div ng-class="{'media':true,'media-list':true, 'main-post':post.parent==null,'child-post':post.parent!=null}"
-              ng-repeat="post in tree | filter:search | orderBy:predicate:reverse | filter:{subscription:false} "
-                                            ng-include="'tree_item_renderer.html'">
+              ng-repeat="post in tree ">
+              <div ng-include="'tree_item_renderer.html'"></div>
+              <div ng-if="$last">
+                  <button ng-click="addMorePosts(post,tree)" class="btn btn-xs">Kolejne</button>
+              </div>
         </div>
     </div>
