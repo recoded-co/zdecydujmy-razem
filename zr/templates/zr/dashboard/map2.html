@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load isloged %}
+{% load url from future %}
 <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <style type="text/css">
 
@@ -191,9 +192,8 @@
             "weight": 5,
             "opacity": 0.65
         }
-
-
-        $.getJSON("{% url 'subjects_geojson' plan.id %}", function (data) {
+    
+    $.getJSON(""+{% url 'subjects_geojson' plan.id  %}, function (data) {
             basePlanLayer.addData(data);
             basePlanLayer.bringToBack();
         });
