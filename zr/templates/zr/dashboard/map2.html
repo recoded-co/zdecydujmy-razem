@@ -238,6 +238,22 @@
             map.remoteControlSwitch = undefined;
             map.remoteControlContent = undefined;
         }
+        map.invalidateSize();
+
+        $(document).ready(function(){
+            var resizeStart = false;
+            $('#resizible_jquery').resize(function(e){
+                if(!resizeStart){
+                    resizeStart=true;
+                }
+            });
+            $(document).mouseup(function(){
+                if(resizeStart){
+                    map.invalidateSize();
+                    resizeStart=false;
+                }
+            });
+        });
 
 
 {% if user|isloged %}
@@ -451,6 +467,7 @@
     }
 
     function addMarkers(data, callback){
+
         var count = data.length;
         var markers = L.markerClusterGroup({showCoverageOnHover: false,
                                             zoomToBoundsOnClick: true,
