@@ -192,8 +192,8 @@
             "weight": 5,
             "opacity": 0.65
         }
-    
-    $.getJSON(""+{% url 'subjects_geojson' plan.id  %}, function (data) {
+
+    $.getJSON("{% url 'subjects_geojson' plan.id  %}", function (data) {
             basePlanLayer.addData(data);
             basePlanLayer.bringToBack();
         });
@@ -221,18 +221,14 @@
         map.remoteControlSwitchOff = function(){
             console.log('map.remoteControlSwitchOff');
             if(map.remoteControlSwitch!=undefined && map.remoteControlContent!=undefined){
-                console.log('remote execute');
                 map.remoteControlSwitch.call(map.remoteControlContent);
                 map.remoteControlSwitch = undefined;
                 map.remoteControlContent = undefined;
             }
-            console.log('end 1');
         }
         map.setRemoteControlSwitch = function (content,method){
-            console.log('map.setRemoteControlSwitch');
             map.remoteControlSwitch = method;
             map.remoteControlContent = content;
-            console.log('end 2');
         }
         map.clearControlSwitch = function (){
             map.remoteControlSwitch = undefined;
@@ -253,6 +249,17 @@
                     resizeStart=false;
                 }
             });
+            map.on('popupopen', function(e) {
+              var marker = e.popup._source;
+              $('#map-search').toggle('slow');
+              $('.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control').toggle('slow');
+            });
+            map.on('popupclose', function(e) {
+              var marker = e.popup._source;
+              $('#map-search').toggle('slow');
+              $('.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control').toggle('slow');
+            });
+
         });
 
 
@@ -692,6 +699,10 @@
         var addPFilter = $("#div_apiList").scope().addPFilter;
         addPFilter(data);
         $("#div_apiList").scope().$apply();
+        $("#nav-tabs-menu").find('li:eq(0)').removeClass('active');
+        $("#nav-tabs-menu").find('li:eq(1)').removeClass('active');
+        $("#nav-tabs-menu").find('li:eq(2)').removeClass('active');
+        $("#nav-tabs-menu").find('li:eq(0)').addClass('active');
     }
     function deletePopoup(data){
         // get data from popup and send it to server

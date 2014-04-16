@@ -219,15 +219,6 @@ line-height: 1.5;
 
 }
 
-/* div.tab-content{
-    border: 1px solid #aaaaaa;
-}
-   border-left-style: outset;
-    border-bottom-style: outset;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    height:422px;
-}*/
 
 body{
     overflow: hidden;
@@ -1000,6 +991,7 @@ div.leaflet-bar a.leaflet-draw-draw-polygon
     position: absolute;
     right: 0px;
     bottom: -80px;
+    border: none ;
 }
 
 div.leaflet-bar a.leaflet-draw-draw-polygon:hover
@@ -1056,6 +1048,7 @@ div.leaflet-bar a.leaflet-draw-draw-marker
     position: absolute;
     right: 0px;
     bottom: -40px;
+    border-bottom: 1px solid #ccc;
 }  
 div.leaflet-bar a.leaflet-draw-draw-marker:hover
 {
@@ -1289,6 +1282,4 @@ textarea#popup_comment
  color: black;
  width: 143px !important;
  border-bottom: 1px solid #ccc;
-
 }
-/**/
