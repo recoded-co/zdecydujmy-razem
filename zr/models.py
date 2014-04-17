@@ -205,7 +205,7 @@ class WebNotification(models.Model):
     status = models.CharField(max_length=2, choices=STATUS)
 
 @receiver(post_save, sender=Post)
-def post_notifications(sender, instance, created, raw, using, update_fields, **kwargs):
+def post_notifications(sender, instance, **kwargs):
     root = instance.get_root()
     subscribed_users = root.subscriptions.all()
     if notification and len(subscribed_users) > 0:

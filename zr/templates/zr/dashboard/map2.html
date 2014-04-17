@@ -253,15 +253,24 @@
               var marker = e.popup._source;
               $('#map-search').toggle('slow');
               $('.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control').toggle('slow');
+              $('#popPublish').click(function(){
+                    layerWaitingRoom.pop();
+                    alert('publish on!');
+              });
             });
             map.on('popupclose', function(e) {
               var marker = e.popup._source;
               $('#map-search').toggle('slow');
               $('.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control').toggle('slow');
+
+              console.log('opoupclose');
+              if(layerWaitingRoom){
+                while(layerWaitingRoom.length > 0){
+                    map.removeLayer(layerWaitingRoom.pop());
+                    }
+              }
             });
-
         });
-
 
 {% if user|isloged %}
 // edit teodor @ katalpa
@@ -362,7 +371,7 @@
                                              "<input id='feature_id' type='hidden' value='"+"'/>" +
                                              "</div> " +
                                              "<hr>" +
-                                             "<button class='btnred btn btn-xs' onclick='addPopup(this);return false;' >publikuj</button>" +
+                                             "<button id='popPublish' class='btnred btn btn-xs' onclick='addPopup(this);return false;' >publikuj</button>" +
                                              "</div>");
                 map.openPopup(popup);
                 layerWaitingRoom.push(layer);
@@ -505,11 +514,6 @@
 
         map.on("click",function(e){
             trackEvent('map area','clicked',user,'','');
-            if(layerWaitingRoom){
-                while(layerWaitingRoom.length > 0){
-                    map.removeLayer(layerWaitingRoom.pop());
-                    }
-                }
             addPostFilter(undefined);
         });
 
