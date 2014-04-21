@@ -261,6 +261,7 @@
               var marker = e.popup._source;
               $('#map-search').toggle('slow');
               $('.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control').toggle('slow');
+
               if(layerWaitingRoom){
                 while(layerWaitingRoom.length > 0){
                     map.removeLayer(layerWaitingRoom.pop());
@@ -419,12 +420,6 @@
         });
 
         addGeometry(function(markers){
-            //vectors.events.register('featureadded','',featureAddedFunction);
-            /*
-            for (k in markers){
-                additionalLayers[k]=markers[k];
-                additionalLayers[k].bringToFront();
-            }*/
         });
 
     }
@@ -577,11 +572,11 @@
 
                 marker.on("click", function(e){
                     trackEvent('marker','marker clicked','','','');
-                    addPostFilter([{id:value.geo_id}]);
+                    addPostFilter([{id:value.id}]);
                 });
                 polygon.on('click', function(e){
                        trackEvent('polygon','clicked',user,'','');
-                       addPostFilter([{id:value.geo_id}]);
+                       addPostFilter([{id:value.id}]);
                 });
 
                 polygon_markers.addLayer(marker);
@@ -647,11 +642,11 @@
 
                     marker.on("click", function(e){
                         trackEvent('marker','marker clicked','','','');
-                        addPostFilter([{id:value.geo_id}]);
+                        addPostFilter([{id:value.id}]);
                     });
                     polyline.on('click', function(e){
                            trackEvent('polyline','clicked',user,'','');
-                           addPostFilter([{id:value.geo_id}]);
+                           addPostFilter([{id:value.id}]);
                     });
                     lines.addLayer(marker);
                 }
@@ -726,7 +721,8 @@
     }
     function addPopup(data){
         // get data from popup and send it to server
-        var temp = {}
+
+        var temp = {};
         var temp_geometry = $(data).parent().find('#geometry').val();
         if (temp_geometry.indexOf('POLYGON')!=-1){
             temp['poly']=temp_geometry;

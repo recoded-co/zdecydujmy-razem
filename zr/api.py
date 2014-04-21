@@ -149,7 +149,8 @@ class NPost(generics.ListAPIView):
         direction = self.parseToBoolean(request.QUERY_PARAMS.get('direction',True))
         round = int(request.QUERY_PARAMS.get('round',1))
 
-        print parent,geometry,type,direction,round
+        #print "parent,geometry,type,direction,round"
+        #print parent,geometry,type,direction,round
 
         cursor = connection.cursor()
         sql = 'SELECT id ,  \
@@ -170,10 +171,20 @@ class NPost(generics.ListAPIView):
             sql += ' and geometry_id is null '
         elif geometry == 'notNone':
             sql += ' and geometry_id is not null '
-        else :
+        elif len(geometry.split(',')) == 1:
             try:
                 if int(geometry)>0:
-                    sql += ' and geometry_id = ' + int(geometry)  + ' '
+                    sql += ' and geometry_id = ' + str(int(float(geometry)))  + ' '
+            except ValueError:
+                print 'ValueError'
+        elif len(geometry.split(','))>1:
+            try:
+                param_list = '('
+                for item in geometry.split(','):
+                    param_list+=str(int(float(item)))+','
+                param_list = param_list[:-1] + ')'
+
+                sql += ' and geometry_id in ' + param_list + ' '
             except ValueError:
                 print 'ValueError'
 
@@ -188,9 +199,9 @@ class NPost(generics.ListAPIView):
                 sql += 'order by numcom '
             else :
                 sql += 'order by numcom desc '
-        print sql
-        cursor.execute(sql, params)
+        #print sql
 
+        cursor.execute(sql, params)
         row = cursor.fetchall()
         paginator = Paginator(row,2);
 
@@ -199,16 +210,15 @@ class NPost(generics.ListAPIView):
         except EmptyPage:
             return Response([])
 
-        queryset = Post.objects.filter(pk__in = [item[0] for item in actuall_item_list])
-        serializer = PostSerializer(queryset, many=True)
-
         temp_ret = []
-        for entry, numcom in zip(serializer.data,actuall_item_list):
-            entry['numcom']=int(numcom[1])
-            temp_ret.append(entry)
+
+        for item in actuall_item_list:
+            temp = Post.objects.get(pk = item[0] )
+            temp_data = PostSerializer(temp)
+            temp_data.data['numcom'] = int(item[1])
+            temp_ret.append(temp_data.data)
 
         return Response(temp_ret)
-
 
     def parseToBoolean(self, str):
         if str == 'True':
