@@ -29,7 +29,7 @@ urlpatterns = patterns('',
 
     url(r'^settings/zipcode_check', ZipcodeCheckView.as_view(), name='zipcode_check'),
     url(r'^api/postfilter', PostsListView.as_view()),
-    url(r'^fff/$', change2, name='avatar_change2'),
+    url(r'^changeavatar/$', change2, name='avatar_change2'),
     url(r'^avatar/', include('avatar.urls')),
     url(r'^$', HomePageView.as_view(), name="home"),
 )

@@ -1283,3 +1283,8 @@ textarea#popup_comment
  width: 143px !important;
  border-bottom: 1px solid #ccc;
 }
+
+.nextPost{
+    float:right;
+    margin-bottom:13px;
+}

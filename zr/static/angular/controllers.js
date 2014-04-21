@@ -7,12 +7,8 @@ var zdControllers = angular.module('zdControllers', ['ngCookies']);
 
 zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope', 'zdServicesFactory','uploadService','Angularytics','postFactory',
   function($scope, $http, $cookies, $rootScope, zdServicesFactory, uploadService, Angularytics, postFactory ) {
-    console.log("starting scope");
-    $scope.$watch('showallposts', function() {
-            console.log("showallposts changed! "+$scope.showallposts);
-    });
 
-    Angularytics.trackPageView = function(url) {
+      Angularytics.trackPageView = function(url) {
         $scope.url = url;
     }
 
@@ -23,13 +19,19 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
         }
     }
 
-    var postHandler = function(servHandler,geo){
+    var postHandler = function(servHandler){
         var servHandler = servHandler;
         var type = 'date';
         var direction = 'True';
         var brPostState = {'None': postState() }
-        var geometry = geo;
+        var geometry = 'None';
         return{
+            setGeoParam: function(item){
+                geometry = item;
+            },
+            cleanParams: function(){
+                brPostState = {'None': postState() }
+            },
             sortByDate: function(){
                 type = 'date';
             },
@@ -44,6 +46,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
             },
             // params: parent_id = number or 'None' if root level
             getPostList: function(parent_id, callback){
+
                 if( brPostState[parent_id] === undefined){
                     brPostState[parent_id] = postState();
                 }
@@ -56,12 +59,19 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
                     direction:direction}).$promise.then( function (data){
                         if(!brPostState[parent_id].reachEnd)
                             callback(data);
+
                         if(data.length<2){
                             brPostState[parent_id].reachEnd = true;
                         } else {
                             brPostState[parent_id].round++;
                         }
                     });
+            },
+            postReachEnd: function(parent_id){
+                if(brPostState[parent_id] !== undefined)
+                    return brPostState[parent_id].reachEnd;
+                else
+                    return true;
             }
         }
     }
@@ -70,53 +80,75 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
 
     $scope.$watch('url', function() {
         if($scope.url=='/all'){
-            tree = postHandler(postFactory.newPostAll,'None');
+            tree = postHandler(postFactory.newPostAll);
+            tree.setGeoParam('None');
         } else if($scope.url=='/details'){
-            tree = postHandler(postFactory.newPostAll,'notNone');
+            tree = postHandler(postFactory.newPostAll);
+            tree.setGeoParam('notNone');
         } else if($scope.url=='/subscriptions'){
             $scope.tree = [];
         }
         tree.getPostList('None',function(data){
                $scope.tree = data;
         });
+        $scope.endTree = tree.postReachEnd('None');
     });
-    tree = postHandler(postFactory.newPostAll,'notNone');
+    tree = postHandler(postFactory.newPostAll);
+    tree.setGeoParam('notNone');
 
     $scope.addMorePosts = function(post,root) {
-        console.log(root);
         if(post.parent == null){
             tree.getPostList('None',function(data){
                 $scope.tree = $scope.tree.concat(data);
             });
+            $scope.endTree = tree.postReachEnd('None');
         }else{
             tree.getPostList(post.parent,function(data){
                 root.nodes = root.nodes.concat(data);
             });
+            post.endTree = tree.postReachEnd(post.parent);
         }
+    };
+    $scope.setDateSorting = function(temp){
+        tree.cleanParams();
+        tree.sortByDate();
+        tree.setDirection(temp);
+        tree.getPostList('None',function(data){
+            $scope.tree = data;
+        });
+        $scope.endTree = tree.postReachEnd('None');
+    };
+    $scope.setCommentsSorting = function(temp){
+        tree.cleanParams();
+        tree.sortByNumComments();
+        tree.setDirection(temp);
+        tree.getPostList('None',function(data){
+            $scope.tree = data;
+        });
+        $scope.endTree = tree.postReachEnd('None');
     };
 
     $scope.showOneDown = function(data){
-        console.log("showOneDown:");
-        console.log(data);
-        if(data.nodes === undefined){
-            console.log('1');
-            tree.getPostList(data.id,function(post_list){
-                console.log(post_list);
-                data.nodes = []
-                data.nodes = data.nodes.concat(post_list);
-            });
-        } else if(data.nodes.length < 2){
-            console.log('2');
-            tree.getPostList(data.id,function(post_list){
-                data.nodes = []
-                data.nodes = data.nodes.concat(post_list);
-            });
-        }
+
         if(data.rozwin==undefined || data.rozwin==false){
             data.rozwin=true;
+            if(data.nodes === undefined){
+                tree.getPostList(data.id,function(post_list){
+                    data.nodes = []
+                    data.nodes = data.nodes.concat(post_list);
+                    });
+            } else if(data.nodes.length < 2){
+                tree.getPostList(data.id,function(post_list){
+                    data.nodes = []
+                    data.nodes = data.nodes.concat(post_list);
+                });
+            }
         } else {
             data.rozwin=false;
         }
+
+
+
     };
 
     $scope.predicate='date';
@@ -190,7 +222,6 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
             $scope.showOneDown(data);
     };
     $scope.showAll = function(){
-        console.log("showAll()");
         $scope.showallposts = true;
         $scope.filterGeoData=[];
 
@@ -267,12 +298,39 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
 
 
     $scope.addPFilter = function(data) {
+
         $scope.filterGeoData = new Array();
         if(data!==undefined){
-            $scope.showallposts = false;
-            for( var item in data ){
-                $scope.filterGeoData.push(data[item].id);
-            };
+            //$scope.showallposts = false;
+
+            if(data && data.length == 1){
+               tree = postHandler(postFactory.newPostAll);
+               tree.setGeoParam(''+data[0].id);
+               tree.cleanParams();
+               tree.getPostList('None',function(data){
+                    $scope.tree = data;
+               });
+               $scope.endTree = tree.postReachEnd('None');
+            } else if(data && data.length > 1){
+               tree = postHandler(postFactory.newPostAll);
+               var geo_params = '';
+               for(var item in data){
+                   if(item==0){
+                   }else{
+                       geo_params +=',';
+                   }
+
+                   geo_params +=''+data[item].geometry;
+               }
+               tree.setGeoParam(''+geo_params);
+               tree.cleanParams();
+               tree.getPostList('None',function(data){
+                    $scope.tree = data;
+               });
+               $scope.endTree = tree.postReachEnd('None');
+
+            }
+
         }else{
             $scope.showallposts = true;
             $scope.filterGeoData=[];

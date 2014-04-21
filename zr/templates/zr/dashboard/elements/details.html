@@ -15,7 +15,7 @@
 
             <button ng-hide="!showallposts" id="date_button" class="btn btn-xs"
                   ng-int="rev_d=true;"
-                  ng-click="predicate = 'date'; reverse=rev_d; rev_d=!rev_d;data_arrow= !data_arrow |trackEvent:'button Data':'Button clicked':user:'':'' ">
+                  ng-click="reverse=rev_d; rev_d=!rev_d;data_arrow= !data_arrow;setDateSorting(rev_d) |trackEvent:'button Data':'Button clicked':user:'':'' ">
               {% trans 'Data' %}
                 <span class="glyphicon glyphicon-arrow-down" ng-hide="data_arrow"></span>
                 <span class="glyphicon glyphicon-arrow-up" ng-show="data_arrow"></span>
@@ -23,7 +23,7 @@
 
             <button ng-hide="!showallposts" class="btn btn-xs"
                       ng-int="rev_nc=true;numcom_arrow=true;"
-                      ng-click="predicate = 'numcom'; reverse=!rev_nc; rev_nc=!rev_nc;numcom_arrow=!numcom_arrow  | trackEvent:'Ilość komentarzy':'Button clicked':user ">
+                      ng-click=" reverse=!rev_nc; rev_nc=!rev_nc;numcom_arrow=!numcom_arrow;setCommentsSorting(rev_nc)  | trackEvent:'Ilość komentarzy':'Button clicked':user ">
                   {% trans 'Ilość komentarzy' %}
                     <span class="glyphicon glyphicon-arrow-down" ng-hide="numcom_arrow"></span>
                     <span class="glyphicon glyphicon-arrow-up" ng-show="numcom_arrow"></span>
@@ -66,9 +66,25 @@
          ng-class="{'media':true,'media-list':true, 'main-post':post.parent==null,'child-post':post.parent!=null}"
          ng-repeat="post in tree ">
         <div ng-include="'tree_item_renderer.html'"></div>
-        <div ng-if="$last">
-            <button ng-click="addMorePosts(post,tree)" class="btn btn-xs">Kolejne</button>
+
+        <div ng-if="$last && !endTree" ng-class="{'tab-post':true, 'dotedline':post.parent==null}">
+            <ul>
+                <li>
+                </li>
+                <li>
+                    <div class="media-body dropbox new_margin"> <!--   style="margin-left: 0px;margin-right: 0px;"  -->
+                        <div ng-class="{'media':true, 'post':post.parent==null,'sub_post':post.parent!=null}">
+                            <div> <!-- style="display: inline-block; width: 100%;"-->
+                                <span class="nextPost">
+                                    <button ng-click="addMorePosts(post,tree)" class="btn btn-xs">Następne komentarze</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
         </div>
+
     </div>
   </div>
 </div>

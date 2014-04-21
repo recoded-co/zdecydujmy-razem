@@ -219,7 +219,6 @@
 
         //remote control switch functions
         map.remoteControlSwitchOff = function(){
-            console.log('map.remoteControlSwitchOff');
             if(map.remoteControlSwitch!=undefined && map.remoteControlContent!=undefined){
                 map.remoteControlSwitch.call(map.remoteControlContent);
                 map.remoteControlSwitch = undefined;
@@ -263,7 +262,6 @@
               $('#map-search').toggle('slow');
               $('.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control').toggle('slow');
 
-              console.log('opoupclose');
               if(layerWaitingRoom){
                 while(layerWaitingRoom.length > 0){
                     map.removeLayer(layerWaitingRoom.pop());
@@ -316,7 +314,6 @@
 
 {% endif %}
 		map.on('draw:created', function (e) {
-            console.log(e);
 			var type = e.layerType,
                     layer = e.layer;
 
@@ -379,7 +376,6 @@
             }
 
 		}).on('draw:drawstart',function(e){
-            console.log(e);
             var type = e.layerType;
             map.remoteControlSwitchOff();
 
@@ -403,12 +399,6 @@
         });
 
         addGeometry(function(markers){
-            //vectors.events.register('featureadded','',featureAddedFunction);
-            /*
-            for (k in markers){
-                additionalLayers[k]=markers[k];
-                additionalLayers[k].bringToFront();
-            }*/
         });
 
     }
@@ -553,11 +543,11 @@
 
                 marker.on("click", function(e){
                     trackEvent('marker','marker clicked','','','');
-                    addPostFilter([{id:value.geo_id}]);
+                    addPostFilter([{id:value.id}]);
                 });
                 polygon.on('click', function(e){
                        trackEvent('polygon','clicked',user,'','');
-                       addPostFilter([{id:value.geo_id}]);
+                       addPostFilter([{id:value.id}]);
                 });
 
                 polygon_markers.addLayer(marker);
@@ -577,7 +567,7 @@
                 marker.on('click', function(e){
                        //postLightOn(value.id);
                        //trackEvent('point','clicked',user,'','');
-                       addPostFilter([{id:value.geo_id}]);
+                       addPostFilter([{id:value.id}]);
                 });
                 markers.addLayer(marker);
             }
@@ -650,7 +640,7 @@
     }
     function addPopup(data){
         // get data from popup and send it to server
-        console.log(data);
+
         var temp = {}
         var temp_geometry = $(data).parent().find('#geometry').val();
         if (temp_geometry.indexOf('POLYGON')!=-1){
@@ -699,7 +689,6 @@
     }
 
     function addPostFilter(data){
-        console.log("addPostFilter");
         var addPFilter = $("#div_apiList").scope().addPFilter;
         addPFilter(data);
         $("#div_apiList").scope().$apply();
