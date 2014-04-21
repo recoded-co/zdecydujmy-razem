@@ -19,12 +19,13 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
         }
     }
 
-    var postHandler = function(servHandler){
+    var postHandler = function(servHandler,plan_id){
         var servHandler = servHandler;
         var type = 'date';
         var direction = 'True';
         var brPostState = {'None': postState() }
         var geometry = 'None';
+        var plan_id= plan_id;
         return{
             setGeoParam: function(item){
                 geometry = item;
@@ -55,6 +56,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
                     type:type,
                     round:''+brPostState[parent_id].round,
                     format:'json',
+                    plan_id:plan_id,
                     parent:parent_id,
                     direction:direction}).$promise.then( function (data){
                         if(!brPostState[parent_id].reachEnd)
@@ -80,10 +82,10 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
 
     $scope.$watch('url', function() {
         if($scope.url=='/all'){
-            tree = postHandler(postFactory.newPostAll);
+            tree = postHandler(postFactory.newPostAll,configuration.getPlanId());
             tree.setGeoParam('None');
         } else if($scope.url=='/details'){
-            tree = postHandler(postFactory.newPostAll);
+            tree = postHandler(postFactory.newPostAll,configuration.getPlanId());
             tree.setGeoParam('notNone');
         } else if($scope.url=='/subscriptions'){
             $scope.tree = [];
@@ -93,7 +95,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
         });
         $scope.endTree = tree.postReachEnd('None');
     });
-    tree = postHandler(postFactory.newPostAll);
+    tree = postHandler(postFactory.newPostAll,configuration.getPlanId());
     tree.setGeoParam('notNone');
 
     $scope.addMorePosts = function(post,root) {
@@ -304,7 +306,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
             //$scope.showallposts = false;
 
             if(data && data.length == 1){
-               tree = postHandler(postFactory.newPostAll);
+               tree = postHandler(postFactory.newPostAll,configuration.getPlanId());
                tree.setGeoParam(''+data[0].id);
                tree.cleanParams();
                tree.getPostList('None',function(data){
@@ -312,7 +314,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
                });
                $scope.endTree = tree.postReachEnd('None');
             } else if(data && data.length > 1){
-               tree = postHandler(postFactory.newPostAll);
+               tree = postHandler(postFactory.newPostAll,configuration.getPlanId());
                var geo_params = '';
                for(var item in data){
                    if(item==0){

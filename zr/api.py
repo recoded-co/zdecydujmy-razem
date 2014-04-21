@@ -148,6 +148,8 @@ class NPost(generics.ListAPIView):
         type = request.QUERY_PARAMS.get('type','date')
         direction = self.parseToBoolean(request.QUERY_PARAMS.get('direction',True))
         round = int(request.QUERY_PARAMS.get('round',1))
+        plan_id = request.QUERY_PARAMS.get('plan_id','None')
+        #TODO : plan_id add into sql query.
 
         #print "parent,geometry,type,direction,round"
         #print parent,geometry,type,direction,round
@@ -166,6 +168,11 @@ class NPost(generics.ListAPIView):
             params.append(parent)
         else :
             sql += 'where parent_id is null '
+
+        if plan_id == 'None':
+            sql += ' and plan_id is null '
+        elif int(float(plan_id))>=0:
+            sql += ' and plan_id = ' + str(int(float(plan_id)))
 
         if geometry == 'None':
             sql += ' and geometry_id is null '
