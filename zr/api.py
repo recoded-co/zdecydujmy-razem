@@ -137,6 +137,84 @@ class PostViewSet(viewsets.ModelViewSet):
 
 router.register(r'posts', PostViewSet)
 
+class NSubscribed(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def list(self, request, *args, **kwargs):
+
+        post_subscription_list = []
+        if self.request.user.is_authenticated():
+            post_subscription_list = PostSubscription.objects.filter(user=self.request.user)
+            if len(post_subscription_list)==0:
+                return Response([])
+        else:
+            return Response([])
+
+        type = request.QUERY_PARAMS.get('type','date')
+        direction = self.parseToBoolean(request.QUERY_PARAMS.get('direction',True))
+        round = int(request.QUERY_PARAMS.get('round',1))
+        plan_id = request.QUERY_PARAMS.get('plan_id','None')
+        parent = request.QUERY_PARAMS.get('parent','None')
+        
+        cursor = connection.cursor()
+        sql = 'SELECT id ,  \
+               (select count(*) from zr_post where parent_id = a.id) as numcom, \
+               geometry_id \
+               FROM zr_post as a '
+
+        parent_sql = ''
+        params = []
+
+        if plan_id == 'None':
+            sql += 'where plan_id is null '
+        elif int(float(plan_id))>=0:
+            sql += 'where plan_id = ' + str(int(float(plan_id)))
+
+        if len(post_subscription_list) > 0 and parent == 'None':
+            sql += ' and id in ' + str(tuple([i.post.id for i in post_subscription_list]))
+        elif parent != 'None':
+            sql += 'and parent_id = %s '
+            params.append(parent)
+
+        order_by_sql = ' '
+        if type == 'date' :
+            if direction :
+                sql += 'order by date '
+            else :
+                sql += 'order by date desc '
+        elif type == 'com':
+            if direction :
+                sql += 'order by numcom '
+            else :
+                sql += 'order by numcom desc '
+        print sql
+
+        cursor.execute(sql, params)
+        row = cursor.fetchall()
+        paginator = Paginator(row,5);
+
+        try:
+            actuall_item_list = paginator.page(round).object_list
+        except EmptyPage:
+            return Response([])
+
+        temp_ret = []
+
+        for item in actuall_item_list:
+            temp = Post.objects.get(pk = item[0] )
+            temp_data = PostSerializer(temp)
+            temp_data.data['numcom'] = int(item[1])
+            temp_ret.append(temp_data.data)
+
+        return Response(temp_ret)
+
+    def parseToBoolean(self, str):
+        if str == 'True':
+            return True
+        else :
+            return False
+
 class NPost(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -172,7 +250,8 @@ class NPost(generics.ListAPIView):
         if plan_id == 'None':
             sql += ' and plan_id is null '
         elif int(float(plan_id))>=0:
-            sql += ' and plan_id = ' + str(int(float(plan_id)))
+            sql += ' and plan_id = %s '
+            params.append(str(int(float(plan_id))))
 
         if geometry == 'None':
             sql += ' and geometry_id is null '
@@ -181,17 +260,15 @@ class NPost(generics.ListAPIView):
         elif len(geometry.split(',')) == 1:
             try:
                 if int(geometry)>0:
-                    sql += ' and geometry_id = ' + str(int(float(geometry)))  + ' '
+                    sql += ' and geometry_id = %s '
+                    params.append(str(int(float(geometry))))
             except ValueError:
                 print 'ValueError'
         elif len(geometry.split(','))>1:
             try:
-                param_list = '('
-                for item in geometry.split(','):
-                    param_list+=str(int(float(item)))+','
-                param_list = param_list[:-1] + ')'
-
-                sql += ' and geometry_id in ' + param_list + ' '
+                param_list = str(tuple([i for i in geometry.split(',')]))
+                sql += ' and geometry_id in %s '
+                params.append(param_list)
             except ValueError:
                 print 'ValueError'
 
@@ -210,7 +287,7 @@ class NPost(generics.ListAPIView):
 
         cursor.execute(sql, params)
         row = cursor.fetchall()
-        paginator = Paginator(row,2);
+        paginator = Paginator(row,5);
 
         try:
             actuall_item_list = paginator.page(round).object_list
