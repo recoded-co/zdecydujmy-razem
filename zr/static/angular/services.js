@@ -36,6 +36,8 @@ phonecatServices.factory('postFactory', ['$resource',
   function($resource){
     return {
         newPostAll: $resource('/zr/api/npost/', {type:'date',round:'1',format:'json',parent:'None', direction:'False', geometry: 'None', plan_id:'None'}, {
+          }),
+        newSubscribedPosts: $resource('/zr/api/nspost/', {type:'date',round:'1',format:'json',direction:'False', plan_id:'None', parent:'None'}, {
           })
         /*,
         newPostFallow: $resource('/zr/api/npost/', {type:'date',round:'1',format:'json',parent:'None', direction:'True'}, {

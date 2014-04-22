@@ -62,7 +62,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
                         if(!brPostState[parent_id].reachEnd)
                             callback(data);
 
-                        if(data.length<2){
+                        if(data.length<5){
                             brPostState[parent_id].reachEnd = true;
                         } else {
                             brPostState[parent_id].round++;
@@ -88,7 +88,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
             tree = postHandler(postFactory.newPostAll,configuration.getPlanId());
             tree.setGeoParam('notNone');
         } else if($scope.url=='/subscriptions'){
-            $scope.tree = [];
+            tree = postHandler(postFactory.newSubscribedPosts,configuration.getPlanId());
         }
         tree.getPostList('None',function(data){
                $scope.tree = data;
@@ -139,7 +139,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
                     data.nodes = []
                     data.nodes = data.nodes.concat(post_list);
                     });
-            } else if(data.nodes.length < 2){
+            } else if(data.nodes.length < 5){
                 tree.getPostList(data.id,function(post_list){
                     data.nodes = []
                     data.nodes = data.nodes.concat(post_list);
@@ -148,9 +148,6 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
         } else {
             data.rozwin=false;
         }
-
-
-
     };
 
     $scope.predicate='date';
