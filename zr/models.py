@@ -24,6 +24,7 @@ class Geometry(models.Model):
     name = models.CharField(max_length=50)
     poly = models.PolygonField(null=True, blank=True)
     point = models.PointField(null=True, blank=True)
+    line = models.LineStringField(null=True, blank=True)
     objects = models.GeoManager()
 
     def geoElement(self):
@@ -32,6 +33,8 @@ class Geometry(models.Model):
             return wkt.write(self.poly)
         elif self.point:
             return wkt.write(self.point)
+        elif self.line:
+            return wkt.write(self.line)
         else:
             return None
 

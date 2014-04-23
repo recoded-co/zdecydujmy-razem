@@ -219,7 +219,6 @@
 
         //remote control switch functions
         map.remoteControlSwitchOff = function(){
-            console.log('map.remoteControlSwitchOff');
             if(map.remoteControlSwitch!=undefined && map.remoteControlContent!=undefined){
                 map.remoteControlSwitch.call(map.remoteControlContent);
                 map.remoteControlSwitch = undefined;
@@ -254,7 +253,7 @@
               $('#map-search').toggle('slow');
               $('.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control').toggle('slow');
               $('#popPublish').click(function(){
-                    layerWaitingRoom.pop();
+                    map.addLayer(layerWaitingRoom.pop());
                     alert('publish on!');
               });
             });
@@ -262,8 +261,6 @@
               var marker = e.popup._source;
               $('#map-search').toggle('slow');
               $('.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control').toggle('slow');
-
-              console.log('opoupclose');
               if(layerWaitingRoom){
                 while(layerWaitingRoom.length > 0){
                     map.removeLayer(layerWaitingRoom.pop());
@@ -289,7 +286,18 @@
 						color: '#0033ff'//'#bfadf55',
 					}
                 },
-                polyline: false,
+                polyline: {
+					allowIntersection: false,
+					showArea: true,
+					drawError: {
+						color: '#b00b00',
+						timeout: 1000,
+                        message: '<strong>Błąd<strong>'
+					},
+					shapeOptions: {
+						color: '#0033ff'//'#bfadf55',
+					}
+                },
                 rectangle: true,
                 circle: false
 			},
@@ -316,7 +324,6 @@
 
 {% endif %}
 		map.on('draw:created', function (e) {
-            console.log(e);
 			var type = e.layerType,
                     layer = e.layer;
 
@@ -354,8 +361,14 @@
                 } else if (type === 'polygon'){
                     trackEvent('polygon create','clicked',user,'','');
                     popup_location = e.layer._latlngs[0];
-                    wkt.fromObject(L.polygon(e.layer._latlngs))
+                    wkt.fromObject(L.polygon(e.layer._latlngs));
+
+                } else if (type === 'polyline'){
+                    trackEvent('polyline create','clicked',user,'','');
+                    popup_location = e.layer._latlngs[0];
+                    wkt.fromObject(L.polyline(e.layer._latlngs));
                 }
+
 
                 //console.log(wkt.components);
                 var wkt_string = wkt.write();
@@ -379,7 +392,6 @@
             }
 
 		}).on('draw:drawstart',function(e){
-            console.log(e);
             var type = e.layerType;
             map.remoteControlSwitchOff();
 
@@ -389,6 +401,8 @@
                 L.DomUtil.addClass(e.target._container, 'leaflet-control-marker-on');
             } else if(type==='polygon'){
                 L.DomUtil.addClass(e.target._container, 'leaflet-control-polygon-on');
+            } else if(type==='polyline'){
+                L.DomUtil.addClass(e.target._container, 'leaflet-control-polyline-on');
             }
         }).on('draw:drawstop',function(e){
             var type = e.layerType;
@@ -399,6 +413,8 @@
                 L.DomUtil.removeClass(e.target._container, 'leaflet-control-marker-on');
             } else if(type==='polygon'){
                 L.DomUtil.removeClass(e.target._container, 'leaflet-control-polygon-on');
+            } else if(type==='polyline'){
+                L.DomUtil.removeClass(e.target._container, 'leaflet-control-polyline-on');
             }
         });
 
@@ -489,6 +505,10 @@
                                             zoomToBoundsOnClick: true,
                                             spiderfyOnMaxZoom: true,
                                             removeOutsideVisibleBounds: true});
+        var lines = L.markerClusterGroup({showCoverageOnHover: false,
+                                            zoomToBoundsOnClick: true,
+                                            spiderfyOnMaxZoom: true,
+                                            removeOutsideVisibleBounds: true});
         var polygon_markers = L.markerClusterGroup({
                                             showCoverageOnHover: true,
                                             zoomToBoundsOnClick: true,
@@ -519,8 +539,12 @@
 
 		$.each(data,function(key, value){
 			var wkt = new Wkt.Wkt();
+            //console.log(value);
             wkt.read(value.geoelement);
             var components = wkt.components[0];
+
+            //console.log('components');
+            //console.log(components);
 
             if (Array.isArray(components)){
                 var latlngs = new Array();
@@ -562,34 +586,86 @@
 
                 polygon_markers.addLayer(marker);
             } else{
-                var xy = components;
-                var latlng = L.latLng(xy.y, xy.x);
-                var marker = L.marker(latlng, {});
-                marker.on('mouseover', function(){
 
-                    //postLightOn(value.id);
+                type = value.geoelement.match(/[A-Z]+/);
 
-                    marker.on('mouseout', function(){
-                       //postLightOff(value.id);
-                       map.removeLayer(polygon);
+                if(type == 'POINT'){
+                    var xy = components;
+                    var latlng = L.latLng(xy.y, xy.x);
+                    var marker = L.marker(latlng, {});
+                    marker.on('mouseover', function(){
+
+                        marker.on('mouseout', function(){
+                           //postLightOff(value.id);
+                           map.removeLayer(polygon);
+                        });
                     });
-                });
-                marker.on('click', function(e){
-                       //postLightOn(value.id);
-                       //trackEvent('point','clicked',user,'','');
-                       addPostFilter([{id:value.geo_id}]);
-                });
-                markers.addLayer(marker);
+                    marker.on('click', function(e){
+                           //postLightOn(value.id);
+                           //trackEvent('point','clicked',user,'','');
+                           addPostFilter([{id:value.geo_id}]);
+                    });
+                    markers.addLayer(marker);
+
+                } else if( type == 'LINESTRING' ){
+                    var point_list = new Array();
+                    var temporaryPoint = {};
+                    var tempStr = value.geoelement.split(' ');
+                    var finallyList = new Array();
+                    var finallyListOb = new Array();
+
+                    for(var item in tempStr ){
+                        if(tempStr[item].match(/\d+[.]+\d+/)){
+                            point_list.push(tempStr[item].match(/\d+[.]+\d+/));
+                        }
+                    }
+
+                    for(var item=0; item<point_list.length; item++){
+                        var x = point_list[item++][0];
+                        var y = point_list[item][0];
+                        finallyListOb.push({x:parseFloat(x),y:parseFloat(y)});
+                        finallyList.push(L.latLng(parseFloat(y), parseFloat(x)));
+                    }
+
+                    var polyline = L.polyline(finallyList);
+                    var latlng = L.latLng(finallyListOb[0].y, finallyListOb[0].x);
+                    var baloonMarker = L.icon({
+                         iconUrl: '/static/images/balonik_1.png',
+                         iconSize:     [30, 26], // size of the icon
+                         iconAnchor:   [0, 26], // point of the icon which will correspond to marker's location
+                         popupAnchor:  [-3, -26] // point from which the popup should open relative to the
+                        });
+
+                    var marker = L.marker(latlng, {icon: baloonMarker});
+
+                    marker.on('mouseover', function(){
+                        polyline.addTo(map);
+                    });
+                    marker.on('mouseout', function(){
+                        map.removeLayer(polyline);
+                    });
+
+                    marker.on("click", function(e){
+                        trackEvent('marker','marker clicked','','','');
+                        addPostFilter([{id:value.geo_id}]);
+                    });
+                    polyline.on('click', function(e){
+                           trackEvent('polyline','clicked',user,'','');
+                           addPostFilter([{id:value.geo_id}]);
+                    });
+                    lines.addLayer(marker);
+                }
             }
             if(!--count){
                 map.addLayer(markers);
                 map.addLayer(polygon_markers);
+                map.addLayer(lines);
                 if (callback != undefined){
                     callback();
                 }
             }
 		});
-        callback({'punkty':markers, 'poligony':polygon_markers});
+        callback({'punkty':markers, 'poligony':polygon_markers, 'lines':lines});
     }
 
     function clearGeoSearchFilter(){
@@ -650,13 +726,14 @@
     }
     function addPopup(data){
         // get data from popup and send it to server
-        console.log(data);
         var temp = {}
         var temp_geometry = $(data).parent().find('#geometry').val();
         if (temp_geometry.indexOf('POLYGON')!=-1){
             temp['poly']=temp_geometry;
         } else if (temp_geometry.indexOf('POINT')!=-1){
             temp['point']=temp_geometry;
+        } else if (temp_geometry.indexOf('LINESTRING')!=-1){
+            temp['line']=temp_geometry;
         } else {
             alert('Error: no poly or point data detected!!');
         }
@@ -699,7 +776,6 @@
     }
 
     function addPostFilter(data){
-        console.log("addPostFilter");
         var addPFilter = $("#div_apiList").scope().addPFilter;
         addPFilter(data);
         $("#div_apiList").scope().$apply();

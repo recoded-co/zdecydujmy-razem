@@ -43,7 +43,7 @@ class GeometrySerializer(ModelSerializer):
 
     class Meta:
         model = Geometry
-        fields = ('id', 'name', 'geoelement', 'geo_id', 'poly', 'point')
+        fields = ('id', 'name', 'geoelement', 'geo_id', 'poly', 'point','line')
 
 
 class GeometryViewSet(viewsets.ModelViewSet):

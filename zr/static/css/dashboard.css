@@ -987,11 +987,10 @@ div.leaflet-bar a.leaflet-draw-draw-polygon
     background-color: rgba(0,0,0,0.6);
     width: 40px;
     height: 40px;
-
     position: absolute;
     right: 0px;
     bottom: -80px;
-    border: none ;
+    border-bottom: 1px solid #ccc;
 }
 
 div.leaflet-bar a.leaflet-draw-draw-polygon:hover
@@ -1008,15 +1007,37 @@ div.leaflet-bar a.leaflet-draw-draw-polygon:hover
 }
 div.leaflet-bar a.leaflet-draw-draw-polyline
 {
- 
   background-image: url('/static/images/planuj-07.png');
   background-size: 40px 40px;
   background-position: 0px;
   background-color: rgba(0,0,0,0.6);
   width: 40px;
   height: 40px;
-
+  position: absolute;
+  right: 0px;
+  bottom: -120px;
+  border: none !important;
 }
+
+div.leaflet-bar a.leaflet-draw-draw-polyline:hover
+{
+  background-image: url('/static/images/planuj-07.png'),url('/static/images/planuj-11.png');
+  background-size: 40px 40px, 47px 40px;
+  background-position: 7px 0px,0px 0px;
+  width: 47px;
+  background-color: transparent;
+  border: none;
+}
+div.leaflet-control-polyline-on a.leaflet-draw-draw-polyline
+{
+    background-image: url('/static/images/planuj-07.png'),url('/static/images/planuj-11.png') !important;
+    background-size: 40px 40px, 47px 40px !important;
+    background-position: 7px 0px,0px 0px !important;
+    width: 47px !important;
+    background-color: transparent !important;
+    border: none !important;
+}
+
 div.leaflet-control-polygon-on a.leaflet-draw-draw-polygon
 {
     background-image: url('/static/images/planuj-05.png'),url('/static/images/planuj-11.png') !important;
@@ -1026,16 +1047,7 @@ div.leaflet-control-polygon-on a.leaflet-draw-draw-polygon
     background-color: transparent !important;
     border: none !important;
 }
-div.leaflet-bar a.leaflet-draw-draw-polyline:hover
-{
- 
-  background-image: url('/static/images/planuj-07.png'),url('/static/images/planuj-11.png');
-  background-size: 40px 40px, 47px 40px;
-  background-position: 7px 0px,0px 0px;
-  width: 47px;
-  background-color: transparent;
-  border: none;
-}
+
 div.leaflet-bar a.leaflet-draw-draw-marker
 {
   

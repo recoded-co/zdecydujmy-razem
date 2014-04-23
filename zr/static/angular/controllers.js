@@ -7,7 +7,6 @@ var zdControllers = angular.module('zdControllers', ['ngCookies']);
 
 zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', 'zdServicesFactory','uploadService','Angularytics',
   function($scope,$http,$cookies, $rootScope,zdServicesFactory, uploadService, Angularytics ) {
-    console.log("starting scope");
     $scope.$watch('showallposts', function() {
             console.log("showallposts changed! "+$scope.showallposts);
     });
@@ -96,8 +95,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
             $scope.showOneDown(data);
     };
     $scope.showOneDown = function(data){
-        console.log("showOneDown:");
-        console.log(data);
         if(data.rozwin==undefined || data.rozwin==false){
             data.rozwin=true;
         } else {
@@ -105,7 +102,6 @@ zdControllers.controller('apiList', ['$scope','$http','$cookies','$rootScope', '
         }
     };
     $scope.showAll = function(){
-        console.log("showAll()");
         $scope.showallposts = true;
         $scope.filterGeoData=[];
 

@@ -213,12 +213,15 @@ L.Control.MeasurePolygon = L.Control.extend({
 	_updateTooltipDistance: function() {
 
         var totalRound = this._polygonArea(this._areaPoints);
+        //console.log(this._areaPoints);
+        //console.log("" + totalRound);
         var text ="";
-        if(this._layerPaintPath.intersects()){
-            text = '<div class="leaflet-measure-tooltip-total">Niepoprawny wielokąt</div>';
-        }else {
+        //TODO: Fix intersection
+        //if(this._layerPaintPath.intersects()){
+        //    text = '<div class="leaflet-measure-tooltip-total">Niepoprawny wielokąt</div>';
+        //}else {
             text = '<div class="leaflet-measure-tooltip-total">' + totalRound + '</div>';
-        }
+        //}
 		this._tooltip._icon.innerHTML = text;
 	},
     _polygonArea: function(list){
@@ -227,8 +230,6 @@ L.Control.MeasurePolygon = L.Control.extend({
         return L.GeometryUtil.readableArea(area, true);
         }
 });
-
-
 
 L.Map.mergeOptions({
 	measurePolygonControl: false
