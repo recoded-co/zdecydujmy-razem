@@ -131,7 +131,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
     };
 
     $scope.showOneDown = function(data){
-
+        console.log('showOneDown');
         if(data.rozwin==undefined || data.rozwin==false){
             data.rozwin=true;
             if(data.nodes === undefined){
@@ -221,13 +221,6 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
             $scope.showOneDown(data);
     };
 
-    $scope.showOneDown = function(data){
-        if(data.rozwin==undefined || data.rozwin==false){
-            data.rozwin=true;
-        } else {
-            data.rozwin=false;
-        }
-    };
 
     $scope.showAll = function(){
         $scope.showallposts = true;
