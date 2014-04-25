@@ -46,7 +46,7 @@
             </div>
         </span>
     </div>
-
+aaaaaaaaaaaaaaaaaaaaaaaaaaa
 
     <!--
         <button type="button" class="btn btn-xs"  ng-click="addBasePost = true  | trackEvent:'Dodaj komentarz':'Button clicked':user ">
@@ -103,7 +103,9 @@
             </textarea>
             <div class="allign_right">
                 <div class="fileinput fileinput-new" data-provides="fileinput">
-                  <button type="button" class="btn btn-xs btn-file btnwhite btngrey"><span class="glyphicon glyphicon-paperclip"></span><input name="..." type="file" value="{[{ post.id }]}" multiple file-change /></button>
+                  <button type="button" class="btn btn-xs btn-file btnwhite btngrey">
+                      <span class="glyphicon glyphicon-paperclip"></span>
+                      <input name="..." type="file" value="{[{ post.id }]}" multiple file-change /></button>
                 </div>
                 <button    type="button" class="btn btn-xs btnblue"
                               ng-click="deleteBP(base_post);addBasePost = false  | trackEvent:'Usuń':'Button clicked':user ">
@@ -128,26 +130,19 @@
             </div>
             <div ng-init="user='{{ user }}'"></div>
         </div>
-        <div ng-class="{'media':true,'media-list':true, 'main-post':post.parent==null,'child-post':post.parent!=null}"
-              ng-repeat="post in tree ">
-              <div ng-include="'tree_item_renderer.html'"></div>
-
-            <div ng-if="$last && !endTree" ng-class="{'tab-post':true, 'dotedline':post.parent==null}">
-                <ul>
-                    <li>
-                    </li>
-                    <li>
-                        <div class="media-body dropbox new_margin"> <!--   style="margin-left: 0px;margin-right: 0px;"  -->
-                            <div ng-class="{'media':true, 'post':post.parent==null,'sub_post':post.parent!=null}">
-                                <div> <!-- style="display: inline-block; width: 100%;"-->
-                                    <span class="nextPost">
-                                        <button ng-click="addMorePosts(post,tree)" class="btn btn-xs">Następne komentarze</button>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+        <div ng-repeat="post in tree ">
+            <div ng-class="{'media':true,
+                        'media-list':true,
+                        'main-post':post.parent==null,
+                        'dotedline':post.parent==null,
+                        'child-post':post.parent!=null}">
+                <div ng-include="'tree_item_renderer.html'">
+                </div>
+            </div>
+            <div ng-if="$last && !endTree" ng-class="{'dotedline':post.parent==null}">
+                <span class="nextPost">
+                    <button ng-click="addMorePosts(post,tree)" class="btn btn-xs">Następne komentarze</button>
+                </span>
             </div>
         </div>
     </div>

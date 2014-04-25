@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load url from future %}
 {% load avatar_tags %}
-<div ng-class="{'tab-post':true, 'dotedline':post.parent==null}">
+<div ng-class="{'tab-post':true}">
     <ul>
         <li> <!-- start here -->
             <img style="position:absolute;"
@@ -20,13 +20,13 @@
                         <span class="right">
                             <button ng-hide="post.parent || !post.geometry" type="button" class="btn btn-xs btnwhite btngrey"
                                 ng-click="zoom_chase(post) | trackEvent:'wyśrodkuj':'Button clicked':user:post.id ">
-                                <span class="glyphicon glyphicon-screenshot"></span>
+                                <i class="fa fa-dot-circle-o"></i>
                             </button>
                             <button ng-hide="post.parent"
                                 ng-class="{'btn':true, 'btn-xs':true, 'btnwhite':true, 'btngrey':true}"
                                 ng-click="subscribe(post, post.subscription);post.subscription=!post.subscription | trackEvent:'Subskrybuj':'Button clicked':user ">
                                 <!-- TODO add pushed pin in case of subscription -->
-                                <span ng-hide="post.parent==null && !post.subscription" class="glyphicon glyphicon-pushpin"></span>
+                                <div ng-hide="post.parent==null && !post.subscription" class="mr-pushpin">&nbsp;</div>
                                 <span ng-hide="post.parent==null && post.subscription" class="glyphicon glyphicon-envelope"></span>
                             </button>
                         </span>
@@ -39,7 +39,7 @@
                         </li>
                     </ul>
                     <div style="display: inline-block; width: 100%;">
-                        <div class="left">
+                        <div ng-class="{'left':true, 'margin-left':post.parent==null}">
                             <button type="button" class="btn btn-xs btnwhite btngrey"  ng-if="post.numcom>0"
                                     ng-click="showOneDown(post)  | trackEvent:'Rozwiń':'Button clicked':user ">
 
@@ -52,19 +52,21 @@
                             </button>
                         </div>
                         <div class="right">
-                         <button type="button" class="btn btn-xs btn-file btnwhite btngrey" ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"><span class="glyphicon glyphicon-paperclip"></span><input name="..." type="file" value="{[{ post.id }]}" multiple file-change /></button>
+                         <button type="button" class="btn btn-xs btn-file btnwhite btngrey" ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates">
+                            <input name="..." type="file" value="{[{ post.id }]}" multiple file-change /><div class="mr-clip">&nbsp;</div>
+                         </button>
                             <button  class="btn btn-xs btngrey btnwhite"
                                 ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
                                 ng-click="scoreUp(post) | trackEvent:'score-up':'Button clicked':user ">
-                                <span  class="glyphicon glyphicon-thumbs-up"></span> <span>{[{ post.positive_rate || 0 }]}</span> {% trans 'za' %}
+                                <div class="mr-handup">&nbsp;</div><span class="fontBl">{[{ post.positive_rate || 0 }]}</span> {% trans 'za' %}
                             </button>
                             <button  class="btn btn-xs btngrey btnwhite"
                                  ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
                                  ng-click="scoreDown(post) | trackEvent:'score-down':'Button clicked':user ">
-                                 <span class="glyphicon glyphicon-thumbs-down"></span> <span>{[{ post.negative_rate || 0 }]}</span> {% trans 'przeciw' %}
+                                 <div class="mr-handdown">&nbsp;</div> <span class="fontBl">{[{ post.negative_rate || 0 }]}</span> {% trans 'przeciw' %}
                             </button>
                             <button ng-hide="'{{ user }}'=='AnonymousUser'" class="btn btn-xs btnsea btnwhite" ng-click="comment(post) | trackEvent:'Dodaj Komentarz':'Button clicked':user:'':''">
-                                <span class="glyphicon glyphicon-comment"></span>{% trans 'skomentuj' %}
+                                <i class="fa fa-comment"></i>&nbsp;<span class="fontBold btnsea">{% trans 'skomentuj' %}</span>
                             </button>
                         </div>
                     </div>
@@ -85,7 +87,7 @@
                     <input type="hidden" ng-model="post.plan" value=""/>
                     <div class="allign_right">
                         <div class="fileinput fileinput-new" data-provides="fileinput" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)">
-                            <button type="button" class="btn btn-xs btn-file btnwhite btngrey"><span class="glyphicon glyphicon-paperclip"></span><input name="..." type="file" value="{[{ post.id }]}" multiple file-change /></button>
+                            <button type="button" class="btn btn-xs btn-file btnwhite btngrey"><div class="mr-clip">&nbsp;</div><input name="..." type="file" value="{[{ post.id }]}" multiple file-change /></button>
                         </div>
                         <button type="button" class="btn btn-xs btnblue" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
                               ng-click="delete(post) | trackEvent:'Usuń':'Button clicked':user "> {% trans 'usuń' %}
@@ -98,23 +100,10 @@
     <div ng-if="post.nodes.length>0" class="tab_border" ng-hide="!(post.rozwin!=undefined && post.rozwin==true) && showallposts" >
         <div ng-repeat="post in post.nodes ">
             <div ng-include="'tree_item_renderer.html'" ></div>
-
-            <div ng-if="$last && !post.endTree" ng-class="{'tab-post':true, 'dotedline':post.parent==null}">
-                <ul>
-                    <li>
-                    </li>
-                    <li>
-                        <div class="media-body dropbox new_margin"> <!--   style="margin-left: 0px;margin-right: 0px;"  -->
-                            <div ng-class="{'media':true, 'post':post.parent==null,'sub_post':false}">
-                                <div> <!-- style="display: inline-block; width: 100%;"-->
-                                    <span class="nextPost">
-                                        <button ng-click="addMorePosts(post,$parent.$parent.$parent.$parent.post)" class="btn btn-xs">Następny komentarz</button>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+            <div ng-if="$last && !post.endTree" ng-class="{'dotedline':post.parent==null}">
+                <span class="nextPostNested">
+                    <button ng-click="addMorePosts(post,$parent.$parent.$parent.$parent.post)" class="btn btn-xs">Następne komentarze</button>
+                </span>
             </div>
         </div>
     </div>

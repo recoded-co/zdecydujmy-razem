@@ -33,7 +33,7 @@ button:hover, button:focus{
 
 .btn:hover
 {
-  color:white !important;
+  color:black !important;
 }
 
 .btnblue{
@@ -148,13 +148,17 @@ padding-bottom: 7px;
 }
 
 .nav > li > a:hover {
-    bacground: #ffffff;
+    background: none;
 }
 
 .nav-tabs > li  {
     padding-top:8px;
     border-right: 1px  solid #DDDDDD;
     padding-bottom:0px;
+}
+
+.nav-tabs > li:nth-child(2n+1)  {
+    background: #A7EBBD;
 }
 
 .toolbox{
@@ -336,6 +340,10 @@ hr {
 .green{
     background-color: darkgreen;
 }
+button:focus {
+    outline:none !important;
+}
+
 
 /*edit teodr @ katalpa*/
      #nav-tabs-menu a
@@ -348,8 +356,8 @@ hr {
            }
            #nav-tabs-menu li.active a
            {
-           padding-top:  8px !important;
-           border-top: 8px solid #00BAB1 !important;
+           padding-top:  16px !important;
+           /*border-top: 8px solid #00BAB1 !important;*/
            }
            #nav-tabs-menu li.open > .dropdown-menu
            {
@@ -362,12 +370,12 @@ hr {
               width: 100% !important;
               height: 40px;
               border-top: 0px;
-              border-bottom: 1px solid #66624A;
+              /*border-bottom: 1px solid #66624A;*/
               padding-top: 8px;
            }
             #nav-tabs-menu li.open > .dropdown-menu li:last-child
            {
-              border-bottom: 0px solid #66624A;
+              /*border-bottom: 0px solid #66624A;*/
            }
             ul.dropdown-menu li
            {
@@ -394,7 +402,7 @@ hr {
            {
             position: fixed;
             z-index: 11;
-            border-bottom: solid 2px #66624A !important;
+            /*border-bottom: solid 2px #66624A !important;*/
            }
            .nav-tabs i
            {
@@ -411,10 +419,10 @@ hr {
            }
            .nav-tabs  li
            {
-            background-color: white;
+            background: #46E5C4;
             width: 23%;
             height: 50px;
-            border-right : solid 1px #66624A !important;
+            border-right : solid 1px white !important;
             padding-top: 16px;
            }
            .nav-tabs > li.active
@@ -480,6 +488,11 @@ hr {
                 margin-top: -2px;
                 margin-left: 4%;  
             }
+            .toolbox span.left button:focus{
+                background:#00B4FF;
+                outline:#00B4FF ;
+                border: 1px solid #00B4FF;
+            }
             .toolbox span.left .glyphicon
             {
                 font-size: 9px !important;
@@ -520,14 +533,13 @@ hr {
             {             
                 position: relative;
                 margin-top: -40px !important;
-                padding-bottom: 35px;
-
+                margin-bottom: 35px;
             }
             div.dotedline
             {
                 border-bottom: 1px dotted #757574;
             }
-            div.main-post:nth-last-child(3n+1)
+            /*div.main-post:nth-last-child(3n+1)
             {
                 border-top: solid 10px #00c7a2;
             }
@@ -539,7 +551,7 @@ hr {
             div.main-post:nth-last-child(3n+2)
             {
                 border-top: solid 10px #EC1E22;
-            }
+            }*/
             /*:first-of-type of type is used to ensure that we style correct element*/ 
             div.main-post ul:first-of-type
             {
@@ -593,7 +605,7 @@ hr {
             {
                 margin-top: 0px !important;
                 padding-top: 13px;
-                border-top: solid 10px #00c7a2;
+                /*border-top: solid 10px #00c7a2;*/
             }
           #subscriptions div.post > img
             {
@@ -1298,5 +1310,103 @@ textarea#popup_comment
 
 .nextPost{
     float:right;
-    margin-bottom:13px;
+    margin:13px;
+    margin-top:-30px;
+}
+.nextPostNested{
+    float:right;
+    margin:13px;
+    margin-top:0px;
+}
+
+
+.mr-pushpin {
+    background-image: url('/static/images/ap8_ikonki-20.png');
+    background-size: 18px 18px, 18px 18px  !important;
+    background-position: 0px 0px,0px 0px;
+    width: 18px  !important;
+    height: 18px  !important;
+    background-color: transparent !important;
+}
+.mr-pushpin-bl {
+    background-image: url('/static/images/ap8_ikonki-15.png');
+    background-size: 18px 18px, 18px 18px  !important;
+    background-position: 0px 0px,0px 0px;
+    width: 18px  !important;
+    height: 18px  !important;
+    background-color: transparent !important;
+    display: inline-block;
+}
+.mr-pushpin:hover {
+    background-image: url('/static/images/ap8_ikonki-15.png');
+    background-size: 18px 18px, 18px 18px  !important;
+    width: 18px  !important;
+    height: 18px  !important;
+    background-color: transparent !important;
+}
+
+.mr-handdown {
+    background-image: url('/static/images/ap8_ikonki-16.png');
+    background-size: 18px 18px, 18px 18px  !important;
+    width: 18px  !important;
+    height: 18px;
+    background-color: transparent !important;
+    display: inline-block;
+}
+.mr-handup{
+    background-image: url('/static/images/ap8_ikonki-17.png');
+    background-size: 18px 18px, 18px 18px  !important;
+    width: 18px  !important;
+    height: 18px;
+    background-color: transparent !important;
+    display: inline-block;
+}
+.mr-clip{
+    background-image: url('/static/images/ap8_ikonki-18.png');
+    background-size: 21px 21px, 21px 21px  !important;
+    width: 21px  !important;
+    height: 21px;
+    background-color: transparent !important;
+}
+.mr-clip:hover{
+    background-image: url('/static/images/ap8_ikonki-19.png');
+    background-size: 21px 21px, 21px 21px  !important;
+    width: 21px  !important;
+    height: 21px;
+    background-color: transparent !important;
+}
+
+input:focus{
+    outline:none;
+    border:none;
+}
+
+btn-f:focus{
+    outline:#00C39E solid thin !important;
+    border:#00C39E solid 1px !important;
+}
+
+textarea{
+    border-top-left-radius: 20px !important;
+    border-top-right-radius: 20px !important;
+    border-bottom-left-radius: 20px !important;
+    border-bottom-right-radius: 0px !important;
+}
+
+textarea:focus{
+    outline:none !important;
+    border:#00C39E solid 1px !important;
+}
+
+.fontBl{
+    color:#333333;
+    font-weight: bold;
+}
+
+.fontBold{
+    font-weight: bold;
+}
+
+.margin-left{
+    margin-left: 60px !important;
 }

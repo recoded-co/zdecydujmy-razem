@@ -63,26 +63,20 @@
     <!-- above has to be at the top all the time, add size to div below -->
   <div>
     <div id="{[{ post.geometry && !post.parent?post.geometry:'none' }]}"
-         ng-class="{'media':true,'media-list':true, 'main-post':post.parent==null,'child-post':post.parent!=null}"
          ng-repeat="post in tree ">
-        <div ng-include="'tree_item_renderer.html'"></div>
+        <div ng-class="{'media':true,
+                    'media-list':true,
+                    'main-post':post.parent==null,
+                    'dotedline':post.parent==null,
+                    'child-post':post.parent!=null}">
+            <div ng-include="'tree_item_renderer.html'"></div>
+        </div>
 
-        <div ng-if="$last && !endTree" ng-class="{'tab-post':true, 'dotedline':post.parent==null}">
-            <ul>
-                <li>
-                </li>
-                <li>
-                    <div class="media-body dropbox new_margin"> <!--   style="margin-left: 0px;margin-right: 0px;"  -->
-                        <div ng-class="{'media':true, 'post':post.parent==null,'sub_post':post.parent!=null}">
-                            <div> <!-- style="display: inline-block; width: 100%;"-->
-                                <span class="nextPost">
-                                    <button ng-click="addMorePosts(post,tree)" class="btn btn-xs">Następne komentarze</button>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
+
+        <div ng-if="$last && !endTree" ng-class="{'dotedline':post.parent==null}">
+                <span class="nextPost">
+                    <button ng-click="addMorePosts(post,tree)" class="btn btn-xs">Następne komentarze</button>
+                </span>
         </div>
 
     </div>
