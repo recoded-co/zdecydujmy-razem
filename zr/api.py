@@ -266,9 +266,10 @@ class NPost(generics.ListAPIView):
                 print 'ValueError'
         elif len(geometry.split(','))>1:
             try:
-                param_list = str(tuple([i for i in geometry.split(',')]))
-                sql += ' and geometry_id in %s '
-                params.append(param_list)
+                param_list = str(tuple([int(float(i)) for i in geometry.split(',')]))
+                sql += ' and geometry_id in ' + param_list + ' '
+                #print param_list
+                #params.append(param_list)
             except ValueError:
                 print 'ValueError'
 
@@ -284,6 +285,7 @@ class NPost(generics.ListAPIView):
             else :
                 sql += 'order by numcom desc '
         #print sql
+        #print params
 
         cursor.execute(sql, params)
         row = cursor.fetchall()
