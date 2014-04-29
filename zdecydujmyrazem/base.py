@@ -190,7 +190,8 @@ NOTIFICATION_QUEUE_ALL = True
 
 #Avatar
 
-AUTO_GENERATE_AVATAR_SIZES = (40,)
+#AUTO_GENERATE_AVATAR_SIZES = (20,40,80,)
+AVATAR_AUTO_GENERATE_SIZES = (20,40,80,)
 
 #The method to use when resizing images, based on the options available in PIL. Defaults to Image.ANTIALIAS.
 #AVATAR_RESIZE_METHOD

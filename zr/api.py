@@ -106,6 +106,7 @@ class PostViewSet(viewsets.ModelViewSet):
             subscribed_posts = [p.post.id for p in PostSubscription().get_user_subscriptions(request.user)]
         else:
             subscribed_posts = []
+
         for entry in serializer.data:
             user = User.objects.get(username=entry['author_name'])
             alt = six.text_type(user)
@@ -204,6 +205,11 @@ class NSubscribed(generics.ListAPIView):
         for item in actuall_item_list:
             temp = Post.objects.get(pk = item[0] )
             temp_data = PostSerializer(temp)
+            user = User.objects.get(username=temp_data.data['author_name'])
+            alt = six.text_type(user)
+            url = avatar_url(user, 40)
+            temp_data.data['avatar_url']=url
+            temp_data.data['avatar_alt']=alt
             temp_data.data['numcom'] = int(item[1])
             temp_ret.append(temp_data.data)
 
@@ -260,8 +266,7 @@ class NPost(generics.ListAPIView):
         elif len(geometry.split(',')) == 1:
             try:
                 if int(geometry)>0:
-                    sql += ' and geometry_id = %s '
-                    params.append(str(int(float(geometry))))
+                    sql += ' and geometry_id = ' + str(int(float(geometry))) + ' '
             except ValueError:
                 print 'ValueError'
         elif len(geometry.split(','))>1:
@@ -301,6 +306,12 @@ class NPost(generics.ListAPIView):
         for item in actuall_item_list:
             temp = Post.objects.get(pk = item[0] )
             temp_data = PostSerializer(temp)
+            user = User.objects.get(username=temp_data.data['author_name'])
+            alt = six.text_type(user)
+            url = avatar_url(user, 40)
+            temp_data.data['avatar_url']=url
+            print url
+            temp_data.data['avatar_alt']=alt
             temp_data.data['numcom'] = int(item[1])
             temp_ret.append(temp_data.data)
 
