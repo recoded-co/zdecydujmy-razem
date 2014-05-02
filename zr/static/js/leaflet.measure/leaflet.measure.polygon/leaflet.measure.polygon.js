@@ -29,7 +29,6 @@ L.Control.MeasurePolygon = L.Control.extend({
 	},
 
 	_toggleMeasure: function () {
-        console.log('Polygon');
 		this._measuring = !this._measuring;
         //check remote switcher in case that other control is still on
         this._map.remoteControlSwitchOff();
@@ -37,7 +36,11 @@ L.Control.MeasurePolygon = L.Control.extend({
         if(this._measuring) {
 
             //arm remote switcher
-            this._map.setRemoteControlSwitch(this,this._remoteSwitchOff);
+            this._map.setRemoteControlSwitch(this,function(){
+                L.DomUtil.removeClass(this._container, 'leaflet-control-measure-on');
+			    this._stopMeasuring();
+                this._measuring = !this._measuring;
+            });
 
 			L.DomUtil.addClass(this._container, 'leaflet-control-measure-on');
 			this._startMeasuring();
@@ -213,8 +216,7 @@ L.Control.MeasurePolygon = L.Control.extend({
 	_updateTooltipDistance: function() {
 
         var totalRound = this._polygonArea(this._areaPoints);
-        //console.log(this._areaPoints);
-        //console.log("" + totalRound);
+
         var text ="";
         //TODO: Fix intersection
         //if(this._layerPaintPath.intersects()){

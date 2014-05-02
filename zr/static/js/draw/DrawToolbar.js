@@ -44,7 +44,7 @@ L.DrawToolbar = L.Toolbar.extend({
 				new L.Draw.Polygon(map, this.options.polygon),
 				this._toolbarContainer,
 				buttonIndex++,
-				buttonClassPrefix,
+				buttonClassPrefix,  
 				L.drawLocal.draw.toolbar.buttons.polygon
 			);
 		}

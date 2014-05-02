@@ -1410,3 +1410,7 @@ textarea:focus{
 .margin-left{
     margin-left: 60px !important;
 }
+
+.leaflet-right .leaflet-draw-actions li:last-child a{
+    visibility:hidden;
+}

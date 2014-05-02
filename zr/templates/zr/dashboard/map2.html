@@ -202,8 +202,6 @@
         var additionalLayers = {
             //"Propozycja planu": basePlanLayer
         }
-        //L.control.layers(baseMaps, additionalLayers, {'collapsed':false}).addTo(map);
-
         L.control.layers(baseMaps, overlayMaps, {'collapsed':false}).addTo(map);
         var drawnItems = new L.FeatureGroup();
         layerWaitingRoom = new Array();
@@ -219,6 +217,7 @@
 
         //remote control switch functions
         map.remoteControlSwitchOff = function(){
+
             if(map.remoteControlSwitch!=undefined && map.remoteControlContent!=undefined){
                 map.remoteControlSwitch.call(map.remoteControlContent);
                 map.remoteControlSwitch = undefined;
@@ -254,7 +253,7 @@
               $('.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control').toggle('slow');
               $('#popPublish').click(function(){
                     map.addLayer(layerWaitingRoom.pop());
-                    alert('publish on!');
+                    //alert('publish on!');
               });
             });
             map.on('popupclose', function(e) {
@@ -309,19 +308,6 @@
 			}
 		});
 		map.addControl(drawControl);
-
-
-  //       var search = new L.Control.Draw({
-		// 	position: 'topright',
-		// 	draw: {
-		// 		polyline: true,
-		// 		circle: false,
-  //               rectangle: true,
-  //               marker: false,
-  //               polygon: false
-  //           }
-		// });
-		//map.addControl(search); // edit teodor @ katalpa
 
 {% endif %}
 		map.on('draw:created', function (e) {
@@ -378,15 +364,15 @@
                 var popup = L.popup()
                     .setLatLng(popup_location)
                     .setContent("<div>" +
-                                             "<div class='map_popup'> " +
-                                             "<textarea placeholder='Komentarz' id='popup_comment' rows='3'>" +
-                                             "</textarea ><br>" +
-                                             "<input id='geometry' type='hidden' value='"+wkt_string+"'/>" +
-                                             "<input id='feature_id' type='hidden' value='"+"'/>" +
-                                             "</div> " +
-                                             "<hr>" +
-                                             "<button id='popPublish' class='btnred btn btn-xs' onclick='addPopup(this);return false;' >publikuj</button>" +
-                                             "</div>");
+                                "<div class='map_popup'> " +
+                                "<textarea placeholder='Komentarz' id='popup_comment' rows='3'>" +
+                                "</textarea ><br>" +
+                                "<input id='geometry' type='hidden' value='"+wkt_string+"'/>" +
+                                "<input id='feature_id' type='hidden' value='"+"'/>" +
+                                "</div> " +
+                                "<hr>" +
+                                "<button id='popPublish' class='btnred btn btn-xs' onclick='addPopup(this);return false;' >publikuj</button>" +
+                                "</div>");
                 map.openPopup(popup);
                 layerWaitingRoom.push(layer);
                 drawnItems.addLayer(layer);
@@ -398,12 +384,28 @@
 
             if (type === 'rectangle'){
                 L.DomUtil.addClass(e.target._container, 'leaflet-control-rectangle-on');
+                map.setRemoteControlSwitch(e,function(){
+                    map.fireEvent( 'draw:drawstop', this );
+                    drawControl._toolbars[36]._modes.rectangle.handler.disable();
+                });
             } else if(type === 'marker') {
                 L.DomUtil.addClass(e.target._container, 'leaflet-control-marker-on');
+                map.setRemoteControlSwitch(e,function(){
+                    map.fireEvent( 'draw:drawstop', this );
+                    drawControl._toolbars[36]._modes.marker.handler.disable();
+            });
             } else if(type==='polygon'){
                 L.DomUtil.addClass(e.target._container, 'leaflet-control-polygon-on');
+                map.setRemoteControlSwitch(e,function(){
+                    map.fireEvent( 'draw:drawstop', this );
+                    drawControl._toolbars[36]._modes.polygon.handler.disable();
+                });
             } else if(type==='polyline'){
                 L.DomUtil.addClass(e.target._container, 'leaflet-control-polyline-on');
+                map.setRemoteControlSwitch(e,function(){
+                    map.fireEvent( 'draw:drawstop', this );
+                    drawControl._toolbars[36]._modes.polyline.handler.disable();
+                });
             }
         }).on('draw:drawstop',function(e){
             var type = e.layerType;
@@ -467,14 +469,6 @@
             addMarkers(data, function(layers){
                 callback(layers);
             });
-            /*
-            $.each(data,function(key,value){
-                parseWKT(value.geoelement,value.name);
-                if(!--count){
-                    callback();
-                }
-            })
-            */
         });
     }
 
