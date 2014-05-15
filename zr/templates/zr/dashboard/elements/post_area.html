@@ -10,12 +10,21 @@
         <li>
             <div class="media-body dropbox new_margin"> <!--   style="margin-left: 0px;margin-right: 0px;"  -->
                 <div ng-class="{'media':true, 'post':post.parent==null,'sub_post':post.parent!=null}">
-                    <div> <!-- style="display: inline-block; width: 100%;"-->
+                    <div class="postContent"> <!-- style="display: inline-block; width: 100%;"-->
                         <span class="left">
                             <p class="head-autor"><em>{[{ post.author_name }]}({[{ post.date | fromToday }]})</em></p>
                             <p class="post-content" style="width:100%;">
                                 {[{ post.content }]}
                             </p>
+                            <div class="post-content-flist">
+                                <ul class="fileList">
+                                    <li ng-repeat="item in post.filep">
+                                        <a class="filePL" href="fmen/download/{[{ item.file }]}"  target="_blank">
+                                            <i class="fa fa-cloud-download"></i>&nbsp;&nbsp;{[{ item.name }]}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </span>
                         <span class="right">
                             <button ng-hide="post.parent || !post.geometry" type="button" class="btn btn-xs btnwhite btngrey"
@@ -31,13 +40,7 @@
                             </button>
                         </span>
                     </div>
-                    <ul ng-repeat="item in post.filep">
-                        <li>{[{ item.name }]}
-                            <a href="fmen/download/{[{ item.file }]}"  target="_blank">
-                                <span class="glyphicon glyphicon-download"></span>
-                            </a>
-                        </li>
-                    </ul>
+
                     <div style="display: inline-block; width: 100%;">
                         <div ng-class="{'left':true, 'margin-left':post.parent==null}">
                             <button type="button" class="btn btn-xs btnwhite btngrey"  ng-if="post.numcom>0"

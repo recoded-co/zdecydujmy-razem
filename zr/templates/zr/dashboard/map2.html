@@ -2,45 +2,6 @@
 {% load isloged %}
 {% load url from future %}
 <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
-<style type="text/css">
-
-    .smallmap {
-        width: 100%;
-        height: 480px;
-        border: 1px solid #ccc;
-    }
-    .olControlPanel div {
-      position: absolute;
-      left: 12px;
-      top: 22px;
-      display:block;
-      width:  18px;
-      height: 18px;
-      margin: 5px;
-      background-image: url("/static/img/zoom-world-mini.png");
-    }
-
-    .marker-cluster-small-pol {
-        background-color: rgba(0, 0, 226, 0.6);
-        }
-    .marker-cluster-small-pol div {
-        background-color: rgba(0, 0, 204, 0.6);
-        }
-
-    .marker-cluster-medium-pol {
-        background-color: rgba(0, 0, 211, 0.6);
-        }
-    .marker-cluster-medium-pol div {
-        background-color: rgba(0, 0, 194, 0.6);
-        }
-
-    .marker-cluster-large-pol {
-        background-color: rgba(0, 0, 156, 0.6);
-        }
-    .marker-cluster-large-pol div {
-        background-color: rgba(0, 0, 128, 0.6);
-        }
-</style>
 
 <script type="text/javascript">
     var lon = parseFloat("{{ plan.center.x|escapejs }}");
@@ -102,26 +63,6 @@
                 openLegendOnLoad: true
             });
 
-    /*
-    var mbmap =
-            L.tileLayer('http://www.poznan.pl/tilecache/tilecache.cgi/1.0.0/poznan_studium/1/{z}/{x}/{y}.png', {
-                attribution: "<a href='http://mapbox.com/about/maps' target='_blank'>Terms & Feedback</a>",
-                maxZoom: 18,
-                legend: LEGEND,
-                openLegendOnLoad: true
-            });
-    */
-  /*
-        var mbmap = L.tileLayer.wms("http://www.poznan.pl/tilecache/tilecache.cgi?", {
-            layers: ['poznan_studium'],
-            format: 'image/png',
-            attribution: "Weather data © 2012 IEM Nexrad"
-        });
-*/
-
-
-
-
         var baseMaps = {
            // "Open Street Map": osm,
             "Mapa": lmap,
@@ -145,7 +86,6 @@
                         maxZoom: 18
                 });
 
-
         var basePlanLayer = L.geoJson([], {
            style: planMapStyle,
            onEachFeature: function (feature, layer) {
@@ -162,7 +102,6 @@
                layer.bindPopup(popup);
            }
         });
-
 
         var overlayMaps = {
         "MPZP": basePlanLayer,
@@ -186,7 +125,6 @@
 
         map.addLayer(basePlanLayer); // city plan base layer
 
-
         var planMapStyle = {
             "color": "#e74c3c",
             "weight": 5,
@@ -197,7 +135,6 @@
             basePlanLayer.addData(data);
             basePlanLayer.bringToBack();
         });
-
 
         var additionalLayers = {
             //"Propozycja planu": basePlanLayer
@@ -253,7 +190,6 @@
               $('.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control').toggle('slow');
               $('#popPublish').click(function(){
                     map.addLayer(layerWaitingRoom.pop());
-                    //alert('publish on!');
               });
             });
             map.on('popupclose', function(e) {
@@ -270,10 +206,17 @@
         });
 
 {% if user|isloged %}
-// edit teodor @ katalpa
         var drawControl = new L.Control.Draw({
 			position: 'topright',
 			draw: {
+                marker:{
+                    icon:L.icon({
+                     iconUrl: '/static/images/ikonki_mapa-27.png',
+                     iconSize:     [40, 40], // size of the icon
+                     iconAnchor:   [20, 42], // point of the icon which will correspond to marker's location
+                     popupAnchor:  [-3, -40] // point from which the popup should open relative to the
+                    })
+                },
                 polygon: {
 					allowIntersection: false,
 					showArea: true,
@@ -282,9 +225,14 @@
 						timeout: 1000,
                         message: '<strong>Błąd<strong>'
 					},
-					shapeOptions: {
-						color: '#0033ff'//'#bfadf55',
-					}
+                    shapeOptions: {
+                        stroke: true,
+                        color: '#009DA5',
+                        weight: 2,
+                        opacity: 1,
+                        fill: true,
+                        clickable: true
+                    }
                 },
                 polyline: {
 					allowIntersection: false,
@@ -295,7 +243,12 @@
                         message: '<strong>Błąd<strong>'
 					},
 					shapeOptions: {
-						color: '#0033ff'//'#bfadf55',
+						stroke: true,
+                        color: '#00B4FF',
+                        weight: 2,
+                        opacity: 1,
+                        fill: false,
+                        clickable: true
 					}
                 },
                 rectangle: true,
@@ -342,6 +295,7 @@
                     trackEvent('marker create','clicked',user,'','');
                     layer.bindPopup(popup);
                     popup_location = e.layer._latlng;
+
                     var point = L.marker(e.layer._latlng);
                     wkt.fromObject(point);
 
@@ -423,9 +377,7 @@
 
         addGeometry(function(markers){
         });
-
     }
-
 
     function setVectorStyle(name,color){
         return new OpenLayers.StyleMap({
@@ -493,11 +445,35 @@
         var markers = L.markerClusterGroup({showCoverageOnHover: false,
                                             zoomToBoundsOnClick: true,
                                             spiderfyOnMaxZoom: true,
-                                            removeOutsideVisibleBounds: true});
+                                            removeOutsideVisibleBounds: true,
+                                            iconCreateFunction: function(cluster) {
+                                                var childCount = cluster.getChildCount();
+                                                /*var c = ' marker-cluster-';
+                                                if (childCount < 10) {
+                                                    c += 'small';
+                                                } else if (childCount < 100) {
+                                                    c += 'medium';
+                                                } else {
+                                                    c += 'large';
+                                                }*/
+                                                  return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'cluster-mr marker-cluster-mr', iconSize: new L.Point(40, 40) });
+                                            }});
         var lines = L.markerClusterGroup({showCoverageOnHover: false,
                                             zoomToBoundsOnClick: true,
                                             spiderfyOnMaxZoom: true,
-                                            removeOutsideVisibleBounds: true});
+                                            removeOutsideVisibleBounds: true,
+                                            iconCreateFunction: function(cluster) {
+                                                var childCount = cluster.getChildCount();
+                                                /*var c = ' marker-cluster-';
+                                                if (childCount < 10) {
+                                                    c += 'small';
+                                                } else if (childCount < 100) {
+                                                    c += 'medium';
+                                                } else {
+                                                    c += 'large';
+                                                }*/
+                                                  return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'cluster-mr line-cluster-mr', iconSize: new L.Point(40, 40) });
+                                            }});
         var polygon_markers = L.markerClusterGroup({
                                             showCoverageOnHover: true,
                                             zoomToBoundsOnClick: true,
@@ -506,20 +482,17 @@
 
                                             iconCreateFunction: function(cluster) {
                                                 var childCount = cluster.getChildCount();
-                                                var c = ' marker-cluster-';
+                                                /*var c = ' marker-cluster-';
                                                 if (childCount < 10) {
                                                     c += 'small';
                                                 } else if (childCount < 100) {
                                                     c += 'medium';
                                                 } else {
                                                     c += 'large';
-                                                }
-                                                  return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'marker-cluster ' + c + '-pol', iconSize: new L.Point(40, 49) });
-
-                                                // return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'marker-cluster ' + c + '-pol', iconSize: new L.Point(40, 40) });
+                                                }*/
+                                                  return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'cluster-mr polygon-cluster-mr', iconSize: new L.Point(40, 40) });
                                             }
                                 });
-
 
         map.on("click",function(e){
             trackEvent('map area','clicked',user,'','');
@@ -532,34 +505,35 @@
             wkt.read(value.geoelement);
             var components = wkt.components[0];
 
-            //console.log('components');
-            //console.log(components);
-
             if (Array.isArray(components)){
                 var latlngs = new Array();
                 for (var i in components){
                     var xy = components[i];
                     latlngs.push(L.latLng(xy.y, xy.x));
                 }
-                var polygon = L.polygon(latlngs);
+                var polygon = L.polygon(latlngs,{   stroke: true,
+                                                    color: '#009DA5',
+                                                    weight: 2,
+                                                    opacity: 1,
+                                                    fill: true,
+                                                    clickable: true
+                                                });
                 var centroid = _getCentroid(components);
                 var xy = centroid; //components[0];
                 var latlng = L.latLng(xy[1], xy[0]);
                 var baloonMarker = L.icon({
-                     iconUrl: '/static/images/balonik_1.png',
-                     iconSize:     [30, 26], // size of the icon
-                     iconAnchor:   [0, 26], // point of the icon which will correspond to marker's location
-                     popupAnchor:  [-3, -26] // point from which the popup should open relative to the
+                     iconUrl: '/static/images/ap_maj-08.png',
+                     iconSize:     [40, 40], // size of the icon
+                     iconAnchor:   [20, 40], // point of the icon which will correspond to marker's location
+                     popupAnchor:  [-3, -40] // point from which the popup should open relative to the
                     })
 
-                var marker = L.marker(latlng, {icon: baloonMarker});
+                var marker = L.marker(latlng, { icon: baloonMarker});
 
                 marker.on('mouseover', function(){
                     polygon.addTo(map);
-                    //postLightOn(value.id); // scrolls comments to current point
 
                     polygon.on('mouseout', function(e){
-                       //postLightOff(value.id); // revers scroll after mouseover
                        map.removeLayer(polygon);
                     });
                 });
@@ -581,7 +555,13 @@
                 if(type == 'POINT'){
                     var xy = components;
                     var latlng = L.latLng(xy.y, xy.x);
-                    var marker = L.marker(latlng, {});
+                    var pointMarker = L.icon({
+                     iconUrl: '/static/images/ap_maj-10.png',
+                     iconSize:     [40, 40], // size of the icon
+                     iconAnchor:   [20, 40], // point of the icon which will correspond to marker's location
+                     popupAnchor:  [-3, -40] // point from which the popup should open relative to the
+                    })
+                    var marker = L.marker(latlng, {icon:pointMarker});
                     marker.on('mouseover', function(){
 
                         marker.on('mouseout', function(){
@@ -590,8 +570,6 @@
                         });
                     });
                     marker.on('click', function(e){
-                           //postLightOn(value.id);
-                           //trackEvent('point','clicked',user,'','');
                            addPostFilter([{id:value.geo_id}]);
                     });
                     markers.addLayer(marker);
@@ -616,13 +594,20 @@
                         finallyList.push(L.latLng(parseFloat(y), parseFloat(x)));
                     }
 
-                    var polyline = L.polyline(finallyList);
+                    var polyline = L.polyline(finallyList,
+                            {   stroke: true,
+                                color: '#00B4FF',
+                                weight: 2,
+                                opacity: 1,
+                                fill: false,
+                                clickable: true
+                            });
                     var latlng = L.latLng(finallyListOb[0].y, finallyListOb[0].x);
                     var baloonMarker = L.icon({
-                         iconUrl: '/static/images/balonik_1.png',
-                         iconSize:     [30, 26], // size of the icon
-                         iconAnchor:   [0, 26], // point of the icon which will correspond to marker's location
-                         popupAnchor:  [-3, -26] // point from which the popup should open relative to the
+                         iconUrl: '/static/images/ap_maj-09.png',
+                         iconSize:     [40, 40], // size of the icon
+                         iconAnchor:   [20, 40], // point of the icon which will correspond to marker's location
+                         popupAnchor:  [-3, -40] // point from which the popup should open relative to the
                         });
 
                     var marker = L.marker(latlng, {icon: baloonMarker});
