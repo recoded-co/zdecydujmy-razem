@@ -86,7 +86,9 @@
                 });
 
         var basePlanLayer = L.geoJson([], {
-           style: planMapStyle,
+           style: function (feature) {
+                return {color: feature.properties.color};
+            },
            onEachFeature: function (feature, layer) {
                var pcontent = '';
                feature.properties.feat_description.forEach(function(o){
@@ -94,6 +96,7 @@
                     pcontent += "<h5>"+ o.key+"</h5><p>"+o.value+"</p>";
                    }
                });
+
                var popup = L.popup({
                    "maxHeight": 200
                });
@@ -129,7 +132,7 @@
             "weight": 2,
             "opacity": 0.65
         }
-
+    
     $.getJSON("{% url 'subjects_geojson' plan.id  %}", function (data) {
             basePlanLayer.addData(data);
             basePlanLayer.bringToBack();

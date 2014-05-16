@@ -71,10 +71,10 @@ class RateSerializer(ModelSerializer):
     class Meta:
         model = Rate
 
+
 class FileSerializer(ModelSerializer):
     class Meta:
         model = PostFileUpload
-
 
 
 class PostSerializer(ModelSerializer):
@@ -87,7 +87,7 @@ class PostSerializer(ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ('id','author', 'author_name',
+        fields = ('id', 'author', 'author_name',
                   'parent', 'plan', 'content',
                   'rate', 'score','geometry',
                   'date','filep','positive_rate','negative_rate')
@@ -496,6 +496,14 @@ def geo_search(request, plan_id):
     else:
         return HttpResponseBadRequest(json.dumps({'result': 'error'}))
 
+@json_response
+def keyword_search(request, plan_id, query):
+    from zr import index as i
+    import json
+    result = i.find(query)
+    print result
+    #result = Post.objects.filter(id__in=result)
+    return json.dumps({'result': result})
 
 class SubjectFeatPropertySerializer(ModelSerializer):
     class Meta:
@@ -508,7 +516,7 @@ class SubjectFeatSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = SubjectFeat
         geo_field = "geom"
-        fields = ('id', 'subject', 'geom', 'feat_description')
+        fields = ('id', 'subject', 'color', 'geom', 'feat_description', )
 
 class SubjectFeatList(generics.ListAPIView):
     queryset = SubjectFeat.objects.all()

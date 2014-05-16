@@ -8,6 +8,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db import connection
+from zr import index
 
 from django.conf import settings
 if "notification" in settings.INSTALLED_APPS:
@@ -69,6 +70,7 @@ class Subject(models.Model):
 class SubjectFeat(models.Model):
     subject = models.ForeignKey(Subject)
     geom = models.PolygonField(srid=4326)
+    color = models.CharField(max_length=100, blank=True, null=True)
 
     def getId(self):
         return self.id
@@ -212,6 +214,7 @@ class WebNotification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=2, choices=STATUS)
 
+
 @receiver(post_save, sender=Post)
 def post_notifications(sender, instance, **kwargs):
     root = instance.get_root()
@@ -219,6 +222,8 @@ def post_notifications(sender, instance, **kwargs):
     if notification and len(subscribed_users) > 0:
         print 'notify: %s' % str(subscribed_users)
         notification.send(subscribed_users, "post_new", {'plan': instance.plan, 'post_content': instance.content})
+    index.update_index(instance)
+
 
 @receiver(post_save, sender=User)
 def ZipCodeUpdate(sender, instance, created, **kwargs):
