@@ -1438,7 +1438,7 @@ textarea:focus{
 }
 
 .leaflet-right .leaflet-draw-actions li:last-child a{
-    visibility:hidden;
+   /* visibility:hidden;*/
 }
 
 .filePL{

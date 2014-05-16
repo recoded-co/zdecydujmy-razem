@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from zr.views import HomePageView, DashboardView, UserCreationPageView
 from zr.views import ZipcodeCheckView
 from zr.api import router
-from zr.api import RateListView, PostsListView, geo_search, keyword_search, SubjectFeatList, SubscriptionDetail
+from zr.api import RateListView, PostsListView, geo_search, keyword_search, SubjectFeatList, SubscriptionDetail, NPost, NSubscribed
 from zr.api import SubscriptionList as ApiSubscriptionList
 from zr.views import change2
 

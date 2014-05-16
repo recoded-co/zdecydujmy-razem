@@ -500,6 +500,7 @@ def keyword_search(request, plan_id, query):
     import json
     result = i.find(query)
     print result
+    #result = Post.objects.filter(id__in=result)
     return json.dumps({'result': result})
 
 class SubjectFeatPropertySerializer(ModelSerializer):
