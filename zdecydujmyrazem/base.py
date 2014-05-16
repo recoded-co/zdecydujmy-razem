@@ -54,6 +54,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.gzip.GZipMiddleware',                # LNZ
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -61,10 +62,21 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',            # LNZ
+    'geonition_utils.middleware.PreventCacheMiddleware',    # LNZ
+    'geonition_utils.middleware.IEEdgeMiddleware',          # LNZ
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
+    "django.core.context_processors.debug",                 # LNZ
+    "django.core.context_processors.i18n",                  # LNZ
+    "django.core.context_processors.media",                 # LNZ
+    "django.core.context_processors.static",                # LNZ
+    "django.core.context_processors.tz",                    # LNZ
+    "django.contrib.messages.context_processors.messages",  # LNZ
+    "django.core.context_processors.request",               # LNZ
+    "base_page.context_processors.organization"             # LNZ
     'social_auth.context_processors.social_auth_by_type_backends',
 )
 
@@ -81,8 +93,11 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
+
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     # Recoded - additional modules
@@ -96,7 +111,8 @@ INSTALLED_APPS = (
     # Made by Recoded:
     'zr',
     'filemanager',
-    'avatar'
+    'avatar',
+
 )
 
 # A sample logging configuration. The only tangible logging

@@ -46,8 +46,13 @@ class Command(BaseCommand):
                 print feature
                 if feature.geom_type == 'Polygon':
                     print 'Polygon'
+                    color = 'blue'
+                    if 'color' in properties:
+                        color = feature.get('color', 'blue')
+                        del properties['color']
+
                     #sf = SubjectFeat(subject=subject, geom=self.marcator_wkt_to_point(feature.geom.wkt))
-                    sf = SubjectFeat(subject=subject, geom=feature.geom.wkt)
+                    sf = SubjectFeat(subject=subject, geom=feature.geom.wkt, color=color)
                     sf.save()
 
                     for p in properties:
