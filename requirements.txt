@@ -13,3 +13,21 @@ django_decorators
 simplejson
 djangorestframework-gis
 django-avatar
+# integracja
+git+https://dwa@bitbucket.org/martut/auth_page.git
+git+https://dwa@bitbucket.org/martut/base_page.git
+git+https://dwa@bitbucket.org/martut/dashboard.git
+git+https://dwa@bitbucket.org/martut/django_auth.git
+git+https://dwa@bitbucket.org/martut/django_geojson_rest.git
+git+https://dwa@bitbucket.org/martut/django_geonition_client.git
+git+https://dwa@bitbucket.org/martut/django_geonition_utils.git
+git+https://github.com/recoded-co/django_images.git
+git+https://github.com/recoded-co/geodjango-map-layers.git
+git+https://dwa@bitbucket.org/martut/geoforms.git
+git+https://dwa@bitbucket.org/dwa/geonition_aliases.git
+git+https://dwa@bitbucket.org/dwa/geoportal.git
+git+https://dwa@bitbucket.org/dwa/gmlupload.git
+git+git://github.com/geonition/planproposal
+git+https://dwa@bitbucket.org/mdminc/softgis_dev.git
+
+
