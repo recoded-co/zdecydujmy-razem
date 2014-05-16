@@ -10,9 +10,10 @@ markdown>=2.3.1
 django-filter>=0.7
 django-notification
 django_decorators
-simplejson
+json
 djangorestframework-gis
 django-avatar
+whoosh
 # integracja
 #git+https://dwa@bitbucket.org/martut/auth_page.git
 #git+https://dwa@bitbucket.org/martut/base_page.git

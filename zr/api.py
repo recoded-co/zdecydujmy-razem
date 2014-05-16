@@ -494,6 +494,13 @@ def geo_search(request, plan_id):
     else:
         return HttpResponseBadRequest(json.dumps({'result': 'error'}))
 
+@json_response
+def keyword_search(request, plan_id, query):
+    from zr import index as i
+    import json
+    result = i.find(query)
+    print result
+    return json.dumps({'result': result})
 
 class SubjectFeatPropertySerializer(ModelSerializer):
     class Meta:

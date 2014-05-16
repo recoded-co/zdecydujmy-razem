@@ -63,8 +63,6 @@ MIDDLEWARE_CLASSES = (
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',            # LNZ
-    'geonition_utils.middleware.PreventCacheMiddleware',    # LNZ
-    'geonition_utils.middleware.IEEdgeMiddleware',          # LNZ
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -76,8 +74,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",                    # LNZ
     "django.contrib.messages.context_processors.messages",  # LNZ
     "django.core.context_processors.request",               # LNZ
-    "base_page.context_processors.organization"             # LNZ
-    'social_auth.context_processors.social_auth_by_type_backends',
 )
 
 ROOT_URLCONF = 'zdecydujmyrazem.urls'
