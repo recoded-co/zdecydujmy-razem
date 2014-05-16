@@ -39,7 +39,6 @@
 
     function map_init(){
 
-
         var osm =
             L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 attribution: 'Map data © OpenStreetMap contributors',
@@ -156,6 +155,7 @@
         map.remoteControlSwitchOff = function(){
 
             if(map.remoteControlSwitch!=undefined && map.remoteControlContent!=undefined){
+                console.log('switch off');
                 map.remoteControlSwitch.call(map.remoteControlContent);
                 map.remoteControlSwitch = undefined;
                 map.remoteControlContent = undefined;
@@ -186,16 +186,16 @@
             });
             map.on('popupopen', function(e) {
               var marker = e.popup._source;
-              $('#map-search').toggle('slow');
-              $('.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control').toggle('slow');
+              //$('#map-search').toggle('slow');
+              //$('.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control').toggle('slow');
               $('#popPublish').click(function(){
-                    map.addLayer(layerWaitingRoom.pop());
+                    //map.addLayer(layerWaitingRoom.pop());
               });
             });
             map.on('popupclose', function(e) {
               var marker = e.popup._source;
-              $('#map-search').toggle('slow');
-              $('.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control').toggle('slow');
+              //$('#map-search').toggle('slow');
+              //$('.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control').toggle('slow');
 
               if(layerWaitingRoom){
                 while(layerWaitingRoom.length > 0){
@@ -211,7 +211,7 @@
 			draw: {
                 marker:{
                     icon:L.icon({
-                     iconUrl: '/static/images/ikonki_mapa-27.png',
+                     iconUrl: '/static/images/ap_maj-10.png',
                      iconSize:     [40, 40], // size of the icon
                      iconAnchor:   [20, 42], // point of the icon which will correspond to marker's location
                      popupAnchor:  [-3, -40] // point from which the popup should open relative to the
@@ -264,6 +264,7 @@
 
 {% endif %}
 		map.on('draw:created', function (e) {
+
 			var type = e.layerType,
                     layer = e.layer;
 
@@ -284,7 +285,7 @@
                     if(data.length>0){
                         addPostFilter(data);
                     }else{
-                        addPostFilter([{id:-1}]);
+                        addPostFilter([{geometry:-1}]);
                     }
                 });
 
@@ -333,6 +334,7 @@
             }
 
 		}).on('draw:drawstart',function(e){
+            console.log('draw:drawstart');
             var type = e.layerType;
             map.remoteControlSwitchOff();
 
@@ -363,7 +365,7 @@
             }
         }).on('draw:drawstop',function(e){
             var type = e.layerType;
-
+            console.log('draw:drawstop');
             if (type === 'rectangle'){
                 L.DomUtil.removeClass(e.target._container, 'leaflet-control-rectangle-on');
             } else if(type === 'marker') {
@@ -448,15 +450,7 @@
                                             removeOutsideVisibleBounds: true,
                                             iconCreateFunction: function(cluster) {
                                                 var childCount = cluster.getChildCount();
-                                                /*var c = ' marker-cluster-';
-                                                if (childCount < 10) {
-                                                    c += 'small';
-                                                } else if (childCount < 100) {
-                                                    c += 'medium';
-                                                } else {
-                                                    c += 'large';
-                                                }*/
-                                                  return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'cluster-mr marker-cluster-mr', iconSize: new L.Point(40, 40) });
+                                                return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'cluster-mr marker-cluster-mr', iconSize: new L.Point(40, 40) });
                                             }});
         var lines = L.markerClusterGroup({showCoverageOnHover: false,
                                             zoomToBoundsOnClick: true,
@@ -464,15 +458,7 @@
                                             removeOutsideVisibleBounds: true,
                                             iconCreateFunction: function(cluster) {
                                                 var childCount = cluster.getChildCount();
-                                                /*var c = ' marker-cluster-';
-                                                if (childCount < 10) {
-                                                    c += 'small';
-                                                } else if (childCount < 100) {
-                                                    c += 'medium';
-                                                } else {
-                                                    c += 'large';
-                                                }*/
-                                                  return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'cluster-mr line-cluster-mr', iconSize: new L.Point(40, 40) });
+                                                return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'cluster-mr line-cluster-mr', iconSize: new L.Point(40, 40) });
                                             }});
         var polygon_markers = L.markerClusterGroup({
                                             showCoverageOnHover: true,
@@ -490,7 +476,7 @@
                                                 } else {
                                                     c += 'large';
                                                 }*/
-                                                  return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'cluster-mr polygon-cluster-mr', iconSize: new L.Point(40, 40) });
+                                                return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'cluster-mr polygon-cluster-mr', iconSize: new L.Point(40, 40) });
                                             }
                                 });
 
@@ -540,11 +526,11 @@
 
                 marker.on("click", function(e){
                     trackEvent('marker','marker clicked','','','');
-                    addPostFilter([{id:value.id}]);
+                    addPostFilter([{geometry:value.id}]);
                 });
                 polygon.on('click', function(e){
                        trackEvent('polygon','clicked',user,'','');
-                       addPostFilter([{id:value.id}]);
+                       addPostFilter([{geometry:value.id}]);
                 });
 
                 polygon_markers.addLayer(marker);
@@ -570,7 +556,7 @@
                         });
                     });
                     marker.on('click', function(e){
-                           addPostFilter([{id:value.geo_id}]);
+                           addPostFilter([{geometry:value.id}]);
                     });
                     markers.addLayer(marker);
 
@@ -621,11 +607,11 @@
 
                     marker.on("click", function(e){
                         trackEvent('marker','marker clicked','','','');
-                        addPostFilter([{id:value.id}]);
+                        addPostFilter([{geometry:value.id}]);
                     });
                     polyline.on('click', function(e){
                            trackEvent('polyline','clicked',user,'','');
-                           addPostFilter([{id:value.id}]);
+                           addPostFilter([{geometry:value.id}]);
                     });
                     lines.addLayer(marker);
                 }
@@ -716,6 +702,7 @@
 
         var comment = $(data).parent().find('#popup_comment').val();
         if(comment){
+            map.addLayer(layerWaitingRoom.pop());
             $.ajax({
                 url : "/zr/api/geometries/",
                 type: "POST",
@@ -732,7 +719,6 @@
                 }
             });
             map.closePopup();
-            layerWaitingRoom = new Array();
         } else {
             alert('comment needed!');
         }
@@ -751,13 +737,15 @@
     }
 
     function addPostFilter(data){
+
+        //$("#nav-tabs-menu").find('li:eq(0)').removeClass('active');
+        //$("#nav-tabs-menu").find('li:eq(1)').removeClass('active');
+        //$("#nav-tabs-menu").find('li:eq(2)').removeClass('active');
+        //$("#nav-tabs-menu").find('li:eq(0)').addClass('active');
+        $("#nav-tabs-menu").find('li:eq(0) > a').trigger('click');
         var addPFilter = $("#div_apiList").scope().addPFilter;
         addPFilter(data);
         $("#div_apiList").scope().$apply();
-        $("#nav-tabs-menu").find('li:eq(0)').removeClass('active');
-        $("#nav-tabs-menu").find('li:eq(1)').removeClass('active');
-        $("#nav-tabs-menu").find('li:eq(2)').removeClass('active');
-        $("#nav-tabs-menu").find('li:eq(0)').addClass('active');
     }
     function deletePopoup(data){
         // get data from popup and send it to server

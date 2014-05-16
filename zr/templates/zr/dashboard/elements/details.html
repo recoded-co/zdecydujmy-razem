@@ -5,15 +5,15 @@
   <div class="post-list">
     <div class="toolbox">
         <span class="left">
-            <button ng-hide="showallposts"
+            <button
                 type="button"
-                onclick="clearGeoSearchFilter()"
+                ng-click="showDiscussion()"
                 class="btn btn-xs btn-danger"
                 ng-click="showAll()|trackEvent:'Rozwiń wszystkie':'Button clicked':user:'':'' ">
-                <span>{% trans 'Rozwiń wszystkie' %}</span>
+                <span>{% trans 'Pokaż dyskusję' %}</span>
             </button>
 
-            <button ng-hide="!showallposts" id="date_button" class="btn btn-xs"
+            <button id="date_button" class="btn btn-xs"
                   ng-int="rev_d=true;"
                   ng-click="reverse=rev_d; rev_d=!rev_d;data_arrow= !data_arrow;setDateSorting(rev_d) |trackEvent:'button Data':'Button clicked':user:'':'' ">
               {% trans 'Data' %}
@@ -21,7 +21,7 @@
                 <span class="glyphicon glyphicon-arrow-up" ng-show="data_arrow"></span>
             </button>
 
-            <button ng-hide="!showallposts" class="btn btn-xs"
+            <button class="btn btn-xs"
                       ng-int="rev_nc=true;numcom_arrow=true;"
                       ng-click=" reverse=!rev_nc; rev_nc=!rev_nc;numcom_arrow=!numcom_arrow;setCommentsSorting(rev_nc)  | trackEvent:'Ilość komentarzy':'Button clicked':user ">
                   {% trans 'Ilość komentarzy' %}

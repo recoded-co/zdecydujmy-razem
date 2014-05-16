@@ -263,6 +263,8 @@ class NPost(generics.ListAPIView):
             sql += ' and geometry_id is null '
         elif geometry == 'notNone':
             sql += ' and geometry_id is not null '
+        elif len(geometry.split(','))== 1 and int(float(geometry)) == -1:
+            return Response([])
         elif len(geometry.split(',')) == 1:
             try:
                 if int(geometry)>0:
@@ -310,7 +312,7 @@ class NPost(generics.ListAPIView):
             alt = six.text_type(user)
             url = avatar_url(user, 40)
             temp_data.data['avatar_url']=url
-            print url
+            #print url
             temp_data.data['avatar_alt']=alt
             temp_data.data['numcom'] = int(item[1])
             temp_ret.append(temp_data.data)

@@ -8,7 +8,7 @@ var zdControllers = angular.module('zdControllers', ['ngCookies']);
 zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope', 'zdServicesFactory','uploadService','Angularytics','postFactory',
   function($scope, $http, $cookies, $rootScope, zdServicesFactory, uploadService, Angularytics, postFactory ) {
 
-      Angularytics.trackPageView = function(url) {
+    Angularytics.trackPageView = function(url) {
         $scope.url = url;
     }
 
@@ -81,6 +81,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
     var tree = null;
 
     $scope.$watch('url', function() {
+        console.log('watch');
         if($scope.url=='/all'){
             tree = postHandler(postFactory.newPostAll,configuration.getPlanId());
             tree.setGeoParam('None');
@@ -276,9 +277,6 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
         }
         sendTempToServer(temp,$http,$cookies,function(temp){
                 $scope.tree.push(temp);
-                if(temp.id!=null){
-                    $scope.geoHashTree[temp.id]=temp;
-                }
             });
           //$scope.tree.$apply();
     };
@@ -306,7 +304,9 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
 
             if(data && data.length == 1){
                tree = postHandler(postFactory.newPostAll,configuration.getPlanId());
-               tree.setGeoParam(''+data[0].id);
+               console.log('data');
+               console.log(data);
+               tree.setGeoParam(''+data[0].geometry);
                tree.cleanParams();
                tree.getPostList('None',function(data){
                     $scope.tree = data;
@@ -333,18 +333,15 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
             }
 
         }else{
+            tree = postHandler(postFactory.newPostAll,configuration.getPlanId());
+            tree.setGeoParam('notNone');
             $scope.showallposts = true;
-            $scope.filterGeoData=[];
+
+            tree.getPostList('None',function(data){
+                   $scope.tree = data;
+            });
+            $scope.endTree = tree.postReachEnd('None');
         }
-    };
-
-    $scope.postLightOn = function(id) {
-        //$("#mediaList1").animate({scrollTop: 30}, "slow");
-        $scope.geoHashTree[id].light = true;
-    };
-
-    $scope.postLightOff = function(id) {
-        $scope.geoHashTree[id].light = false;
     };
 
     $rootScope.$on('upload:loadstart', function () {
@@ -358,6 +355,17 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
     $rootScope.$on('upload:success', function(xhr){
 
     });
+
+    $scope.showDiscussion = function() {
+        tree = postHandler(postFactory.newPostAll,configuration.getPlanId());
+        tree.setGeoParam('notNone');
+        $scope.showallposts = true;
+
+        tree.getPostList('None',function(data){
+            $scope.tree = data;
+        });
+        $scope.endTree = tree.postReachEnd('None');
+    }
 
     $scope.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction){
         Angularytics.trackEvent(category, action, opt_label, opt_value, opt_noninteraction);
