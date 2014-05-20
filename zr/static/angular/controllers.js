@@ -443,7 +443,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
     });
 
     $scope.showDiscussion = function() {
-        tree = postHandler(postFactory.newPostAll,configuration.getPlanId());
+        tree = postHandler(postFactory.newPostAll,undefined,configuration.getPlanId());
         tree.setGeoParam('notNone');
         $scope.showallposts = true;
 
