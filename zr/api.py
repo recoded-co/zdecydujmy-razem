@@ -517,7 +517,8 @@ def keyword_search(request, plan_id, query):
 
     from zr import index as i
     import json
-    result = i.find(query)
+    result = i.find(query, plan_id)
+    result = i.find(query, plan_id)
     print result
     result = [(item,len(Post.objects.filter(parent_id=item))) for item in result ]
     paginator = Paginator(result,5);
@@ -532,17 +533,21 @@ def keyword_search(request, plan_id, query):
 
 @json_response
 def date_search(request, plan_id, year, mon, day):
+    from django.conf import settings
+    import pytz
 
     print plan_id,year,mon,day
     round = int(request.GET.get('round',1))
 
-    result = Post.objects.exclude(geometry=None).exclude(parent__isnull=False).filter(plan_id=int(plan_id),date=datetime.date(int(year),int(mon),int(day)))
+    result = Post.objects.exclude(geometry=None).exclude(parent__isnull=False).filter(plan_id=int(plan_id),
+                                                                                date=datetime.date(int(year),int(mon),int(day), tzinfo=pytz.timezone(settings.TIME_ZONE))
+                                                                                )
     print 'len(result)'
     print len(result)
-    if len(result) == 0 :
+    if len(result) == 0:
         return []
     result = [(item.id,len(Post.objects.filter(parent_id=item.id))) for item in result ]
-    paginator = Paginator(result,5);
+    paginator = Paginator(result, 5);
 
     try:
         actuall_item_list = paginator.page(round).object_list
