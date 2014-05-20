@@ -1,8 +1,8 @@
 __author__ = 'dwa'
-from whoosh import index
-from whoosh.fields import Schema, ID, NGRAMWORDS
+from whoosh import index, query
+from whoosh.fields import Schema, ID, NGRAMWORDS, NUMERIC, DATETIME, TEXT
 from whoosh.qparser import QueryParser, MultifieldParser
-
+from whoosh.qparser.dateparse import DateParserPlugin
 
 
 """
@@ -19,8 +19,10 @@ IDX_DIR = 'zr_index'
 
 SCHEMA = Schema(
     id=ID(stored=True),
-    author=NGRAMWORDS(stored=True),
-    content=NGRAMWORDS(stored=True)
+    plan_id=NUMERIC(),
+    author=TEXT(stored=True),
+    content=TEXT(stored=True),
+    date=DATETIME(stored=True)
 )
 
 
@@ -39,7 +41,7 @@ def get_or_create_index(force_create=False):
 def write_post(writer, post):
     utf_content = post.content
     utf_username = post.author.username
-    writer.add_document(id=unicode(post.id), author=utf_username, content=utf_content)
+    writer.add_document(id=unicode(post.id), plan_id=post.plan.id, author=utf_username, content=utf_content, date=post.date)
 
 
 def create_new_index():
@@ -58,14 +60,18 @@ def update_index(post):
     write_post(writer, post)
     writer.commit()
 
-
-def find(query):
-    query = query[:-1] if query.endswith('/') else query
+"""
+    In order to search date, use: "date:2014-05-16" query
+"""
+def find(uquery, plan_id):
+    uquery = uquery[:-1] if uquery.endswith('/') else uquery
     try:
         ix, created = get_or_create_index()
-        qp = MultifieldParser(['content', 'author'], schema=SCHEMA)
-        q = qp.parse(query)
-        results = ix.searcher().search(q)
+        qp = MultifieldParser(['content', 'author', 'date'], schema=SCHEMA)
+        qp.add_plugin(DateParserPlugin())
+        allow_q = query.Term('plan_id', plan_id)
+        q = qp.parse(uquery)
+        results = ix.searcher().search(q, filter=allow_q)
         return [int(r['id']) for r in results]
     except Exception, e:
         print e
