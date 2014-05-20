@@ -197,6 +197,7 @@
             });
             map.on('popupclose', function(e) {
               var marker = e.popup._source;
+              map.remoteControlSwitchOff();
               //$('#map-search').toggle('slow');
               //$('.leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control').toggle('slow');
 
