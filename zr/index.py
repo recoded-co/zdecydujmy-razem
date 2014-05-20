@@ -38,7 +38,7 @@ def get_or_create_index(force_create=False):
 
 def write_post(writer, post):
     utf_content = post.content
-    utf_username = post.author.get_username()
+    utf_username = post.author.username
     writer.add_document(id=unicode(post.id), author=utf_username, content=utf_content)
 
 

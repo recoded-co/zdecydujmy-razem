@@ -21,6 +21,7 @@ from django.utils import six
 from django.db import connection
 from django.core.paginator import Paginator, EmptyPage
 from django.contrib.auth.models import User
+import datetime
 
 
 router = routers.DefaultRouter()
@@ -230,7 +231,7 @@ class NPost(generics.ListAPIView):
         parent = request.QUERY_PARAMS.get('parent','None')
         geometry = request.QUERY_PARAMS.get('geometry', 'None')
         type = request.QUERY_PARAMS.get('type','date')
-        direction = self.parseToBoolean(request.QUERY_PARAMS.get('direction',True))
+        direction = NPost.parseToBoolean(request.QUERY_PARAMS.get('direction',True))
         round = int(request.QUERY_PARAMS.get('round',1))
         plan_id = request.QUERY_PARAMS.get('plan_id','None')
         #TODO : plan_id add into sql query.
@@ -305,6 +306,14 @@ class NPost(generics.ListAPIView):
 
         temp_ret = []
 
+        temp_ret = NPost.addDataToOutput(actuall_item_list)
+
+
+        return Response(temp_ret)
+
+    @staticmethod
+    def addDataToOutput(actuall_item_list):
+        return_list =[]
         for item in actuall_item_list:
             temp = Post.objects.get(pk = item[0] )
             temp_data = PostSerializer(temp)
@@ -315,11 +324,11 @@ class NPost(generics.ListAPIView):
             #print url
             temp_data.data['avatar_alt']=alt
             temp_data.data['numcom'] = int(item[1])
-            temp_ret.append(temp_data.data)
+            return_list.append(temp_data.data)
+        return return_list
 
-        return Response(temp_ret)
-
-    def parseToBoolean(self, str):
+    @staticmethod
+    def parseToBoolean(str):
         if str == 'True':
             return True
         else :
@@ -496,14 +505,54 @@ def geo_search(request, plan_id):
     else:
         return HttpResponseBadRequest(json.dumps({'result': 'error'}))
 
+
 @json_response
 def keyword_search(request, plan_id, query):
+
+    parent = request.GET.get('parent','None')
+    geometry = request.GET.get('geometry', 'None')
+    type = request.GET.get('type','date')
+    direction = NPost.parseToBoolean(request.GET.get('direction',True))
+    round = int(request.GET.get('round',1))
+
     from zr import index as i
     import json
     result = i.find(query)
     print result
-    #result = Post.objects.filter(id__in=result)
-    return json.dumps({'result': result})
+    result = [(item,len(Post.objects.filter(parent_id=item))) for item in result ]
+    paginator = Paginator(result,5);
+
+    try:
+        actuall_item_list = paginator.page(round).object_list
+    except EmptyPage:
+        return []
+
+    result = NPost.addDataToOutput(actuall_item_list)
+    return result
+
+@json_response
+def date_search(request, plan_id, year, mon, day):
+
+    print plan_id,year,mon,day
+    round = int(request.GET.get('round',1))
+
+    result = Post.objects.exclude(geometry=None).exclude(parent__isnull=False).filter(plan_id=int(plan_id),date=datetime.date(int(year),int(mon),int(day)))
+    print 'len(result)'
+    print len(result)
+    if len(result) == 0 :
+        return []
+    result = [(item.id,len(Post.objects.filter(parent_id=item.id))) for item in result ]
+    paginator = Paginator(result,5);
+
+    try:
+        actuall_item_list = paginator.page(round).object_list
+    except EmptyPage:
+        return []
+
+    result = NPost.addDataToOutput(actuall_item_list)
+
+    return result
+
 
 class SubjectFeatPropertySerializer(ModelSerializer):
     class Meta:

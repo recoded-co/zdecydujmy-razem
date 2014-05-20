@@ -168,8 +168,3 @@ def change2(request, extra_context=None, next_override=None,
     }
     context.update(extra_context)
     return render(request, 'zr/avatar/change.html', context)
-
-
-def test(request, *args, **kwargs):
-    print kwargs
-    pass

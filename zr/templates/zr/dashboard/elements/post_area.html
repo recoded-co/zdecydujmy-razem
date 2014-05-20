@@ -61,12 +61,12 @@
                             <button  class="btn btn-xs btngrey btnwhite"
                                 ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
                                 ng-click="scoreUp(post) | trackEvent:'score-up':'Button clicked':user ">
-                                <div class="mr-handup">&nbsp;</div><span class="fontBl">{[{ post.positive_rate || 0 }]}</span> {% trans 'za' %}
+                                <div class="mr-handup">&nbsp;</div>{[{ post.positive_rate || 0 }]} {% trans 'za' %}
                             </button>
                             <button  class="btn btn-xs btngrey btnwhite"
                                  ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
                                  ng-click="scoreDown(post) | trackEvent:'score-down':'Button clicked':user ">
-                                 <div class="mr-handdown">&nbsp;</div> <span class="fontBl">{[{ post.negative_rate || 0 }]}</span> {% trans 'przeciw' %}
+                                 <div class="mr-handdown">&nbsp;</div> {[{ post.negative_rate || 0 }]} {% trans 'przeciw' %}
                             </button>
                             <button ng-hide="'{{ user }}'=='AnonymousUser'" class="btn btn-xs btnsea btnwhite" ng-click="comment(post) | trackEvent:'Dodaj Komentarz':'Button clicked':user:'':''">
                                 <i class="fa fa-comment"></i>&nbsp;<span class="fontBold btnsea">{% trans 'skomentuj' %}</span>

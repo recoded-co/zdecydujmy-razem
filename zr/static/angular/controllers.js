@@ -19,14 +19,22 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
         }
     }
 
-    var postHandler = function(servHandler,plan_id){
+    var postHandler = function(servHandler,nestH,plan_id){
         var servHandler = servHandler;
+        var nestedHandler = nestH;
         var type = 'date';
         var direction = 'True';
         var brPostState = {'None': postState() }
         var geometry = 'None';
         var plan_id= plan_id;
+        var text = '';
         return{
+            setHandler: function(handler){
+                postHandler = handler;
+            },
+            setSearchText: function(textp){
+                text = textp;
+            },
             setGeoParam: function(item){
                 geometry = item;
             },
@@ -51,7 +59,20 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
                 if( brPostState[parent_id] === undefined){
                     brPostState[parent_id] = postState();
                 }
-                servHandler.query({
+                var tempServHandler = undefined;
+
+                // changing post service for nested comments,
+                // nested comments are out of text or data search
+                if(parent_id != 'None' && nestedHandler != undefined ){
+                    //nested
+                    tempServHandler = nestedHandler;
+                } else {
+                    //surface
+                    tempServHandler = servHandler;
+                }
+                console.log('text:  ' + text);
+                tempServHandler.query({
+                    text:text,
                     geometry: geometry,
                     type:type,
                     round:''+brPostState[parent_id].round,
@@ -59,6 +80,36 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
                     plan_id:plan_id,
                     parent:parent_id,
                     direction:direction}).$promise.then( function (data){
+                        if(!brPostState[parent_id].reachEnd)
+                            callback(data);
+
+                        if(data.length<5){
+                            brPostState[parent_id].reachEnd = true;
+                        } else {
+                            brPostState[parent_id].round++;
+                        }
+                    });
+            },
+            getPostListParams: function(parent_id,paramList, callback){
+
+                if( brPostState[parent_id] === undefined){
+                    brPostState[parent_id] = postState();
+                }
+                var tempServHandler = undefined;
+
+                // changing post service for nested comments,
+                // nested comments are out of text or data search
+                if(parent_id != 'None' && nestedHandler != undefined ){
+                    //nested
+                    tempServHandler = nestedHandler;
+                } else {
+                    //surface
+                    tempServHandler = servHandler;
+                }
+                var params = {  round:''+brPostState[parent_id].round,
+                                plan_id:plan_id};
+                angular.extend(params,paramList);
+                tempServHandler.query(params).$promise.then( function (data){
                         if(!brPostState[parent_id].reachEnd)
                             callback(data);
 
@@ -80,23 +131,41 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
 
     var tree = null;
 
+    $scope.$watch('searchdate.date',function(x){
+        if(x instanceof Object){
+
+            tree = postHandler(postFactory.dateSearch,postFactory.newPostAll,configuration.getPlanId());
+            $scope.showallposts = true;
+            var params = {
+                year: x.getFullYear(),
+                mon: x.getMonth()+1,
+                day: x.getDate()
+            }
+            tree.getPostListParams('None',params,function(data){
+                $scope.tree = data;
+            });
+
+            $scope.endTree = tree.postReachEnd('None');
+        }
+    });
+
     $scope.$watch('url', function() {
         console.log('watch');
         if($scope.url=='/all'){
-            tree = postHandler(postFactory.newPostAll,configuration.getPlanId());
+            tree = postHandler(postFactory.newPostAll,undefined,configuration.getPlanId());
             tree.setGeoParam('None');
         } else if($scope.url=='/details'){
-            tree = postHandler(postFactory.newPostAll,configuration.getPlanId());
+            tree = postHandler(postFactory.newPostAll,undefined,configuration.getPlanId());
             tree.setGeoParam('notNone');
         } else if($scope.url=='/subscriptions'){
-            tree = postHandler(postFactory.newSubscribedPosts,configuration.getPlanId());
+            tree = postHandler(postFactory.newSubscribedPosts,undefined,configuration.getPlanId());
         }
         tree.getPostList('None',function(data){
                $scope.tree = data;
         });
         $scope.endTree = tree.postReachEnd('None');
     });
-    tree = postHandler(postFactory.newPostAll,configuration.getPlanId());
+    tree = postHandler(postFactory.newPostAll,undefined,configuration.getPlanId());
     tree.setGeoParam('notNone');
 
     $scope.addMorePosts = function(post,root) {
@@ -303,7 +372,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
             //$scope.showallposts = false;
 
             if(data && data.length == 1){
-               tree = postHandler(postFactory.newPostAll,configuration.getPlanId());
+               tree = postHandler(postFactory.newPostAll,undefined,configuration.getPlanId());
                console.log('data');
                console.log(data);
                tree.setGeoParam(''+data[0].geometry);
@@ -313,7 +382,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
                });
                $scope.endTree = tree.postReachEnd('None');
             } else if(data && data.length > 1){
-               tree = postHandler(postFactory.newPostAll,configuration.getPlanId());
+               tree = postHandler(postFactory.newPostAll,undefined,configuration.getPlanId());
                var geo_params = '';
                for(var item in data){
                    if(item==0){
@@ -333,7 +402,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
             }
 
         }else{
-            tree = postHandler(postFactory.newPostAll,configuration.getPlanId());
+            tree = postHandler(postFactory.newPostAll,undefined,configuration.getPlanId());
             tree.setGeoParam('notNone');
             $scope.showallposts = true;
 
@@ -343,6 +412,23 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
             $scope.endTree = tree.postReachEnd('None');
         }
     };
+
+    $scope.search = function(text){
+        if(text && text.length>=1){
+            tree = postHandler(postFactory.textSearch,postFactory.newPostAll,configuration.getPlanId());
+            tree.setGeoParam('notNone');
+
+            $scope.showallposts = true;
+
+            tree.setSearchText(text);
+
+            tree.getPostList('None',function(data){
+                $scope.tree = data;
+            });
+
+            $scope.endTree = tree.postReachEnd('None');
+        }
+    }
 
     $rootScope.$on('upload:loadstart', function () {
         console.log('Controller: on `loadstart`');
