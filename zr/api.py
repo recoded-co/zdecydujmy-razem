@@ -496,7 +496,7 @@ def geo_search(request, plan_id):
         #print polygon
         try:
             pnt = fromstr(polygon, srid=4326)
-            geometries = Geometry.objects.filter(Q(poly__intersects=pnt) | Q(point__intersects=pnt))
+            geometries = Geometry.objects.filter(Q(poly__intersects=pnt) | Q(point__intersects=pnt) | Q(line__intersects=pnt))
             posts = Post.objects.filter(plan__id=plan_id, geometry__in=geometries)
             posts_serialized = PostSerializer(posts, many=True)
             return posts_serialized.data #json_geometries.data
@@ -515,9 +515,10 @@ def keyword_search(request, plan_id, query):
     direction = NPost.parseToBoolean(request.GET.get('direction',True))
     round = int(request.GET.get('round',1))
 
+    print plan_id,query
+
     from zr import index as i
     import json
-    result = i.find(query, plan_id)
     result = i.find(query, plan_id)
     print result
     result = [(item,len(Post.objects.filter(parent_id=item))) for item in result ]
@@ -535,15 +536,22 @@ def keyword_search(request, plan_id, query):
 def date_search(request, plan_id, year, mon, day):
     from django.conf import settings
     import pytz
+    from django.utils.timezone import make_aware,make_naive
+    from django.db.models import Q
 
-    print plan_id,year,mon,day
     round = int(request.GET.get('round',1))
 
-    result = Post.objects.exclude(geometry=None).exclude(parent__isnull=False).filter(plan_id=int(plan_id),
-                                                                                date=datetime.date(int(year),int(mon),int(day), tzinfo=pytz.timezone(settings.TIME_ZONE))
-                                                                                )
-    print 'len(result)'
-    print len(result)
+    now = datetime.datetime(int(year),int(mon),int(day))
+    delta = datetime.timedelta(days=1)
+
+    start = make_aware(now,pytz.timezone(settings.TIME_ZONE))
+    end = make_aware(now + delta,pytz.timezone(settings.TIME_ZONE))
+
+    result = Post.objects.exclude(geometry=None)\
+        .exclude(parent__isnull=False)\
+        .filter(plan_id=int(plan_id))\
+        .filter( Q(date__gte=start) & Q(date__lte=end))
+
     if len(result) == 0:
         return []
     result = [(item.id,len(Post.objects.filter(parent_id=item.id))) for item in result ]
@@ -565,7 +573,8 @@ class SubjectFeatPropertySerializer(ModelSerializer):
         fields = ('key', 'value')
 
 class SubjectFeatSerializer(GeoFeatureModelSerializer):
-    feat_description = SubjectFeatPropertySerializer(many=True) #serializers.RelatedField(many=True)
+    feat_description = SubjectFeatPropertySerializer(many=True)
+    #serializers.RelatedField(many=True)
 
     class Meta:
         model = SubjectFeat
