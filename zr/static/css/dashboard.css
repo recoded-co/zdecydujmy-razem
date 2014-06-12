@@ -377,11 +377,22 @@ button:focus {
            }
            #nav-tabs-menu li.open > .dropdown-menu li
            {
+              margin-left: -1px;
+              padding-left: 10px;
               width: 100% !important;
               height: 40px;
-              border-top: 0px;
-              /*border-bottom: 1px solid #66624A;*/
+              border-top: solid white 2px !important;
+              background: #46E5C4;
               padding-top: 8px;
+           }
+           #nav-tabs-menu li.open > .dropdown-menu li:hover
+           {
+              background: #2FA39B;
+           }
+           .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus{
+               background: #2FA39B;
+               height: 20px;
+               background-color: #2FA39B !important;
            }
             #nav-tabs-menu li.open > .dropdown-menu li:last-child
            {
@@ -396,16 +407,14 @@ button:focus {
            #nav-tabs-menu li.open > ul.dropdown-menu a
            {
               border: none !important;
-             
-             
-              text-align: center;
-              height: 40px;
+              text-align: left  ;
+              height: 20px;
            }
             #nav-tabs-menu li.open > ul.dropdown-menu a:hover
            {
               border: none !important; 
-              text-align: center;
-              background-color: #FFFFFF;
+              /*text-align: center;*/
+              /*background-color: #FFFFFF;*/
               text-decoration: underline;
            }
            .nav-tabs
@@ -425,10 +434,16 @@ button:focus {
            .img-circle img
            {
             margin-right: 6px;
+            border-radius: 10px;
+            margin-top: -8px;
            }
+           .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+              background-color: inherit;
+              border-color: #428bca;
+            }
            .nav .open > a, .nav .open > a:hover, .nav .open > a:focus
            {
-            background-color: white !important;
+            /*background-color: white !important;*/
            }
            ul.nav.nav-tabs
            {
@@ -1525,3 +1540,4 @@ textarea:focus{
 .leaflet-container .leaflet-control-zoomslider{
     top:100px;
 }
+

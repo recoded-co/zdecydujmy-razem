@@ -2,56 +2,122 @@
 {% load i18n %}
 {% load url from future %}
 
-{% block navbar %} {% endblock %}
+{% block navbar %}
+    <div class="pagina">
+        <img class="logo_op" src="/static/images/ap_maj-11.png" alt=""/>
+    </div>
+{% endblock %}
+
+{% block extra_head %}
+    <link href='/static/css/registration.css' rel='stylesheet' type='text/css'/>
+    <link href='/static/css/btn_m.css' rel='stylesheet' type='text/css'/>
+{% endblock %}
 
 {% block content %}
 
-<div class="jumbotron">
+<div class="back_row">
   <div class="container">
       <form class="form-signin" method="post" action="{% url 'register' %}">
         {% csrf_token %}
             <div class="row">
                 <div class="col-xs-6 col-md-6">
+                    <span class="left">
+                        <h2>rejestracja</h2>
+                    </span>
+                </div>
+                <div class="col-xs-6 col-md-6">
+                    <span class="right"><a href="/zr/"><img src="/static/images/ap_maj6_wymiary-12.png" alt="cross"/></a></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6 col-md-6">
                     <div class="form-group">
-                        <label for="id_{{ form.username.name }}">{% trans "Nazwa użytkownika" %}</label>
-                        <div style="color: red">{{ form.username.errors }}</div>
-                        <input id="id_{{ form.username.name }}" placeholder="{{ form.username.label }}" maxlength="254" name="{{ form.username.name }}" type="text" class="form-control" autofocus>
+                        <span class="block pro_l">
+                            <label for="id_{{ form.username.name }}">{% trans "Nazwa użytkownika*" %}</label>
+                            <!--<div style="color: red">{{ form.username.errors }}</div>-->
+                        </span>
+                        <span class="block pro_r">
+
+                            <input id="id_{{ form.username.name }}" placeholder="{{ form.username.label }}" maxlength="254" name="{{ form.username.name }}" type="text" class="form-control" autofocus>
+                        </span>
+                    </div>
+                    <div  id="space" class="form-group">
+                        <span class="block pro_l">
+                            <label for="id_{{ form.email.name }}">{% trans "Adres email*" %}</label>
+                            <!--<div style="color: red">{{ form.email.errors }}</div>-->
+                        </span>
+                        <span class="block pro_r">
+
+                            <input id="id_{{ form.email.name }}" placeholder="{{ form.email.label }}" maxlength="254" name="{{ form.email.name }}" type="text" class="form-control" autofocus>
+                        </span>
                     </div>
                     <div class="form-group">
-                        <label for="id_{{ form.email.name }}">{% trans "Adres email" %}</label>
-                        <div style="color: red">{{ form.email.errors }}</div>
-                        <input id="id_{{ form.email.name }}" placeholder="{{ form.email.label }}" maxlength="254" name="{{ form.email.name }}" type="text" class="form-control" autofocus>
+                        <span class="block pro_l">
+                            <label for="id_{{ form.firstname.name }}">{% trans "Imię" %}</label>
+                        </span>
+                        <span class="block pro_r">
+                            <input id="id_{{ form.firstname.name }}" placeholder="{{ form.firstname.label }}" maxlength="254" name="{{ form.firstname.name }}" type="text" class="form-control" autofocus>
+                        </span>
                     </div>
                     <div class="form-group">
-                        <label for="id_{{ form.firstname.name }}">{% trans "Imię" %}</label>
-                        <input id="id_{{ form.firstname.name }}" placeholder="{{ form.firstname.label }}" maxlength="254" name="{{ form.firstname.name }}" type="text" class="form-control" autofocus>
+                        <span class="block pro_l">
+                            <label for="id_{{ form.lastname.name }}">{% trans "Nazwisko" %}</label>
+                        </span>
+                        <span class="block pro_r">
+                            <input id="id_{{ form.lastname.name }}" placeholder="{{ form.lastname.label }}" maxlength="254" name="{{ form.lastname.name }}" type="text" class="form-control" autofocus>
+                        </span>
                     </div>
                     <div class="form-group">
-                        <label for="id_{{ form.lastname.name }}">{% trans "Nazwisko" %}</label>
-                        <input id="id_{{ form.lastname.name }}" placeholder="{{ form.lastname.label }}" maxlength="254" name="{{ form.lastname.name }}" type="text" class="form-control" autofocus>
+                        <span class="block pro_l">
+                            <label for="id_{{ form.zipcode.name }}">{% trans "Kod pocztowy*" %}</label>
+                            <!--<div style="color: red">{{ form.zipcode.errors }}</div>-->
+                        </span>
+                        <span class="block pro_r">
+
+                            <input id="id_{{ form.zipcode.name }}" placeholder="{{ form.zipcode.label }}" maxlength="254" name="{{ form.zipcode.name }}" type="text" class="form-control" autofocus>
+                        </span>
                     </div>
                     <div class="form-group">
-                        <label for="id_{{ form.zipcode.name }}">{% trans "Kod pocztowy" %}</label>
-                         <div style="color: red">{{ form.zipcode.errors }}</div>
-                        <input id="id_{{ form.zipcode.name }}" placeholder="{{ form.zipcode.label }}" maxlength="254" name="{{ form.zipcode.name }}" type="text" class="form-control" autofocus>
-                    </div>
-                    <div class="form-group">
-                        <label for="id_{{ form.password1.name }}">{% trans 'Hasło' %}</label>
-                        <div style="color: red">{{ form.password1.errors }}</div>
-                        <input id="id_{{ form.password1.name }}" placeholder="{{ form.password1.label }}" maxlength="254" name="{{ form.password1.name }}" type="password" class="form-control" >
-                    </div>
-                    <div class="form-group">
-                        <label for="id_{{ form.password2.name }}">{% trans 'Potwierdź hasło' %}</label>
-                        <div style="color: red">{{ form.password2.errors }}</div>
-                        <input id="id_{{ form.password2.name }}" placeholder="{{ form.password2.label }}" maxlength="254" name="{{ form.password2.name }}" type="password" class="form-control" >
+                        <span class="block pro_l">
+                        </span>
+                        <span class="block pro_r">
+                            <p class="it15"> * Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+                        </span>
                     </div>
                 </div>
                 <div class="col-xs-6 col-md-6">
+                    <div class="form-group">
+                        <span class="block pro_l">
+                            <label for="id_{{ form.password1.name }}">{% trans 'Hasło*' %}</label>
+                            <!--<div style="color: red">{{ form.password1.errors }}</div>-->
+                        </span>
+                        <span class="block pro_r">
+                            <input id="id_{{ form.password1.name }}" placeholder="{{ form.password1.label }}" maxlength="254" name="{{ form.password1.name }}" type="password" class="form-control" >
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <span class="block pro_l">
+                            <label for="id_{{ form.password2.name }}">{% trans 'Potwierdź hasło*' %}</label>
+                            <!--<div style="color: red">{{ form.password2.errors }}</div>-->
+                        </span>
+                        <span class="block pro_r">
+                            <input id="id_{{ form.password2.name }}" placeholder="{{ form.password2.label }}" maxlength="254" name="{{ form.password2.name }}" type="password" class="form-control" >
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <span class="block pro_l">
+                        </span>
+                        <span class="block pro_r">
+                            {% if form.password2.errors or form.password1.errors or form.password1.errors or form.email.errors or form.username.errors %}
+                                <p class="btn-big-n btn-r it15" style="width: 200px;">Należy zaznaczyć wymagane pola</p>
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <input type="hidden" name="next" value="{{ next }}" />
+                    <button type="submit" class="btn-sm-n btn-a r ">{% trans 'Zapisz' %}</button>
                 </div>
             </div>
-            <input type="hidden" name="next" value="{{ next }}" />
-            <button type="submit" class="btn  btn-success">{% trans 'Zarejestruj' %}</button>
-            <hr />
         </form>
   </div>
 </div>

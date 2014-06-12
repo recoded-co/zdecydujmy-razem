@@ -2,34 +2,42 @@
 {% load url from future %}
 <form class="form-signin" method="post" action="{% url 'django.contrib.auth.views.login' %}">
 {% csrf_token %}
-    {% if form.errors %}
-	    <p>{% trans "Adres email lub hasło jest niepoprawne." %}</p>
-	{% endif %}
-    <div class="row">
-	    <div class="col-xs-6 col-md-6">
+
+    <div class="log_row">
+	    <div class="col-xs-7 col-md-7 login">
             <div class="form-group">
-                <label for="id_{{ form.username.name }}">{% trans "Adres e-mail lub login" %}</label>
-                <input id="id_{{ form.username.name }}" placeholder="{% trans 'np. jane lub jan@gmail.com' %}" maxlength="254" name="{{ form.username.name }}" type="text" class="form-control" autofocus>
+                <input class="form-control input-sm" id="id_{{ form.username.name }}" placeholder="{% trans 'np. jane lub jan@gmail.com' %}" maxlength="254" name="{{ form.username.name }}" type="text" class="form-control" autofocus>
             </div>
             <div class="form-group">
-                <label for="id_{{ form.password.name }}">{% trans 'Hasło' %}</label>
-                <input id="id_{{ form.password.name }}" placeholder="{{ form.password.label }}" maxlength="254" name="{{ form.password.name }}" type="password" class="form-control" >
+                <input  class="form-control input-sm" id="id_{{ form.password.name }}" placeholder="{% trans 'hasło' %}" maxlength="254" name="{{ form.password.name }}" type="password" class="form-control" >
             </div>
+            {% if form.errors %}
+                <p class="red_info">{% trans "Adres email lub hasło jest niepoprawne." %}</p>
+            {% endif %}
             <input type="hidden" name="next" value="{{ next }}" />
-
-            <button name="zaloguj" type="submit" class="btn  btn-success">{% trans 'Zaloguj' %}</button>
-            <a href="{% url   'forgot_password1' %}">{% trans 'zapomniałem hasła' %}</a>
+            <div style="float: right;">
+                <a class=" btn-sm-n btn-a" href="{% url 'register' %}">
+                    {% trans 'Zarejestruj się' %}
+                </a>
+                <button name="zaloguj" type="submit" class="btn-sm-n btn-b">
+                    {% trans 'Zaloguj' %}
+                </button>
+                <br>
+                <a href="{% url   'forgot_password1' %}">{% trans 'zapomniałem hasła' %}</a>    
+            </div>
         </div>
-        <div class="col-xs-6 col-md-3">
-            <br>
-            <a class="btn btn-primary btn-block" href="{% url 'socialauth_begin' 'google-oauth2' %}">{% trans 'Konto Google' %}</a>
-
-            <a class="btn btn-primary btn-block" href="{% url 'socialauth_begin' 'facebook' %}">{% trans 'Konto Facebook' %}</a>
-
-            <a class="btn btn-warning btn-block" href="{% url 'register' %}">{% trans 'Zarejestruj się' %}</a>
-
-            <a class="btn btn-warning btn-block" href="/zr/dashboard">{% trans 'Anonimowy użytkownik' %}</a>
+        <div class="col-xs-5 col-md-5">
+            <div class="sociallinks">
+                <p>{% trans 'Zaloguj się jako/przez' %}</p>
+                <img width="20px" height="20px" src="/static/images/l1.png" alt=""/>
+                <a class="btn-c btn-sm-n" href="/zr/dashboard">{% trans 'anonimowy użytkownik' %}</a>
+                <br>
+                <img width="20px" height="20px" src="/static/images/google.png" alt=""/>
+                <a class="btn-sm-n btn-c " href="{% url 'socialauth_begin' 'google-oauth2' %}">{% trans 'konto google' %}</a>
+                <br>
+                <img width="20px" height="20px" src="/static/images/facebook.png" alt=""/>
+                <a class="btn-sm-n  btn-c" href="{% url 'socialauth_begin' 'facebook' %}">{% trans 'konto facebook' %}</a>
+            </div>
         </div>
-
-    <hr />
+    </div>
 </form>

@@ -73,8 +73,10 @@
     <link rel="stylesheet" href="/static/css/jasny-bootstrap.min.css"/>
     <link rel="stylesheet" href="/static/js/LeafletTileLegend/Leaflet.TileLegend.css"/>
     <link rel="stylesheet" href="/static/angular/bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css"/>
-    <link rel="stylesheet" href="/static/js/Font-Awesome/css/font-awesome.min.css"/>
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
+    <!--<link rel="stylesheet" href="/static/js/Font-Awesome/css/font-awesome.min.css"/>
+-->
     <!--<link rel="stylesheet" href="/static/js/bootstrap-datepicker/css/datepicker.css"/>-->
 {% endblock %}
 
@@ -165,8 +167,8 @@
                   <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
+                  <li><a href="{% url 'avatar_change2' %}">{% trans "Zmień zdjęcie" %}</a></li>
                   <li><a href="{% url 'django.contrib.auth.views.logout_then_login' %}">{% trans "Wyloguj" %}</a></li>
-                  <li><a href="{% url 'avatar_change2' %}">Change your avatar</a></li>
               </ul>
           </li>
       </ul>

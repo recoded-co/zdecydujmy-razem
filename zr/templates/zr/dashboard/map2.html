@@ -64,7 +64,7 @@
 
         var baseMaps = {
            // "Open Street Map": osm,
-            "Mapa": lmap,
+            "Mapa": osm,
             "Zdjęcia satelitarne": mbmap
         };
         var mpzp =
@@ -188,15 +188,11 @@
                 }
             });
             map.on('popupopen', function(e) {
+              map.panTo(e.popup._latlng);
               var marker = e.popup._source;
-              $('#popPublish').click(function(){
-                    //map.addLayer(layerWaitingRoom.pop());
-              });
             });
             map.on('popupclose', function(e) {
-              var marker = e.popup._source;
               map.remoteControlSwitchOff();
-
               if(layerWaitingRoom){
                 while(layerWaitingRoom.length > 0){
                     map.removeLayer(layerWaitingRoom.pop());

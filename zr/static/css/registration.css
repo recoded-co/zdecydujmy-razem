@@ -1,0 +1,82 @@
+body {
+    background: url('../images/map_pod.png') repeat !important;
+}
+
+.pagina{
+    width:100%;
+    heinght: 64px;
+    background: #ffffff;
+}
+
+.back_row{
+    margin-top: 320px;
+    background: #46E5C4;
+    padding-bottom:35px;
+}
+
+h2{
+    font-size: 32px !important;
+    font-weight: 100 !important;
+    font-stretch: extra-expanded !important;
+    font-family: "source_sans_prolight" !important;
+    color:#FFFFFF !important;
+    margin: 15px 0px 15px 0px !important;
+}
+label{
+    font-size: 17px !important;
+    font-weight: 100 !important;
+}
+
+.block{
+    display: inline-block;
+}
+.pro_l{
+    width:190px;
+    text-align: right;
+    margin: 1px 0px;
+}
+.pro_r{
+    width: 357px;
+    margin: 1px 0px;
+}
+
+#space{
+    margin-bottom: 30px !important;
+}
+
+#id_zipcode{
+    width:50% !important;
+}
+
+.it15{
+    font-style: italic;
+    font-size: 15px;
+}
+
+.form-group .block input {
+    padding: 3px 4px;
+    font-size: 15px;
+    color: #111111;
+    line-height: 1;
+    border-radius: 10px;
+    margin: 1px 1px;
+    height: 33px;
+}
+
+.col-xs-6 .form-group {
+    margin-bottom: 1px !important;
+}
+.left{
+    margin-left:35%;
+    float:left;
+    display:inline-block;
+}
+.right{
+    margin: 20px 0px 15px 0px;
+    float:right;
+    display:inline-block;
+}
+.center{
+    text-align: center;
+    padding: 10px 0px;
+}

@@ -2,19 +2,73 @@
 {% load i18n %}
 {% load url from future %}
 
+{% block extra_head %}
+    <link href='/static/css/mw_style.css' rel='stylesheet' type='text/css'/>
+    <link href='/static/css/btn_m.css' rel='stylesheet' type='text/css'/>
+{% endblock %}
+
 {% block navbar %} {% endblock %}
 
 {% block content %}
 
-    <p style="text-align: center; margin-top:10px; margin-left: auto; margin-right: auto;" > <img src="/static/img/intro.png" /></p>
-
-<div class="jumbotron">
-
-  <div class="container">
-      {% include 'zr/login_form.html' %}
-  </div>
-</div>
-
-
-
+    <div class="main_w1">
+        <div class="row">
+        <div class="mw mwleft">
+            <img class="logo_op" src="/static/images/logo_op.png" alt=""/>
+            <div class="small_link">
+                <p>
+                    <a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit >></a>
+                </p>
+            </div>
+        </div>
+        <div class="mw mwright">
+            <div class="video_scr">
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="m_box">
+                <div class="login_container">
+                      {% include 'zr/login_form.html' %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+        <div class="m_box text_area">
+            <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                exercitation ullamco laboris nisi ut aliquip </h2>
+            <div class="text_col">
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
+                    aute irure dolor in reprehenderit in voluptate velit esse
+                    cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                    occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum.
+                </p>
+            </div>
+            <div class="text_col">
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                exercitation ullamco laboris nisi ut aliquip
+                </p>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+            <div class="m_box">
+                <hr class="m_box_m" >
+                <div class="footer_l">
+                    <span class="block"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p></span>
+                    <span class="block"><img width="30px" height="30px" src="#" /></span>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

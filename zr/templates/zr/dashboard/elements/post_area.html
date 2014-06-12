@@ -28,15 +28,15 @@
                         </span>
                         <span class="right">
                             <button ng-hide="post.parent || !post.geometry" type="button" class="btn btn-xs btnwhite btngrey"
-                                ng-click="zoom_chase(post) | trackEvent:'wyśrodkuj':'Button clicked':user:post.id ">
+                                ng-click="zoom_chase(post) | trackEvent:'wyśrodkuj':'Button clicked':user:post.id " title="{% trans 'Pokaż na mapie' %}">
                                 <i class="fa fa-dot-circle-o"></i>
                             </button>
                             <button ng-hide="post.parent"
                                 ng-class="{'btn':true, 'btn-xs':true, 'btnwhite':true, 'btngrey':true}"
                                 ng-click="subscribe(post, post.subscription);post.subscription=!post.subscription | trackEvent:'Subskrybuj':'Button clicked':user ">
                                 <!-- TODO add pushed pin in case of subscription -->
-                                <div ng-hide="post.parent==null && !post.subscription" class="mr-pushpin">&nbsp;</div>
-                                <span ng-hide="post.parent==null && post.subscription" class="glyphicon glyphicon-envelope"></span>
+                                <div ng-hide="post.parent==null && !post.subscription" class="mr-pushpin" title="{% trans 'Subskrybuj wątek' %}">&nbsp;</div>
+                                <span ng-hide="post.parent==null && post.subscription" class="glyphicon glyphicon-envelope" title="{% trans 'Subskrybuj wątek' %}"></span>
                             </button>
                         </span>
                     </div>

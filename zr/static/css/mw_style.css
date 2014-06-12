@@ -1,0 +1,122 @@
+body {
+    background: url('../images/map_pod.png') repeat !important;
+}
+
+.main_w1{
+    width: 1002px;
+    margin-top:25px;
+    margin-left:auto;
+    margin-right: auto;
+    margin-bottom: 25px;
+    padding-top: 38px;
+    padding-bottom:5px;
+    /*border: solid 1px black;
+    */background: #FFFFFF;
+}
+.row{
+    display:table-row;
+}
+.mw {
+    float:left;
+}
+
+.mwleft{
+    width:400px;
+    background: white;
+    padding-left: 10px;
+    height:100%
+}
+
+.mwright{
+    width:575px;
+    background: greenyellow;
+}
+.small_link{
+    margin-left:45%;
+}
+.video_scr{
+    width:575px;
+    height:353px;
+    background:darkgrey;
+    margin-right: 25px;
+}
+.m_box{
+    width:1000px;
+    margin-top:18px;
+    margin-bottom:45px;
+}
+.m_box_m{
+    width:950px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:18px;
+    margin-bottom:5px;
+    border-color: black;
+
+}
+.login_container{
+    margin-left:400px;
+}
+
+.form-signin .log_row {
+    margin-top:18px;
+}
+
+.login{
+    margin-top:18px;
+}
+.red_info{
+    color:red;
+}
+#id_username{
+    width: 100%;
+    height: 33px;
+}
+#id_password{
+    width: 100%;
+    height: 33px;
+}
+.text_area{
+    padding:25px;
+
+}
+.text_col{
+    float:left;
+    width:475px;
+    height:150px;
+    padding: 10px 0px;
+    margin: 0px 0px;
+}
+.mgr{
+    margin-left:20px;
+    margin-right: 20px;
+    border-top:solid 1px black;
+}
+.footer_l{
+    float:right;
+    display: inline;
+    margin-right:5%;
+    padding-bottom: 20px;
+}
+.btn-a{
+    color: #ffffff;
+    background-color: #3276b1;
+    border-color: #285e8e;
+}
+.btn-a:hover{
+    color: red;
+    background-color: red;
+    border-color: red;
+}
+.block{
+    display: inline-block;
+}
+
+.sociallinks{
+    float: right;
+    margin-right:20px;
+    margin-top:13px;
+}
+.hh{
+    height: 150px;
+}

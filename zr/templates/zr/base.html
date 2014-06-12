@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load url from future %}
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en" >
 <head>
     <meta charset="utf-8">
@@ -40,9 +41,7 @@
 
         {% block content %} {% endblock %}
 	
-	    <hr>
-
-        {% block footer %}
+	    {% block footer %}
 	      <!--  <footer>
                 <p>{% trans 'Projek finansowany z ....' %}</p>
             </footer> -->
