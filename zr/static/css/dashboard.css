@@ -1,3 +1,7 @@
+body{
+    font-family: 'Source Sans Pro', sans-serif !important;
+}
+
 button{
     background:#CCCACA;
 }
@@ -11,7 +15,8 @@ button:hover, button:focus{
     color: white; 
     font-size: 12px;
     font-variant: normal;
-    font-family: "source_sans_prolight";
+    font-family: 'Source Sans Pro', sans-serif ;
+    /*font-family: "source_sans_prolight";*/
 }
 .leaflet-popup-content .btnred
 {
@@ -325,7 +330,8 @@ hr {
 }
 
 .head-autor {
-                font-family: "source_sans_prolight";
+    font-family: 'Source Sans Pro', sans-serif !important;
+                /*font-family: "source_sans_prolight";*/
                 font-size:  1em;                
                 color: #757574 ;
 }
@@ -359,7 +365,7 @@ button:focus {
      #nav-tabs-menu a
            {
            padding: 0px !important;
-           font-family: "source_sans_prolight";
+           /*font-family: "source_sans_prolight";*/
            font-size: 1.2em;
            color:#000000;
            text-align: center;
@@ -512,7 +518,8 @@ button:focus {
            
             .toolbox button
             {
-                font-family: "source_sans_prolight";
+                font-family: 'Source Sans Pro', sans-serif;
+                /*font-family: "source_sans_prolight";*/
                 
             }
        
@@ -653,7 +660,8 @@ button:focus {
             .head-autor
             {
                 font-size: 1em;
-                font-family: "source_sans_prolight";
+                font-family: 'Source Sans Pro', sans-serif;
+                /*font-family: "source_sans_prolight";*/
                 color: #757574 ;
             }
             div.post
@@ -665,8 +673,8 @@ button:focus {
            
             div.main-post p.head-autor
             {
-                
-                font-family: "source_sans_prolight";
+                font-family: 'Source Sans Pro', sans-serif;
+                /*font-family: "source_sans_prolight";*/
                 font-size:  1em;                
                 color: #757574 ;
 
@@ -714,7 +722,8 @@ button:focus {
             }
             div.sub_post p.post-content
             {
-                font-family: "source_sans_prolight";
+                font-family: 'Source Sans Pro', sans-serif;
+                /*font-family: "source_sans_prolight";*/
                 font-size: 1.1em;               
                 width: 90%;
                 margin-left: 10px;

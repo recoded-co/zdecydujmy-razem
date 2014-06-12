@@ -91,8 +91,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
 
-    # Uncomment the next line to enable the admin:
-    'django.contrib.admin',
 
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
@@ -108,6 +106,9 @@ INSTALLED_APPS = (
     'zr',
     'filemanager',
     'avatar',
+     # Uncomment the next line to enable the admin:
+    'django.contrib.admin',
+
 
 )
 
@@ -215,4 +216,4 @@ AVATAR_STORAGE_DIR = 'avatar/'
 AVATAR_GRAVATAR_BACKUP = False
 
 #   The default URL to default to if AVATAR_GRAVATAR_BACKUP is set to False and there is no Avatar instance found in the system for the given user.
-AVATAR_DEFAULT_URL = '/images/anonymous.png'
+AVATAR_DEFAULT_URL = '/images/ap_maj6_wymiary-10.png'

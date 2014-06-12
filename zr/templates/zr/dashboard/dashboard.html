@@ -167,7 +167,9 @@
                   <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
-                  <li><a href="{% url 'avatar_change2' %}">{% trans "Zmień zdjęcie" %}</a></li>
+                  {% if not user.is_anonymous %}
+                    <li><a href="{% url 'avatar_change2' %}"><div class="img-circle">{% avatar user 20 %}{% trans "Zmień zdjęcie" %}</div></a></li>
+                  {% endif %}
                   <li><a href="{% url 'django.contrib.auth.views.logout_then_login' %}">{% trans "Wyloguj" %}</a></li>
               </ul>
           </li>
