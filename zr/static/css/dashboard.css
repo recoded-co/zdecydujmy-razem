@@ -4,6 +4,10 @@ body{
 
 button{
     background:#CCCACA;
+    font-family: 'Source Sans Pro', sans-serif !important;
+}
+input{
+    font-family: 'Source Sans Pro', sans-serif  !important;
 }
 
 button:hover, button:focus{
@@ -1482,6 +1486,9 @@ textarea:focus{
 }
 .filePL:hover{
     color: #333333;;
+}
+.postContent{
+    font-family: 'Source Sans Pro', sans-serif ;
 }
 .postContent .left{
     margin-bottom: 20px;

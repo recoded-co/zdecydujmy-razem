@@ -2,6 +2,9 @@ body {
     background: url('../images/map_pod.png') repeat !important;
     font-family: 'Source Sans Pro', sans-serif !important;
 }
+a:hover{
+    text-decoration: none !important;
+}
 
 .main_w1{
     width: 1002px;
@@ -118,6 +121,7 @@ body {
     margin-right:20px;
     margin-top:13px;
 }
+
 .hh{
     height: 150px;
 }

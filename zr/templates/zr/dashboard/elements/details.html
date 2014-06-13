@@ -17,16 +17,16 @@
                   ng-int="rev_d=true;"
                   ng-click="reverse=rev_d; rev_d=!rev_d;data_arrow= !data_arrow;setDateSorting(rev_d) |trackEvent:'button Data':'Button clicked':user:'':'' ">
               {% trans 'Data' %}
-                <span class="glyphicon glyphicon-arrow-down" ng-hide="data_arrow"></span>
-                <span class="glyphicon glyphicon-arrow-up" ng-show="data_arrow"></span>
+                <span class="fa fa-arrow-down fa-lg" ng-hide="data_arrow"></span>
+                <span class="fa fa-arrow-up fa-lg" ng-show="data_arrow"></span>
             </button>
 
             <button class="btn btn-xs"
                       ng-int="rev_nc=true;numcom_arrow=true;"
                       ng-click=" reverse=!rev_nc; rev_nc=!rev_nc;numcom_arrow=!numcom_arrow;setCommentsSorting(rev_nc)  | trackEvent:'Ilość komentarzy':'Button clicked':user ">
                   {% trans 'Ilość komentarzy' %}
-                    <span class="glyphicon glyphicon-arrow-down" ng-hide="numcom_arrow"></span>
-                    <span class="glyphicon glyphicon-arrow-up" ng-show="numcom_arrow"></span>
+                    <span class="fa fa-arrow-down fa-lg" ng-hide="numcom_arrow"></span>
+                    <span class="fa fa-arrow-up fa-lg" ng-show="numcom_arrow"></span>
             </button>
         </span>
 
@@ -43,7 +43,7 @@
                     <div class="input-append">
                         <input type="hidden" class="input-large" data-ng-model="searchdate.date">
                             <span class="add-on">
-                        <i class="glyphicon glyphicon-calendar"></i><b class="caret"></b>
+                        <i class="fa fa-calendar fa-lg"></i><b class="caret"></b>
                     </span>{[{ searchdate.date | date:'yyyy-MM-dd' }]}
                             <span ng-hide="!searchdate.date" class="glyphicon glyphicon-remove" ng-click="searchdate.date='' "></span>
                     </div>

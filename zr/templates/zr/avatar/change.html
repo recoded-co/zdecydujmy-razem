@@ -11,6 +11,7 @@
 {% block extra_head %}
     <link href='/static/css/registration.css' rel='stylesheet' type='text/css'/>
     <link href='/static/css/btn_m.css' rel='stylesheet' type='text/css'/>
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 {% endblock %}
 
 {% block content %}
@@ -18,7 +19,7 @@
     <div class="center">
         <h2>{% trans "zdjęcie profilowe" %}</h2>
         <div class="round">
-            {% avatar user %}
+            {% avatar user 174 %}
         </div>
         <!--{% if not avatars %}
             <p>{% trans "You haven't uploaded an avatar yet. Please upload one now." %}</p>

@@ -29,14 +29,18 @@
         <div class="col-xs-5 col-md-5">
             <div class="sociallinks">
                 <p>{% trans 'Zaloguj się jako/przez' %}</p>
-                <img width="20px" height="20px" src="/static/images/l1.png" alt=""/>
-                <a class="btn-c btn-sm-n" href="/zr/dashboard">{% trans 'anonimowy użytkownik' %}</a>
-                <br>
-                <img width="20px" height="20px" src="/static/images/google.png" alt=""/>
-                <a class="btn-sm-n btn-c " href="{% url 'socialauth_begin' 'google-oauth2' %}">{% trans 'konto google' %}</a>
-                <br>
-                <img width="20px" height="20px" src="/static/images/facebook.png" alt=""/>
-                <a class="btn-sm-n  btn-c" href="{% url 'socialauth_begin' 'facebook' %}">{% trans 'konto facebook' %}</a>
+                <div class="row">
+                    <img width="20px" height="20px" src="/static/images/l1.png" alt=""/>
+                    <a class="btn-c btn-sm-n" href="/zr/dashboard">{% trans 'anonimowy użytkownik' %}</a>
+                </div>
+                <div class="row">
+                    <img width="20px" height="20px" src="/static/images/google.png" alt=""/>
+                    <a class="btn-sm-n btn-c " href="{% url 'socialauth_begin' 'google-oauth2' %}">{% trans 'konto google' %}</a>
+                </div>
+                <div class="row">
+                    <img width="20px" height="20px" src="/static/images/facebook.png" alt=""/>
+                    <a class="btn-sm-n  btn-c" href="{% url 'socialauth_begin' 'facebook' %}">{% trans 'konto facebook' %}</a>
+                </div>
             </div>
         </div>
     </div>
