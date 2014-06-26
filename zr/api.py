@@ -33,7 +33,6 @@ class PlanViewSet(viewsets.ModelViewSet):
 router.register(r'plans', PlanViewSet)
 
 
-
 class ConfigurationViewSet(viewsets.ModelViewSet):
     model = Configuration
 
@@ -90,8 +89,9 @@ class PostSerializer(ModelSerializer):
         model = Post
         fields = ('id', 'author', 'author_name',
                   'parent', 'plan', 'content',
-                  'rate', 'score','geometry',
-                  'date','filep','positive_rate','negative_rate')
+                  'rate', 'score', 'geometry',
+                  'date', 'filep', 'positive_rate','negative_rate')
+
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
@@ -138,6 +138,7 @@ class PostViewSet(viewsets.ModelViewSet):
         return super(PostViewSet, self).create(request, *args, **kwargs)
 
 router.register(r'posts', PostViewSet)
+
 
 class NSubscribed(generics.ListAPIView):
     queryset = Post.objects.all()
@@ -219,8 +220,9 @@ class NSubscribed(generics.ListAPIView):
     def parseToBoolean(self, str):
         if str == 'True':
             return True
-        else :
+        else:
             return False
+
 
 class NPost(generics.ListAPIView):
     queryset = Post.objects.all()
@@ -251,7 +253,7 @@ class NPost(generics.ListAPIView):
         if parent != 'None':
             sql += 'where parent_id = %s '
             params.append(parent)
-        else :
+        else:
             sql += 'where parent_id is null '
 
         if plan_id == 'None':
@@ -285,12 +287,12 @@ class NPost(generics.ListAPIView):
         if type == 'date' :
             if direction :
                 sql += 'order by date '
-            else :
+            else:
                 sql += 'order by date desc '
         elif type == 'com':
             if direction :
                 sql += 'order by numcom '
-            else :
+            else:
                 sql += 'order by numcom desc '
         #print sql
         #print params
@@ -334,13 +336,16 @@ class NPost(generics.ListAPIView):
         else :
             return False
 
+
 class RateSerializer(ModelSerializer):
     class Meta:
         model = Rate
 
+
 class RateViewSet(viewsets.ModelViewSet):
     queryset = Rate.objects.all()
     serializer_class = RateSerializer
+
 
 class RateListView(generics.ListAPIView):
     queryset = Rate.objects.all()
@@ -392,6 +397,7 @@ class SubscriptionList(mixins.ListModelMixin,
             return self.create(request, args, kwargs)
         else:
             raise PermissionDenied('You have to be logged in and you can only subscribe for yourself')
+
 
 class SubscriptionDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
@@ -478,6 +484,8 @@ class TrackEventsViewSet(viewsets.ModelViewSet):
                 inputs[item] = data[item]
             else:
                 inputs[item] = ''
+        inputs['opt_label'] = str(request.user)
+        inputs['opt_noninteraction'] = request.session.session_key
         trackevent = TrackEvents.objects.create(**inputs)
         return Response(TrackEventsSerializer(trackevent).data, status=status.HTTP_201_CREATED)
 
