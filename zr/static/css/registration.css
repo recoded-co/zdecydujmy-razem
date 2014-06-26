@@ -29,9 +29,11 @@ label{
 }
 
 .block{
-    display: inline-block;
+    display: inline-flex;
 }
 .pro_l{
+    display: inline-flex;
+    justify-content:flex-end;
     width:190px;
     text-align: right;
     margin: 1px 0px;
@@ -80,6 +82,15 @@ label{
 .center{
     text-align: center;
     padding: 10px 0px;
+}
+
+input[type=text]{
+    padding: 6px 12px !important;
+    line-height: 1.428571429 !important;
+}
+input[type=password]{
+    padding: 6px 12px !important;
+    line-height: 1.428571429 !important;
 }
 
 #id_email{

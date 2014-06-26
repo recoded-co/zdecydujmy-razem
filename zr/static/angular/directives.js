@@ -30,9 +30,7 @@ zdApp.directive('fileChange',['uploadService', function (uploadService) {
 }]);
 
 zdApp.directive('dropbox',['uploadService', function (uploadService) {
-
     var linker = function ($scope, element, attributes) {
-
         element[0].ondragover = function(evt) {
             evt.stopPropagation();
             evt.preventDefault();
@@ -72,3 +70,35 @@ zdApp.directive('dropbox',['uploadService', function (uploadService) {
 
     };
 }]);
+
+zdApp.directive('whenScrolled',function() {
+    return function(scope, elm, attr) {
+        var raw = elm[0];
+
+        var funCheckBounds = function(evt) {
+            var a = parseInt(elm.context.scrollTop + elm.context.offsetHeight);
+            var b = parseInt(elm.context.scrollHeight);
+
+            if (a == b || a == (b+1)) {
+                    scope.$apply(attr.whenScrolled);
+                }
+        };
+        angular.element(raw).bind('scroll load', funCheckBounds);
+    };
+});
+
+
+zdApp.factory('pulsePointBuf',function(){
+    var buffor= new Array();
+    return {
+        add: function(temp){
+            temp.add('pulseit');
+            buffor.push(temp);
+        },
+        remove: function(){
+            while(buffor.length>0){
+                buffor.pop().remove('pulseit');
+            }
+        }
+    }
+});

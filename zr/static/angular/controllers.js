@@ -5,8 +5,29 @@
 var zdControllers = angular.module('zdControllers', ['ngCookies']);
 //'configurations','rates','subjects','posts','geometries','plans',
 
-zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope', 'zdServicesFactory','uploadService','Angularytics','postFactory',
-  function($scope, $http, $cookies, $rootScope, zdServicesFactory, uploadService, Angularytics, postFactory ) {
+
+zdControllers.controller('apiList',
+    ['$scope',
+    '$http',
+    '$cookies',
+    '$rootScope',
+    'zdServicesFactory',
+    'uploadService',
+    'Angularytics',
+    'postFactory',
+    'pulsePointBuf',
+    function($scope,
+             $http,
+             $cookies,
+             $rootScope,
+             zdServicesFactory,
+             uploadService,
+             Angularytics,
+             postFactory,
+             pulsePointBuf
+    ) {
+
+
 
     Angularytics.trackPageView = function(url) {
         $scope.url = url;
@@ -70,7 +91,6 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
                     //surface
                     tempServHandler = servHandler;
                 }
-                console.log('text:  ' + text);
                 tempServHandler.query({
                     text:text,
                     geometry: geometry,
@@ -135,7 +155,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
         if(x instanceof Object){
 
             tree = postHandler(postFactory.dateSearch,postFactory.newPostAll,configuration.getPlanId());
-            $scope.showallposts = true;
+            //$scope.showallposts = true;
             var params = {
                 year: x.getFullYear(),
                 mon: x.getMonth()+1,
@@ -150,7 +170,6 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
     });
 
     $scope.$watch('url', function() {
-        console.log('watch');
         if($scope.url=='/all'){
             tree = postHandler(postFactory.newPostAll,undefined,configuration.getPlanId());
             tree.setGeoParam('None');
@@ -163,6 +182,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
         tree.getPostList('None',function(data){
                $scope.tree = data;
         });
+        $scope.pointPulseRm();
         $scope.endTree = tree.postReachEnd('None');
     });
     tree = postHandler(postFactory.newPostAll,undefined,configuration.getPlanId());
@@ -170,10 +190,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
 
     $scope.addMorePosts = function(post,root) {
         if(post.parent == null){
-            tree.getPostList('None',function(data){
-                $scope.tree = $scope.tree.concat(data);
-            });
-            $scope.endTree = tree.postReachEnd('None');
+            $scope.addNextPostsToRoot();
         }else{
             tree.getPostList(post.parent,function(data){
                 root.nodes = root.nodes.concat(data);
@@ -181,6 +198,12 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
             post.endTree = tree.postReachEnd(post.parent);
         }
     };
+    $scope.addNextPostsToRoot = function(){
+            tree.getPostList('None',function(data){
+                $scope.tree = $scope.tree.concat(data);
+            });
+            $scope.endTree = tree.postReachEnd('None');
+        }
     $scope.setDateSorting = function(temp){
         tree.cleanParams();
         tree.sortByDate();
@@ -201,7 +224,6 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
     };
 
     $scope.showOneDown = function(data){
-        console.log('showOneDown');
         if(data.rozwin==undefined || data.rozwin==false){
             data.rozwin=true;
             if(data.nodes === undefined){
@@ -223,7 +245,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
     $scope.predicate='date';
     $scope.reverse=true;
     $scope.data_arrow=true;
-    $scope.showallposts=true;
+    $scope.showallpoints=false;
 
     var post_buff_id = 0;
     $scope.zoom_chase = function(post){
@@ -269,6 +291,7 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
             base_post.text = "";
         };
     $scope.addDown = function(data) {
+
             if (data.nodes !== undefined)
                 var postCh = data.nodes.length + 1;
             else
@@ -283,25 +306,19 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
                 zmiennac:false
             }
             sendTempToServer(temp,$http,$cookies,function(temp){
+                temp['userAdded']=true;
                 data.nodes.unshift(temp);
                 data.numcom++;
             });
             data.text = "";
-            data.zmiennac=false;
+            data.zmiennac=false ;
             $scope.showOneDown(data);
     };
 
 
     $scope.showAll = function(){
-        $scope.showallposts = true;
+        $scope.showallpoints = true ;
         $scope.filterGeoData=[];
-
-        /*
-          if($scope.showallposts == false){
-              $scope.showallposts = true;
-          }else{
-              $scope.showallposts = false;
-          }*/
       };
     $scope.addVertical = function(data) {
         if (data.nodes !== undefined)
@@ -345,9 +362,9 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
             zmiennac:false
         }
         sendTempToServer(temp,$http,$cookies,function(temp){
-                $scope.tree.push(temp);
+                temp['userAdded']=true;
+                $scope.tree.unshift(temp);
             });
-          //$scope.tree.$apply();
     };
     $scope.subscribe = function(data, subscribed){
         var temp = {
@@ -369,12 +386,10 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
 
         $scope.filterGeoData = new Array();
         if(data!==undefined){
-            //$scope.showallposts = false;
+            $scope.showallpoints = true;
 
             if(data && data.length == 1){
                tree = postHandler(postFactory.newPostAll,undefined,configuration.getPlanId());
-               console.log('data');
-               console.log(data);
                tree.setGeoParam(''+data[0].geometry);
                tree.cleanParams();
                tree.getPostList('None',function(data){
@@ -402,9 +417,11 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
             }
 
         }else{
+
+            $scope.pointPulseRm();
             tree = postHandler(postFactory.newPostAll,undefined,configuration.getPlanId());
             tree.setGeoParam('notNone');
-            $scope.showallposts = true;
+            $scope.showallpoints = false;
 
             tree.getPostList('None',function(data){
                    $scope.tree = data;
@@ -417,8 +434,6 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
         if(text && text.length>=1){
             tree = postHandler(postFactory.textSearch,postFactory.newPostAll,configuration.getPlanId());
             tree.setGeoParam('notNone');
-
-            $scope.showallposts = true;
 
             tree.setSearchText(text);
 
@@ -443,9 +458,10 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
     });
 
     $scope.showDiscussion = function() {
+        $scope.pointPulseRm();
         tree = postHandler(postFactory.newPostAll,undefined,configuration.getPlanId());
         tree.setGeoParam('notNone');
-        $scope.showallposts = true;
+        $scope.showallpoints = false;
 
         tree.getPostList('None',function(data){
             $scope.tree = data;
@@ -457,7 +473,15 @@ zdControllers.controller('apiList', ['$scope', '$http', '$cookies', '$rootScope'
         Angularytics.trackEvent(category, action, opt_label, opt_value, opt_noninteraction);
     }
 
-  }]);
+    $scope.pointPulseAdd = function(temp){
+        pulsePointBuf.add(temp);
+    }
+
+    $scope.pointPulseRm = function(){
+        pulsePointBuf.remove();
+    }
+
+  }])
 
 function sendCSRFPost(url,$http,$cookies,data){
     var thisdata = data;

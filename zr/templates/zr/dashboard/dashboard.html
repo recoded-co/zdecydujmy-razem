@@ -74,7 +74,6 @@
     <link rel="stylesheet" href="/static/js/LeafletTileLegend/Leaflet.TileLegend.css"/>
     <link rel="stylesheet" href="/static/angular/bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css"/>
     <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
 
     <!--<link rel="stylesheet" href="/static/js/Font-Awesome/css/font-awesome.min.css"/>
 -->
@@ -154,8 +153,12 @@
 <div id="row_box" class="row dashbord_map" ng-app="zd">
    
   <div id="middleman"></div>
-  <div id="resizible_jquery" class="col-xs-12 col-sm-6 col-md-5 delpadding" style="float:right;">
-      <div id="div_apiList" ng-controller="apiList" >
+  <div id="resizible_jquery"
+       class="col-xs-12 col-sm-6 col-md-5 delpadding"
+       style="float:right;"
+       ng-controller="apiList"
+       when-scrolled="addNextPostsToRoot()"  >
+      <div id="div_apiList"  >
 
       <ul id="nav-tabs-menu" class="nav nav-tabs">
           <li class="active" ><a href="#details" data-toggle="tab"><i class="fa fa-comments fa-fw"></i>SZCZEGÓŁY</a></li>
@@ -163,7 +166,7 @@
           <li><a href="#all" data-toggle="tab"><i class="fa fa-square fa-fw"></i>CAŁOŚĆ</a></li>
           <li>
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <div class="img-circle">{% avatar user 20 %}{{ user }}</div>
+                  <div class="img-circle" >{% avatar user 20 %}{{ user }}</div>
                   <!--<img src="/static/images/face.jpeg" alt="avatar" width="20px" height="20px" class="img-circle">-->
                   <b class="caret"></b>
               </a>

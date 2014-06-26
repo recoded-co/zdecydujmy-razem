@@ -8,7 +8,9 @@ from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db import connection
+from datetime import datetime
 from zr import index
+
 
 from django.conf import settings
 if "notification" in settings.INSTALLED_APPS:
@@ -116,7 +118,7 @@ class Post(models.Model):
     content = models.TextField()
     geometry = models.ForeignKey(Geometry, null=True, blank=True)
     subscriptions = models.ManyToManyField(User, through="PostSubscription", null=True, blank=True)
-    date = models.DateTimeField(auto_now=True, blank=True)
+    date = models.DateTimeField(auto_now=True)
 
     def has_subscription(self, user=None):
         if user in self.subscriptions.all():
@@ -157,7 +159,12 @@ class Post(models.Model):
         else:
             return self
 
-"""
+"""    def save(self, *args, **kwargs):
+        ''' On save, update timestamps '''
+        self.date = datetime.now()
+
+        return super(Post, self).save(*args, **kwargs)
+
     def numcom(self):
         return self.pk #cursor.fetchone()
 

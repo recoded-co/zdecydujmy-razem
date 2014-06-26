@@ -28,13 +28,19 @@ angular.module('searchFilters', []).filter('searchdate', function() {
 angular.module('dateTools', []).filter('fromToday', function() {
   return function(inputA) {
     if (!angular.isUndefined(inputA)) {
+        Date.prototype.addHours= function(h){
+            this.setHours(this.getHours()+h);
+            return this;
+        }
         var then = getFullDate(inputA), // month is zero based
-            now  = new Date;
+            now  = new Date().addHours(-2);
+
         var days = Math.round((now - then) / (1000 * 60 * 60 * 24)),
             hrest = Math.round((now - then) % (1000 * 60 * 60 * 24)),
             mrest = Math.round((now - then) % (1000 * 60 * 60));
         var hours = Math.floor(hrest / (1000 * 60 * 60));
         var minutes = Math.floor(mrest / (1000 * 60 ));
+
         if(days<1){
             if(hours==0){
                 return minutes+" minut temu";
@@ -88,9 +94,9 @@ function getFullDate(text){
     date.setYear(parseInt(temp[0]));
     date.setMonth(parseInt(temp[1])-1);
     date.setDate(parseInt(temp[2]));
-    //date.setHours(parseInt(temp[3]));
-    //date.setMinutes(parseInt(temp[4]));
-    //date.setSeconds(parseInt(temp[5]));
-    //date.setMilliseconds(0);
+    date.setHours(parseInt(temp[3]));
+    date.setMinutes(parseInt(temp[4]));
+    date.setSeconds(parseInt(temp[5]));
+    date.setMilliseconds(0);
     return date;
 }

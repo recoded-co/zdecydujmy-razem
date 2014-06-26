@@ -24,6 +24,10 @@ a:hover{
     float:left;
 }
 
+.login .form-group{
+    margin-bottom: 6px;
+}
+
 .mwleft{
     width:400px;
     background: white;

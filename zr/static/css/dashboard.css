@@ -67,8 +67,9 @@ button:hover, button:focus{
 
 .btngrey{
     font-size: 14px;
-    color:#757574 !important;
+    color:#A0A0A0 !important;
     margin-right:5px;
+    color: #A0A0A0;
 }
 
 .btngrey:hover{
@@ -183,8 +184,19 @@ padding-bottom: 7px;
 .toolbox{
     height:50px;
     padding-top:14px;
+    margin-left: 10px;
+    display:inline-flex;
+    /*align-items: stretch;*/
+    flex-flow: row wrap;
+    justify-content: space-between;
 }
 
+.toolbox span.right{
+    width: 250px;
+}
+.toolbox .left{
+    margin-bottom: 10px;
+}
 
 .filedragablearea{
     background-color: #E1E1E8;
@@ -196,7 +208,7 @@ padding-bottom: 7px;
 }
 
 div#resizible_jquery{
-    overflow-y: scroll;
+   /* overflow-y: scroll;*/
     overflow-x: hidden;
     height: 100%;
 }
@@ -336,8 +348,8 @@ hr {
 .head-autor {
     font-family: 'Source Sans Pro', sans-serif !important;
                 /*font-family: "source_sans_prolight";*/
-                font-size:  1em;                
-                color: #757574 ;
+                font-size:  12px;
+                color: #A0A0A0 ;
 }
 .post-content {
     margin-top:-10px;
@@ -447,6 +459,12 @@ button:focus {
             border-radius: 10px;
             margin-top: -8px;
            }
+           .img-circle40 img
+           {
+            margin-right: 6px;
+            border-radius: 20px;
+            margin-top: -8px;
+           }
            .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
               background-color: inherit;
               border-color: #428bca;
@@ -530,7 +548,6 @@ button:focus {
             .toolbox span.left
             {
                 margin-top: -2px;
-                margin-left: 4%;  
             }
             .toolbox span.left button:focus{
                 /*background:#00B4FF;
@@ -653,7 +670,7 @@ button:focus {
             #subscriptions div.tab-post, #all div.tab-post
             {
                 margin-top: 0px !important;
-                padding-top: 13px;
+                padding-top: 11px;
                 /*border-top: solid 10px #00c7a2;*/
             }
           #subscriptions div.post > img
@@ -663,10 +680,10 @@ button:focus {
             }
             .head-autor
             {
-                font-size: 1em;
+                font-size: 12px;
                 font-family: 'Source Sans Pro', sans-serif;
                 /*font-family: "source_sans_prolight";*/
-                color: #757574 ;
+                color: #A0A0A0 ;
             }
             div.post
             {
@@ -679,8 +696,8 @@ button:focus {
             {
                 font-family: 'Source Sans Pro', sans-serif;
                 /*font-family: "source_sans_prolight";*/
-                font-size:  1em;                
-                color: #757574 ;
+                font-size:  12px;
+                color: #A0A0A0 ;
 
             }
             div.main-post p.post-content
@@ -721,7 +738,7 @@ button:focus {
             }
             div.tab-post 
             {
-                margin-top: 13px;
+                margin-top: 11px;
                 margin-bottom: -5px;
             }
             div.sub_post p.post-content
@@ -876,7 +893,6 @@ button:focus {
              }
 
              /* map area */
-             //teodor@katalpa 
             div.leaflet-top.leaflet-left
             {
                margin-top: 10%;
@@ -1310,7 +1326,7 @@ div.leaflet-bar a.leaflet-control-measure-ruler:hover
         url('/static/fonts/sourcesanspro-italic-webfont.woff') format('woff'),
         url('/static/fonts/sourcesanspro-italic-webfont.ttf') format('truetype'),
         url('sourcesanspro-italic-webfont.svg#source_sans_proitalic') format('svg');
-    font-weight: normal;
+    font-weight:  lighter;
     font-style: normal;
 }
 
@@ -1321,7 +1337,7 @@ div.leaflet-bar a.leaflet-control-measure-ruler:hover
         url('/static/fonts/sourcesanspro-light-webfont.woff') format('woff'),
         url('/static/fonts/sourcesanspro-light-webfont.ttf') format('truetype'),
         url('/static/fonts/sourcesanspro-light-webfont.svg#source_sans_prolight') format('svg');
-    font-weight: normal;
+    font-weight:  lighter;
     font-style: normal;
 
 }
@@ -1332,7 +1348,7 @@ div.leaflet-bar a.leaflet-control-measure-ruler:hover
         url('/static/fonts/sourcesanspro-semibold-webfont.woff') format('woff'),
         url('/static/fonts/sourcesanspro-semibold-webfont.ttf') format('truetype'),
         url('/static/fonts/sourcesanspro-semibold-webfont.svg#source_sans_prosemibold') format('svg');
-    font-weight: normal;
+    font-weight: lighter;
     font-style: normal;
 }
 
@@ -1363,12 +1379,11 @@ color: black;
 
 textarea#popup_comment
 {
- /*border: none !important;*/
+ border: 1px solid #989898 !important;
  font-family: 'source_sans_prolight';
- font-size: 1.1em;
+ font-size: 12px;
  color: black;
  width: 200px !important;
- border-bottom: 1px solid black;
 }
 
 .nextPost{
@@ -1379,7 +1394,7 @@ textarea#popup_comment
 .nextPostNested{
     float:right;
     margin:13px;
-    margin-top:0px;
+    margin-top:11px;
 }
 
 
@@ -1557,3 +1572,45 @@ textarea:focus{
     top:100px;
 }
 
+.leaflet-popup-content{
+    margin: 12px 10px 40px 10px !important;
+}
+
+#popPublish{
+    float:right;
+    margin-top:3px;
+}
+
+.btn-sm-n, .btn-xs{
+    display: inline-block;
+    padding: 6px 8px;
+    font-size: 14px;
+    line-height: 1;
+    border-radius: 4px;
+    margin: 3px 2px;
+}
+
+#error_comment_needed{
+    position: absolute;
+    color: red;
+    bottom: 42px;
+    left: 12px;
+}
+.visible_off{
+    visibility: hidden;
+}
+
+.pulseit{
+    position:absolute;
+    -webkit-animation: pulse linear .5s infinite;
+    animation: pulse linear .5s infinite; }
+@-webkit-keyframes pulse {
+    0% { top:-10px; }
+    50% { top:0px; }
+    100% { top:-10px; }
+}
+@keyframes pulse {
+    0% { top:-10px; }
+    50% { top:0px; }
+    100% { top:-10px; }
+}

@@ -13,6 +13,7 @@
     var plan_id = parseInt('{{ plan_id }}');
     var user = '{{ user }}';
     var search_filter_layer = undefined;
+    var pulseContainer = new Array();
 
 
 
@@ -316,13 +317,14 @@
                     .setLatLng(popup_location)
                     .setContent("<div>" +
                                 "<div class='map_popup'> " +
-                                "<textarea placeholder='Komentarz' id='popup_comment' rows='3'>" +
+                                "<textarea placeholder='Komentarz' id='popup_comment' rows='8'>" +
                                 "</textarea ><br>" +
                                 "<input id='geometry' type='hidden' value='"+wkt_string+"'/>" +
                                 "<input id='feature_id' type='hidden' value='"+"'/>" +
                                 "</div> " +
                                 "<hr>" +
-                                "<button id='popPublish' class='btnred btn btn-xs' onclick='addPopup(this);return false;' >publikuj</button>" +
+                                "<div id='error_comment_needed' class='visible_off'>Brak komentarza</div>"+
+                                "<button id='popPublish' class='btnred btn btn-sm-n' onclick='addPopup(this);return false;' >publikuj</button>" +
                                 "</div>");
                 map.openPopup(popup);
                 layerWaitingRoom.push(layer);
@@ -522,6 +524,9 @@
 
                 marker.on("click", function(e){
                     trackEvent('marker','marker clicked','','','');
+                    addPointPulse(e.target._icon.classList)
+                    //e.target._icon.classList.add('pulseit');
+                    pulseContainer.add(e.target._icon.classList);
                     addPostFilter([{geometry:value.id}]);
                 });
                 polygon.on('click', function(e){
@@ -552,7 +557,9 @@
                         });
                     });
                     marker.on('click', function(e){
-                           addPostFilter([{geometry:value.id}]);
+                        //e.target._icon.classList.add('pulseit');
+                        addPointPulse(e.target._icon.classList)
+                        addPostFilter([{geometry:value.id}]);
                     });
                     markers.addLayer(marker);
 
@@ -603,6 +610,8 @@
 
                     marker.on("click", function(e){
                         trackEvent('marker','marker clicked','','','');
+                        addPointPulse(e.target._icon.classList)
+                        //e.target._icon.classList.add('pulseit');
                         addPostFilter([{geometry:value.id}]);
                     });
                     polyline.on('click', function(e){
@@ -716,7 +725,7 @@
             });
             map.closePopup();
         } else {
-            alert('comment needed!');
+            $(data).parent().find('#error_comment_needed').removeClass("visible_off");
         }
     }
 
@@ -731,13 +740,21 @@
         track(category, action, opt_label, opt_value, opt_noninteraction);
         $("#div_apiList").scope().$apply();
     }
+    function resetPointPulse(){
+        var pointPulseRm = $("#div_apiList").scope().pointPulseRm;
+        pointPulseRm();
+        $("#div_apiList").scope().$apply();
+    }
+    function addPointPulse(temp){
+        var pointPulseRm = $("#div_apiList").scope().pointPulseRm;
+        pointPulseRm();
+        var pointPulseAdd = $("#div_apiList").scope().pointPulseAdd;
+        pointPulseAdd(temp);
+        $("#div_apiList").scope().$apply();
+    }
 
     function addPostFilter(data){
 
-        //$("#nav-tabs-menu").find('li:eq(0)').removeClass('active');
-        //$("#nav-tabs-menu").find('li:eq(1)').removeClass('active');
-        //$("#nav-tabs-menu").find('li:eq(2)').removeClass('active');
-        //$("#nav-tabs-menu").find('li:eq(0)').addClass('active');
         $("#nav-tabs-menu").find('li:eq(0) > a').trigger('click');
         var addPFilter = $("#div_apiList").scope().addPFilter;
         addPFilter(data);

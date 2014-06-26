@@ -4,8 +4,10 @@
 <div ng-class="{'tab-post':true}">
     <ul>
         <li> <!-- start here -->
-            <img style="position:absolute;"
+
+            <img ng-if="!post.userAdded" style="position:absolute;"
                         src="{[{ post.avatar_url }]}" alt="{[{ post.avatar_alt }]}" width="40px" height="40px" class="img-circle">
+            <div class="img-circle40" style="position: absolute;" ng-if="post.userAdded">{% avatar user 40 %}</div>
         </li>
         <li>
             <div class="media-body dropbox new_margin"> <!--   style="margin-left: 0px;margin-right: 0px;"  -->
@@ -35,8 +37,8 @@
                                 ng-class="{'btn':true, 'btn-xs':true, 'btnwhite':true, 'btngrey':true}"
                                 ng-click="subscribe(post, post.subscription);post.subscription=!post.subscription | trackEvent:'Subskrybuj':'Button clicked':user ">
                                 <!-- TODO add pushed pin in case of subscription -->
-                                <div ng-hide="post.parent==null && !post.subscription" class="mr-pushpin" title="{% trans 'Subskrybuj wątek' %}">&nbsp;</div>
-                                <span ng-hide="post.parent==null && post.subscription" class="glyphicon glyphicon-envelope" title="{% trans 'Subskrybuj wątek' %}"></span>
+                                <div ng-hide="post.parent==null && !post.subscription" class="fa fa-envelope-o" title="{% trans 'Subskrybuj wątek' %}"></div>
+                                <span ng-hide="post.parent==null && post.subscription" class="fa fa-envelope" title="{% trans 'Subskrybuj wątek' %}"></span>
                             </button>
                         </span>
                     </div>
@@ -48,9 +50,8 @@
 
                                 <!-- Ten fragment prawdopodobmnie jest do usunięcia, blokuje rozwijanie komentarzy
                                 ng-disabled="!showallposts">-->
-                                <i ng-if="showallposts==true" ng-hide="post.rozwin" class="fa fa-caret-up"></i>
-                                <i ng-if="showallposts==true" ng-show="post.rozwin" class="fa fa-caret-down"></i>
-                                <i ng-if="showallposts==false" ng-show="post.rozwin" class="fa fa-caret-down"></i>
+                                <i ng-hide="post.rozwin" class="fa fa-caret-up"></i>
+                                <i ng-show="post.rozwin" class="fa fa-caret-down"></i>
                                     {[{ post.numcom || 0 }]} {% trans 'odpowiedzi' %}
                             </button>
                         </div>
@@ -61,12 +62,12 @@
                             <button  class="btn btn-xs btngrey btnwhite"
                                 ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
                                 ng-click="scoreUp(post) | trackEvent:'score-up':'Button clicked':user ">
-                                <div class="mr-handup">&nbsp;</div>{[{ post.positive_rate || 0 }]} {% trans 'za' %}
+                                <div class="mr-handup">&nbsp;</div><b>{[{ post.positive_rate || 0 }]}</b> {% trans 'za' %}
                             </button>
                             <button  class="btn btn-xs btngrey btnwhite"
                                  ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
                                  ng-click="scoreDown(post) | trackEvent:'score-down':'Button clicked':user ">
-                                 <div class="mr-handdown">&nbsp;</div> {[{ post.negative_rate || 0 }]} {% trans 'przeciw' %}
+                                 <div class="mr-handdown">&nbsp;</div><b> {[{ post.negative_rate || 0 }]}</b> {% trans 'przeciw' %}
                             </button>
                             <button ng-hide="'{{ user }}'=='AnonymousUser'" class="btn btn-xs btnsea btnwhite" ng-click="comment(post) | trackEvent:'Dodaj Komentarz':'Button clicked':user:'':''">
                                 <i class="fa fa-comment"></i>&nbsp;<span class="fontBold btnsea">{% trans 'skomentuj' %}</span>
@@ -81,7 +82,7 @@
         </ul>
     </div>
 
-           <div class="add_comment">
+           <div ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)" class="add_comment">
                     <textarea ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
                               ng-model="post.text"
                               class="form-control"
@@ -92,15 +93,15 @@
                         <div class="fileinput fileinput-new" data-provides="fileinput" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)">
                             <button type="button" class="btn btn-xs btn-file btnwhite btngrey"><div class="mr-clip">&nbsp;</div><input name="..." type="file" value="{[{ post.id }]}" multiple file-change /></button>
                         </div>
-                        <button type="button" class="btn btn-xs btnblue" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
+                        <button type="button" class="btn btn-sm-n btnblue" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
                               ng-click="delete(post) | trackEvent:'Usuń':'Button clicked':user "> {% trans 'usuń' %}
                         </button>
-                        <button type="button" class="btn btn-xs btnred" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
+                        <button type="button" class="btn btn-sm-n btnred" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
                               ng-click="addDown(post) | trackEvent:'Zapisz':'Button clicked':user ">{% trans 'publikuj' %}
                         </button>
                     </div>
     </div>
-    <div ng-if="post.nodes.length>0" class="tab_border" ng-hide="!(post.rozwin!=undefined && post.rozwin==true) && showallposts" >
+    <div ng-if="post.nodes.length>0" class="tab_border" ng-hide="!(post.rozwin!=undefined && post.rozwin==true)" >
         <div ng-repeat="post in post.nodes ">
             <div ng-include="'tree_item_renderer.html'" ></div>
             <div ng-if="$last && !post.endTree" ng-class="{'dotedline':post.parent==null}">

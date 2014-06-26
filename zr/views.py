@@ -65,6 +65,7 @@ class UserCreationPageView(TemplateView):
         return context
 
     def post(self, request):
+        from django.contrib.auth import authenticate, login
         form = LoginForm(request.POST)
 
         if form.is_valid():
@@ -85,10 +86,15 @@ class UserCreationPageView(TemplateView):
             user.first_name = form.cleaned_data['first_name']
             user.last_name = form.cleaned_data['last_name']
             user.save()
+
             profile = user.get_profile()
             profile.zipcode = form.cleaned_data['zipcode']
             profile.save()
-            return HttpResponseRedirect(reverse('django.contrib.auth.views.login'))
+
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
+            login(request, user)
+
+            return HttpResponseRedirect(reverse('dashboard'))
         return render_to_response('zr/registration.html', {'form': form}, context_instance=RequestContext(request))
 
 
