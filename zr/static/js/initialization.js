@@ -29,6 +29,12 @@ function page_init(){
         var absolut_width = parseInt(document.getElementById("row_box").offsetWidth);
         post_box.style.width = "{{ configuration.default }}%";
         //map_box.style.width = ""+(99 - parseInt("{{ configuration.default }}") - parseInt((margin_gap*100)/absolut_width))+"%";
+        //middle_background
+        if( "{{ configuration.side|dirparser }}"=="left"){
+            $('.ui-resizable-e').addClass('middle_background');
+        } else {
+            $('.ui-resizable-w').addClass('middle_background');
+        }
         calibration();
 }
 

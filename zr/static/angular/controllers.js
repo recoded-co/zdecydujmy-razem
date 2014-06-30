@@ -76,7 +76,7 @@ zdControllers.controller('apiList',
             },
             // params: parent_id = number or 'None' if root level
             getPostList: function(parent_id, callback){
-
+                var LIMIT=0;
                 if( brPostState[parent_id] === undefined){
                     brPostState[parent_id] = postState();
                 }
@@ -86,9 +86,10 @@ zdControllers.controller('apiList',
                 // nested comments are out of text or data search
                 if(parent_id != 'None' && nestedHandler != undefined ){
                     //nested
+                    LIMIT=50;
                     tempServHandler = nestedHandler;
                 } else {
-                    //surface
+                    LIMIT=5
                     tempServHandler = servHandler;
                 }
                 tempServHandler.query({
@@ -103,7 +104,7 @@ zdControllers.controller('apiList',
                         if(!brPostState[parent_id].reachEnd)
                             callback(data);
 
-                        if(data.length<5){
+                        if(data.length<LIMIT){
                             brPostState[parent_id].reachEnd = true;
                         } else {
                             brPostState[parent_id].round++;

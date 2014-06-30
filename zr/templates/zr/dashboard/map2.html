@@ -13,7 +13,7 @@
     var plan_id = parseInt('{{ plan_id }}');
     var user = '{{ user }}';
     var search_filter_layer = undefined;
-    var pulseContainer = new Array();
+    var PLAN_POPUPS_VISIBILITY=true;
 
 
 
@@ -99,18 +99,24 @@
                });
 
                var popup = L.popup({
-                   "maxHeight": 200
+                   "maxHeight": 150
                });
+
                popup.setContent(pcontent);
-               layer.bindPopup(popup);
+               layer.on("click", function (e) {
+                   if(PLAN_POPUPS_VISIBILITY){
+                       popup.setLatLng(e.latlng);
+                       map.openPopup(popup);
+                   }
+               });
            }
         });
 
         var overlayMaps = {
-        "MPZP": basePlanLayer,
-                "Studium": studium,
-                "Struktura własności": strukturaWlasnosci,
-                "Wyniki ankiet": wynikiAnkiet
+            "MPZP": basePlanLayer,
+            "Studium": studium,
+            "Struktura własności": strukturaWlasnosci,
+            "Wyniki ankiet": wynikiAnkiet
         };
 
         map = L.map('map', {
@@ -159,7 +165,6 @@
         map.remoteControlSwitchOff = function(){
 
             if(map.remoteControlSwitch!=undefined && map.remoteControlContent!=undefined){
-                console.log('switch off');
                 map.remoteControlSwitch.call(map.remoteControlContent);
                 map.remoteControlSwitch = undefined;
                 map.remoteControlContent = undefined;
@@ -174,6 +179,22 @@
             map.remoteControlContent = undefined;
         }
         map.invalidateSize();
+
+        function planPopupV(){
+            PLAN_POPUPS_VISIBILITY = !PLAN_POPUPS_VISIBILITY;
+        }
+
+        //extra button for specified layer popup appearance
+        var myButtonOptions = {
+              'onClick': planPopupV,  // callback function
+              'doToggle': false,  // bool
+              'toggleStatus': true,  // bool
+              'toggle':true
+        }
+
+        var myButton = new L.Control.Button(myButtonOptions).addTo(map);
+
+
 
         $(document).ready(function(){
             var resizeStart = false;
@@ -525,8 +546,6 @@
                 marker.on("click", function(e){
                     trackEvent('marker','marker clicked','','','');
                     addPointPulse(e.target._icon.classList)
-                    //e.target._icon.classList.add('pulseit');
-                    pulseContainer.add(e.target._icon.classList);
                     addPostFilter([{geometry:value.id}]);
                 });
                 polygon.on('click', function(e){
