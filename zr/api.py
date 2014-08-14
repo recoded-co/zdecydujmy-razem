@@ -195,7 +195,7 @@ class NSubscribed(generics.ListAPIView):
 
         cursor.execute(sql, params)
         row = cursor.fetchall()
-        paginator = Paginator(row,5);
+        paginator = Paginator(row,8);
 
         try:
             actuall_item_list = paginator.page(round).object_list
@@ -254,7 +254,7 @@ class NPost(generics.ListAPIView):
             sql += 'where parent_id = %s '
             params.append(parent)
         else :
-            LIMIT=5
+            LIMIT=8
             sql += 'where parent_id is null '
 
         if plan_id == 'None':
@@ -531,7 +531,7 @@ def keyword_search(request, plan_id, query):
     result = i.find(query, plan_id)
     print result
     result = [(item,len(Post.objects.filter(parent_id=item))) for item in result ]
-    paginator = Paginator(result,5);
+    paginator = Paginator(result,8);
 
     try:
         actuall_item_list = paginator.page(round).object_list
@@ -564,7 +564,7 @@ def date_search(request, plan_id, year, mon, day):
     if len(result) == 0:
         return []
     result = [(item.id,len(Post.objects.filter(parent_id=item.id))) for item in result ]
-    paginator = Paginator(result, 5);
+    paginator = Paginator(result, 8);
 
     try:
         actuall_item_list = paginator.page(round).object_list
