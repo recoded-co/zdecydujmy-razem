@@ -173,6 +173,7 @@ class Post(models.Model):
         return super(Post, self).save(*args, **kwargs)
     """
 
+
 class Rate(models.Model):
     post = models.ForeignKey(Post, related_name='rates')
     user = models.ForeignKey(User)
