@@ -108,12 +108,25 @@
                         <span class="block pro_l">
                         </span>
                         <span class="block pro_r">
-                            {% if form.password2.errors or form.password1.errors or form.password1.errors or form.email.errors or form.username.errors %}
+                            {% if form.password2.errors or form.password1.errors or form.email.errors or form.username.errors %}
+                                {% if form.password2.errors %}
+                                    {{ form.password2.errors }}
+                                {% elif form.password1.errors %}
+                                    {{ form.password1.errors }}
+                                {% elif form.email.errors %}
+                                    {{ form.email.errors }}
+                                {% elif form.username.errors %}
+                                    {{ form.username.errors }}
+                                {% endif %}
 
 
-                                <p class="btn-big-n btn-r it15" style="width: 200px;">Należy zaznaczyć wymagane pola</p>
                             {% endif %}
                         </span>
+                        <!--<span class="block pro_l">
+                        </span>
+                        <span class="block pro_r">
+                            <p class="btn-big-n btn-r it15" style="width: 200px;">Należy zaznaczyć wymagane pola</p>
+                        </span> -->
                     </div>
 
                     <input type="hidden" name="next" value="{{ next }}" />

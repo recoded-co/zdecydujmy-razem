@@ -195,7 +195,7 @@ class NSubscribed(generics.ListAPIView):
 
         cursor.execute(sql, params)
         row = cursor.fetchall()
-        paginator = Paginator(row,5);
+        paginator = Paginator(row,8);
 
         try:
             actuall_item_list = paginator.page(round).object_list
@@ -236,8 +236,7 @@ class NPost(generics.ListAPIView):
         direction = NPost.parseToBoolean(request.QUERY_PARAMS.get('direction',True))
         round = int(request.QUERY_PARAMS.get('round',1))
         plan_id = request.QUERY_PARAMS.get('plan_id','None')
-        #TODO : plan_id add into sql query.
-
+        LIMIT = 0
         #print "parent,geometry,type,direction,round"
         #print parent,geometry,type,direction,round
 
@@ -251,9 +250,11 @@ class NPost(generics.ListAPIView):
         params = []
 
         if parent != 'None':
+            LIMIT=50
             sql += 'where parent_id = %s '
             params.append(parent)
-        else:
+        else :
+            LIMIT=8
             sql += 'where parent_id is null '
 
         if plan_id == 'None':
@@ -299,7 +300,7 @@ class NPost(generics.ListAPIView):
 
         cursor.execute(sql, params)
         row = cursor.fetchall()
-        paginator = Paginator(row,5);
+        paginator = Paginator(row,LIMIT);
 
         try:
             actuall_item_list = paginator.page(round).object_list
@@ -530,7 +531,7 @@ def keyword_search(request, plan_id, query):
     result = i.find(query, plan_id)
     print result
     result = [(item,len(Post.objects.filter(parent_id=item))) for item in result ]
-    paginator = Paginator(result,5);
+    paginator = Paginator(result,8);
 
     try:
         actuall_item_list = paginator.page(round).object_list
@@ -563,7 +564,7 @@ def date_search(request, plan_id, year, mon, day):
     if len(result) == 0:
         return []
     result = [(item.id,len(Post.objects.filter(parent_id=item.id))) for item in result ]
-    paginator = Paginator(result, 5);
+    paginator = Paginator(result, 8);
 
     try:
         actuall_item_list = paginator.page(round).object_list

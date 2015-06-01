@@ -212,6 +212,13 @@ div#resizible_jquery{
     overflow-x: hidden;
     height: 100%;
 }
+
+.middle_background{
+background: url(../img/pala.png) 1px 50% no-repeat;
+width:6px;
+left:0px;
+}
+
 div#mapsquare{
     height: 100%;
 }
@@ -438,6 +445,10 @@ button:focus {
               /*text-align: center;*/
               /*background-color: #FFFFFF;*/
               text-decoration: underline;
+           }
+           .dropdown .btn-xs{
+               margin-left:0px;
+               margin-right: 2px;
            }
            .nav-tabs
            {
@@ -1180,7 +1191,7 @@ div.leaflet-bar a.leaflet-draw-draw-rectangle
     height: 40px;
     position: absolute;
     right: 0px;
-    top: 184px;
+    top: 173px;
 }
 div.leaflet-control-rectangle-on a.leaflet-draw-draw-rectangle
 {
@@ -1309,49 +1320,6 @@ div.leaflet-bar a.leaflet-control-measure-ruler:hover
 {
   margin-right: 2%;
 }
-@font-face 
-{
-    font-family: 'fontawesome';
-    src: url('/static/fonts/fontawesome-webfont.eot'); /* IE 5-8 */ 
-    src: local('☺'),             /* sneakily trick IE */
-        url('/static/fonts/fontawesome-webfont.woff') format('woff'),    /* FF 3.6, Chrome 5, IE9 */
-        url('/static/fonts/fontawesome-webfont.ttf') format('truetype'), /* Opera, Safari */
-        url('/static/fonts/fontawesome-webfont#font') format('svg'); /* iOS */
-}
-@font-face 
-{
-    font-family: 'source_sans_proitalic';
-    src: url('/static/fonts/sourcesanspro-italic-webfont.eot');
-    src: url('/static/fonts/sourcesanspro-italic-webfont.eot?#iefix') format('embedded-opentype'),
-        url('/static/fonts/sourcesanspro-italic-webfont.woff') format('woff'),
-        url('/static/fonts/sourcesanspro-italic-webfont.ttf') format('truetype'),
-        url('sourcesanspro-italic-webfont.svg#source_sans_proitalic') format('svg');
-    font-weight:  lighter;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'source_sans_prolight';
-    src: url('/static/fonts/sourcesanspro-light-webfont.eot');
-    src: url('/static/fonts/sourcesanspro-light-webfont.eot?#iefix') format('embedded-opentype'),
-        url('/static/fonts/sourcesanspro-light-webfont.woff') format('woff'),
-        url('/static/fonts/sourcesanspro-light-webfont.ttf') format('truetype'),
-        url('/static/fonts/sourcesanspro-light-webfont.svg#source_sans_prolight') format('svg');
-    font-weight:  lighter;
-    font-style: normal;
-
-}
-@font-face {
-    font-family: 'source_sans_prosemibold';
-    src: url('/static/fonts/sourcesanspro-semibold-webfont.eot');
-    src: url('/static/fonts/sourcesanspro-semibold-webfont.eot?#iefix') format('embedded-opentype'),
-        url('/static/fonts/sourcesanspro-semibold-webfont.woff') format('woff'),
-        url('/static/fonts/sourcesanspro-semibold-webfont.ttf') format('truetype'),
-        url('/static/fonts/sourcesanspro-semibold-webfont.svg#source_sans_prosemibold') format('svg');
-    font-weight: lighter;
-    font-style: normal;
-}
-
 .map_popup
 {
   font-family: 'source_sans_prolight';
@@ -1613,4 +1581,36 @@ textarea:focus{
     0% { top:-10px; }
     50% { top:0px; }
     100% { top:-10px; }
+}
+
+.leaflet-buttons-control-toggleon{
+    background-image: url('/static/images/planuj-051.png'),url('/static/images/planuj-11.png') ! important;
+    background-size: 40px 40px, 47px 40px !important;
+    background-position: 7px 0px,0px 0px !important;
+    width: 47px !important;
+    background-color: transparent !important;
+    border: none !important;
+
+}
+div.leaflet-buttons-control-button{
+    background-image: url('/static/images/planuj-051.png');
+    background-size: 40px 40px;
+    background-position: 0px;
+    background-color: rgba(0,0,0,0.6);
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: 0px;
+    top: 143px;
+    border-bottom: 1px solid #ccc;
+}
+div.leaflet-buttons-control-button:hover
+{
+
+  background-image: url('/static/images/planuj-051.png'),url('/static/images/planuj-11.png');
+  background-size: 40px 40px, 47px 40px;
+  background-position: 7px 0px,0px 0px;
+  width: 47px;
+  background-color: transparent;
+  border: none;
 }
