@@ -5,8 +5,6 @@
 {% block extra_head %}
     <link href='/static/css/mw_style.css' rel='stylesheet' type='text/css'/>
     <link href='/static/css/btn_m.css' rel='stylesheet' type='text/css'/>
-
-
 {% endblock %}
 
 {% block navbar %} {% endblock %}
@@ -23,28 +21,11 @@
                 </p>
             </div>
         </div>
-
         <div class="mw mwright">
             <div class="video_scr">
             </div>
         </div>
         </div>
-
-        <div class="row" ng-app="dynamic_links" ng-controller="dynamic_links_controller">
-                Skąd wiesz o nas:
-            <div class="m_box" id="dynamic_links">
-                <span ng-repeat="o in options">
-                    <a class="btn-sm-n  btn-c" onclick="change_referrer('{[{ o.referrer }]}')">{[{ o.label }]}</a>
-                </span>
-
-            </div>
-            <div>
-                <p>Name: {[{ document.referrer }]}</p>
-            </div>
-        </div>
-
-
-        {% comment %}
         <div class="row">
             <div class="m_box">
                 <div class="login_container">
@@ -89,43 +70,5 @@
                 </div>
             </div>
         </div>
-        {% endcomment %}
-
     </div>
-    <script src="/static/angular/angular.js"></script>
-    <script>
-    var customInterpolationApp = angular.module('dynamic_links', []);
-
-    customInterpolationApp.config(function($interpolateProvider) {
-      $interpolateProvider.startSymbol('{[{');
-      $interpolateProvider.endSymbol('}]}');
-    });
-    /**
-     * Randomize array element order in-place.
-     * Using Fisher-Yates shuffle algorithm.
-     */
-    function shuffleArray(array) {
-        for (var i = array.length - 1; i > 0; i--) {
-            var j = Math.floor(Math.random() * (i + 1));
-            var temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
-        }
-        return array;
-    }
-    function dynamic_links_controller($scope){
-        var options = [
-            { label:"Od znajomych!", referer:"friends" },
-            { label:"Od facebooka!", referer:"facebook" },
-            { label:"Na mieście!", referer:"city" },
-           ];
-
-        $scope.options = shuffleArray(options);
-
-        $scope.change_referrer = function(ref){
-            console.log(document.referrer);
-            //document.referrer = document.referrer + ref;
-        }
-    }
-    </script>
 {% endblock %}
