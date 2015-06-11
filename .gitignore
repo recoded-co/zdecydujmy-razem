@@ -1,8 +1,7 @@
 *.log
 *.pot
 *.pyc
-local_settings.py
-settings.py
+zdecydujmyrazem/local.py
 zr_index/
 media/
 static/

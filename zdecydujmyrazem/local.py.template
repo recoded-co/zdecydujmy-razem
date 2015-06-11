@@ -1,0 +1,40 @@
+"""
+Local project settings.
+"""
+
+SECRET_KEY = ''
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+    }
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = ''
+
+EMAIL_PORT = ''
+
+EMAIL_HOST_USER = ''
+
+EMAIL_HOST_PASSWORD = ''
+
+EMAIL_USE_SSL = False
+
+DEFAULT_FROM_EMAIL = ''
+
+NOTIFICATION_QUEUE_ALL = True
+
+GOOGLE_OAUTH2_CLIENT_ID = ''
+
+GOOGLE_OAUTH2_CLIENT_SECRET = ''
+
+FACEBOOK_APP_ID = ''
+
+FACEBOOK_API_SECRET = ''
