@@ -18,25 +18,33 @@
         var margin_gap=20;
 
         $(document).ready(function(){
-            var max,min;
+            var max, min = 520;
+
+            if ($('#resizible_jquery').width() < 520)
+                $('#resizible_jquery').width(min);
+
             var navSidebarWidth =  $('#resizible_jquery').width();
+
             $('ul.nav-tabs').css('width',navSidebarWidth+"px");
             $('.toolbox').css('width',navSidebarWidth+"px");
             configuration.setAuthor('{{ user.id }}');
             configuration.setPlanId('{{ plan_id }}');
             page_init();
-                                              
+
             $(window).resize(function(){
              var navSidebarWidth =  $('#resizible_jquery').width();
              $('ul.nav-tabs').css('width',navSidebarWidth+"px");
              $('.toolbox').css('width',navSidebarWidth+"px");
             });
-           
+
            $('body').resize(function(){
                var viewportwidth = parseInt($('#row_box').innerWidth()) - margin_gap -1;
                 max =  parseInt((viewportwidth*parseInt("{{ configuration.max }}"))/100);
                 min =  parseInt((viewportwidth*parseInt("{{ configuration.min }}"))/100);
-              
+
+                if (min < 520)
+                    min = 520;
+
                $( "#resizible_jquery" ).resizable({
                   maxWidth: max,
                   minWidth: min,
@@ -49,7 +57,7 @@
               handles: 'e, w'
             });
         });
-       
+
         </script>
 {% endblock %}
 
@@ -152,7 +160,7 @@
 
 {% block content %}
 <div id="row_box" class="row dashbord_map" ng-app="zd">
-   
+
   <div id="middleman"></div>
   <div id="resizible_jquery"
        class="col-xs-12 col-sm-6 col-md-5 delpadding"
