@@ -914,6 +914,7 @@ button:focus {
                 width: 40px;
                 height: 40px;
                 /*padding-top: 7px;*/
+                white-space: nowrap;
                }
 
             div.leaflet-top.leaflet-left a:hover
