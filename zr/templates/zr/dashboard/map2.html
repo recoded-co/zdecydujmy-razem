@@ -139,7 +139,7 @@
             "weight": 2,
             "opacity": 0.65
         }
-    
+
     $.getJSON("{% url 'subjects_geojson' plan.id  %}", function (data) {
             basePlanLayer.addData(data);
             basePlanLayer.bringToBack();
@@ -361,25 +361,29 @@
                 L.DomUtil.addClass(e.target._container, 'leaflet-control-rectangle-on');
                 map.setRemoteControlSwitch(e,function(){
                     map.fireEvent( 'draw:drawstop', this );
-                    drawControl._toolbars[36]._modes.rectangle.handler.disable();
+                    // TODO: Hardcoded toolbar index. Need to be dynamically fetched from somewhere!
+                    drawControl._toolbars[39]._modes.rectangle.handler.disable();
                 });
             } else if(type === 'marker') {
                 L.DomUtil.addClass(e.target._container, 'leaflet-control-marker-on');
                 map.setRemoteControlSwitch(e,function(){
                     map.fireEvent( 'draw:drawstop', this );
-                    drawControl._toolbars[36]._modes.marker.handler.disable();
+                    // TODO: Hardcoded toolbar index. Need to be dynamically fetched from somewhere!
+                    drawControl._toolbars[39]._modes.marker.handler.disable();
             });
             } else if(type==='polygon'){
                 L.DomUtil.addClass(e.target._container, 'leaflet-control-polygon-on');
                 map.setRemoteControlSwitch(e,function(){
                     map.fireEvent( 'draw:drawstop', this );
-                    drawControl._toolbars[36]._modes.polygon.handler.disable();
+                    // TODO: Hardcoded toolbar index. Need to be dynamically fetched from somewhere!
+                    drawControl._toolbars[39]._modes.polygon.handler.disable();
                 });
             } else if(type==='polyline'){
                 L.DomUtil.addClass(e.target._container, 'leaflet-control-polyline-on');
                 map.setRemoteControlSwitch(e,function(){
                     map.fireEvent( 'draw:drawstop', this );
-                    drawControl._toolbars[36]._modes.polyline.handler.disable();
+                    // TODO: Hardcoded toolbar index. Need to be dynamically fetched from somewhere!
+                    drawControl._toolbars[39]._modes.polyline.handler.disable();
                 });
             }
         }).on('draw:drawstop',function(e){
