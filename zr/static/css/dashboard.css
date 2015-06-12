@@ -1300,6 +1300,7 @@ div.leaflet-bar a.leaflet-control-measure-ruler:hover
 }
 .add_comment
 {
+  overflow: hidden;
   margin-top: 20px;
 }
 .add_comment textarea
