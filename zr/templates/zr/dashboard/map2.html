@@ -5,809 +5,869 @@
 
 <script type="text/javascript">
     var lon = parseFloat("{{ plan.center.x|escapejs }}");
-    var lat = parseFloat("{{ plan.center.y|escapejs }}");
-    var scope = "{{ plan.geocoding_scope }}";
-    var zoom = parseInt("{{ plan.zoom_level }}")
-    var after_search_zoom = parseInt("{{ plan.after_search_zoom }}");
-    var map, drawControls, selectedFeature,wtk,vectors,layerWaitingRoom;
-    var plan_id = parseInt('{{ plan_id }}');
-    var user = '{{ user }}';
-    var search_filter_layer = undefined;
-    var PLAN_POPUPS_VISIBILITY=false;
+var lat = parseFloat("{{ plan.center.y|escapejs }}");
+var scope = "{{ plan.geocoding_scope }}";
+var zoom = parseInt("{{ plan.zoom_level }}")
+var after_search_zoom = parseInt("{{ plan.after_search_zoom }}");
+var map, drawControls, selectedFeature, wtk, vectors, layerWaitingRoom;
+var plan_id = parseInt('{{ plan_id }}');
+var user = '{{ user }}';
+var search_filter_layer = undefined;
+var PLAN_POPUPS_VISIBILITY = false;
 
 
 
-    function geolocate(address){
+function geolocate(address) {
 
-    	var geocoder = new google.maps.Geocoder();
-		if (geocoder) {
-			geocoder.geocode({ 'address': address, 'region':'pl' }, function (results, status) {
-				if (status == google.maps.GeocoderStatus.OK) {
-					var geometry = results[0].geometry.location;
-                    map.setView([geometry.lat(), geometry.lng()], after_search_zoom);
-         		} else {
-            		console.log("Geocoding failed: " + status);
-         		}
-      		});
-   		}
+    var geocoder = new google.maps.Geocoder();
+    if (geocoder) {
+        geocoder.geocode({
+            'address': address,
+            'region': 'pl'
+        }, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                var geometry = results[0].geometry.location;
+                map.setView([geometry.lat(), geometry.lng()], after_search_zoom);
+            } else {
+                console.log("Geocoding failed: " + status);
+            }
+        });
+    }
+}
+
+$("#map-search-button").click(function() {
+    var address = $("#map-search-input").val();
+    geolocate(address);
+})
+
+$("#map-search-input").val(scope + ', ');
+
+function map_init() {
+    var osm =
+        L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: 'Map data © OpenStreetMap contributors',
+            maxZoom: 19,
+            minZoom: 0,
+            legend: LEGEND
+        });
+
+    var lmap =
+        L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+            maxZoom: 18,
+            legend: LEGEND
+        });
+
+    var mbmap =
+        L.tileLayer('http://{s}.tiles.mapbox.com/v3/mmlodkowski.gpl722i4/{z}/{x}/{y}.png', {
+            attribution: "<a href='http://mapbox.com/about/maps' target='_blank'>Terms & Feedback</a>",
+            maxZoom: 18,
+            legend: LEGEND,
+            openLegendOnLoad: true
+        });
+
+    var baseMaps = {
+        // "Open Street Map": osm,
+        "Mapa": osm,
+        "Zdjęcia satelitarne": mbmap
+    };
+    var mpzp =
+        L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+            maxZoom: 18
+        });
+    var studium = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+        maxZoom: 18
+    });
+    var strukturaWlasnosci = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+        maxZoom: 18
+    });
+    var wynikiAnkiet = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+        maxZoom: 18
+    });
+
+    var basePlanLayer = L.geoJson([], {
+        style: function(feature) {
+            return {
+                color: feature.properties.color
+            };
+        },
+        onEachFeature: function(feature, layer) {
+            var pcontent = '';
+            feature.properties.feat_description.forEach(function(o) {
+                if (o.value !== '') {
+                    pcontent += "<h5>" + o.key + "</h5><p>" + o.value + "</p>";
+                }
+            });
+
+            var popup = L.popup({
+                "maxHeight": 150
+            });
+
+            popup.setContent(pcontent);
+            layer.on("click", function(e) {
+                if (PLAN_POPUPS_VISIBILITY) {
+                    popup.setLatLng(e.latlng);
+                    map.openPopup(popup);
+                }
+            });
+        }
+    });
+
+    var overlayMaps = {
+        "MPZP": basePlanLayer,
+        "Studium": studium,
+        "Struktura własności": strukturaWlasnosci,
+        "Wyniki ankiet": wynikiAnkiet
+    };
+
+    map = L.map('map', {
+        attributionControl: false,
+        editInOSMControl: true,
+        editInOSMControlOptions: {
+            position: 'topleft'
+        },
+        center: new L.LatLng(lat, lon),
+        zoom: zoom,
+        measureControl: true,
+        measurePolygonControl: true,
+        layers: [mbmap],
+        minZoom: 1,
+        maxZoom: 17
+    });
+
+    map.addLayer(basePlanLayer); // city plan base layer
+
+    var planMapStyle = {
+        "color": "#e74c3c",
+        "weight": 2,
+        "opacity": 0.65
     }
 
-    $( "#map-search-button").click(function(){
-        var address = $( "#map-search-input").val();
-        geolocate(address);
-    })
-    $( "#map-search-input").val(scope+', ');
+    $.getJSON("{% url 'subjects_geojson' plan.id  %}", function(data) {
+        basePlanLayer.addData(data);
+        basePlanLayer.bringToBack();
+    });
 
-    function map_init(){
+    var additionalLayers = {
+        //"Propozycja planu": basePlanLayer
+    }
+    L.control.layers(baseMaps, overlayMaps, {
+        'collapsed': false
+    }).addTo(map);
+    var drawnItems = new L.FeatureGroup();
+    layerWaitingRoom = new Array();
+    map.addLayer(drawnItems);
 
-        var osm =
-            L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                attribution: 'Map data © OpenStreetMap contributors',
-                maxZoom: 19,
-                minZoom: 0,
-                legend: LEGEND
-            });
+    var searchItems = new L.FeatureGroup();
+    search_filter_layer = searchItems;
+    map.addLayer(searchItems);
 
-        var lmap =
-            L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                maxZoom: 18,
-                legend: LEGEND
-            });
+    L.control.scale().addTo(map);
 
-        var mbmap =
-            L.tileLayer('http://{s}.tiles.mapbox.com/v3/mmlodkowski.gpl722i4/{z}/{x}/{y}.png', {
-                attribution: "<a href='http://mapbox.com/about/maps' target='_blank'>Terms & Feedback</a>",
-                maxZoom: 18,
-                legend: LEGEND,
-                openLegendOnLoad: true
-            });
+    var legendControl = (new L.Control.TileLegend()).addTo(map);
 
-        var baseMaps = {
-           // "Open Street Map": osm,
-            "Mapa": osm,
-            "Zdjęcia satelitarne": mbmap
-        };
-        var mpzp =
-                L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                        maxZoom: 18
-                });
-                var studium = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                        maxZoom: 18
-                });
-                var strukturaWlasnosci = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                        maxZoom: 18
-                });
-                var wynikiAnkiet = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-                        maxZoom: 18
-                });
+    //remote control switch functions
+    map.remoteControlSwitchOff = function() {
 
-        var basePlanLayer = L.geoJson([], {
-           style: function (feature) {
-                return {color: feature.properties.color};
-            },
-           onEachFeature: function (feature, layer) {
-               var pcontent = '';
-               feature.properties.feat_description.forEach(function(o){
-                   if (o.value !== ''){
-                    pcontent += "<h5>"+ o.key+"</h5><p>"+o.value+"</p>";
-                   }
-               });
-
-               var popup = L.popup({
-                   "maxHeight": 150
-               });
-
-               popup.setContent(pcontent);
-               layer.on("click", function (e) {
-                   if(PLAN_POPUPS_VISIBILITY){
-                       popup.setLatLng(e.latlng);
-                       map.openPopup(popup);
-                   }
-               });
-           }
-        });
-
-        var overlayMaps = {
-            "MPZP": basePlanLayer,
-            "Studium": studium,
-            "Struktura własności": strukturaWlasnosci,
-            "Wyniki ankiet": wynikiAnkiet
-        };
-
-        map = L.map('map', {
-            attributionControl: false,
-            editInOSMControl: true,
-            editInOSMControlOptions: {position: 'topleft'},
-            center: new L.LatLng(lat, lon),
-            zoom: zoom,
-            measureControl: true,
-            measurePolygonControl: true,
-            layers: [mbmap],
-            minZoom: 1,
-            maxZoom: 17
-        });
-
-        map.addLayer(basePlanLayer); // city plan base layer
-
-        var planMapStyle = {
-            "color": "#e74c3c",
-            "weight": 2,
-            "opacity": 0.65
-        }
-
-    $.getJSON("{% url 'subjects_geojson' plan.id  %}", function (data) {
-            basePlanLayer.addData(data);
-            basePlanLayer.bringToBack();
-        });
-
-        var additionalLayers = {
-            //"Propozycja planu": basePlanLayer
-        }
-        L.control.layers(baseMaps, overlayMaps, {'collapsed':false}).addTo(map);
-        var drawnItems = new L.FeatureGroup();
-        layerWaitingRoom = new Array();
-        map.addLayer(drawnItems);
-
-        var searchItems = new L.FeatureGroup();
-        search_filter_layer = searchItems;
-        map.addLayer(searchItems);
-
-        L.control.scale().addTo(map);
-
-        var legendControl = (new L.Control.TileLegend()).addTo(map);
-
-        //remote control switch functions
-        map.remoteControlSwitchOff = function(){
-
-            if(map.remoteControlSwitch!=undefined && map.remoteControlContent!=undefined){
-                map.remoteControlSwitch.call(map.remoteControlContent);
-                map.remoteControlSwitch = undefined;
-                map.remoteControlContent = undefined;
-            }
-        }
-        map.setRemoteControlSwitch = function (content,method){
-            map.remoteControlSwitch = method;
-            map.remoteControlContent = content;
-        }
-        map.clearControlSwitch = function (){
+        if (map.remoteControlSwitch != undefined && map.remoteControlContent != undefined) {
+            map.remoteControlSwitch.call(map.remoteControlContent);
             map.remoteControlSwitch = undefined;
             map.remoteControlContent = undefined;
         }
-        map.invalidateSize();
+    }
+    map.setRemoteControlSwitch = function(content, method) {
+        map.remoteControlSwitch = method;
+        map.remoteControlContent = content;
+    }
+    map.clearControlSwitch = function() {
+        map.remoteControlSwitch = undefined;
+        map.remoteControlContent = undefined;
+    }
+    map.invalidateSize();
 
-        function planPopupV(){
-            PLAN_POPUPS_VISIBILITY = !PLAN_POPUPS_VISIBILITY;
-        }
+    function planPopupV() {
+        PLAN_POPUPS_VISIBILITY = !PLAN_POPUPS_VISIBILITY;
+    }
 
-        //extra button for specified layer popup appearance
-        var myButtonOptions = {
-              'onClick': planPopupV,  // callback function
-              'doToggle': false,  // bool
-              'toggleStatus': true,  // bool
-              'toggle':true
-        }
+    //extra button for specified layer popup appearance
+    var myButtonOptions = {
+        'onClick': planPopupV, // callback function
+        'doToggle': false, // bool
+        'toggleStatus': true, // bool
+        'toggle': true
+    }
 
-        var myButton = new L.Control.Button(myButtonOptions).addTo(map);
+    var myButton = new L.Control.Button(myButtonOptions).addTo(map);
 
-
-
-        $(document).ready(function(){
-            var resizeStart = false;
-            $('#resizible_jquery').resize(function(e){
-                if(!resizeStart){
-                    resizeStart=true;
-                }
-            });
-            $(document).mouseup(function(){
-                if(resizeStart){
-                    map.invalidateSize();
-                    resizeStart=false;
-                }
-            });
-            map.on('popupopen', function(e) {
-              map.panTo(e.popup._latlng);
-              var marker = e.popup._source;
-            });
-            map.on('popupclose', function(e) {
-              map.remoteControlSwitchOff();
-              if(layerWaitingRoom){
-                while(layerWaitingRoom.length > 0){
-                    map.removeLayer(layerWaitingRoom.pop());
-                    }
-              }
-            });
+    $(document).ready(function() {
+        var resizeStart = false;
+        $('#resizible_jquery').resize(function(e) {
+            if (!resizeStart) {
+                resizeStart = true;
+            }
         });
+        $(document).mouseup(function() {
+            if (resizeStart) {
+                map.invalidateSize();
+                resizeStart = false;
+            }
+        });
+        map.on('popupopen', function(e) {
+            map.panTo(e.popup._latlng);
+            var marker = e.popup._source;
+        });
+        map.on('popupclose', function(e) {
+            map.remoteControlSwitchOff();
+            if (layerWaitingRoom) {
+                while (layerWaitingRoom.length > 0) {
+                    map.removeLayer(layerWaitingRoom.pop());
+                }
+            }
+        });
+    });
 
 {% if user|isloged %}
-        var drawControl = new L.Control.Draw({
-			position: 'topright',
-			draw: {
-                marker:{
-                    icon:L.icon({
-                     iconUrl: '/static/images/ap_maj-10.png',
-                     iconSize:     [40, 40], // size of the icon
-                     iconAnchor:   [20, 42], // point of the icon which will correspond to marker's location
-                     popupAnchor:  [-3, -40] // point from which the popup should open relative to the
-                    })
+    var drawControl = new L.Control.Draw({
+        position: 'topright',
+        draw: {
+            marker: {
+                icon: L.icon({
+                    iconUrl: '/static/images/ap_maj-10.png',
+                    iconSize: [40, 40], // size of the icon
+                    iconAnchor: [20, 42], // point of the icon which will correspond to marker's location
+                    popupAnchor: [-3, -40] // point from which the popup should open relative to the
+                })
+            },
+            polygon: {
+                allowIntersection: false,
+                showArea: true,
+                drawError: {
+                    color: '#b00b00',
+                    timeout: 1000,
+                    message: '<strong>Błąd<strong>'
                 },
-                polygon: {
-					allowIntersection: false,
-					showArea: true,
-					drawError: {
-						color: '#b00b00',
-						timeout: 1000,
-                        message: '<strong>Błąd<strong>'
-					},
-                    shapeOptions: {
-                        stroke: true,
-                        color: '#009DA5',
-                        weight: 2,
-                        opacity: 1,
-                        fill: true,
-                        clickable: true
-                    }
-                },
-                polyline: {
-					allowIntersection: false,
-					showArea: true,
-					drawError: {
-						color: '#b00b00',
-						timeout: 1000,
-                        message: '<strong>Błąd<strong>'
-					},
-					shapeOptions: {
-						stroke: true,
-                        color: '#00B4FF',
-                        weight: 2,
-                        opacity: 1,
-                        fill: false,
-                        clickable: true
-					}
-                },
-                rectangle: true,
-                circle: false
-			},
-			edit: {
-				featureGroup: drawnItems,
-				remove: false,
-                edit: false
-			}
-		});
-		map.addControl(drawControl);
-
-{% endif %}
-		map.on('draw:created', function (e) {
-
-			var type = e.layerType,
-                    layer = e.layer;
-
-            var wkt = new Wkt.Wkt();
-            if (type === 'rectangle'){ // search
-                var wkt_bb = wkt.fromObject(L.polygon(e.layer._latlngs));
-                var wkt_string = wkt.write();
-
-                searchItems.addLayer(layer);
-                layer.on('click', function(e){
-                    trackEvent('search rectangle','clicked',user,'','');
-                    searchItems.removeLayer(layer);
-                    addPostFilter(undefined);
-                });
-
-                geoSearch(wkt_string, plan_id, function(data, textStatus, jqXHR) {
-                    // TODO search results callback
-                    if(data.length>0){
-                        addPostFilter(data);
-                    }else{
-                        addPostFilter([{geometry:-1}]);
-                    }
-                });
-
-            }else{
-                var popup_location = null;
-
-                if (type === 'marker') {
-                    trackEvent('marker create','clicked',user,'','');
-                    layer.bindPopup(popup);
-                    popup_location = e.layer._latlng;
-
-                    var point = L.marker(e.layer._latlng);
-                    wkt.fromObject(point);
-
-                } else if (type === 'polygon'){
-                    trackEvent('polygon create','clicked',user,'','');
-                    popup_location = e.layer._latlngs[0];
-                    wkt.fromObject(L.polygon(e.layer._latlngs));
-
-                } else if (type === 'polyline'){
-                    trackEvent('polyline create','clicked',user,'','');
-                    popup_location = e.layer._latlngs[0];
-                    wkt.fromObject(L.polyline(e.layer._latlngs));
+                shapeOptions: {
+                    stroke: true,
+                    color: '#009DA5',
+                    weight: 2,
+                    opacity: 1,
+                    fill: true,
+                    clickable: true
                 }
+            },
+            polyline: {
+                allowIntersection: false,
+                showArea: true,
+                drawError: {
+                    color: '#b00b00',
+                    timeout: 1000,
+                    message: '<strong>Błąd<strong>'
+                },
+                shapeOptions: {
+                    stroke: true,
+                    color: '#00B4FF',
+                    weight: 2,
+                    opacity: 1,
+                    fill: false,
+                    clickable: true
+                }
+            },
+            rectangle: true,
+            circle: false
+        },
+        edit: {
+            featureGroup: drawnItems,
+            remove: false,
+            edit: false
+        }
+    });
+    map.addControl(drawControl);
+{% endif %}
 
+    map.on('draw:created', function(e) {
 
-                //console.log(wkt.components);
-                var wkt_string = wkt.write();
-                //console.log(wkt_string);
+        var type = e.layerType,
+            layer = e.layer;
 
-                var popup = L.popup()
-                    .setLatLng(popup_location)
-                    .setContent("<div>" +
-                                "<div class='map_popup'> " +
-                                "<textarea placeholder='Komentarz' id='popup_comment' rows='8'>" +
-                                "</textarea ><br>" +
-                                "<input id='geometry' type='hidden' value='"+wkt_string+"'/>" +
-                                "<input id='feature_id' type='hidden' value='"+"'/>" +
-                                "</div> " +
-                                "<hr>" +
-                                "<div id='error_comment_needed' class='visible_off'>Brak komentarza</div>"+
-                                "<button id='popPublish' class='btnred btn btn-sm-n' onclick='addPopup(this);return false;' >publikuj</button>" +
-                                "</div>");
-                map.openPopup(popup);
-                layerWaitingRoom.push(layer);
-                drawnItems.addLayer(layer);
-            }
+        var wkt = new Wkt.Wkt();
+        if (type === 'rectangle') { // search
+            var wkt_bb = wkt.fromObject(L.polygon(e.layer._latlngs));
+            var wkt_string = wkt.write();
 
-		}).on('draw:drawstart',function(e){
-            console.log('draw:drawstart');
-            var type = e.layerType;
-            map.remoteControlSwitchOff();
-
-            if (type === 'rectangle'){
-                L.DomUtil.addClass(e.target._container, 'leaflet-control-rectangle-on');
-                map.setRemoteControlSwitch(e,function(){
-                    map.fireEvent( 'draw:drawstop', this );
-                    // TODO: Hardcoded toolbar index. Need to be dynamically fetched from somewhere!
-                    drawControl._toolbars[39]._modes.rectangle.handler.disable();
-                });
-            } else if(type === 'marker') {
-                L.DomUtil.addClass(e.target._container, 'leaflet-control-marker-on');
-                map.setRemoteControlSwitch(e,function(){
-                    map.fireEvent( 'draw:drawstop', this );
-                    // TODO: Hardcoded toolbar index. Need to be dynamically fetched from somewhere!
-                    drawControl._toolbars[39]._modes.marker.handler.disable();
+            searchItems.addLayer(layer);
+            layer.on('click', function(e) {
+                trackEvent('search rectangle', 'clicked', user, '', '');
+                searchItems.removeLayer(layer);
+                addPostFilter(null);
             });
-            } else if(type==='polygon'){
-                L.DomUtil.addClass(e.target._container, 'leaflet-control-polygon-on');
-                map.setRemoteControlSwitch(e,function(){
-                    map.fireEvent( 'draw:drawstop', this );
-                    // TODO: Hardcoded toolbar index. Need to be dynamically fetched from somewhere!
-                    drawControl._toolbars[39]._modes.polygon.handler.disable();
-                });
-            } else if(type==='polyline'){
-                L.DomUtil.addClass(e.target._container, 'leaflet-control-polyline-on');
-                map.setRemoteControlSwitch(e,function(){
-                    map.fireEvent( 'draw:drawstop', this );
-                    // TODO: Hardcoded toolbar index. Need to be dynamically fetched from somewhere!
-                    drawControl._toolbars[39]._modes.polyline.handler.disable();
-                });
-            }
-        }).on('draw:drawstop',function(e){
-            var type = e.layerType;
-            console.log('draw:drawstop');
-            if (type === 'rectangle'){
-                L.DomUtil.removeClass(e.target._container, 'leaflet-control-rectangle-on');
-            } else if(type === 'marker') {
-                L.DomUtil.removeClass(e.target._container, 'leaflet-control-marker-on');
-            } else if(type==='polygon'){
-                L.DomUtil.removeClass(e.target._container, 'leaflet-control-polygon-on');
-            } else if(type==='polyline'){
-                L.DomUtil.removeClass(e.target._container, 'leaflet-control-polyline-on');
-            }
-        });
 
-        addGeometry(function(markers){
-        });
-    }
-
-    function setVectorStyle(name,color){
-        return new OpenLayers.StyleMap({
-				        "default": new OpenLayers.Style({
-				            strokeColor: color,
-				            strokeOpacity: .7,
-				            strokeWidth: 1,
-				            fillColor: color,
-				            fillOpacity: .5,
-				            cursor: "pointer"
-				        }),
-				        "temporary": new OpenLayers.Style({
-				            strokeColor: color,
-				            strokeOpacity: 1,
-				            strokeWidth: 2,
-				            fillColor: color,
-				            fillOpacity: .9,
-				            cursor: "pointer",
-				            label: ""+name// "${"+MapLayerList[x]['name_param']+"}"
-				        }),
-				        "select": new OpenLayers.Style({
-				            strokeColor: color,
-				            strokeOpacity: .9,
-				            strokeWidth: 2,
-				            fillColor: color,
-				            fillOpacity: .9,
-				            graphicZIndex: 2,
-				            cursor: "pointer"
-				        })
-        });
-    }
-
-    /**
-     * TODO add polygon method
-     * @param callback
-     */
-    function addGeometry(callback){
-        // TODO !!!! pass plan id here, right now you get all data from all plans in the system
-        $.getJSON( "/zr/api/geometries/?format=json", function( data ) {
-            var count = data.length;
-            addMarkers(data, function(layers){
-                callback(layers);
+            geoSearch(wkt_string, plan_id, function(data, textStatus, jqXHR) {
+                // TODO search results callback
+                if (data.length > 0) {
+                    addPostFilter(data);
+                } else {
+                    addPostFilter([{
+                        geometry: -1
+                    }]);
+                }
             });
-        });
-    }
 
-    function _getCentroid(points){
-        var i, j, len, p1, p2, f, area, x, y,
+        } else {
+            var popup_location = null;
+
+            if (type === 'marker') {
+                trackEvent('marker create', 'clicked', user, '', '');
+                layer.bindPopup(popup);
+                popup_location = e.layer._latlng;
+
+                var point = L.marker(e.layer._latlng);
+                wkt.fromObject(point);
+
+            } else if (type === 'polygon') {
+                trackEvent('polygon create', 'clicked', user, '', '');
+                popup_location = e.layer._latlngs[0];
+                wkt.fromObject(L.polygon(e.layer._latlngs));
+
+            } else if (type === 'polyline') {
+                trackEvent('polyline create', 'clicked', user, '', '');
+                popup_location = e.layer._latlngs[0];
+                wkt.fromObject(L.polyline(e.layer._latlngs));
+            }
+
+
+            //console.log(wkt.components);
+            var wkt_string = wkt.write();
+            //console.log(wkt_string);
+
+            var popup = L.popup()
+                .setLatLng(popup_location)
+                .setContent("<div>" +
+                    "<div class='map_popup'> " +
+                    "<textarea placeholder='Komentarz' id='popup_comment' rows='8'>" +
+                    "</textarea ><br>" +
+                    "<input id='geometry' type='hidden' value='" + wkt_string + "'/>" +
+                    "<input id='feature_id' type='hidden' value='" + "'/>" +
+                    "</div> " +
+                    "<hr>" +
+                    "<div id='error_comment_needed' class='visible_off'>Brak komentarza</div>" +
+                    "<button id='popPublish' class='btnred btn btn-sm-n' onclick='addPopup(this);return false;' >publikuj</button>" +
+                    "</div>");
+            map.openPopup(popup);
+            layerWaitingRoom.push(layer);
+            drawnItems.addLayer(layer);
+        }
+
+    }).on('draw:drawstart', function(e) {
+        console.log('draw:drawstart');
+        var type = e.layerType;
+        map.remoteControlSwitchOff();
+
+        if (type === 'rectangle') {
+            L.DomUtil.addClass(e.target._container, 'leaflet-control-rectangle-on');
+            map.setRemoteControlSwitch(e, function() {
+                map.fireEvent('draw:drawstop', this);
+                // TODO: Hardcoded toolbar index. Need to be dynamically fetched from somewhere!
+                drawControl._toolbars[39]._modes.rectangle.handler.disable();
+            });
+        } else if (type === 'marker') {
+            L.DomUtil.addClass(e.target._container, 'leaflet-control-marker-on');
+            map.setRemoteControlSwitch(e, function() {
+                map.fireEvent('draw:drawstop', this);
+                // TODO: Hardcoded toolbar index. Need to be dynamically fetched from somewhere!
+                drawControl._toolbars[39]._modes.marker.handler.disable();
+            });
+        } else if (type === 'polygon') {
+            L.DomUtil.addClass(e.target._container, 'leaflet-control-polygon-on');
+            map.setRemoteControlSwitch(e, function() {
+                map.fireEvent('draw:drawstop', this);
+                // TODO: Hardcoded toolbar index. Need to be dynamically fetched from somewhere!
+                drawControl._toolbars[39]._modes.polygon.handler.disable();
+            });
+        } else if (type === 'polyline') {
+            L.DomUtil.addClass(e.target._container, 'leaflet-control-polyline-on');
+            map.setRemoteControlSwitch(e, function() {
+                map.fireEvent('draw:drawstop', this);
+                // TODO: Hardcoded toolbar index. Need to be dynamically fetched from somewhere!
+                drawControl._toolbars[39]._modes.polyline.handler.disable();
+            });
+        }
+    }).on('draw:drawstop', function(e) {
+        var type = e.layerType;
+        console.log('draw:drawstop');
+        if (type === 'rectangle') {
+            L.DomUtil.removeClass(e.target._container, 'leaflet-control-rectangle-on');
+        } else if (type === 'marker') {
+            L.DomUtil.removeClass(e.target._container, 'leaflet-control-marker-on');
+        } else if (type === 'polygon') {
+            L.DomUtil.removeClass(e.target._container, 'leaflet-control-polygon-on');
+        } else if (type === 'polyline') {
+            L.DomUtil.removeClass(e.target._container, 'leaflet-control-polyline-on');
+        }
+    });
+
+    addGeometry(function(markers) {});
+} // function map_init()
+
+function setVectorStyle(name, color) {
+    return new OpenLayers.StyleMap({
+        "default": new OpenLayers.Style({
+            strokeColor: color,
+            strokeOpacity: .7,
+            strokeWidth: 1,
+            fillColor: color,
+            fillOpacity: .5,
+            cursor: "pointer"
+        }),
+        "temporary": new OpenLayers.Style({
+            strokeColor: color,
+            strokeOpacity: 1,
+            strokeWidth: 2,
+            fillColor: color,
+            fillOpacity: .9,
+            cursor: "pointer",
+            label: "" + name // "${"+MapLayerList[x]['name_param']+"}"
+        }),
+        "select": new OpenLayers.Style({
+            strokeColor: color,
+            strokeOpacity: .9,
+            strokeWidth: 2,
+            fillColor: color,
+            fillOpacity: .9,
+            graphicZIndex: 2,
+            cursor: "pointer"
+        })
+    });
+}
+
+/**
+ * TODO add polygon method
+ * @param callback
+ */
+function addGeometry(callback) {
+    // TODO !!!! pass plan id here, right now you get all data from all plans in the system
+    $.getJSON("/zr/api/geometries/?format=json", function(data) {
+        var count = data.length;
+        addMarkers(data, function(layers) {
+            callback(layers);
+        });
+    });
+}
+
+function _getCentroid(points) {
+    var i, j, len, p1, p2, f, area, x, y,
         // polygon centroid algorithm; only uses the first ring if there are multiple
         area = x = y = 0;
-        for (i = 0, len = points.length, j = len - 1; i < len; j = i++) {
-            p1 = points[i];
-            p2 = points[j];
-            f = p1.y * p2.x - p2.y * p1.x;
-            x += (p1.x + p2.x) * f;
-            y += (p1.y + p2.y) * f;
-            area += f * 3;
-        }
-        return [x / area, y / area];
+    for (i = 0, len = points.length, j = len - 1; i < len; j = i++) {
+        p1 = points[i];
+        p2 = points[j];
+        f = p1.y * p2.x - p2.y * p1.x;
+        x += (p1.x + p2.x) * f;
+        y += (p1.y + p2.y) * f;
+        area += f * 3;
     }
+    return [x / area, y / area];
+}
 
-    function addMarkers(data, callback){
+function addMarkers(data, callback) {
 
-        var count = data.length;
-        var markers = L.markerClusterGroup({showCoverageOnHover: false,
-                                            zoomToBoundsOnClick: true,
-                                            spiderfyOnMaxZoom: true,
-                                            removeOutsideVisibleBounds: true,
-                                            iconCreateFunction: function(cluster) {
-                                                var childCount = cluster.getChildCount();
-                                                return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'cluster-mr marker-cluster-mr', iconSize: new L.Point(40, 40) });
-                                            }});
-        var lines = L.markerClusterGroup({showCoverageOnHover: false,
-                                            zoomToBoundsOnClick: true,
-                                            spiderfyOnMaxZoom: true,
-                                            removeOutsideVisibleBounds: true,
-                                            iconCreateFunction: function(cluster) {
-                                                var childCount = cluster.getChildCount();
-                                                return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'cluster-mr line-cluster-mr', iconSize: new L.Point(40, 40) });
-                                            }});
-        var polygon_markers = L.markerClusterGroup({
-                                            showCoverageOnHover: true,
-                                            zoomToBoundsOnClick: true,
-                                            spiderfyOnMaxZoom: true,
-                                            removeOutsideVisibleBounds: true,
-
-                                            iconCreateFunction: function(cluster) {
-                                                var childCount = cluster.getChildCount();
-                                                /*var c = ' marker-cluster-';
-                                                if (childCount < 10) {
-                                                    c += 'small';
-                                                } else if (childCount < 100) {
-                                                    c += 'medium';
-                                                } else {
-                                                    c += 'large';
-                                                }*/
-                                                return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'cluster-mr polygon-cluster-mr', iconSize: new L.Point(40, 40) });
-                                            }
-                                });
-
-        map.on("click",function(e){
-            trackEvent('map area','clicked',user,'','');
-            addPostFilter(undefined);
-        });
-
-		$.each(data,function(key, value){
-			var wkt = new Wkt.Wkt();
-            //console.log(value);
-            wkt.read(value.geoelement);
-            var components = wkt.components[0];
-
-            if (Array.isArray(components)){
-                var latlngs = new Array();
-                for (var i in components){
-                    var xy = components[i];
-                    latlngs.push(L.latLng(xy.y, xy.x));
-                }
-                var polygon = L.polygon(latlngs,{   stroke: true,
-                                                    color: '#009DA5',
-                                                    weight: 2,
-                                                    opacity: 1,
-                                                    fill: true,
-                                                    clickable: true
-                                                });
-                var centroid = _getCentroid(components);
-                var xy = centroid; //components[0];
-                var latlng = L.latLng(xy[1], xy[0]);
-                var baloonMarker = L.icon({
-                     iconUrl: '/static/images/ap_maj-08.png',
-                     iconSize:     [40, 40], // size of the icon
-                     iconAnchor:   [20, 40], // point of the icon which will correspond to marker's location
-                     popupAnchor:  [-3, -40] // point from which the popup should open relative to the
-                    })
-
-                var marker = L.marker(latlng, { icon: baloonMarker});
-
-                marker.on('mouseover', function(){
-                    polygon.addTo(map);
-
-                    polygon.on('mouseout', function(e){
-                       map.removeLayer(polygon);
-                    });
-                });
-
-                marker.on("click", function(e){
-                    trackEvent('marker','marker clicked','','','');
-                    addPointPulse(e.target._icon.classList)
-                    addPostFilter([{geometry:value.id}]);
-                });
-                polygon.on('click', function(e){
-                       trackEvent('polygon','clicked',user,'','');
-                       addPostFilter([{geometry:value.id}]);
-                });
-
-                polygon_markers.addLayer(marker);
-            } else{
-
-                type = value.geoelement.match(/[A-Z]+/);
-
-                if(type == 'POINT'){
-                    var xy = components;
-                    var latlng = L.latLng(xy.y, xy.x);
-                    var pointMarker = L.icon({
-                     iconUrl: '/static/images/ap_maj-10.png',
-                     iconSize:     [40, 40], // size of the icon
-                     iconAnchor:   [20, 40], // point of the icon which will correspond to marker's location
-                     popupAnchor:  [-3, -40] // point from which the popup should open relative to the
-                    })
-                    var marker = L.marker(latlng, {icon:pointMarker});
-                    marker.on('mouseover', function(){
-
-                        marker.on('mouseout', function(){
-                           //postLightOff(value.id);
-                           map.removeLayer(polygon);
-                        });
-                    });
-                    marker.on('click', function(e){
-                        //e.target._icon.classList.add('pulseit');
-                        addPointPulse(e.target._icon.classList)
-                        addPostFilter([{geometry:value.id}]);
-                    });
-                    markers.addLayer(marker);
-
-                } else if( type == 'LINESTRING' ){
-                    var point_list = new Array();
-                    var temporaryPoint = {};
-                    var tempStr = value.geoelement.split(' ');
-                    var finallyList = new Array();
-                    var finallyListOb = new Array();
-
-                    for(var item in tempStr ){
-                        if(tempStr[item].match(/\d+[.]+\d+/)){
-                            point_list.push(tempStr[item].match(/\d+[.]+\d+/));
-                        }
-                    }
-
-                    for(var item=0; item<point_list.length; item++){
-                        var x = point_list[item++][0];
-                        var y = point_list[item][0];
-                        finallyListOb.push({x:parseFloat(x),y:parseFloat(y)});
-                        finallyList.push(L.latLng(parseFloat(y), parseFloat(x)));
-                    }
-
-                    var polyline = L.polyline(finallyList,
-                            {   stroke: true,
-                                color: '#00B4FF',
-                                weight: 2,
-                                opacity: 1,
-                                fill: false,
-                                clickable: true
-                            });
-                    var latlng = L.latLng(finallyListOb[0].y, finallyListOb[0].x);
-                    var baloonMarker = L.icon({
-                         iconUrl: '/static/images/ap_maj-09.png',
-                         iconSize:     [40, 40], // size of the icon
-                         iconAnchor:   [20, 40], // point of the icon which will correspond to marker's location
-                         popupAnchor:  [-3, -40] // point from which the popup should open relative to the
-                        });
-
-                    var marker = L.marker(latlng, {icon: baloonMarker});
-
-                    marker.on('mouseover', function(){
-                        polyline.addTo(map);
-                    });
-                    marker.on('mouseout', function(){
-                        map.removeLayer(polyline);
-                    });
-
-                    marker.on("click", function(e){
-                        trackEvent('marker','marker clicked','','','');
-                        addPointPulse(e.target._icon.classList)
-                        //e.target._icon.classList.add('pulseit');
-                        addPostFilter([{geometry:value.id}]);
-                    });
-                    polyline.on('click', function(e){
-                           trackEvent('polyline','clicked',user,'','');
-                           addPostFilter([{geometry:value.id}]);
-                    });
-                    lines.addLayer(marker);
-                }
-            }
-            if(!--count){
-                map.addLayer(markers);
-                map.addLayer(polygon_markers);
-                map.addLayer(lines);
-                if (callback != undefined){
-                    callback();
-                }
-            }
-		});
-        callback({'punkty':markers, 'poligony':polygon_markers, 'lines':lines});
-    }
-
-    function clearGeoSearchFilter(){
-        trackEvent('search rectangle','clicked',user,'','');
-        if (search_filter_layer){
-            search_filter_layer.clearLayers();
+    var count = data.length;
+    var markers = L.markerClusterGroup({
+        showCoverageOnHover: false,
+        zoomToBoundsOnClick: true,
+        spiderfyOnMaxZoom: true,
+        removeOutsideVisibleBounds: true,
+        iconCreateFunction: function(cluster) {
+            var childCount = cluster.getChildCount();
+            return new L.DivIcon({
+                html: '<div><span>' + childCount + '</span></div>',
+                className: 'cluster-mr marker-cluster-mr',
+                iconSize: new L.Point(40, 40)
+            });
         }
+    });
+    var lines = L.markerClusterGroup({
+        showCoverageOnHover: false,
+        zoomToBoundsOnClick: true,
+        spiderfyOnMaxZoom: true,
+        removeOutsideVisibleBounds: true,
+        iconCreateFunction: function(cluster) {
+            var childCount = cluster.getChildCount();
+            return new L.DivIcon({
+                html: '<div><span>' + childCount + '</span></div>',
+                className: 'cluster-mr line-cluster-mr',
+                iconSize: new L.Point(40, 40)
+            });
+        }
+    });
+    var polygon_markers = L.markerClusterGroup({
+        showCoverageOnHover: true,
+        zoomToBoundsOnClick: true,
+        spiderfyOnMaxZoom: true,
+        removeOutsideVisibleBounds: true,
+
+        iconCreateFunction: function(cluster) {
+            var childCount = cluster.getChildCount();
+            /*var c = ' marker-cluster-';
+            if (childCount < 10) {
+                c += 'small';
+            } else if (childCount < 100) {
+                c += 'medium';
+            } else {
+                c += 'large';
+            }*/
+            return new L.DivIcon({
+                html: '<div><span>' + childCount + '</span></div>',
+                className: 'cluster-mr polygon-cluster-mr',
+                iconSize: new L.Point(40, 40)
+            });
+        }
+    });
+
+    map.on("click", function(e) {
+        trackEvent('map area', 'clicked', user, '', '');
         addPostFilter(undefined);
-    };
+    });
 
-    function postLightOn(id){
-        var LightOn = $("#div_apiList").scope().postLightOn;
-        LightOn(id);
-        $("#div_apiList").scope().$apply();
-        if($('#'+id).position())
-            $("#resizible_jquery").animate({scrollTop: $('#resizible_jquery').scrollTop()+$('#'+id).position().top}, "slow");
-    };
-
-    function postLightOff(id){
-        var LightOff = $("#div_apiList").scope().postLightOff;
-        LightOff(id);
-        $("#div_apiList").scope().$apply();
-    };
-
-    function parseWKT(value, name) {
+    $.each(data, function(key, value) {
         var wkt = new Wkt.Wkt();
-        wkt.read(value);
+        //console.log(value);
+        wkt.read(value.geoelement);
         var components = wkt.components[0];
 
-        if (Array.isArray(components)){
+        if (Array.isArray(components)) {
             var latlngs = new Array();
-            for (var i in components){
+            for (var i in components) {
                 var xy = components[i];
-                var latlng = L.latLng(xy.y, xy.x);
                 latlngs.push(L.latLng(xy.y, xy.x));
             }
-            var polygon = L.polygon(latlngs);
-            polygon.addTo(map);
-        } else{
-            var xy = components;
+            var polygon = L.polygon(latlngs, {
+                stroke: true,
+                color: '#009DA5',
+                weight: 2,
+                opacity: 1,
+                fill: true,
+                clickable: true
+            });
+            var centroid = _getCentroid(components);
+            var xy = centroid; //components[0];
+            var latlng = L.latLng(xy[1], xy[0]);
+            var baloonMarker = L.icon({
+                iconUrl: '/static/images/ap_maj-08.png',
+                iconSize: [40, 40], // size of the icon
+                iconAnchor: [20, 40], // point of the icon which will correspond to marker's location
+                popupAnchor: [-3, -40] // point from which the popup should open relative to the
+            })
+
+            var marker = L.marker(latlng, {
+                icon: baloonMarker
+            });
+
+            marker.on('mouseover', function() {
+                polygon.addTo(map);
+
+                polygon.on('mouseout', function(e) {
+                    map.removeLayer(polygon);
+                });
+            });
+
+            marker.on("click", function(e) {
+                trackEvent('marker', 'marker clicked', '', '', '');
+                addPointPulse(e.target._icon.classList)
+                addPostFilter([{
+                    geometry: value.id
+                }]);
+            });
+            polygon.on('click', function(e) {
+                trackEvent('polygon', 'clicked', user, '', '');
+                addPostFilter([{
+                    geometry: value.id
+                }]);
+            });
+
+            polygon_markers.addLayer(marker);
+        } else {
+
+            type = value.geoelement.match(/[A-Z]+/);
+
+            if (type == 'POINT') {
+                var xy = components;
+                var latlng = L.latLng(xy.y, xy.x);
+                var pointMarker = L.icon({
+                    iconUrl: '/static/images/ap_maj-10.png',
+                    iconSize: [40, 40], // size of the icon
+                    iconAnchor: [20, 40], // point of the icon which will correspond to marker's location
+                    popupAnchor: [-3, -40] // point from which the popup should open relative to the
+                })
+                var marker = L.marker(latlng, {
+                    icon: pointMarker
+                });
+                marker.on('mouseover', function() {
+
+                    marker.on('mouseout', function() {
+                        //postLightOff(value.id);
+                        map.removeLayer(polygon);
+                    });
+                });
+                marker.on('click', function(e) {
+                    //e.target._icon.classList.add('pulseit');
+                    addPointPulse(e.target._icon.classList)
+                    addPostFilter([{
+                        geometry: value.id
+                    }]);
+                });
+                markers.addLayer(marker);
+
+            } else if (type == 'LINESTRING') {
+                var point_list = new Array();
+                var temporaryPoint = {};
+                var tempStr = value.geoelement.split(' ');
+                var finallyList = new Array();
+                var finallyListOb = new Array();
+
+                for (var item in tempStr) {
+                    if (tempStr[item].match(/\d+[.]+\d+/)) {
+                        point_list.push(tempStr[item].match(/\d+[.]+\d+/));
+                    }
+                }
+
+                for (var item = 0; item < point_list.length; item++) {
+                    var x = point_list[item++][0];
+                    var y = point_list[item][0];
+                    finallyListOb.push({
+                        x: parseFloat(x),
+                        y: parseFloat(y)
+                    });
+                    finallyList.push(L.latLng(parseFloat(y), parseFloat(x)));
+                }
+
+                var polyline = L.polyline(finallyList, {
+                    stroke: true,
+                    color: '#00B4FF',
+                    weight: 2,
+                    opacity: 1,
+                    fill: false,
+                    clickable: true
+                });
+                var latlng = L.latLng(finallyListOb[0].y, finallyListOb[0].x);
+                var baloonMarker = L.icon({
+                    iconUrl: '/static/images/ap_maj-09.png',
+                    iconSize: [40, 40], // size of the icon
+                    iconAnchor: [20, 40], // point of the icon which will correspond to marker's location
+                    popupAnchor: [-3, -40] // point from which the popup should open relative to the
+                });
+
+                var marker = L.marker(latlng, {
+                    icon: baloonMarker
+                });
+
+                marker.on('mouseover', function() {
+                    polyline.addTo(map);
+                });
+                marker.on('mouseout', function() {
+                    map.removeLayer(polyline);
+                });
+
+                marker.on("click", function(e) {
+                    trackEvent('marker', 'marker clicked', '', '', '');
+                    addPointPulse(e.target._icon.classList)
+                        //e.target._icon.classList.add('pulseit');
+                    addPostFilter([{
+                        geometry: value.id
+                    }]);
+                });
+                polyline.on('click', function(e) {
+                    trackEvent('polyline', 'clicked', user, '', '');
+                    addPostFilter([{
+                        geometry: value.id
+                    }]);
+                });
+                lines.addLayer(marker);
+            }
+        }
+        if (!--count) {
+            map.addLayer(markers);
+            map.addLayer(polygon_markers);
+            map.addLayer(lines);
+            if (callback != undefined) {
+                callback();
+            }
+        }
+    });
+    callback({
+        'punkty': markers,
+        'poligony': polygon_markers,
+        'lines': lines
+    });
+}
+
+function clearGeoSearchFilter() {
+    trackEvent('search rectangle', 'clicked', user, '', '');
+    if (search_filter_layer) {
+        search_filter_layer.clearLayers();
+    }
+    addPostFilter(undefined);
+};
+
+function postLightOn(id) {
+    var LightOn = $("#div_apiList").scope().postLightOn;
+    LightOn(id);
+    $("#div_apiList").scope().$apply();
+    if ($('#' + id).position())
+        $("#resizible_jquery").animate({
+            scrollTop: $('#resizible_jquery').scrollTop() + $('#' + id).position().top
+        }, "slow");
+};
+
+function postLightOff(id) {
+    var LightOff = $("#div_apiList").scope().postLightOff;
+    LightOff(id);
+    $("#div_apiList").scope().$apply();
+};
+
+function parseWKT(value, name) {
+    var wkt = new Wkt.Wkt();
+    wkt.read(value);
+    var components = wkt.components[0];
+
+    if (Array.isArray(components)) {
+        var latlngs = new Array();
+        for (var i in components) {
+            var xy = components[i];
             var latlng = L.latLng(xy.y, xy.x);
-            var marker = L.marker(latlng, {});
-            marker.addTo(map);
+            latlngs.push(L.latLng(xy.y, xy.x));
         }
+        var polygon = L.polygon(latlngs);
+        polygon.addTo(map);
+    } else {
+        var xy = components;
+        var latlng = L.latLng(xy.y, xy.x);
+        var marker = L.marker(latlng, {});
+        marker.addTo(map);
     }
+}
 
-    function toggleControl(element) {
-        var map = {'Dodaj punkt':'point','Dodaj poligon':'polygon'};
-        var control = drawControls[map[element.value]];
-        control.activate();
-    }
-    function stripObj(obj){
-        window.stripObj = obj;
-    }
-    function displayWKT(feature) {
-        var str = wkt.write(feature);
-        return str;
-    }
-    function addPopup(data){
-        // get data from popup and send it to server
+function toggleControl(element) {
+    var map = {
+        'Dodaj punkt': 'point',
+        'Dodaj poligon': 'polygon'
+    };
+    var control = drawControls[map[element.value]];
+    control.activate();
+}
 
-        var temp = {};
-        var temp_geometry = $(data).parent().find('#geometry').val();
-        if (temp_geometry.indexOf('POLYGON')!=-1){
-            temp['poly']=temp_geometry;
-        } else if (temp_geometry.indexOf('POINT')!=-1){
-            temp['point']=temp_geometry;
-        } else if (temp_geometry.indexOf('LINESTRING')!=-1){
-            temp['line']=temp_geometry;
-        } else {
-            alert('Error: no poly or point data detected!!');
-        }
-        temp['name']='noname';
+function stripObj(obj) {
+    window.stripObj = obj;
+}
 
-        var comment = $(data).parent().find('#popup_comment').val();
-        if(comment){
-            map.addLayer(layerWaitingRoom.pop());
-            $.ajax({
-                url : "/zr/api/geometries/",
-                type: "POST",
-                data : temp,
-                headers: {'X-CSRFToken': $.cookie('csrftoken')},
-                success: function(data, textStatus, jqXHR)
-                {
-                    trackEvent('post added','clicked',user,'','');
-                    addComentToGeoElement(data,comment);
-                },
-                error: function (jqXHR, textStatus, errorThrown)
-                {
-                    console.log('error: ' + textStatus);
-                }
-            });
-            map.closePopup();
-        } else {
-            $(data).parent().find('#error_comment_needed').removeClass("visible_off");
-        }
-    }
+function displayWKT(feature) {
+    var str = wkt.write(feature);
+    return str;
+}
 
-    function addComentToGeoElement(data, comment){
-        var pushCommentIntoScope = $("#div_apiList").scope().pushCommentIntoScope;
-        pushCommentIntoScope(data, comment);
-        $("#div_apiList").scope().$apply();
-    }
+function addPopup(data) {
+    // get data from popup and send it to server
 
-    function trackEvent(category, action, opt_label, opt_value, opt_noninteraction){
-        var track = $("#div_apiList").scope().trackEvent;
-        track(category, action, opt_label, opt_value, opt_noninteraction);
-        $("#div_apiList").scope().$apply();
+    var temp = {};
+    var temp_geometry = $(data).parent().find('#geometry').val();
+    if (temp_geometry.indexOf('POLYGON') != -1) {
+        temp['poly'] = temp_geometry;
+    } else if (temp_geometry.indexOf('POINT') != -1) {
+        temp['point'] = temp_geometry;
+    } else if (temp_geometry.indexOf('LINESTRING') != -1) {
+        temp['line'] = temp_geometry;
+    } else {
+        alert('Error: no poly or point data detected!!');
     }
-    function resetPointPulse(){
-        var pointPulseRm = $("#div_apiList").scope().pointPulseRm;
-        pointPulseRm();
-        $("#div_apiList").scope().$apply();
-    }
-    function addPointPulse(temp){
-        var pointPulseRm = $("#div_apiList").scope().pointPulseRm;
-        pointPulseRm();
-        var pointPulseAdd = $("#div_apiList").scope().pointPulseAdd;
-        pointPulseAdd(temp);
-        $("#div_apiList").scope().$apply();
-    }
+    temp['name'] = 'noname';
 
-    function addPostFilter(data){
-
-        $("#nav-tabs-menu").find('li:eq(0) > a').trigger('click');
-        var addPFilter = $("#div_apiList").scope().addPFilter;
-        addPFilter(data);
-        $("#div_apiList").scope().$apply();
+    var comment = $(data).parent().find('#popup_comment').val();
+    if (comment) {
+        map.addLayer(layerWaitingRoom.pop());
+        $.ajax({
+            url: "/zr/api/geometries/",
+            type: "POST",
+            data: temp,
+            headers: {
+                'X-CSRFToken': $.cookie('csrftoken')
+            },
+            success: function(data, textStatus, jqXHR) {
+                trackEvent('post added', 'clicked', user, '', '');
+                addComentToGeoElement(data, comment);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log('error: ' + textStatus);
+            }
+        });
+        map.closePopup();
+    } else {
+        $(data).parent().find('#error_comment_needed').removeClass("visible_off");
     }
-    function deletePopoup(data){
-        // get data from popup and send it to server
-        var feature_id = $(data).parent().find('#feature_id').val();
-        vectors.eraseFeatures([vectors.getFeatureById(feature_id)]);
-        map.popups[0].destroy();
-    }
+}
 
-    function geoSearch(wkt, plan_id, success_callback){
+function addComentToGeoElement(data, comment) {
+    var pushCommentIntoScope = $("#div_apiList").scope().pushCommentIntoScope;
+    pushCommentIntoScope(data, comment);
+    $("#div_apiList").scope().$apply();
+}
 
-        if(wkt){
-            $.ajax({
-                url : '/zr/api/geosearch/'+plan_id+'/',
-                type: 'POST',
-                data : 'wkt='+wkt,
-                headers: {'X-CSRFToken': $.cookie('csrftoken')},
-                success: success_callback,
-                error: function (jqXHR, textStatus, errorThrown)
-                {
-                    console.log('error: ' + textStatus);
-                }
-            });
-        } else {
-            alert('Search are needed!');
-        }
+function trackEvent(category, action, opt_label, opt_value, opt_noninteraction) {
+    var track = $("#div_apiList").scope().trackEvent;
+    track(category, action, opt_label, opt_value, opt_noninteraction);
+    $("#div_apiList").scope().$apply();
+}
+
+function resetPointPulse() {
+    var pointPulseRm = $("#div_apiList").scope().pointPulseRm;
+    pointPulseRm();
+    $("#div_apiList").scope().$apply();
+}
+
+function addPointPulse(temp) {
+    var pointPulseRm = $("#div_apiList").scope().pointPulseRm;
+    pointPulseRm();
+    var pointPulseAdd = $("#div_apiList").scope().pointPulseAdd;
+    pointPulseAdd(temp);
+    $("#div_apiList").scope().$apply();
+}
+
+function addPostFilter(data) {
+
+    $("#nav-tabs-menu").find('li:eq(0) > a').trigger('click');
+    var addPFilter = $("#div_apiList").scope().addPFilter;
+    addPFilter(data);
+    $("#div_apiList").scope().$apply();
+}
+
+function deletePopoup(data) {
+    // get data from popup and send it to server
+    var feature_id = $(data).parent().find('#feature_id').val();
+    vectors.eraseFeatures([vectors.getFeatureById(feature_id)]);
+    map.popups[0].destroy();
+}
+
+function geoSearch(wkt, plan_id, success_callback) {
+
+    if (wkt) {
+        $.ajax({
+            url: '/zr/api/geosearch/' + plan_id + '/',
+            type: 'POST',
+            data: 'wkt=' + wkt,
+            headers: {
+                'X-CSRFToken': $.cookie('csrftoken')
+            },
+            success: success_callback,
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log('error: ' + textStatus);
+            }
+        });
+    } else {
+        alert('Search are needed!');
     }
+}
 </script>
 
 <div id="map" class="smallmap"></div>
