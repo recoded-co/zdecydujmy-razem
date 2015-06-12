@@ -364,9 +364,11 @@ function map_init() {
     }).on('draw:drawstart', function(e) {
         console.log('draw:drawstart');
         var type = e.layerType;
-        map.remoteControlSwitchOff();
+
+        // map.remoteControlSwitchOff();
 
         if (type === 'rectangle') {
+            clearGeoSearchFilter();
             L.DomUtil.addClass(e.target._container, 'leaflet-control-rectangle-on');
             map.setRemoteControlSwitch(e, function() {
                 map.fireEvent('draw:drawstop', this);
