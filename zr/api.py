@@ -13,7 +13,7 @@ from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from filemanager.models import PostFileUpload
 from zr.models import Plan, Configuration, Geometry, Post, Rate, PostSubscription, TrackEvents
 from zr.models import Subject, SubjectFeat, SubjectFeatProperty
-from django_decorators.decorators import json_response
+from jsonview.decorators import json_view
 from django.views.decorators.csrf import csrf_exempt
 from avatar.util import get_default_avatar_url
 from avatar.templatetags.avatar_tags import avatar_url
@@ -159,7 +159,7 @@ class NSubscribed(generics.ListAPIView):
         round = int(request.QUERY_PARAMS.get('round',1))
         plan_id = request.QUERY_PARAMS.get('plan_id','None')
         parent = request.QUERY_PARAMS.get('parent','None')
-        
+
         cursor = connection.cursor()
         sql = 'SELECT id ,  \
                (select count(*) from zr_post where parent_id = a.id) as numcom, \
@@ -494,28 +494,27 @@ router.register(r'track', TrackEventsViewSet)
 
 
 #@csrf_exempt
-@json_response
+@json_view
 def geo_search(request, plan_id):
     from django.db.models import Q
     from django.contrib.gis.geos import fromstr
-    from django.http import HttpResponseBadRequest
-    import json
+
     polygon = request.POST.get('wkt', None)
+
     if polygon:
-        #print polygon
         try:
             pnt = fromstr(polygon, srid=4326)
             geometries = Geometry.objects.filter(Q(poly__intersects=pnt) | Q(point__intersects=pnt) | Q(line__intersects=pnt))
             posts = Post.objects.filter(plan__id=plan_id, geometry__in=geometries)
             posts_serialized = PostSerializer(posts, many=True)
-            return posts_serialized.data #json_geometries.data
+            return posts_serialized.data
         except Exception, e:
-            return json.dumps({'result': 'exception'})
+            return {'result': 'exception'}, 500
     else:
-        return HttpResponseBadRequest(json.dumps({'result': 'error'}))
+        return {'result': 'error'}, 500
 
 
-@json_response
+@json_view
 def keyword_search(request, plan_id, query):
 
     parent = request.GET.get('parent','None')
@@ -524,12 +523,8 @@ def keyword_search(request, plan_id, query):
     direction = NPost.parseToBoolean(request.GET.get('direction',True))
     round = int(request.GET.get('round',1))
 
-    print plan_id,query
-
     from zr import index as i
-    import json
     result = i.find(query, plan_id)
-    print result
     result = [(item,len(Post.objects.filter(parent_id=item))) for item in result ]
     paginator = Paginator(result,8);
 
@@ -541,7 +536,7 @@ def keyword_search(request, plan_id, query):
     result = NPost.addDataToOutput(actuall_item_list)
     return result
 
-@json_response
+@json_view
 def date_search(request, plan_id, year, mon, day):
     from django.conf import settings
     import pytz
@@ -571,10 +566,7 @@ def date_search(request, plan_id, year, mon, day):
     except EmptyPage:
         return []
 
-    result = NPost.addDataToOutput(actuall_item_list)
-
-    return result
-
+    return NPost.addDataToOutput(actuall_item_list)
 
 class SubjectFeatPropertySerializer(ModelSerializer):
     class Meta:
