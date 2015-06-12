@@ -106,7 +106,17 @@ input[type=password]{
     line-height: 1.428571429 !important;
 }
 
-#id_email{
+label[for="id_new_password1"],
+label[for="id_new_password2"] {
+    width: 150px;
+    text-align: right;
+    padding-right: 10px;
+}
+
+#id_email,
+#id_new_password1,
+#id_new_password2
+{
     height: 33px;
     font-size: 12px;
     line-height: 1.5;
@@ -124,5 +134,3 @@ input[type=password]{
     -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
-
-#id_email:focus

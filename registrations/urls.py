@@ -1,10 +1,19 @@
-__author__ = 'marcinra'
 from django.conf.urls import patterns, url
-from django.contrib.auth import views as auth_views
 
-urlpatterns = patterns('django.contrib.auth.views',
-url(r'^passreset/$','password_reset',{'template_name': 'registrations/password_reset_form.html'},name='forgot_password1'),
-url(r'^passresetdone/$','password_reset_done',{'template_name': 'registrations/password_reset_done.html'},name='forgot_password2'),#),
-url(r'^passresetconfirm/(?P<uidb36>[-\w]+)/(?P<token>[-\w]+)/$','password_reset_confirm',{'template_name': 'registrations/password_reset_confirm.html'},name='forgot_password3'),
-url(r'^passresetcomplete/$','password_reset_complete',{'template_name': 'registrations/password_reset_complete.html'},name='forgot_password4'),
+__author__ = 'marcinra'
+
+urlpatterns = patterns('',
+    url(r'^password_reset/$', 'django.contrib.auth.views.password_reset',
+        {'template_name': 'registrations/password_reset_form.html'},
+        name='password_reset'),
+    url(r'^password_reset/done/$', 'django.contrib.auth.views.password_reset_done',
+        {'template_name': 'registrations/password_reset_done.html'},
+        name='password_reset_done'),
+    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        'django.contrib.auth.views.password_reset_confirm',
+        {'template_name': 'registrations/password_reset_confirm.html'},
+        name='password_reset_confirm'),
+    url(r'^reset/done/$', 'django.contrib.auth.views.password_reset_complete',
+        {'template_name': 'registrations/password_reset_complete.html'},
+        name='password_reset_complete'),
 )
