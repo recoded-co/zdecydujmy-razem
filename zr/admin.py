@@ -5,7 +5,15 @@ from zr.models import *
 admin.site.register(Geometry, admin.OSMGeoAdmin)
 admin.site.register(Plan, admin.OSMGeoAdmin)
 admin.site.register(Configuration)
-admin.site.register(Post)
+
+
+class PostAdmin(admin.ModelAdmin):
+    list_display = ('author', 'date', 'is_removed')
+    list_filter = ('is_removed',)
+    search_fields = ('content',)
+
+admin.site.register(Post, PostAdmin)
+
 admin.site.register(Rate)
 admin.site.register(PostSubscription)
 admin.site.register(Subject)
