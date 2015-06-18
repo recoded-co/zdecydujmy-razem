@@ -13,9 +13,14 @@
     "tests"
   ],
   "dependencies": {
+    "angular-bootstrap-datetimepicker": "~0.2.4",
     "angular-cookies": "~1.0.8",
     "angular-resource-unstable": "~1.1.5",
     "angular-strap": "~0.7.7",
     "angularytics": "~0.2.3"
+  },
+  "resolutions": {
+    "angular": "^1.2.16",
+    "bootstrap": ">=2.0.4 <4.0"
   }
 }

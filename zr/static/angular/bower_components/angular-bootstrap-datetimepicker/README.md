@@ -1,4 +1,4 @@
-# Angular bootstrap date & time picker  v0.2.1
+# Angular bootstrap date & time picker  v0.2.4
 ================================
 
 Native AngularJS datetime picker directive styled by Twitter Bootstrap 3
@@ -16,7 +16,7 @@ Only the CSS file from the bootstrap-datetimepicker project was re-used.
 #Dependencies
 
 Requires:
- * AngularJS 1.1.3 or higher (1.0.x will not work)
+ * AngularJS 1.2.11 or higher (1.0.x will not work)
  * moment.js for date parsing and formatting
  * bootstrap's dropdown component (`dropdowns.less`)
  * bootstrap's glyphicons for arrows
@@ -75,15 +75,15 @@ Apply the directive to your form elements:
 <datetimepicker data-ng-model="data.date"></datetimepicker>
 ```
 
-## Options
+## Callback functions
 
 ### on-set-time
-Attribute on datetimepicker
+Attribute on datetimepicker element
 
 If the value of the on-set-time attribute is a function, the date time picker will call this function
 passing in the selected value and previous value.
 ```html
-<datetimepicker data-ng-model="data.date" date-on-set-time="onTimeSet"></datetimepicker>
+<datetimepicker data-ng-model="data.date" data-on-set-time="onTimeSet"></datetimepicker>
 ```
 This function will be called when the user selects a value on the minView.
 ```javascript
@@ -92,6 +92,8 @@ $scope.onTimeSet = function (newDate, oldDate) {
     console.log(oldDate);
 }
 ```
+
+## Configuration Options
 
 ### startView
 
@@ -120,6 +122,16 @@ The increment used to build the hour view. A button is created for each <code>mi
 ### dropdownSelector
 
 When used within a Bootstrap dropdown, the selector specified in dropdownSelector will toggle the dropdown when a date/time is selected.
+
+### weekStart
+
+Number.  Default: 0
+
+Allows to set a week's starting day. Should be between 0 and 6.
+
+```html
+<datetimepicker data-ng-model="data.date" data-datetimepicker-config="{'weekStart': 1}"></datetimepicker>
+```
 
 ## Working with ng-model
 The angular-bootstrap-datetimepicker directive requires ng-model and the picked date/time is automatically synchronized with the model value.
@@ -155,7 +167,7 @@ Display formatting of the date field is controlled by Angular filters.
 
 ```html
 <div class="dropdown">
-    <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="#">
+    <a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="">
         Click here to show calendar
     </a>
     <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
@@ -171,7 +183,7 @@ the drop-down is toggled closed after the user selectes a date/time.
 ### Drop-down component with associated input box.
 ```html
 <div class="dropdown">
-    <a class="dropdown-toggle my-toggle-select" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="#">
+    <a class="dropdown-toggle my-toggle-select" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="">
         <div class="input-append"><input type="text" class="input-large" data-ng-model="data.date"><span class="add-on"><i
                 class="icon-calendar"></i></span>
         </div>
@@ -227,7 +239,3 @@ If the hour view is the minView, the date will be set to the beginning of the ho
 This view allows the user to select a specific time of day, in the selected hour.
 By default, the time is displayed in 5 minute increments. The <code>minuteStep</code> property controls the increments of time displayed.
 If the minute view is the minView, which is is by default, the date will be set to the beginning of the hour on the day selected.
-
-# Idea Project Directory
-
-The .idea directory holds the IntelliJ Idea project files for this project. If you use Idea, just open the project with Idea.

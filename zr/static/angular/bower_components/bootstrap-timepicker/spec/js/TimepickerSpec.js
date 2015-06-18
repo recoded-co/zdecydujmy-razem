@@ -72,6 +72,7 @@ describe('Timepicker feature', function() {
     expect(tp1.modalBackdrop).toBe(false);
     expect(tp1.modalBackdrop).toBe(false);
     expect(tp1.isOpen).toBe(false);
+    expect(tp1.showWidgetOnAddonClick).toBe(true);
   });
 
   it('should allow user to configure defaults', function() {
@@ -216,6 +217,8 @@ describe('Timepicker feature', function() {
     tp3.setTime('2320');
     expect(tp3.getTime()).toBe('23:20:00', 'setTime with 2320 on tp3');
 
+    tp3.setTime('0:00');
+    expect(tp3.getTime()).toBe('0:00:00', 'setTime with 0:00 on tp3');
   });
 
   it('should update picker on blur', function() {
@@ -459,6 +462,9 @@ describe('Timepicker feature', function() {
 
 
   it('should not have the widget in the DOM if remove method is called', function() {
+    tp1.showWidget();
+    tp2.showWidget();
+    tp3.showWidget();
     expect($('body')).toContain('.bootstrap-timepicker-widget');
     tp1.remove();
     tp2.remove();

@@ -1,6 +1,6 @@
 {
   "name": "bootstrap-timepicker",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "A timepicker component for Twitter Bootstrap 2.x",
   "repository": {
     "type": "git",
@@ -16,11 +16,11 @@
     "autotype": "https://raw.github.com/mmonteleone/jquery.autotype/master/jquery.autotype.js"
   },
   "homepage": "https://github.com/jdewit/bootstrap-timepicker",
-  "_release": "0.2.5",
+  "_release": "0.2.6",
   "_resolution": {
     "type": "version",
-    "tag": "v0.2.5",
-    "commit": "9136efb478d2da4ce81678ef22bd452b5bf1bf38"
+    "tag": "v0.2.6",
+    "commit": "30c1d66475d315dea9446afa5ea73eb2c99e2b70"
   },
   "_source": "git://github.com/jdewit/bootstrap-timepicker.git",
   "_target": ">= 0.2.2",
