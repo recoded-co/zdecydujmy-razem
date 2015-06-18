@@ -83,6 +83,7 @@ class PostSerializer(ModelSerializer):
     rate = serializers.IntegerField(source='has_rate')
     score = serializers.IntegerField(source='has_likes')
     author_name = serializers.CharField()
+    content = serializers.SerializerMethodField()
     filep =  FileSerializer(required=False, many=True)
     positive_rate = serializers.IntegerField(source='like_sum')
     negative_rate = serializers.IntegerField(source='dislike_sum')
@@ -92,8 +93,13 @@ class PostSerializer(ModelSerializer):
         fields = ('id', 'author', 'author_name',
                   'parent', 'plan', 'content',
                   'rate', 'score', 'geometry',
-                  'date', 'filep', 'positive_rate','negative_rate')
+                  'date', 'filep', 'positive_rate','negative_rate', 'is_removed')
 
+    def get_content(self, obj):
+        if obj.is_removed:
+            return u"Komentarz usunięty przez administratora."
+        else:
+            return obj.content
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
