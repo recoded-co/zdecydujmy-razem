@@ -87,7 +87,7 @@ class UserCreationPageView(TemplateView):
             user.last_name = form.cleaned_data['last_name']
             user.save()
 
-            profile = user.get_profile()
+            profile = user.profile
             profile.zipcode = form.cleaned_data['zipcode']
             profile.save()
 
@@ -116,7 +116,7 @@ class ZipcodeCheckView(View):
         user = request.user
 
         try:
-            profile = user.get_profile()
+            profile = user.profile
         except Profile.DoesNotExist, e:
             profile = Profile(user=user)
             profile.save()
@@ -129,7 +129,7 @@ class ZipcodeCheckView(View):
             return render_to_response('zr/zip_code.html', {'form': form, 'next': next}, context_instance=RequestContext(request))
 
     def post(self, request):
-        profile = request.user.get_profile()
+        profile = request.user.profile
         form = ZipCodeForm(request.POST)
         if form.is_valid():
             profile.zipcode = form.cleaned_data['zipcode']

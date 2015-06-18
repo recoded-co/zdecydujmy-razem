@@ -29,19 +29,21 @@ router = routers.DefaultRouter()
 
 class PlanViewSet(viewsets.ModelViewSet):
     model = Plan
+    queryset = Plan.objects.all()
 
 router.register(r'plans', PlanViewSet)
 
 
 class ConfigurationViewSet(viewsets.ModelViewSet):
     model = Configuration
+    queryset = Configuration.objects.all()
 
 router.register(r'configurations', ConfigurationViewSet)
 
 
 class GeometrySerializer(ModelSerializer):
-    geoelement = serializers.Field(source='geoElement')
-    geo_id = serializers.Field(source='geoId')
+    geoelement = serializers.CharField(source='geoElement')
+    geo_id = serializers.CharField(source='geoId')
 
     class Meta:
         model = Geometry
@@ -78,12 +80,12 @@ class FileSerializer(ModelSerializer):
 
 
 class PostSerializer(ModelSerializer):
-    rate = serializers.Field(source='has_rate')
-    score = serializers.Field(source='has_likes')
-    author_name = serializers.Field(source='author_name')
+    rate = serializers.IntegerField(source='has_rate')
+    score = serializers.IntegerField(source='has_likes')
+    author_name = serializers.CharField()
     filep =  FileSerializer(required=False, many=True)
-    positive_rate = serializers.Field(source='like_sum')
-    negative_rate = serializers.Field(source='dislike_sum')
+    positive_rate = serializers.IntegerField(source='like_sum')
+    negative_rate = serializers.IntegerField(source='dislike_sum')
 
     class Meta:
         model = Post

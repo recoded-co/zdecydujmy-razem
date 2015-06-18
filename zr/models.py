@@ -20,7 +20,7 @@ else:
 
 
 class Profile(models.Model):
-    user = models.ForeignKey(User)
+    user = models.OneToOneField(User)
     zipcode = models.CharField(max_length=6, null=True, blank=True)
 
 
@@ -177,7 +177,7 @@ class Post(models.Model):
 class Rate(models.Model):
     post = models.ForeignKey(Post, related_name='rates')
     user = models.ForeignKey(User)
-    like = models.NullBooleanField(null=True, blank=True)
+    like = models.NullBooleanField(null=True, blank=True, default=False)
     rate = models.IntegerField(null=True, blank=True)
 
     def get_user_like(self, user):
@@ -187,7 +187,7 @@ class Rate(models.Model):
 class PostSubscription(models.Model):
     post = models.ForeignKey(Post)
     user = models.ForeignKey(User)
-    active = models.BooleanField()
+    active = models.BooleanField(default=False)
 
     def get_user_subscriptions(self, user):
         return PostSubscription.objects.filter(user=user, active=True)
