@@ -705,6 +705,10 @@ button:focus {
                 font-family: "source_sans_prosemibold";
                 font-size: 1.2em;
             }
+            div.main-post p.comment-removed
+            {
+              text-decoration: line-through;
+            }
             div.main-post div.left
             {
                 float:left;
