@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load url from future %}
 {% load avatar_tags %}
+
 <div ng-class="{'tab-post':true}">
     <ul>
         <li> <!-- start here -->
@@ -56,6 +57,13 @@
                             </button>
                         </div>
                         <div class="right">
+                            {% if request.user.is_superuser %}
+                                <button type="button" class="btn btn-xs btnwhite btngrey" title="{% trans 'Usuń' %}"
+                                ng-click="openModal(post)">
+                                    <i class="fa fa-trash-o"></i>
+                                </button>
+                            {% endif %}
+
                          <button type="button" class="btn btn-xs btn-file btnwhite btngrey" ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates">
                             <input name="..." type="file" value="{[{ post.id }]}" multiple file-change /><div class="mr-clip">&nbsp;</div>
                          </button>
@@ -74,7 +82,7 @@
                             </button>
                         </div>
                     </div>
-             
+
                     </div>
 
                 </div>
@@ -111,5 +119,3 @@
             </div>
         </div>
     </div>
-
-

@@ -374,10 +374,25 @@ zdControllers.controller('apiList',
             active: !subscribed // TODO add variable which says what to do, activate | deactivate
         }
         sendCSRFPost('/zr/api/subscriptions/',$http, $cookies, temp);
-    }
+    };
+
+    $scope.openModal = function(post) {
+        $('#post-delete-modal').modal('show');
+
+        $scope.current_post = post;
+    };
+    $scope.deletePost = function() {
+        if (typeof $scope.current_post != 'undefined') {
+            console.log({id: $scope.current_post.id});
+            sendCSRFPost('/zr/api/posts/remove/', $http, $cookies, {id: $scope.current_post.id});
+        }
+
+        $('#post-delete-modal').modal('hide');
+    };
+
     $scope.postCompare = function(exp,act){
         return false
-      };
+    };
 
     // FILES upload controll :
     $scope.files = [];

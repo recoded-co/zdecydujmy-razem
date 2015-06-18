@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
 from rest_framework import viewsets, routers
 from rest_framework.serializers import ModelSerializer
-from rest_framework import filters
+from rest_framework import filters, status
 from rest_framework import generics
 from rest_framework import serializers
 from rest_framework import mixins
+from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.serializers import ModelSerializer, Serializer
@@ -144,6 +146,27 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         return super(PostViewSet, self).create(request, *args, **kwargs)
+
+    @list_route(methods=['post'])
+    def remove(self, request, *args, **kwargs):
+        id = request.data.get('id')
+        if id:
+            try:
+                post = Post.objects.get(pk=id)
+                post.is_removed = True
+                post.save()
+                return Response({'message': 'Usunięto wpis.'})
+
+            except Post.DoesNotExist:
+                return Response(
+                    {'message': 'Nie odnaleziono wpisu.'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+        return Response(
+            {'message': 'Brak ID.'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 router.register(r'posts', PostViewSet)
 

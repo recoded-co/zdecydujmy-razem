@@ -170,6 +170,26 @@
        when-scrolled="addNextPostsToRoot()"  >
       <div id="div_apiList"  >
 
+      <div id="post-delete-modal" class="modal fade">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">{% trans "Usuń wpis" %}</h4>
+            </div>
+            <div class="modal-body">
+              {% blocktrans %}
+                  Czy na pewno usunąć wybrany komentarz?
+              {% endblocktrans %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" ng-click="deletePost()">{% trans "Tak" %}</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Nie" %}</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+
       <ul id="nav-tabs-menu" class="nav nav-tabs">
           <li class="active" ><a href="#details" data-toggle="tab"><i class="fa fa-comments fa-fw"></i>SZCZEGÓŁY</a></li>
           <li><a href="#subscriptions" data-toggle="tab"><div class="mr-pushpin-bl">&nbsp;</div>ŚLEDZĘ</a></li>
