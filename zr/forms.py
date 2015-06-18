@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 class PostSubscriptionForm(ModelForm):
     class Meta:
         model = PostSubscription
+        exclude = ()
 
 
 class ZipCodeForm(forms.Form):
