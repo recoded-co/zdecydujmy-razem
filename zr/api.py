@@ -149,6 +149,13 @@ class PostViewSet(viewsets.ModelViewSet):
 
     @list_route(methods=['post'])
     def remove(self, request, *args, **kwargs):
+        if not request.user.is_superuser:
+            return Response(
+                {'message': u'Brak uprawnień by wykonać tę akcję.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
         id = request.data.get('id')
         if id:
             try:
