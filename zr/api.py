@@ -89,10 +89,11 @@ class PostSerializer(ModelSerializer):
     filep =  FileSerializer(required=False, many=True)
     positive_rate = serializers.IntegerField(source='like_sum')
     negative_rate = serializers.IntegerField(source='dislike_sum')
+    author_is_staff = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
-        fields = ('id', 'author', 'author_name',
+        fields = ('id', 'author', 'author_name', 'author_is_staff',
                   'parent', 'plan', 'content',
                   'rate', 'score', 'geometry',
                   'date', 'filep', 'positive_rate','negative_rate', 'is_removed')
@@ -102,6 +103,12 @@ class PostSerializer(ModelSerializer):
             return u"Komentarz usunięty przez administratora."
         else:
             return obj.content
+
+    def get_author_is_staff(self, obj):
+        if obj.author.is_staff:
+            return True
+
+        return False
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()

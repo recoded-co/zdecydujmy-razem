@@ -673,10 +673,9 @@ button:focus {
                 padding-top: 11px;
                 /*border-top: solid 10px #00c7a2;*/
             }
-          #subscriptions div.post > img
+            #subscriptions div.post > img
             {
                 margin-top:13px !important;
-
             }
             .head-autor
             {
@@ -686,11 +685,12 @@ button:focus {
             }
             div.post
             {
-              margin-right: 2%;
-
-
+                padding-right: 2%;
             }
-
+            div.post.staff-comment
+            {
+                background: #FFFCCC;
+            }
             div.main-post p.head-autor
             {
                 font-family: 'Source Sans Pro', sans-serif;

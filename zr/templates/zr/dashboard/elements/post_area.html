@@ -11,8 +11,8 @@
             <div class="img-circle40" style="position: absolute;" ng-if="post.userAdded">{% avatar user 40 %}</div>
         </li>
         <li>
-            <div class="media-body dropbox new_margin"> <!--   style="margin-left: 0px;margin-right: 0px;"  -->
-                <div ng-class="{'media':true, 'post':post.parent==null,'sub_post':post.parent!=null}">
+            <div class="media-body dropbox"> <!--   style="margin-left: 0px;margin-right: 0px;"  -->
+                <div ng-class="{'media':true, 'post':post.parent==null,'sub_post':post.parent!=null, 'staff-comment': post.author_is_staff}">
                     <div class="postContent"> <!-- style="display: inline-block; width: 100%;"-->
                         <span class="left">
                             <p class="head-autor"><em>{[{ post.author_name }]}({[{ post.date | fromToday }]})</em></p>
