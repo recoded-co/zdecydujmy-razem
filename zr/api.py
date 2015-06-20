@@ -340,8 +340,6 @@ class NPost(generics.ListAPIView):
                 sql += 'order by numcom '
             else:
                 sql += 'order by numcom desc '
-        #print sql
-        #print params
 
         cursor.execute(sql, params)
         row = cursor.fetchall()
@@ -362,17 +360,23 @@ class NPost(generics.ListAPIView):
     @staticmethod
     def addDataToOutput(actuall_item_list):
         return_list =[]
+
         for item in actuall_item_list:
-            temp = Post.objects.get(pk = item[0] )
-            temp_data = PostSerializer(temp)
-            user = User.objects.get(username=temp_data.data['author_name'])
+            post = Post.objects.get(pk = item[0] )
+            post_serialized = PostSerializer(post)
+
+            data = post_serialized.data
+
+            user = User.objects.get(username=data['author_name'])
             alt = six.text_type(user)
             url = avatar_url(user, 40)
-            temp_data.data['avatar_url']=url
-            print url
-            temp_data.data['avatar_alt']=alt
-            temp_data.data['numcom'] = int(item[1])
-            return_list.append(temp_data.data)
+
+            data['avatar_url']=url
+            data['avatar_alt']=alt
+            data['numcom'] = int(item[1])
+
+            return_list.append(data)
+
         return return_list
 
     @staticmethod
