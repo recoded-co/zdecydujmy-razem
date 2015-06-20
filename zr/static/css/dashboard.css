@@ -652,7 +652,7 @@ button:focus {
             }
             div.main-post span.right button
             {
-                background-color: #FFFFFF;
+                background-color: transparent;
                 margin-right: 0px;
             }
             div.main-post span.right button:hover
@@ -790,7 +790,7 @@ button:focus {
             }
             div.post div.left button,div.post div.right button,div.sub_post div.left button,div.sub_post div.right button
             {
-                background-color: #FFFFFF;
+                background-color: transparent;
             }
             div.allign_right button
             {
