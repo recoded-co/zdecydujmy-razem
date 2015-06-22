@@ -32,10 +32,10 @@
 
         <span class="right">
             <div class="input-group input-group-sm double-input">
-                <input class="form-control" ng-model="search.content" placeholder="Znajdź kontekst rozmowy">
+                <input class="posts-search form-control" ng-model="search.content" placeholder="Znajdź kontekst rozmowy">
 
             <div class="input-group-btn" >
-                <button class="btn " ng-click="search(search.content)" style="border-right-width: 0px;border-radius: 0px;"><i class="fa fa-search fa-fw"></i>Szukaj</button>
+                <button class="btn posts-search-submit" ng-click="search(search.content)" style="border-right-width: 0px;border-radius: 0px;"><i class="fa fa-search fa-fw"></i>Szukaj</button>
             </div>
 
             <div class="dropdown input-group-btn">
@@ -81,3 +81,14 @@
     </div>
   </div>
 </div>
+
+<script type="text/javascript">
+    $('.posts-search').keypress(function(e) {
+      if (e.which == 13) {
+        $(".posts-search-submit").click();
+
+        return false;
+      }
+    });
+
+</script>
