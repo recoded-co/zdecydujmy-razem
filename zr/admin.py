@@ -15,7 +15,29 @@ class PostAdmin(admin.ModelAdmin):
 admin.site.register(Post, PostAdmin)
 
 admin.site.register(Rate)
-admin.site.register(PostSubscription)
+
+
+
+class PostSubscriptionAdmin(admin.ModelAdmin):
+    model = PostSubscription
+    list_display = ('user', 'get_post', 'get_author', 'active',)
+
+    def get_queryset(self, request):
+        return super(PostSubscriptionAdmin, self).get_queryset(request).select_related('user', 'post', 'post__author')
+
+    def get_post(self, obj):
+        return obj.post.content
+    get_post.short_description = 'Post'
+    get_post.admin_order_field = 'post'
+
+    def get_author(self, obj):
+        return obj.post.author
+    get_author.short_description = 'Author'
+    get_author.admin_order_field = 'post__author'
+
+
+admin.site.register(PostSubscription, PostSubscriptionAdmin)
+
 admin.site.register(Subject)
 admin.site.register(SubjectFeat)
 admin.site.register(SubjectFeatProperty)
