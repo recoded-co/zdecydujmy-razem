@@ -42,6 +42,14 @@ $("#map-search-button").click(function() {
 
 $("#map-search-input").val(scope + ', ');
 
+$('#map-search-input').keypress(function(e) {
+  if (e.which == 13) {
+    $("#map-search-button").click();
+
+    return false;
+  }
+});
+
 function map_init() {
     var osm =
         L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
