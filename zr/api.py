@@ -90,13 +90,16 @@ class PostSerializer(ModelSerializer):
     positive_rate = serializers.IntegerField(source='like_sum', required=False)
     negative_rate = serializers.IntegerField(source='dislike_sum', required=False)
     author_is_staff = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
         fields = ('id', 'author', 'author_name', 'author_is_staff',
                   'parent', 'plan', 'content',
                   'rate', 'score', 'geometry',
-                  'date', 'filep', 'positive_rate','negative_rate', 'is_removed')
+                  'date', 'filep', 'positive_rate','negative_rate', 'is_removed',
+                  'is_subscribed',
+        )
 
     def get_content(self, obj):
         if obj.is_removed:
@@ -110,13 +113,20 @@ class PostSerializer(ModelSerializer):
 
         return False
 
+    def get_is_subscribed(self, obj):
+        request = self.context.get('request')
+        if request and request.user:
+            return obj.postsubscription_set.filter(user=request.user, active=True).exists()
+
+        return False
+
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
     def list(self, request):
         queryset = Post.objects.all() # TODO add plan parameter!!
-        serializer = PostSerializer(queryset, many=True)
+        serializer = PostSerializer(queryset, many=True, context={'request': request})
         result = []
         # TODO make this in one query
         # TODO do it right!
@@ -230,7 +240,8 @@ class NSubscribed(generics.ListAPIView):
             sql += 'where plan_id = ' + str(int(float(plan_id)))
 
         if len(post_subscription_list) > 0 and parent == 'None':
-            sql += ' and id in ' + str(tuple([i.post.id for i in post_subscription_list]))
+            sql += ' and id in (%s)' % (','.join([unicode(i.post.id) for i in post_subscription_list]))
+
         elif parent != 'None':
             sql += 'and parent_id = %s '
             params.append(parent)
@@ -261,7 +272,7 @@ class NSubscribed(generics.ListAPIView):
 
         for item in actuall_item_list:
             temp = Post.objects.get(pk = item[0] )
-            temp_data = PostSerializer(temp)
+            temp_data = PostSerializer(temp, context={'request': request})
             user = User.objects.get(username=temp_data.data['author_name'])
             alt = six.text_type(user)
             url = avatar_url(user, 40)
@@ -362,18 +373,18 @@ class NPost(generics.ListAPIView):
 
         temp_ret = []
 
-        temp_ret = NPost.addDataToOutput(actuall_item_list)
+        temp_ret = NPost.addDataToOutput(actuall_item_list, request=request)
 
 
         return Response(temp_ret)
 
     @staticmethod
-    def addDataToOutput(actuall_item_list):
+    def addDataToOutput(actuall_item_list, request=None):
         return_list =[]
 
         for item in actuall_item_list:
             post = Post.objects.get(pk = item[0] )
-            post_serialized = PostSerializer(post)
+            post_serialized = PostSerializer(post, context={'request': request})
 
             data = post_serialized.data
 
