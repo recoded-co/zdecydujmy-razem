@@ -739,7 +739,7 @@ button:focus {
             div.tab-post
             {
                 margin-top: 11px;
-                margin-bottom: -5px;
+                margin-bottom: 0;
             }
             div.sub_post p.post-content
             {
