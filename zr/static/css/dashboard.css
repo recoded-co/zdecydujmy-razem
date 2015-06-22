@@ -1,13 +1,13 @@
 body{
-    font-family: 'Source Sans Pro', sans-serif !important;
+    font-family: 'Roboto', sans-serif !important;
 }
 
 button{
     background:#CCCACA;
-    font-family: 'Source Sans Pro', sans-serif !important;
+    font-family: 'Roboto', sans-serif !important;
 }
 input{
-    font-family: 'Source Sans Pro', sans-serif  !important;
+    font-family: 'Roboto', sans-serif  !important;
 }
 
 button:hover, button:focus{
@@ -19,7 +19,7 @@ button:hover, button:focus{
     color: white;
     font-size: 12px;
     font-variant: normal;
-    font-family: 'Source Sans Pro', sans-serif ;
+    font-family: 'Roboto', sans-serif ;
 }
 .leaflet-popup-content .btnred
 {
@@ -345,7 +345,7 @@ hr {
 }
 
 .head-autor {
-    font-family: 'Source Sans Pro', sans-serif !important;
+    font-family: 'Roboto', sans-serif !important;
                 font-size:  12px;
                 color: #A0A0A0 ;
 }
@@ -541,7 +541,7 @@ button:focus {
 
             .toolbox button
             {
-                font-family: 'Source Sans Pro', sans-serif;
+                font-family: 'Roboto', sans-serif;
 
             }
 
@@ -680,7 +680,7 @@ button:focus {
             .head-autor
             {
                 font-size: 12px;
-                font-family: 'Source Sans Pro', sans-serif;
+                font-family: 'Roboto', sans-serif;
                 color: #A0A0A0 ;
             }
             div.post
@@ -693,7 +693,7 @@ button:focus {
             }
             div.main-post p.head-autor
             {
-                font-family: 'Source Sans Pro', sans-serif;
+                font-family: 'Roboto', sans-serif;
                 font-size:  12px;
                 color: #A0A0A0 ;
 
@@ -745,7 +745,7 @@ button:focus {
             }
             div.sub_post p.post-content
             {
-                font-family: 'Source Sans Pro', sans-serif;
+                font-family: 'Roboto', sans-serif;
                 font-size: 1.1em;
                 width: 90%;
                 margin-left: 10px;
@@ -962,7 +962,7 @@ button:focus {
                div.leaflet-control-layers-base label
                {
                     color: white;
-                    font-family: 'Source Sans Pro', sans-serif ;
+                    font-family: 'Roboto', sans-serif ;
                     font-weight: normal;
                     display: inline-block;
                     margin-left: 10px;
@@ -994,7 +994,7 @@ button:focus {
                {
                     background-color: #FFFFFF;
                     color: #000;
-                    font-family: 'Source Sans Pro', sans-serif ;
+                    font-family: 'Roboto', sans-serif ;
                     font-weight: normal;
                     display: inline-block;
                     padding-left: 20px;
@@ -1314,13 +1314,13 @@ div.leaflet-bar a.leaflet-control-measure-ruler:hover
 }
 .map_popup
 {
-  font-family: 'Source Sans Pro', sans-serif ;
+  font-family: 'Roboto', sans-serif ;
   font-size: 0.8em;
   font-weight: normal;
 }
 .map_popup label
 {
-  font-family: 'Source Sans Pro', sans-serif ;
+  font-family: 'Roboto', sans-serif ;
   font-size: 1em;
   font-weight: normal;
 }
@@ -1340,7 +1340,7 @@ color: black;
 textarea#popup_comment
 {
  border: 1px solid #989898 !important;
- font-family: 'Source Sans Pro', sans-serif ;
+ font-family: 'Roboto', sans-serif ;
  font-size: 12px;
  color: black;
  width: 200px !important;
@@ -1463,7 +1463,7 @@ textarea:focus{
     color: #333333;;
 }
 .postContent{
-    font-family: 'Source Sans Pro', sans-serif ;
+    font-family: 'Roboto', sans-serif ;
 }
 .postContent .left{
     margin-bottom: 20px;
