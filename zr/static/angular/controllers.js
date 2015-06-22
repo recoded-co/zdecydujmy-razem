@@ -89,7 +89,7 @@ zdControllers.controller('apiList',
                     LIMIT=50;
                     tempServHandler = nestedHandler;
                 } else {
-                    LIMIT=8
+                    LIMIT=25
                     tempServHandler = servHandler;
                 }
                 tempServHandler.query({

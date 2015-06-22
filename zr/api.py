@@ -309,7 +309,7 @@ class NPost(generics.ListAPIView):
             sql += 'where parent_id = %s '
             params.append(parent)
         else :
-            LIMIT=8
+            LIMIT=25
             sql += 'where parent_id is null '
 
         if plan_id == 'None':
