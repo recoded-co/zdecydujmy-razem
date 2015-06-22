@@ -44,8 +44,8 @@ router.register(r'configurations', ConfigurationViewSet)
 
 
 class GeometrySerializer(ModelSerializer):
-    geoelement = serializers.CharField(source='geoElement')
-    geo_id = serializers.CharField(source='geoId')
+    geoelement = serializers.CharField(source='geoElement', required=False)
+    geo_id = serializers.CharField(source='geoId', required=False)
 
     class Meta:
         model = Geometry
