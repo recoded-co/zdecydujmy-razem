@@ -82,13 +82,13 @@ class FileSerializer(ModelSerializer):
 
 
 class PostSerializer(ModelSerializer):
-    rate = serializers.IntegerField(source='has_rate')
-    score = serializers.IntegerField(source='has_likes')
-    author_name = serializers.CharField()
+    rate = serializers.IntegerField(source='has_rate', required=False)
+    score = serializers.IntegerField(source='has_likes', required=False)
+    author_name = serializers.CharField(required=False)
     content = serializers.SerializerMethodField()
     filep =  FileSerializer(required=False, many=True)
-    positive_rate = serializers.IntegerField(source='like_sum')
-    negative_rate = serializers.IntegerField(source='dislike_sum')
+    positive_rate = serializers.IntegerField(source='like_sum', required=False)
+    negative_rate = serializers.IntegerField(source='dislike_sum', required=False)
     author_is_staff = serializers.SerializerMethodField()
 
     class Meta:
@@ -152,7 +152,17 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response(result)
 
     def create(self, request, *args, **kwargs):
-        return super(PostViewSet, self).create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        instance = serializer.instance
+
+        instance.content = request.data['content']
+        instance.save()
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     @list_route(methods=['post'])
     def remove(self, request, *args, **kwargs):
