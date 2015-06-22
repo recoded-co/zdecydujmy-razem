@@ -525,14 +525,14 @@ button:focus {
            }
            .tab-pane
            {
-           padding-top: 140px;
+            padding-top: 100px;
            }
            .toolbox
            {
-            margin-top: -90px;
+            top: 50px;
             position: fixed;
             background-color: white;
-            z-index: 10;
+            z-index: 11;
            }
 
 
@@ -579,7 +579,6 @@ button:focus {
                 background-color: white;
             }
             span.right .input-group-sm > .form-control, .input-group-sm > .input-group-addon, .input-group-sm > .input-group-btn > .btn
-
             {
                 margin-top: -4px;
                 border: solid 1px #ccc;
@@ -588,7 +587,6 @@ button:focus {
                 padding-bottom: 5px;
                 height: 30px;
             }
-
             .post-list
             {
                 border-bottom: solid 1px transparent;
@@ -598,8 +596,8 @@ button:focus {
             div.main-post
             {
                 position: relative;
-                margin-top: -40px !important;
-                margin-bottom: 35px;
+                margin-top: 0;
+                margin-bottom: 0;
             }
             div.dotedline
             {
