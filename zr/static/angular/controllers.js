@@ -167,6 +167,8 @@ zdControllers.controller('apiList',
             });
 
             $scope.endTree = tree.postReachEnd('None');
+
+            $scope.showallpoints = true;
         }
     });
 
@@ -458,6 +460,8 @@ zdControllers.controller('apiList',
             });
 
             $scope.endTree = tree.postReachEnd('None');
+
+            $scope.showallpoints = true;
         }
     }
 
