@@ -351,7 +351,12 @@ function map_init() {
             var wkt_string = wkt.write();
             //console.log(wkt_string);
 
-            var popup = L.popup()
+            var minWidth = Math.round($('#map').width() / 2);
+
+            if (minWidth < 150)
+                minWidth = 150;
+
+            var popup = L.popup({minWidth: minWidth, maxWidth: minWidth})
                 .setLatLng(popup_location)
                 .setContent("<div>" +
                     "<div class='map_popup'> " +
