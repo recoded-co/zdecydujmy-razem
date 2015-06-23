@@ -15,6 +15,7 @@ var user = '{{ user }}';
 var search_filter_layer = undefined;
 var PLAN_POPUPS_VISIBILITY = false;
 
+mapObjects = {};
 
 
 function geolocate(address) {
@@ -590,7 +591,7 @@ function addMarkers(data, callback) {
             });
 
             marker.on("click", function(e) {
-                trackEvent('marker', 'marker clicked', '', '', '');
+                trackEvent('polygon', 'marker clicked', '', '', '');
                 addPointPulse(e.target._icon.classList)
                 addPostFilter([{
                     geometry: value.id
@@ -604,6 +605,7 @@ function addMarkers(data, callback) {
             });
 
             polygon_markers.addLayer(marker);
+            mapObjects[value.geo_id] = marker;
         } else {
 
             type = value.geoelement.match(/[A-Z]+/);
@@ -635,6 +637,7 @@ function addMarkers(data, callback) {
                     }]);
                 });
                 markers.addLayer(marker);
+                mapObjects[value.geo_id] = marker;
 
             } else if (type == 'LINESTRING') {
                 var point_list = new Array();
@@ -687,7 +690,7 @@ function addMarkers(data, callback) {
                 });
 
                 marker.on("click", function(e) {
-                    trackEvent('marker', 'marker clicked', '', '', '');
+                    trackEvent('polyline', 'marker clicked', '', '', '');
                     addPointPulse(e.target._icon.classList)
                         //e.target._icon.classList.add('pulseit');
                     addPostFilter([{
@@ -701,6 +704,7 @@ function addMarkers(data, callback) {
                     }]);
                 });
                 lines.addLayer(marker);
+                mapObjects[value.geo_id] = marker;
             }
         }
         if (!--count) {

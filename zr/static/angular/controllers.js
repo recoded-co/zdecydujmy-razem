@@ -256,6 +256,9 @@ zdControllers.controller('apiList',
             post_buff_id = post.id;
             zdServicesFactory.geometries_content.get({id_param:post.geometry}).$promise.then(function(data){
                 map.fitBounds(parseWKTbeta(data.geoelement));
+
+                $scope.pointPulseRm();
+                $scope.pointPulseAdd(window.mapObjects[post.id]._icon.classList);
             });
         }
     }
