@@ -56,9 +56,16 @@
               minWidth: min,
               handles: 'e, w'
             });
-        });
 
-        </script>
+           $('a[data-toggle="tab"]').on('click', function (e) {
+               if ($(e.target).attr('href') != '#details') {
+                   $('.leaflet-draw-section').hide();
+               } else {
+                   $('.leaflet-draw-section').show();
+               }
+           });
+        });
+    </script>
 {% endblock %}
 
 {% block extra_css %}
