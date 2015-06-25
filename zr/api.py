@@ -115,7 +115,7 @@ class PostSerializer(ModelSerializer):
 
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
-        if request and request.user:
+        if request and request.user and not request.user.is_anonymous():
             return obj.postsubscription_set.filter(user=request.user, active=True).exists()
 
         return False
