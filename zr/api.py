@@ -213,7 +213,7 @@ class NSubscribed(generics.ListAPIView):
 
         post_subscription_list = []
         if self.request.user.is_authenticated():
-            post_subscription_list = PostSubscription.objects.filter(user=self.request.user)
+            post_subscription_list = PostSubscription.objects.filter(user=self.request.user, active=True)
             if len(post_subscription_list)==0:
                 return Response([])
         else:
@@ -257,7 +257,6 @@ class NSubscribed(generics.ListAPIView):
                 sql += 'order by numcom '
             else :
                 sql += 'order by numcom desc '
-        print sql
 
         cursor.execute(sql, params)
         row = cursor.fetchall()
