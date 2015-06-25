@@ -260,7 +260,7 @@ class NSubscribed(generics.ListAPIView):
 
         cursor.execute(sql, params)
         row = cursor.fetchall()
-        paginator = Paginator(row,8);
+        paginator = Paginator(row, 25);
 
         try:
             actuall_item_list = paginator.page(round).object_list
@@ -586,16 +586,16 @@ def geo_search(request, plan_id):
 @json_view
 def keyword_search(request, plan_id, query):
 
-    parent = request.GET.get('parent','None')
+    parent = request.GET.get('parent', 'None')
     geometry = request.GET.get('geometry', 'None')
-    type = request.GET.get('type','date')
-    direction = NPost.parseToBoolean(request.GET.get('direction',True))
-    round = int(request.GET.get('round',1))
+    type = request.GET.get('type', 'date')
+    direction = NPost.parseToBoolean(request.GET.get('direction', True))
+    round = int(request.GET.get('round', 1))
 
     from zr import index as i
     result = i.find(query, plan_id)
-    result = [(item,len(Post.objects.filter(parent_id=item))) for item in result ]
-    paginator = Paginator(result,8);
+    result = [(item, len(Post.objects.filter(parent_id=item))) for item in result]
+    paginator = Paginator(result, 25)
 
     try:
         actuall_item_list = paginator.page(round).object_list
@@ -628,7 +628,7 @@ def date_search(request, plan_id, year, mon, day):
     if len(result) == 0:
         return []
     result = [(item.id,len(Post.objects.filter(parent_id=item.id))) for item in result ]
-    paginator = Paginator(result, 8);
+    paginator = Paginator(result, 25);
 
     try:
         actuall_item_list = paginator.page(round).object_list

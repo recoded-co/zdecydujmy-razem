@@ -70,7 +70,7 @@ def find(uquery, plan_id):
         qp = MultifieldParser(['content', 'author', 'date'], schema=SCHEMA)
         qp.add_plugin(DateParserPlugin())
         allow_q = query.Term('plan_id', plan_id)
-        q = qp.parse(uquery)
+        q = qp.parse(''.join(['*', uquery, '*']))
         results = ix.searcher().search(q, filter=allow_q)
         return [int(r['id']) for r in results]
     except Exception, e:
