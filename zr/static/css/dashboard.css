@@ -200,15 +200,20 @@ padding-bottom: 7px;
 }
 
 div#resizible_jquery{
+   position: relative;
    /* overflow-y: scroll;*/
     overflow-x: hidden;
     height: 100%;
 }
 
 .middle_background{
-background: url(../img/pala.png) 1px 50% no-repeat;
-width:6px;
-left:0px;
+  background: url(../img/pala.png) 1px 50% no-repeat;
+  position: fixed;
+  left: auto;
+  top: 0;
+  bottom: 0;
+  z-index: 1000;
+  width:6px;
 }
 
 div#mapsquare{
