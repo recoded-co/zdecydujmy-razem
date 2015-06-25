@@ -38,8 +38,8 @@
                                 ng-hide="post.parent"
                                 ng-class="{'btn':true, 'btn-xs':true, 'btnwhite':true, 'btngrey':true}"
                                 ng-click="subscribe(post, post.is_subscribed);post.is_subscribed=!post.is_subscribed | trackEvent:'Subskrybuj':'Button clicked':user ">
-                                    <div ng-hide="post.parent==null && !post.is_subscribed" class="fa fa-envelope-o" title="{% trans 'Subskrybuj wątek' %}"></div>
-                                    <span ng-hide="post.parent==null && post.is_subscribed" class="fa fa-envelope" title="{% trans 'Subskrybuj wątek' %}"></span>
+                                    <div ng-hide="post.parent==null && !post.is_subscribed" class="fa fa-envelope" title="{% trans 'Subskrybuj wątek' %}"></div>
+                                    <span ng-hide="post.parent==null && post.is_subscribed" class="fa fa-envelope-o" title="{% trans 'Subskrybuj wątek' %}"></span>
                             </button>
                         </span>
                     </div>
