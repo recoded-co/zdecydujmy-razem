@@ -230,11 +230,13 @@ div#map{
 }
 div.right
 {
-    font-family: "source_sans_proitalic";
+    font-family: "Roboto", sans-serif;
+    font-style: italic;;
 }
 
 .form-control{
-    font-family: "source_sans_prosemibold";
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
     font-size: 1.2em;
 }
 
@@ -351,7 +353,8 @@ hr {
 }
 .post-content {
     margin-top:-10px;
-    font-family: "source_sans_prosemibold";
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
     font-size: 1.2em;
 }
 .dotedline{
@@ -700,7 +703,8 @@ button:focus {
             {
                 width:100%;
                 margin-top: -5px;
-                font-family: "source_sans_prosemibold";
+                font-family: "Roboto", sans-serif;
+                font-weight: 500;
                 font-size: 1.2em;
             }
             div.main-post p.comment-removed
@@ -710,13 +714,15 @@ button:focus {
             div.main-post div.left
             {
                 float:left;
-                font-family: "source_sans_proitalic";
+                font-family: "Roboto", sans-serif;
+                font-style: italic;
                 margin-left: 10px;
             }
             div.main-post div.right
             {
                 float:right;
-                font-family: "source_sans_proitalic";
+                font-family: "Roboto", sans-serif;
+                font-style: italic;
             }
             div.main-post div.right > div.fileinput-new
             {
