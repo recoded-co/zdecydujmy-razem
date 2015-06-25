@@ -99,6 +99,7 @@ function map_init() {
     });
 
     var basePlanLayer = L.geoJson([], {
+        clickable: false,
         style: function(feature) {
             return {
                 color: feature.properties.color
