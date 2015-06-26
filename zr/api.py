@@ -49,24 +49,13 @@ class GeometrySerializer(ModelSerializer):
 
     class Meta:
         model = Geometry
-        fields = ('id', 'name', 'geoelement', 'geo_id', 'poly', 'point','line')
+        fields = ('id', 'name', 'geoelement', 'geo_id', 'poly', 'point', 'line')
 
 
 class GeometryViewSet(viewsets.ModelViewSet):
     queryset = Geometry.objects.all()
     serializer_class = GeometrySerializer
 
-    def pre_save(self, obj):
-        print 'pre_save %s' % str(obj)
-
-    def post_save(self, obj, created=False):
-        print 'post save %s' % str(obj)
-
-    def pre_delete(self, obj):
-        print 'pre delete %s' % str(obj)
-
-    def post_delete(self, obj):
-        print 'post delete %s' % str(obj)
 
 router.register(r'geometries', GeometryViewSet)
 
