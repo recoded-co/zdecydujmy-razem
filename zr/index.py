@@ -16,7 +16,7 @@ from whoosh.qparser.dateparse import DateParserPlugin
     date = models.DateField(auto_now=True, blank=True)
 """
 
-from settings import IDX_DIR
+from settings.conf import IDX_DIR
 
 
 SCHEMA = Schema(
