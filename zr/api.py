@@ -256,14 +256,14 @@ class NSubscribed(generics.ListAPIView):
         order_by_sql = ' '
         if type == 'date' :
             if direction :
-                sql += 'order by date '
-            else :
                 sql += 'order by date desc '
+            else :
+                sql += 'order by date '
         elif type == 'com':
             if direction :
-                sql += 'order by numcom '
-            else :
                 sql += 'order by numcom desc '
+            else :
+                sql += 'order by numcom '
 
         cursor.execute(sql, params)
         row = cursor.fetchall()
@@ -359,14 +359,14 @@ class NPost(generics.ListAPIView):
         order_by_sql = ' '
         if type == 'date' :
             if direction :
-                sql += 'order by date '
-            else:
                 sql += 'order by date desc '
+            else:
+                sql += 'order by date '
         elif type == 'com':
             if direction :
-                sql += 'order by numcom '
-            else:
                 sql += 'order by numcom desc '
+            else:
+                sql += 'order by numcom '
 
         cursor.execute(sql, params)
         row = cursor.fetchall()
