@@ -897,6 +897,7 @@ button:focus {
              {
                margin-left: 4%;
                margin-bottom: 20px;
+               font-size: 14px;
              }
              .sub_post textarea{
               float: right;
@@ -1350,7 +1351,7 @@ textarea#popup_comment
 {
  border: 1px solid #989898 !important;
  font-family: 'Roboto', sans-serif ;
- font-size: 12px;
+ font-size: 14px;
  color: black;
  width: 100%;
 }
