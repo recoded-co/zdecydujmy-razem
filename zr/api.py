@@ -580,9 +580,9 @@ def keyword_search(request, plan_id, query):
     type = request.GET.get('type', 'date')
     direction = NPost.parseToBoolean(request.GET.get('direction', True))
     round = int(request.GET.get('round', 1))
-
-    from zr import index as i
-    result = i.find(query, plan_id)
+    
+    from zr.index import find
+    result = find(query, plan_id)
     result = [(item, len(Post.objects.filter(parent_id=item))) for item in result]
     paginator = Paginator(result, 25)
 

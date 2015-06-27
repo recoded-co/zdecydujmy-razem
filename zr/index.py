@@ -1,4 +1,5 @@
 __author__ = 'dwa'
+from django.conf import settings
 from whoosh import index, query
 from whoosh.fields import Schema, ID, NGRAMWORDS, NUMERIC, DATETIME, TEXT
 from whoosh.qparser import QueryParser, MultifieldParser
@@ -15,7 +16,8 @@ from whoosh.qparser.dateparse import DateParserPlugin
     date = models.DateField(auto_now=True, blank=True)
 """
 
-IDX_DIR = 'zr_index'
+from settings import IDX_DIR
+
 
 SCHEMA = Schema(
     id=ID(stored=True),
@@ -27,6 +29,7 @@ SCHEMA = Schema(
 
 
 def get_or_create_index(force_create=False):
+    print 'get_od_create'
     import os
     if not os.path.exists(IDX_DIR):
         os.mkdir(IDX_DIR)
@@ -39,6 +42,7 @@ def get_or_create_index(force_create=False):
 
 
 def write_post(writer, post):
+    print 'write_post'
     utf_content = post.content
     utf_username = post.author.username
     writer.add_document(id=unicode(post.id), plan_id=post.plan.id, author=utf_username, content=utf_content, date=post.date)
@@ -48,6 +52,7 @@ def create_new_index():
     from zr.models import Post
     ix, created = get_or_create_index(force_create=True)#index.create_in(IDX_DIR, SCHEMA)
     entries = Post.objects.all()
+    print len(entries)
     writer = ix.writer()
     for e in entries:
         write_post(writer, e)
