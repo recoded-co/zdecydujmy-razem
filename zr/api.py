@@ -91,6 +91,7 @@ class PostSerializer(ModelSerializer):
     negative_rate = serializers.IntegerField(source='dislike_sum', required=False)
     author_is_staff = serializers.SerializerMethodField()
     is_subscribed = serializers.SerializerMethodField()
+    is_owned = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -98,7 +99,7 @@ class PostSerializer(ModelSerializer):
                   'parent', 'plan', 'content',
                   'rate', 'score', 'geometry',
                   'date', 'filep', 'positive_rate','negative_rate', 'is_removed',
-                  'is_subscribed',
+                  'is_subscribed', 'is_owned',
         )
 
     def get_content(self, obj):
@@ -117,6 +118,12 @@ class PostSerializer(ModelSerializer):
         request = self.context.get('request')
         if request and request.user and not request.user.is_anonymous():
             return obj.postsubscription_set.filter(user=request.user, active=True).exists()
+
+        return False
+    def get_is_owned(self, obj):
+        request = self.context.get('request')
+        if request and request.user and request.user == obj.author:
+            return True
 
         return False
 

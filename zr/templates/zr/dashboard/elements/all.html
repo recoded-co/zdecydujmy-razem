@@ -19,7 +19,7 @@
             </textarea>
             <div class="allign_right">
                 <div class="fileinput fileinput-new" data-provides="fileinput">
-                  <button type="button" class="btn btn-xs btn-file btnwhite btngrey"><span class="glyphicon glyphicon-paperclip"></span><input name="..." type="file" value="{[{ post.id }]}" multiple file-change /></button>
+                  <button type="button" class="btn btn-xs btn-file btnwhite btngrey" ng-show="post.is_owned"><span class="glyphicon glyphicon-paperclip"></span><input name="..." type="file" value="{[{ post.id }]}" multiple file-change /></button>
                 </div>
                 <button    type="button" class="btn btn-xs btnblue"
                               ng-click="deleteBP(base_post);addBasePost = false  | trackEvent:'Usuń':'Button clicked':user ">

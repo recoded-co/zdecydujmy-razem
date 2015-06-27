@@ -41,11 +41,14 @@ class FileManager(View):
 
 @csrf_exempt
 def angular_post(request):
-    print request.POST
     newfile = None
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
         post = Post.objects.get(id = request.POST['post_id'])
+
+        if request.user != post.author:
+            return HttpResponse({}, content_type='application/json')
+
         if form.is_valid() and post:
             newfile = PostFileUpload(file = request.FILES['datafile'], post = post, name=str(request.FILES['datafile']))
             newfile.save()

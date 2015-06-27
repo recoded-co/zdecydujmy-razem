@@ -64,7 +64,7 @@
                                 </button>
                             {% endif %}
 
-                         <button type="button" class="btn btn-xs btn-file btnwhite btngrey" ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates">
+                         <button type="button" class="btn btn-xs btn-file btnwhite btngrey" ng-show="post.is_owned" ng-disabled="post.sub_rates">
                             <input name="..." type="file" value="{[{ post.id }]}" multiple file-change /><div class="mr-clip">&nbsp;</div>
                          </button>
                             <button  class="btn btn-xs btngrey btnwhite"
