@@ -1615,3 +1615,7 @@ div.leaflet-buttons-control-button:hover
   background-color: transparent;
   border: none;
 }
+
+.leaflet-measure-tooltip-total {
+  font-size: 15px;
+}
