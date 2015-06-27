@@ -49,24 +49,13 @@ class GeometrySerializer(ModelSerializer):
 
     class Meta:
         model = Geometry
-        fields = ('id', 'name', 'geoelement', 'geo_id', 'poly', 'point','line')
+        fields = ('id', 'name', 'geoelement', 'geo_id', 'poly', 'point', 'line')
 
 
 class GeometryViewSet(viewsets.ModelViewSet):
     queryset = Geometry.objects.all()
     serializer_class = GeometrySerializer
 
-    def pre_save(self, obj):
-        print 'pre_save %s' % str(obj)
-
-    def post_save(self, obj, created=False):
-        print 'post save %s' % str(obj)
-
-    def pre_delete(self, obj):
-        print 'pre delete %s' % str(obj)
-
-    def post_delete(self, obj):
-        print 'post delete %s' % str(obj)
 
 router.register(r'geometries', GeometryViewSet)
 
@@ -599,8 +588,8 @@ def keyword_search(request, plan_id, query):
     direction = NPost.parseToBoolean(request.GET.get('direction', True))
     round = int(request.GET.get('round', 1))
 
-    from zr import index as i
-    result = i.find(query, plan_id)
+    from zr.index import find
+    result = find(query, plan_id)
     result = [(item, len(Post.objects.filter(parent_id=item))) for item in result]
     paginator = Paginator(result, 25)
 
