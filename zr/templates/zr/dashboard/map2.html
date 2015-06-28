@@ -16,6 +16,7 @@ var search_filter_layer = undefined;
 var PLAN_POPUPS_VISIBILITY = false;
 
 mapObjects = {};
+basePlanLayerData = {};
 
 
 function geolocate(address) {
@@ -98,38 +99,13 @@ function map_init() {
         maxZoom: 18
     });
 
-    var basePlanLayer = L.geoJson([], {
-        clickable: false,
-        style: function(feature) {
-            return {
-                color: feature.properties.color
-            };
-        },
-        onEachFeature: function(feature, layer) {
-            var pcontent = '';
-            feature.properties.feat_description.forEach(function(o) {
-                if (o.value !== '') {
-                    pcontent += "<h5>" + o.key + "</h5><p>" + o.value + "</p>";
-                }
-            });
-
-            var popup = L.popup({
-                "maxHeight": 150
-            });
-
-            popup.setContent(pcontent);
-            layer.on("click", function(e) {
-                if (PLAN_POPUPS_VISIBILITY) {
-                    popup.setLatLng(e.latlng);
-                    map.openPopup(popup);
-                }
-            });
-        }
-    });
+    var basePlanLayer = createBasePlanLayer();
 
     var overlayMaps = {
         "MPZP": basePlanLayer,
-        "Studium": studium
+        "Studium": studium,
+        "Struktura własności": strukturaWlasnosci,
+        "Wyniki ankiet": wynikiAnkiet
     };
 
     map = L.map('map', {
@@ -155,10 +131,7 @@ function map_init() {
         "opacity": 0.65
     }
 
-    $.getJSON("{% url 'subjects_geojson' plan.id  %}", function(data) {
-        basePlanLayer.addData(data);
-        basePlanLayer.bringToBack();
-    });
+
 
     var additionalLayers = {
         //"Propozycja planu": basePlanLayer
@@ -190,6 +163,8 @@ function map_init() {
     map.setRemoteControlSwitch = function(content, method) {
         map.remoteControlSwitch = method;
         map.remoteControlContent = content;
+
+
     }
     map.clearControlSwitch = function() {
         map.remoteControlSwitch = undefined;
@@ -199,6 +174,10 @@ function map_init() {
 
     function planPopupV() {
         PLAN_POPUPS_VISIBILITY = !PLAN_POPUPS_VISIBILITY;
+
+        map.removeLayer(basePlanLayer)
+        basePlanLayer = createBasePlanLayer({clickable: PLAN_POPUPS_VISIBILITY});
+        map.addLayer(basePlanLayer);
     }
 
     //extra button for specified layer popup appearance
@@ -456,6 +435,57 @@ function setVectorStyle(name, color) {
             cursor: "pointer"
         })
     });
+}
+
+function createBasePlanLayer(options) {
+    var defaults = {
+        clickable: false,
+        style: function(feature) {
+            return {
+                color: feature.properties.color
+            };
+        },
+        onEachFeature: function(feature, layer) {
+            var pcontent = '';
+            feature.properties.feat_description.forEach(function(o) {
+                if (o.value !== '') {
+                    pcontent += "<h5>" + o.key + "</h5><p>" + o.value + "</p>";
+                }
+            });
+
+            var popup = L.popup({
+                "maxHeight": 150
+            });
+
+            popup.setContent(pcontent);
+            layer.on("click", function(e) {
+                if (PLAN_POPUPS_VISIBILITY) {
+                    popup.setLatLng(e.latlng);
+                    map.openPopup(popup);
+                }
+            });
+        }
+    };
+
+    options = $.extend({}, defaults, options);
+
+    var data,
+        layer = L.geoJson([], options);
+
+    if (basePlanLayerData instanceof Object) {
+        $.getJSON("{% url 'subjects_geojson' plan.id  %}", function(response) {
+            basePlanLayerData = response;
+
+            layer.addData(basePlanLayerData);
+            layer.bringToBack();
+        });
+    } else {
+        layer.addData(basePlanLayerData);
+        layer.bringToBack();
+    }
+
+
+    return layer;
 }
 
 /**
