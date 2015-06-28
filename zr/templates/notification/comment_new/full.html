@@ -1,8 +1,10 @@
 {% load i18n %}
+{% url 'dashboard' as dashboard_url %}
+
 {% blocktrans %}
 <h1>There is a new comment to post you are watching on {{ plan }}:</h1>
 {% endblocktrans %}
 <p>{{ comment_content }}</p>
 {% blocktrans %}
-<h3>Read more on http://{{ current_site }} {% url 'dashboard' %}</h3>
+<h3>Read more on http://{{ current_site }}{{ dashboard_url }}</h3>
 {% endblocktrans %}
