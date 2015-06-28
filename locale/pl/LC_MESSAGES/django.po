@@ -1,0 +1,465 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-06-28 20:03+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+
+#: filemanager/forms.py:8
+msgid "Wybierz plik"
+msgstr ""
+
+#: filemanager/forms.py:9
+msgid "max. 42 megabajtow"
+msgstr ""
+
+#: registrations/forms.py:17 zr/templates/zr/login_form.html:9
+msgid "np. jane lub jan@gmail.com"
+msgstr ""
+
+#: registrations/forms.py:25 zr/templates/zr/login_form.html:12
+msgid "hasło"
+msgstr ""
+
+#: zdecydujmyrazem/settings.py:72
+msgid "Polish"
+msgstr ""
+
+#: zr/forms.py:17 zr/views.py:37
+msgid "zip code"
+msgstr "kod pocztowy"
+
+#: zr/management.py:9
+msgid "New post"
+msgstr ""
+
+#: zr/management.py:9
+msgid "new post in your threads"
+msgstr ""
+
+#: zr/management.py:10
+msgid "New comment"
+msgstr ""
+
+#: zr/management.py:10
+msgid "new post comment"
+msgstr ""
+
+#: zr/models.py:96
+msgid "Left side bar"
+msgstr ""
+
+#: zr/models.py:97
+msgid "Right side bar"
+msgstr ""
+
+#: zr/models.py:214
+msgid "Alert"
+msgstr ""
+
+#: zr/models.py:215
+msgid "Alert seen"
+msgstr ""
+
+#: zr/models.py:216
+msgid "Info"
+msgstr ""
+
+#: zr/models.py:217
+msgid "Info seen"
+msgstr ""
+
+#: zr/templates/notification/comment_new/full.html:4
+#, python-format
+msgid ""
+"\n"
+"<h1>There is a new comment to post you are watching on %(plan)s:</h1>\n"
+msgstr ""
+
+#: zr/templates/notification/comment_new/full.html:8
+#: zr/templates/notification/post_new/full.html:8
+#, python-format
+msgid ""
+"\n"
+"<h3>Read more on http://%(current_site)s%(dashboard_url)s</h3>\n"
+msgstr ""
+
+#: zr/templates/notification/comment_new/full.txt:2
+#, python-format
+msgid ""
+"\n"
+"There is a new comment to post you are watching on %(plan)s:\n"
+msgstr ""
+
+#: zr/templates/notification/comment_new/full.txt:6
+#, python-format
+msgid ""
+"\n"
+"Read more on http://%(current_site)s\n"
+msgstr ""
+
+#: zr/templates/notification/comment_new/notice.html:2
+#: zr/templates/notification/comment_new/short.txt:2
+msgid ""
+"\n"
+"New comment notification\n"
+msgstr ""
+
+#: zr/templates/notification/post_new/full.html:4
+#, python-format
+msgid ""
+"\n"
+"<h1>There is a new post on %(plan)s:</h1>\n"
+msgstr ""
+
+#: zr/templates/notification/post_new/full.txt:1
+#, python-format
+msgid "There is a new post on %(plan)s:"
+msgstr ""
+
+#: zr/templates/notification/post_new/notice.html:2
+#: zr/templates/notification/post_new/short.txt:2
+msgid ""
+"\n"
+"New post notification\n"
+msgstr ""
+
+#: zr/templates/registrations/password_reset_complete.html:5
+#: zr/templates/registrations/password_reset_complete.html:21
+msgid "Password reset complete"
+msgstr ""
+
+#: zr/templates/registrations/password_reset_complete.html:23
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr ""
+
+#: zr/templates/registrations/password_reset_complete.html:25
+msgid "Log in"
+msgstr ""
+
+#: zr/templates/registrations/password_reset_confirm.html:5
+msgid "Password reset"
+msgstr ""
+
+#: zr/templates/registrations/password_reset_confirm.html:22
+msgid "Enter new password"
+msgstr ""
+
+#: zr/templates/registrations/password_reset_confirm.html:23
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+
+#: zr/templates/registrations/password_reset_confirm.html:29
+msgid "New password:"
+msgstr ""
+
+#: zr/templates/registrations/password_reset_confirm.html:31
+msgid "Confirm password:"
+msgstr ""
+
+#: zr/templates/registrations/password_reset_confirm.html:32
+msgid "Change my password"
+msgstr ""
+
+#: zr/templates/registrations/password_reset_confirm.html:35
+msgid "Password reset unsuccessful"
+msgstr ""
+
+#: zr/templates/registrations/password_reset_confirm.html:36
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+
+#: zr/templates/registrations/password_reset_done.html:5
+#: zr/templates/registrations/password_reset_done.html:21
+msgid "Password reset successful"
+msgstr ""
+
+#: zr/templates/registrations/password_reset_done.html:23
+msgid ""
+"We've e-mailed you instructions for setting your password to the e-mail "
+"address you submitted. You should be receiving it shortly."
+msgstr ""
+
+#: zr/templates/registrations/password_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this e-mail because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+
+#: zr/templates/registrations/password_reset_email.html:4
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: zr/templates/registrations/password_reset_email.html:8
+msgid "Your username, in case you've forgotten:"
+msgstr ""
+
+#: zr/templates/registrations/password_reset_email.html:10
+msgid "Thanks for using our site!"
+msgstr ""
+
+#: zr/templates/registrations/password_reset_email.html:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""
+
+#: zr/templates/registrations/password_reset_form.html:19
+msgid "Resetowanie hasła"
+msgstr ""
+
+#: zr/templates/registrations/password_reset_form.html:21
+msgid ""
+"Zapomniałeś hasła? Podaj swój email poniżej, wyślemy Ci instrukcję jak "
+"zresetować hasło."
+msgstr ""
+
+#: zr/templates/registrations/password_reset_form.html:27
+msgid "Adres E-mail:"
+msgstr ""
+
+#: zr/templates/registrations/password_reset_form.html:30
+msgid "Zresetuj moje hasło"
+msgstr ""
+
+#: zr/templates/zr/avatar/change.html:19
+msgid "zdjęcie profilowe"
+msgstr ""
+
+#: zr/templates/zr/avatar/change.html:24
+msgid "You haven't uploaded an avatar yet. Please upload one now."
+msgstr ""
+
+#: zr/templates/zr/avatar/change.html:30
+msgid "Choose new Default"
+msgstr ""
+
+#: zr/templates/zr/avatar/change.html:39
+msgid "Akceptuj"
+msgstr ""
+
+#: zr/templates/zr/avatar/change.html:43
+msgid "Wróć"
+msgstr ""
+
+#: zr/templates/zr/base.html:9
+msgid "Planuj swoje miasto"
+msgstr ""
+
+#: zr/templates/zr/base.html:46
+msgid "Projek finansowany z ...."
+msgstr ""
+
+#: zr/templates/zr/dashboard/dashboard.html:185
+msgid "Usuń wpis"
+msgstr ""
+
+#: zr/templates/zr/dashboard/dashboard.html:188
+msgid ""
+"\n"
+"                  Czy na pewno usunąć wybrany komentarz?\n"
+"              "
+msgstr ""
+
+#: zr/templates/zr/dashboard/dashboard.html:193
+msgid "Tak"
+msgstr ""
+
+#: zr/templates/zr/dashboard/dashboard.html:194
+msgid "Nie"
+msgstr ""
+
+#: zr/templates/zr/dashboard/dashboard.html:212
+msgid "Zmień zdjęcie"
+msgstr ""
+
+#: zr/templates/zr/dashboard/dashboard.html:214 zr/templates/zr/navbar.html:32
+msgid "Wyloguj"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/all.html:9
+msgid " dodaj"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/all.html:26
+#: zr/templates/zr/dashboard/elements/post_area.html:105
+#: zr/templates/zr/dashboard/elements/subscriptions.html:112
+msgid "usuń"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/all.html:30
+#: zr/templates/zr/dashboard/elements/post_area.html:108
+#: zr/templates/zr/dashboard/elements/subscriptions.html:116
+msgid "publikuj"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/all.html:36
+#: zr/templates/zr/dashboard/elements/subscriptions.html:122
+#: zr/templates/zr/zip_code.html:27
+msgid "Zapisz"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/all.html:40
+#: zr/templates/zr/dashboard/elements/post_area.html:61
+#: zr/templates/zr/dashboard/elements/subscriptions.html:126
+msgid "Usuń"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/details.html:13
+msgid "Pokaż dyskusję"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/details.html:19
+#: zr/templates/zr/dashboard/elements/subscriptions.html:11
+#: zr/templates/zr/dashboard/elements/subscriptions.html:64
+msgid "Data"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/details.html:27
+#: zr/templates/zr/dashboard/elements/subscriptions.html:18
+#: zr/templates/zr/dashboard/elements/subscriptions.html:78
+msgid "Ilość komentarzy"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/post_area.html:34
+msgid "Pokaż na mapie"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/post_area.html:37
+msgid "Śledź"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/post_area.html:41
+#: zr/templates/zr/dashboard/elements/post_area.html:42
+msgid "Subskrybuj wątek"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/post_area.html:56
+msgid "odpowiedzi"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/post_area.html:73
+msgid "za"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/post_area.html:78
+msgid "przeciw"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/post_area.html:81
+msgid "skomentuj"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/subscriptions.html:53
+msgid "Dodaj komentarz"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/subscriptions.html:56
+msgid "Szukaj"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/subscriptions.html:59
+msgid "Rozwiń wszystkie"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/subscriptions.html:71
+msgid "Ocena"
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/subscriptions.html:84
+msgid "Treść: "
+msgstr ""
+
+#: zr/templates/zr/dashboard/elements/subscriptions.html:86
+msgid "Data: "
+msgstr ""
+
+#: zr/templates/zr/dashboard/map.html:328
+msgid "Set map"
+msgstr ""
+
+#: zr/templates/zr/index.html:62 zr/templates/zr/login_form.html:15
+msgid "Adres email lub hasło jest niepoprawne."
+msgstr ""
+
+#: zr/templates/zr/index.html:71 zr/templates/zr/login_form.html:20
+msgid "Zarejestruj się"
+msgstr ""
+
+#: zr/templates/zr/index.html:74 zr/templates/zr/login_form.html:23
+msgid "Zaloguj"
+msgstr ""
+
+#: zr/templates/zr/index.html:81
+msgid "zapomniałem/łam hasła"
+msgstr ""
+
+#: zr/templates/zr/index.html:88 zr/templates/zr/login_form.html:31
+msgid "Zaloguj się jako/przez"
+msgstr ""
+
+#: zr/templates/zr/index.html:95 zr/templates/zr/login_form.html:34
+msgid "anonimowy użytkownik"
+msgstr ""
+
+#: zr/templates/zr/index.html:101 zr/templates/zr/login_form.html:38
+msgid "konto google"
+msgstr ""
+
+#: zr/templates/zr/index.html:107 zr/templates/zr/login_form.html:42
+msgid "konto facebook"
+msgstr ""
+
+#: zr/templates/zr/login_form.html:26
+msgid "zapomniałem hasła"
+msgstr ""
+
+#: zr/templates/zr/navbar.html:23
+msgid "Wpisz adres lub nazwę ulicy"
+msgstr ""
+
+#: zr/templates/zr/navbar.html:24
+msgid "Wyszukaj"
+msgstr ""
+
+#: zr/templates/zr/navbar.html:31
+msgid "Subscriptions"
+msgstr ""
+
+#: zr/templates/zr/registration.html:159
+msgid "Zarejestruj"
+msgstr ""
+
+#: zr/templates/zr/zip_code.html:16
+msgid "Kod pocztowy"
+msgstr ""
+
+#: zr/views.py:30
+msgid "first name"
+msgstr ""
+
+#: zr/views.py:33
+msgid "last name"
+msgstr ""
+
+#: zr/views.py:164
+msgid "Successfully updated your avatar."
+msgstr ""
