@@ -2,141 +2,165 @@
 {% load i18n %}
 {% load url from future %}
 
+{% block extra_head %}
+    <link href='/static/css/mw_style.css' rel='stylesheet' type='text/css'/>
+    <link href='/static/css/btn_m.css' rel='stylesheet' type='text/css'/>
+    <link href='/static/css/home.css' rel='stylesheet' type='text/css'/>
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"/>
+
+    <script src="/static/js/jquery-1.9.1.js"></script>
+{% endblock %}
+
 {% block navbar %}
     <div class="pagina">
         <img class="logo_op" src="/static/images/ap_maj-11.png" alt=""/>
     </div>
 {% endblock %}
 
-{% block extra_head %}
-    <link href='/static/css/registration.css' rel='stylesheet' type='text/css'/>
-    <link href='/static/css/btn_m.css' rel='stylesheet' type='text/css'/>
-{% endblock %}
-
 {% block content %}
+    <div class="wrapper">
+        <div class="head">
+            <h1>Planuj swoje miasto</h1>
+        </div>
 
-<div class="back_row">
-  <div class="container">
-      <form class="form-signin" method="post" action="{% url 'register' %}">
-        {% csrf_token %}
-            <div class="row">
-                <div class="col-xs-6 col-md-6">
-                    <span class="left">
-                        <h2>rejestracja</h2>
-                    </span>
-                </div>
-                <div class="col-xs-6 col-md-6">
-                    <span class="right"><a href="/zr/"><img src="/static/images/ap_maj6_wymiary-12.png" alt="cross"/></a></span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-6 col-md-6">
-                    <div class="form-group">
-                        <span class="block pro_l">
-                            <label for="id_{{ form.username.name }}">{% trans "Nazwa użytkownika*" %}</label>
-                            <!--<div style="color: red">{{ form.username.errors }}</div>-->
-                        </span>
-                        <span class="block pro_r">
-
-                            <input id="id_{{ form.username.name }}" placeholder="{{ form.username.label }}" maxlength="254" name="{{ form.username.name }}" type="text" class="form-control" autofocus>
-                        </span>
-                    </div>
-                    <div  id="space" class="form-group">
-                        <span class="block pro_l">
-                            <label for="id_{{ form.email.name }}">{% trans "Adres email*" %}</label>
-                            <!--<div style="color: red">{{ form.email.errors }}</div>-->
-                        </span>
-                        <span class="block pro_r">
-
-                            <input id="id_{{ form.email.name }}" placeholder="{{ form.email.label }}" maxlength="254" name="{{ form.email.name }}" type="text" class="form-control" autofocus>
-                        </span>
-                    </div>
-                    <div class="form-group">
-                        <span class="block pro_l">
-                            <label for="id_{{ form.firstname.name }}">{% trans "Imię" %}</label>
-                        </span>
-                        <span class="block pro_r">
-                            <input id="id_{{ form.firstname.name }}" placeholder="{{ form.firstname.label }}" maxlength="254" name="{{ form.firstname.name }}" type="text" class="form-control" autofocus>
-                        </span>
-                    </div>
-                    <div class="form-group">
-                        <span class="block pro_l">
-                            <label for="id_{{ form.lastname.name }}">{% trans "Nazwisko" %}</label>
-                        </span>
-                        <span class="block pro_r">
-                            <input id="id_{{ form.lastname.name }}" placeholder="{{ form.lastname.label }}" maxlength="254" name="{{ form.lastname.name }}" type="text" class="form-control" autofocus>
-                        </span>
-                    </div>
-                    <div class="form-group">
-                        <span class="block pro_l">
-                            <label for="id_{{ form.zipcode.name }}">{% trans "Kod pocztowy*" %}</label>
-                            <!--<div style="color: red">{{ form.zipcode.errors }}</div>-->
-                        </span>
-                        <span class="block pro_r">
-
-                            <input id="id_{{ form.zipcode.name }}" placeholder="{{ form.zipcode.label }}" maxlength="254" name="{{ form.zipcode.name }}" type="text" class="form-control" autofocus>
-                        </span>
-                    </div>
-                    <div class="form-group">
-                        <span class="block pro_l">
-                        </span>
-                        <span class="block pro_r">
-                            <p class="it15"> * Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
-                        </span>
-                    </div>
-                </div>
-                <div class="col-xs-6 col-md-6">
-                    <div class="form-group">
-                        <span class="block pro_l">
-                            <label for="id_{{ form.password1.name }}">{% trans 'Hasło*' %}</label>
-                            <!--<div style="color: red">{{ form.password1.errors }}</div>-->
-                        </span>
-                        <span class="block pro_r">
-                            <input id="id_{{ form.password1.name }}" placeholder="{{ form.password1.label }}" maxlength="254" name="{{ form.password1.name }}" type="password" class="form-control" >
-                        </span>
-                    </div>
-                    <div class="form-group">
-                        <span class="block pro_l">
-                            <label for="id_{{ form.password2.name }}">{% trans 'Potwierdź hasło*' %}</label>
-                            <!--<div style="color: red">{{ form.password2.errors }}</div>-->
-                        </span>
-                        <span class="block pro_r">
-                            <input id="id_{{ form.password2.name }}" placeholder="{{ form.password2.label }}" maxlength="254" name="{{ form.password2.name }}" type="password" class="form-control" >
-                        </span>
-                    </div>
-                    <div class="form-group">
-                        <span class="block pro_l">
-                        </span>
-                        <span class="block pro_r">
-                            {% if form.password2.errors or form.password1.errors or form.email.errors or form.username.errors %}
-                                {% if form.password2.errors %}
-                                    {{ form.password2.errors }}
-                                {% elif form.password1.errors %}
-                                    {{ form.password1.errors }}
-                                {% elif form.email.errors %}
-                                    {{ form.email.errors }}
-                                {% elif form.username.errors %}
-                                    {{ form.username.errors }}
-                                {% endif %}
-
-
-                            {% endif %}
-                        </span>
-                        <!--<span class="block pro_l">
-                        </span>
-                        <span class="block pro_r">
-                            <p class="btn-big-n btn-r it15" style="width: 200px;">Należy zaznaczyć wymagane pola</p>
-                        </span> -->
-                    </div>
-
+        <section class="content">
+            <div class="inner">
+                <form class="form-signin" method="post" action="{% url 'register' %}">
+                    {% csrf_token %}
                     <input type="hidden" name="next" value="{{ next }}" />
-                    <button type="submit" class="btn-sm-n btn-a r ">{% trans 'Zapisz' %}</button>
-                </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-offset-4 col-md-8">
+                                    <h3>rejestracja</h3>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 text-right">
+                                    {{ form.username.label_tag }}
+                                </div>
+                                <div class="col-md-8">
+                                    {{ form.username }}
+                                    {% if form.username.errors %}
+                                        {% for error in form.username.errors %}
+                                            <div class="alert alert-danger" role="alert">
+                                                {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="row bottom-offset-15">
+                                <div class="col-md-4 text-right">
+                                    {{ form.email.label_tag }}
+                                </div>
+                                <div class="col-md-8">
+                                    {{ form.email }}
+                                    {% if form.email.errors %}
+                                        {% for error in form.email.errors %}
+                                            <div class="alert alert-danger" role="alert">
+                                                {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 text-right">
+                                    {{ form.first_name.label_tag }}
+                                </div>
+                                <div class="col-md-8">
+                                    {{ form.first_name }}
+                                    {% if form.first_name.errors %}
+                                        {% for error in form.first_name.errors %}
+                                            <div class="alert alert-danger" role="alert">
+                                                {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 text-right">
+                                    {{ form.last_name.label_tag }}
+                                </div>
+                                <div class="col-md-8">
+                                    {{ form.last_name }}
+                                    {% if form.last_name.errors %}
+                                        {% for error in form.last_name.errors %}
+                                            <div class="alert alert-danger" role="alert">
+                                                {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 text-right">
+                                    {{ form.zipcode.label_tag }}
+                                </div>
+                                <div class="col-md-8">
+                                    {{ form.zipcode }}
+                                    {% if form.zipcode.errors %}
+                                        {% for error in form.zipcode.errors %}
+                                            <div class="alert alert-danger" role="alert">
+                                                {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-offset-4 col-md-8">
+                                    <h3 style="visibility: hidden;">&nbsp;</h3>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 text-right">
+                                    {{ form.password1.label_tag }}
+                                </div>
+                                <div class="col-md-8">
+                                    {{ form.password1 }}
+                                    {% if form.password1.errors %}
+                                        {% for error in form.password1.errors %}
+                                            <div class="alert alert-danger" role="alert">
+                                                {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 text-right">
+                                    {{ form.password2.label_tag }}
+                                </div>
+                                <div class="col-md-8">
+                                    {{ form.password2 }}
+                                    {% if form.password2.errors %}
+                                        {% for error in form.password2.errors %}
+                                            <div class="alert alert-danger" role="alert">
+                                                {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-sm-n btn-a r ">{% trans 'Zarejestruj' %}</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
-  </div>
-</div>
-
+        </section>
+    </div>
 {% endblock %}
-
-
