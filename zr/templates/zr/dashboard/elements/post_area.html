@@ -32,7 +32,7 @@
                         <span class="right">
                             <button ng-hide="post.parent || !post.geometry" type="button" class="btn btn-xs btnwhite btngrey"
                                 ng-click="zoom_chase(post) | trackEvent:'wyśrodkuj':'Button clicked':user:post.id " title="{% trans 'Pokaż na mapie' %}">
-                                <i class="fa fa-dot-circle-o"></i>
+                                <i class="fa fa-dot-circle-o"></i> {% trans 'Pokaż na mapie' %}
                             </button>
                             <button title="{% trans 'Śledź' %}"
                                 ng-hide="post.parent"
