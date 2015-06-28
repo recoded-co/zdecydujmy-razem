@@ -76,14 +76,6 @@ a:hover{
 .red_info{
     color:red;
 }
-#id_username{
-    width: 100%;
-    height: 33px;
-}
-#id_password{
-    width: 100%;
-    height: 33px;
-}
 .text_area{
     padding:25px;
 

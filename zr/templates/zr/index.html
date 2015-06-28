@@ -5,70 +5,121 @@
 {% block extra_head %}
     <link href='/static/css/mw_style.css' rel='stylesheet' type='text/css'/>
     <link href='/static/css/btn_m.css' rel='stylesheet' type='text/css'/>
+    <link href='/static/css/home.css' rel='stylesheet' type='text/css'/>
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"/>
+
+    <script src="/static/js/jquery-1.9.1.js"></script>
 {% endblock %}
 
-{% block navbar %} {% endblock %}
+{% block navbar %}
+    <div class="pagina">
+        <img class="logo_op" src="/static/images/ap_maj-11.png" alt=""/>
+    </div>
+{% endblock %}
 
 {% block content %}
+    <div class="wrapper">
+        <div class="head">
+            <h1>Planuj swoje miasto</h1>
+        </div>
 
-    <div class="main_w1">
-        <div class="row">
-        <div class="mw mwleft">
-            <img class="logo_op" src="/static/images/logo_op.png" alt=""/>
-            <div class="small_link">
-                <p>
-                    <a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit >></a>
-                </p>
-            </div>
-        </div>
-        <div class="mw mwright">
-            <div class="video_scr">
-            </div>
-        </div>
-        </div>
-        <div class="row">
-            <div class="m_box">
-                <div class="login_container">
-                      {% include 'zr/login_form.html' %}
+        <section class="content">
+            <div class="inner">
+                <div class="row">
+                    <div class="col-md-6 col-left">
+                        <form class="form-signin" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ next }}" />
+
+                            <div class="row">
+                                <div class="col-md-offset-4 col-md-8">
+                                    <h3>logowanie</h3>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    {{ form.username.label_tag }}
+                                </div>
+                                <div class="col-md-8">
+                                    {{ form.username }}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    {{ form.password.label_tag }}
+                                </div>
+                                <div class="col-md-8">
+                                    {{ form.password }}
+                                </div>
+                            </div>
+
+                            {% if form.errors %}
+                                <div class="row">
+                                    <div class="col-md-offset-4 col-md-8">
+                                        <div class="alert alert-danger" role="alert">
+                                            <p>{% trans "Adres email lub hasło jest niepoprawne." %}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="row">
+                                <div class="col-md-offset-4 col-md-8 buttons">
+                                    <a class=" btn-sm-n btn-a" href="{% url 'register' %}">
+                                        {% trans 'Zarejestruj się' %}
+                                    </a>
+                                    <button name="zaloguj" type="submit" class="btn-sm-n btn-b">
+                                        {% trans 'Zaloguj' %}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-offset-4 col-md-8 buttons">
+                                    <a href="{% url 'password_reset' %}">{% trans 'zapomniałem/łam hasła' %}</a>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="row social-login">
+                            <div class="col-md-4">
+                                <p>{% trans 'Zaloguj się jako/przez' %}:</p>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <a href="{% url 'dashboard' %}">
+                                            <i class="fa fa-user"></i>
+                                            <span>{% trans 'anonimowy użytkownik' %}</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="{% url 'socialauth_begin' 'google-oauth2' %}">
+                                            <i class="fa fa-facebook"></i>
+                                            <span>{% trans 'konto google' %}</span>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <a href="{% url 'socialauth_begin' 'facebook' %}">
+                                            <i class="fa fa-google-plus"></i>
+                                            <span>{% trans 'konto facebook' %}</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-right">
+                        <p>Szanowni Państwo,</p>
+                        <p>Zapraszamy do wzięcia udziału w ankiecie na temat preferencji mieszkańców Poznania wobec przyszłego zagospodarowania przestrzennego okolic parku Kasprowicza.</p>
+                        <p>Badanie jest realizowane w ramach projektu narodowego centrum nauki (2012/05/B/HS4/03850) przez wydział nauk geograficznych i geologicznych uniwersytetu im Adama Mickiewicza w Poznaniu.</p>
+                        <p>Projet jest realizowany w porozumieniu z miejską pracownią urbanistyczną w Poznaniu. Wyniki zostaną przekazane projektantom planistycznym i zostaną wykorzystane podczas przygotowania planu. Wprowadzone w ankiecie uwagi będą miały status wniosków nieformalnych. Państwa udział przyczyni sie do lepszego dopasowania zagospodarowania terenu do potrzeb mieszkańców.</p>
+                        <p>Ankieta ma 5 stron, a jej wypełnienie powinno zająć nie więcej niż 15 minut. W przypadku jakichkolwiek pytań i uwag dotyczących badania, prosimy o kontakt na adres mailowy geoankieta(at)amu.edu.pl.</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-        <div class="m_box text_area">
-            <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                exercitation ullamco laboris nisi ut aliquip </h2>
-            <div class="text_col">
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
-                    aute irure dolor in reprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                    occaecat cupidatat non proident, sunt in culpa qui officia
-                    deserunt mollit anim id est laborum.
-                </p>
-            </div>
-            <div class="text_col">
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                exercitation ullamco laboris nisi ut aliquip
-                </p>
-            </div>
-        </div>
-        </div>
-        <div class="row">
-            <div class="m_box">
-                <hr class="m_box_m" >
-                <div class="footer_l">
-                    <span class="block"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p></span>
-                    {# <span class="block"><img width="30px" height="30px" src="#" /></span> #}
-                </div>
-            </div>
-        </div>
+        </section>
     </div>
 {% endblock %}

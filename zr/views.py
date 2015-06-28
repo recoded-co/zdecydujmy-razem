@@ -11,6 +11,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import redirect
 
+from registrations.forms import CustomLoginForm
 from zr.models import Profile
 from zr.models import Configuration, PostSubscription, Plan
 from zr.forms import ZipCodeForm
@@ -46,10 +47,10 @@ class HomePageView(TemplateView):
             return super(HomePageView,self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        from django.contrib.auth.forms import AuthenticationForm
+
         from zdecydujmyrazem import settings
         context = super(HomePageView, self).get_context_data(**kwargs)
-        context['form'] = AuthenticationForm()
+        context['form'] = CustomLoginForm()
         context['next'] = settings.LOGIN_REDIRECT_URL
         return context
 

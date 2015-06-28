@@ -3,6 +3,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.views.generic.base import RedirectView
 
+from registrations.forms import CustomLoginForm
 
 admin.autodiscover()
 
@@ -10,7 +11,10 @@ urlpatterns = patterns('',
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'media'}),
     url(r'^zr/', include('zr.urls')),
 
-    url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'zr/index.html'}),
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login', {
+        'authentication_form': CustomLoginForm,
+        'template_name': 'zr/index.html',
+    }),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login'),
     url(r'^accounts/', include('registrations.urls')),
     url(r'^social_auth/', include('social_auth.urls')),
