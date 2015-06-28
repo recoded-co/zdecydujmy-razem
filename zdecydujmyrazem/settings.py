@@ -4,6 +4,8 @@ Django settings for zdecydujmyrazem project.
 import os
 from datetime import date
 
+from django.utils.translation import ugettext_lazy as _
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -65,6 +67,14 @@ WSGI_APPLICATION = 'zdecydujmyrazem.wsgi.application'
 DATABASES = {}
 
 LANGUAGE_CODE = 'pl'
+
+LANGUAGES = (
+    ('pl', _('Polish')),
+)
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
 
 TIME_ZONE = 'UTC'
 
