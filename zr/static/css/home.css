@@ -1,0 +1,86 @@
+html, body {
+    height: 100%;
+}
+
+.bottom-offset-15 {
+    margin-bottom: 15px;
+}
+
+.row {
+    display: block;
+}
+
+.pagina{
+    width:100%;
+    heinght: 64px;
+    background: #ffffff;
+}
+
+.wrapper {
+    position: relative;
+    min-height: calc(100% - 319px - 64px);
+    margin-top: 319px;
+    background: #46e5c4;
+}
+
+.wrapper .head {
+    width: 100%;
+    height: 319px;
+    margin-top: -319px;
+    background: transparent url('../images/head_bg.png') no-repeat 50% 100%;
+    position: absolute;
+}
+
+.wrapper .head * {
+    display: none;
+}
+
+.wrapper .content .inner {
+    max-width: 1374px;
+    margin: 0 auto;
+    padding-top: 32px;
+}
+form .row {
+    padding-bottom: 5px;
+}
+form input {
+    width: 100%;
+    border: none;
+    border-radius: 7px;
+    padding: 5px;
+}
+
+.text-right {
+    line-height: 34px;
+    text-align: right;
+}
+.col-right {
+    text-transform: uppercase;
+}
+
+.alert {
+    margin-top: 15px;
+    padding: 5px !important;
+}
+
+.social-login {
+    padding-top: 30px;
+    text-align: center;
+}
+
+.social-login a {
+    color: #4d4d4d;
+    line-height: 1;
+}
+.social-login .fa {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    line-height: 50px;
+    -moz-border-radius: 60px;
+    -webkit-border-radius: 60px;
+    border-radius: 60px;
+    color: #4d4d4d;
+    font-size: 32px;
+}
