@@ -17,7 +17,6 @@ admin.site.register(Post, PostAdmin)
 admin.site.register(Rate)
 
 
-
 class PostSubscriptionAdmin(admin.ModelAdmin):
     model = PostSubscription
     list_display = ('user', 'get_post', 'get_author', 'active',)
@@ -64,3 +63,13 @@ class EventDecoration(admin.ModelAdmin):
 
 
 admin.site.register(TrackEvents, EventDecoration)
+
+
+class EventAdmin(admin.ModelAdmin):
+    date_hierarchy = 'created_at'
+    list_display = ('action', 'user', 'obj', 'created_at')
+    list_filter = ('action', 'user')
+    search_fields = ['action', 'user', 'obj']
+
+
+admin.site.register(Event, EventAdmin)
