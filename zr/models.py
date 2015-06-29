@@ -74,7 +74,7 @@ class SubjectFeat(models.Model):
     subject = models.ForeignKey(Subject)
     geom = models.PolygonField(srid=4326)
     color = models.CharField(max_length=100, blank=True, null=True)
-    description = models.TextField(max_length=5000, blank=True)
+    description = models.TextField(null=True, blank=True)
 
     """
     def getId(self):
