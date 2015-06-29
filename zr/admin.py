@@ -39,7 +39,20 @@ class PostSubscriptionAdmin(admin.ModelAdmin):
 admin.site.register(PostSubscription, PostSubscriptionAdmin)
 
 admin.site.register(Subject)
-admin.site.register(SubjectFeat)
+
+
+class SubjectFeatAdmin(admin.ModelAdmin):
+    model = SubjectFeat
+    list_display = ('subject', 'get_geom', 'color')
+
+    def get_geom(self, obj):
+        return str(obj.geom)[:200]
+    get_geom.short_description = 'Geometry'
+    get_geom.admin_order_field = 'geom'
+
+
+admin.site.register(SubjectFeat, SubjectFeatAdmin)
+
 admin.site.register(SubjectFeatProperty)
 
 
