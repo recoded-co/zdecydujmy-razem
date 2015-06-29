@@ -90,6 +90,7 @@ function map_init() {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
         maxZoom: 18
     });
+    /*
     var strukturaWlasnosci = L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
         maxZoom: 18
@@ -98,14 +99,14 @@ function map_init() {
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
         maxZoom: 18
     });
-
+    */
     var basePlanLayer = createBasePlanLayer();
 
     var overlayMaps = {
         "MPZP": basePlanLayer,
-        "Studium": studium,
+        "Studium": studium/*,
         "Struktura własności": strukturaWlasnosci,
-        "Wyniki ankiet": wynikiAnkiet
+        "Wyniki ankiet": wynikiAnkiet*/
     };
 
     map = L.map('map', {
@@ -450,12 +451,15 @@ function createBasePlanLayer(options) {
         },
         onEachFeature: function(feature, layer) {
             var pcontent = '';
+            if (feature.properties.description){
+                pcontent = feature.properties.description;
+            }
+
             feature.properties.feat_description.forEach(function(o) {
                 if (o.value !== '') {
                     pcontent += "<h5>" + o.key + "</h5><p>" + o.value + "</p>";
                 }
             });
-
 
             var minWidth = Math.round($('#map').width() / 4 * 3);
 

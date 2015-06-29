@@ -26,11 +26,13 @@ class PostSubscriptionAdmin(admin.ModelAdmin):
 
     def get_post(self, obj):
         return obj.post.content
+
     get_post.short_description = 'Post'
     get_post.admin_order_field = 'post'
 
     def get_author(self, obj):
         return obj.post.author
+
     get_author.short_description = 'Author'
     get_author.admin_order_field = 'post__author'
 
@@ -46,6 +48,7 @@ class SubjectFeatAdmin(admin.ModelAdmin):
 
     def get_geom(self, obj):
         return str(obj.geom)[:200]
+
     get_geom.short_description = 'Geometry'
     get_geom.admin_order_field = 'geom'
 

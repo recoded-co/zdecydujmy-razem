@@ -38,14 +38,9 @@ class Command(BaseCommand):
         ds = DataSource(shp_file)
 
         for layer in ds:
-            print 'layer start'
-            print layer
             properties = layer.fields
             for feature in layer:
-                print 'layer feature'
-                print feature
                 if feature.geom_type == 'Polygon':
-                    print 'Polygon'
                     color = 'blue'
                     if 'color' in properties:
                         color = feature.get('color', 'blue')
