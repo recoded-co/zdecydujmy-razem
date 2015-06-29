@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.gis.db import models
 from django.utils.translation import ugettext as _
 from django.db.models.signals import post_save
@@ -195,6 +196,92 @@ class PostSubscription(models.Model):
 
     def __unicode__(self):
         return '%s: %s' % (self.post.author, self.post.content)
+
+class Event(models.Model):
+    ACTION_UKO = 'UKO'
+    ACTION_UAO = 'UAO'
+    ACTION_UDO = 'UDO'
+    ACTION_UST = 'UST'
+    ACTION_UWD = 'UWD'
+    ACTION_USD = 'USD'
+    ACTION_USK = 'USK'
+    ACTION_UFSA = 'UFSA'
+    ACTION_UFSD = 'UFSD'
+    ACTION_ULO = 'ULO'
+    ACTION_UDP = 'UDP'
+    ACTION_UPP = 'UPP'
+    ACTION_MI = 'MI'
+    ACTION_ZSZ = 'ZSZ'
+    ACTION_ZSL = 'ZSL'
+    ACTION_ZCA = 'ZCA'
+    ACTION_MPZPZ = 'MPZPZ'
+    ACTION_MPZPO = 'MPZPO'
+    ACTION_STUDZ = 'STUDZ'
+    ACTION_STUDO = 'STUDO'
+    ACTION_MPZS = 'MPZS'
+    ACTION_MPMA = 'MPMA'
+    ACTION_UDP = 'UDP'
+    ACTION_UDPA = 'UDPA'
+    ACTION_UDO = 'UDO'
+    ACTION_UDOA = 'UDOA'
+    ACTION_UDL = 'UDL'
+    ACTION_UDLA = 'UDLA'
+    ACTION_UFPP = 'UFPP'
+    ACTION_UFPO = 'UFPO'
+    ACTION_WWPO = 'WWPO'
+    ACTION_WOZM = 'WOZM'
+    ACTION_ZZOM = 'ZZOM'
+    ACTION_ZZSR = 'ZZSR'
+    ACTION_WAPM = 'WAPM'
+    ACTION_IOMP = 'IOMP'
+    ACTION_POM = 'POM'
+    ACTION_WFPP = 'WFPP'
+
+    ACTION_CHOICES = (
+        (ACTION_UKO, _('UKO')),
+        (ACTION_UAO, _('UAO')),
+        (ACTION_UDO, _('UDO')),
+        (ACTION_UST, _('UST')),
+        (ACTION_UWD, _('UWD')),
+        (ACTION_USD, _('USD')),
+        (ACTION_USK, _('USK')),
+        (ACTION_UFSA, _('UFSA')),
+        (ACTION_UFSD, _('UFSD')),
+        (ACTION_ULO, _('ULO')),
+        (ACTION_UDP, _('UDP')),
+        (ACTION_UPP, _('UPP')),
+        (ACTION_MI, _('MI')),
+        (ACTION_ZSZ, _('ZSZ')),
+        (ACTION_ZSL, _('ZSL')),
+        (ACTION_ZCA, _('ZCA')),
+        (ACTION_MPZPZ, _('MPZPZ')),
+        (ACTION_MPZPO, _('MPZPO')),
+        (ACTION_STUDZ, _('STUDZ')),
+        (ACTION_STUDO, _('STUDO')),
+        (ACTION_MPZS, _('MPZS')),
+        (ACTION_MPMA, _('MPMA')),
+        (ACTION_UDP, _('UDP')),
+        (ACTION_UDPA, _('UDPA')),
+        (ACTION_UDO, _('UDO')),
+        (ACTION_UDOA, _('UDOA')),
+        (ACTION_UDL, _('UDL')),
+        (ACTION_UDLA, _('UDLA')),
+        (ACTION_UFPP, _('UFPP')),
+        (ACTION_UFPO, _('UFPO')),
+        (ACTION_WWPO, _('WWPO')),
+        (ACTION_WOZM, _('WOZM')),
+        (ACTION_ZZOM, _('ZZOM')),
+        (ACTION_ZZSR, _('ZZSR')),
+        (ACTION_WAPM, _('WAPM')),
+        (ACTION_IOMP, _('IOMP')),
+        (ACTION_POM, _('POM')),
+        (ACTION_WFPP, _('WFPP')),
+    )
+
+    action = models.CharField(max_length=3, choices=ACTION_CHOICES)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    obj = models.CharField(max_length=128, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
 
 class TrackEvents(models.Model):
