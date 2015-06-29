@@ -528,6 +528,7 @@ function addMarkers(data, callback) {
 
     var count = data.length;
     var markers = L.markerClusterGroup({
+        disableClusteringAtZoom: 17,
         showCoverageOnHover: false,
         zoomToBoundsOnClick: true,
         spiderfyOnMaxZoom: true,
@@ -542,6 +543,7 @@ function addMarkers(data, callback) {
         }
     });
     var lines = L.markerClusterGroup({
+        disableClusteringAtZoom: 17,
         showCoverageOnHover: false,
         zoomToBoundsOnClick: true,
         spiderfyOnMaxZoom: true,
@@ -556,6 +558,7 @@ function addMarkers(data, callback) {
         }
     });
     var polygon_markers = L.markerClusterGroup({
+        disableClusteringAtZoom: 17,
         showCoverageOnHover: true,
         zoomToBoundsOnClick: true,
         spiderfyOnMaxZoom: true,
