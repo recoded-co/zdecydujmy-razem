@@ -59,6 +59,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
+    'zr.context_processors.analytics_settings'
     )
 
 ROOT_URLCONF = 'zdecydujmyrazem.urls'
@@ -104,7 +105,7 @@ HOME_PAGE_URL = '/zr/dashboard'
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.facebook.FacebookBackend',
     'social_auth.backends.google.GoogleOAuth2Backend',
-    'social_auth.backends.google.GoogleBackend',
+    'soc    ial_auth.backends.google.GoogleBackend',
     'zr.backends.backend.LowercaseAuthenticationBackend',
     'zr.backends.backend.EmailAuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
