@@ -633,19 +633,22 @@ def date_search(request, plan_id, year, mon, day):
 
     return NPost.addDataToOutput(actuall_item_list)
 
+
 class SubjectFeatPropertySerializer(ModelSerializer):
     class Meta:
         model = SubjectFeatProperty
         fields = ('key', 'value')
 
+
 class SubjectFeatSerializer(GeoFeatureModelSerializer):
     feat_description = SubjectFeatPropertySerializer(many=True)
-    #serializers.RelatedField(many=True)
+    description = serializers.CharField(default='')
 
     class Meta:
         model = SubjectFeat
         geo_field = "geom"
-        fields = ('id', 'subject', 'color', 'geom', 'feat_description', )
+        fields = ('id', 'subject', 'color', 'geom', 'description', 'feat_description', )
+
 
 class SubjectFeatList(generics.ListAPIView):
     queryset = SubjectFeat.objects.all()
