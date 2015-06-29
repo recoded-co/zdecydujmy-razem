@@ -203,10 +203,13 @@ function map_init() {
                 resizeStart = false;
             }
         });
+
         map.on('popupopen', function(e) {
-            map.panTo(e.popup._latlng);
-            var marker = e.popup._source;
+            var px = map.project(e.popup._latlng);
+            px.y -= e.popup._container.clientHeight / 5 * 3;
+            map.panTo(map.unproject(px),{animate: true});
         });
+
         map.on('popupclose', function(e) {
             map.remoteControlSwitchOff();
             if (layerWaitingRoom) {
@@ -453,9 +456,13 @@ function createBasePlanLayer(options) {
                 }
             });
 
-            var popup = L.popup({
-                "maxHeight": 150
-            });
+
+            var minWidth = Math.round($('#map').width() / 4 * 3);
+
+            if (minWidth < 150)
+                minWidth = 150;
+
+            var popup = L.popup({minWidth: minWidth, maxWidth: minWidth})
 
             popup.setContent(pcontent);
             layer.on("click", function(e) {
