@@ -239,6 +239,7 @@ class Event(models.Model):
     ACTION_IOMP = 'IOMP'
     ACTION_POM = 'POM'
     ACTION_WFPP = 'WFPP'
+    ACTION_DWDC = 'DWDC'
 
     ACTION_CHOICES = (
         (ACTION_UKO, _('UKO')),
@@ -279,10 +280,11 @@ class Event(models.Model):
         (ACTION_IOMP, _('IOMP')),
         (ACTION_POM, _('POM')),
         (ACTION_WFPP, _('WFPP')),
+        (ACTION_DWDC, _('DWDC')),
     )
 
-    action = models.CharField(max_length=3, choices=ACTION_CHOICES)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    action = models.CharField(max_length=16, choices=ACTION_CHOICES)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
     obj = models.CharField(max_length=128, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
