@@ -5,6 +5,7 @@ django-bootstrap-toolkit==2.15.0
 django-filter==0.7
 django-floppyforms==1.1
 django-jsonview==0.4.3
+django-maintenancemode==0.10
 django-notification==1.3.3
 django-registration-redux==1.2
 django-social-auth==0.7.28
