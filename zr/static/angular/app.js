@@ -31,7 +31,8 @@ var zdApp = angular.module('zd', [
   'ui.bootstrap.datetimepicker',
   'searchFilters',
   'dateTools',
-  'geoFilter'
+  'geoFilter',
+  'analytics'
 ]);
 
 zdApp.config(function(AngularyticsProvider) {
