@@ -1,6 +1,7 @@
 {% extends "zr/base.html" %}
 {% load i18n %}
 {% load url from future %}
+{% load static %}
 
 {% block extra_head %}
     <link href='/static/css/mw_style.css' rel='stylesheet' type='text/css'/>
@@ -28,7 +29,7 @@
                 <p>Zapraszamy do wzięcia udziału w dyskusji internetowej na temat zapisów miejscowego planu zagospodarowania przestrzennego "Park Kasprowicza". Dyskusja rozpocznie się w środę 1 lipca o godzinie 12:00.</p>
                 <p>Aplikacja pozwala na zapoznanie się z roboczą wersją treści uchwały i rysunku planu, dodawanie komentarzy dotyczących planu, wymianę opinii między uczestnikami dyskusji w tym projektantami z Miejskiej Pracowni Urbanistycznej w Poznaniu.</p>
                 <p>Dyskusja jest częścią drugiego etapu konsultacji społecznych miejscowego planu zagospodarowania przestrzennego “Park Kasprowicza” prowadzonych przez Miejską Pracownią Urbanistyczną w Poznaniu.</p>
-                <p>Etap ten jest kontynuacją pierwszego etapu konsultacji oraz geoankiety przeprowadzonej w październiku-listopadzie 2014. Raport z wynikami geoankiety można pobrać klikając na ten adres Geoankieta_Raport.</p>
+                <p>Etap ten jest kontynuacją pierwszego etapu konsultacji oraz geoankiety przeprowadzonej w październiku-listopadzie 2014. Raport z wynikami geoankiety można pobrać klikając na ten adres <a href="{% static "Park_Kasprowicza_-_skrócony_raport.pdf"%}">Geoankieta_Raport</a>.</p>
                 <p>Wnioski z dyskusji zostaną przekazane projektantom planistycznym i będą wykorzystane podczas kolejnych etapów pracy nad zapisami planu.</p>
                 <p>Dyskusja jest częścią projektu badawczego realizowanego przez Instytut Geoekologii i Geoinformacji Uniwersytetu im. Adama Mickiewicza w Poznaniu, finansowanego przez Narodowe Centrum Nauki na podstawie decyzji nr 2012/05/B/HS4/03850.</p>
             </div>
