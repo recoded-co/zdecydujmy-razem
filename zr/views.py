@@ -14,7 +14,7 @@ from django.shortcuts import redirect
 from registrations.forms import CustomLoginForm
 from zr.models import Profile
 from zr.models import Configuration, PostSubscription, Plan
-from zr.forms import ZipCodeForm
+from zr.forms import ZipCodeForm, ProfileForm
 from avatar.models import Avatar
 from avatar.forms import PrimaryAvatarForm, DeleteAvatarForm, UploadAvatarForm
 from avatar.views import _get_avatars, _get_next
@@ -22,6 +22,7 @@ from django.contrib import messages
 from avatar.signals import avatar_updated
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+
 
 class LoginForm(UserCreationForm):
     email = forms.EmailField(widget=forms.TextInput(), required=True)
@@ -44,7 +45,7 @@ class HomePageView(TemplateView):
         if request.user.is_authenticated():
             return HttpResponseRedirect(reverse('dashboard'))
         else:
-            return super(HomePageView,self).get(request, *args, **kwargs)
+            return super(HomePageView, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
 
@@ -95,7 +96,7 @@ class UserCreationPageView(TemplateView):
             user.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, user)
 
-            return HttpResponseRedirect(reverse('dashboard'))
+            return HttpResponseRedirect(reverse('zipcode_check'))
         return render_to_response('zr/registration.html', {'form': form}, context_instance=RequestContext(request))
 
 
@@ -123,10 +124,10 @@ class ZipcodeCheckView(View):
             profile.save()
 
         next = request.GET.get('next', settings.HOME_PAGE_URL)# TODO hardcoded next
-        if profile and profile.zipcode:
+        if profile and not profile.first_login:
             return redirect(next)
         else:
-            form = ZipCodeForm(initial={'zipcode': ''})
+            form = ProfileForm(initial={'user': request.user, 'zipcode': profile.zipcode if profile.zipcode else ''})
             return render_to_response('zr/zip_code.html', {'form': form, 'next': next}, context_instance=RequestContext(request))
 
     def post(self, request):
@@ -134,6 +135,8 @@ class ZipcodeCheckView(View):
         form = ZipCodeForm(request.POST)
         if form.is_valid():
             profile.zipcode = form.cleaned_data['zipcode']
+            profile.user = request.user
+            profile.first_login = False
             profile.save()
             return redirect(request.POST['next'])
         return render_to_response('zr/zip_code.html', {'form': form, 'next': request.POST['next']}, context_instance=RequestContext(request))

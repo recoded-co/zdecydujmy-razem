@@ -6,28 +6,21 @@
 
 {% block content %}
 
-<div class="jumbotron">
+<section class="content">
+
   <div class="container">
+    <p>
       <form class="form-signin" method="POST" action="{% url 'zipcode_check' %}">
         {% csrf_token %}
-            <div class="row">
-                <div class="col-xs-6 col-md-6">
-                    <div class="form-group">
-                        <label for="id_{{ form.zipcode.name }}">{% trans "Kod pocztowy" %}</label>
-                         <div style="color: red">{{ form.zipcode.errors }}</div>
-                        <input id="id_{{ form.zipcode.name }}" placeholder="{{ form.zipcode.label }}"
-                               maxlength="254" name="{{ form.zipcode.name }}"
-                               value="{{ form.zipcode.value }}" type="text" class="form-control" autofocus>
-                    </div>
-                </div>
-                <div class="col-xs-6 col-md-6">
-                </div>
-            </div>
+
+          {{ form.as_p }}
+
             <input type="hidden" id='id_next' name="next" value="{{ next }}" />
             <button type="submit" class="btn  btn-success">{% trans 'Zapisz' %}</button>
             <hr />
         </form>
+      </p>
   </div>
-</div>
 
+    </section>
 {% endblock %}

@@ -105,7 +105,7 @@ HOME_PAGE_URL = '/zr/dashboard'
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.facebook.FacebookBackend',
     'social_auth.backends.google.GoogleOAuth2Backend',
-    'soc    ial_auth.backends.google.GoogleBackend',
+    'social_auth.backends.google.GoogleBackend',
     'zr.backends.backend.LowercaseAuthenticationBackend',
     'zr.backends.backend.EmailAuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
