@@ -15,7 +15,7 @@ DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['127.0.0.1',]
+ALLOWED_HOSTS = ['127.0.0.1', ]
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -110,7 +110,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-AVATAR_AUTO_GENERATE_SIZES = (20,40,80,174,)
+AVATAR_AUTO_GENERATE_SIZES = (20, 40, 80, 174,)
 
 AVATAR_STORAGE_DIR = 'avatar/'
 
