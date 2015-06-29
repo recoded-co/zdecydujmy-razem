@@ -1,0 +1,37 @@
+{% extends "zr/base.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% block extra_head %}
+    <link href='/static/css/mw_style.css' rel='stylesheet' type='text/css'/>
+    <link href='/static/css/btn_m.css' rel='stylesheet' type='text/css'/>
+    <link href='/static/css/home.css' rel='stylesheet' type='text/css'/>
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"/>
+
+    <script src="/static/js/jquery-1.9.1.js"></script>
+{% endblock %}
+
+{% block navbar %}
+    <div class="pagina">
+        <img class="logo_op" src="/static/images/ap_maj-11.png" alt=""/>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="wrapper">
+        <div class="head">
+            <h1>Planuj swoje miasto</h1>
+        </div>
+
+        <section class="content">
+            <div class="inner">
+                <p>Zapraszamy do wzięcia udziału w dyskusji internetowej na temat zapisów miejscowego planu zagospodarowania przestrzennego "Park Kasprowicza". Dyskusja rozpocznie się w środę 1 lipca o godzinie 12:00.</p>
+                <p>Aplikacja pozwala na zapoznanie się z roboczą wersją treści uchwały i rysunku planu, dodawanie komentarzy dotyczących planu, wymianę opinii między uczestnikami dyskusji w tym projektantami z Miejskiej Pracowni Urbanistycznej w Poznaniu.</p>
+                <p>Dyskusja jest częścią drugiego etapu konsultacji społecznych miejscowego planu zagospodarowania przestrzennego “Park Kasprowicza” prowadzonych przez Miejską Pracownią Urbanistyczną w Poznaniu.</p>
+                <p>Etap ten jest kontynuacją pierwszego etapu konsultacji oraz geoankiety przeprowadzonej w październiku-listopadzie 2014. Raport z wynikami geoankiety można pobrać klikając na ten adres Geoankieta_Raport.</p>
+                <p>Wnioski z dyskusji zostaną przekazane projektantom planistycznym i będą wykorzystane podczas kolejnych etapów pracy nad zapisami planu.</p>
+                <p>Dyskusja jest częścią projektu badawczego realizowanego przez Instytut Geoekologii i Geoinformacji Uniwersytetu im. Adama Mickiewicza w Poznaniu, finansowanego przez Narodowe Centrum Nauki na podstawie decyzji nr 2012/05/B/HS4/03850.</p>
+            </div>
+        </section>
+    </div>
+{% endblock %}
