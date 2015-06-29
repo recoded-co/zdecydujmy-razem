@@ -13,7 +13,7 @@ from rest_framework.renderers import JSONRenderer
 from django.contrib.auth.models import User
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from filemanager.models import PostFileUpload
-from zr.models import Plan, Configuration, Geometry, Post, Rate, PostSubscription, TrackEvents
+from zr.models import Plan, Configuration, Geometry, Post, Rate, PostSubscription, TrackEvents, Event
 from zr.models import Subject, SubjectFeat, SubjectFeatProperty
 from jsonview.decorators import json_view
 from django.views.decorators.csrf import csrf_exempt
@@ -520,6 +520,27 @@ class PostSubscriptionViewSet(viewsets.ModelViewSet):
 """
 
 #router.register(r'subscriptions', PostSubscriptionViewSet)
+
+
+class EventSerializer(ModelSerializer):
+    class Meta:
+        model = Event
+
+class EventViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        data['user'] = request.user.pk
+
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+router.register(r'event', EventViewSet)
 
 
 class TrackEventsSerializer(ModelSerializer):
