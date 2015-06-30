@@ -29,8 +29,8 @@ var search_filter_layer = undefined;
 var PLAN_POPUPS_VISIBILITY = false;
 
 mapObjects = {};
-basePlanLayerData = {};
-
+basePlanLayerData = null;
+layerControl = null;
 
 function geolocate(address) {
 
@@ -107,8 +107,8 @@ function map_init() {
     var basePlanLayer = createBasePlanLayer();
 
     var overlayMaps = {
-        "MPZP": basePlanLayer,
-        "Studium": studium
+        "Studium": studium,
+        "MPZP": basePlanLayer
     };
 
     map = L.map('map', {
@@ -139,7 +139,7 @@ function map_init() {
     var additionalLayers = {
         //"Propozycja planu": basePlanLayer
     }
-    L.control.layers(baseMaps, overlayMaps, {
+    layerControl = L.control.layers(baseMaps, overlayMaps, {
         'collapsed': false
     }).addTo(map);
 
@@ -205,9 +205,15 @@ function map_init() {
     function planPopupV() {
         PLAN_POPUPS_VISIBILITY = !PLAN_POPUPS_VISIBILITY;
 
-        map.removeLayer(basePlanLayer)
+        layerControl.removeLayer(basePlanLayer)
+        map.removeLayer(basePlanLayer);
+
         basePlanLayer = createBasePlanLayer({clickable: PLAN_POPUPS_VISIBILITY});
+
+        layerControl.addOverlay(basePlanLayer, 'MPZP');
         map.addLayer(basePlanLayer);
+        basePlanLayer.bringToBack();
+
         tracker('IOMP');
     }
 
@@ -514,7 +520,6 @@ function createBasePlanLayer(options) {
             });
 
             if (name !== ''){
-                console.log(feature.geometry.coordinates[0]);
                 var points = [];
 
                 feature.geometry.coordinates[0].forEach(function(o){
@@ -522,7 +527,6 @@ function createBasePlanLayer(options) {
                 });
 
                 var centroid = _getCentroid(points);
-                console.log(centroid);
                 var marker = L.circleMarker(centroid).bindLabel(name, {
                         noHide: true
                     }).setRadius(4);//.addTo(map);
@@ -538,17 +542,16 @@ function createBasePlanLayer(options) {
     var data,
         layer = L.geoJson([], options);
 
-    if (basePlanLayerData instanceof Object) {
+    if (basePlanLayerData == null) {
         $.getJSON("{% url 'subjects_geojson' plan.id  %}", function(response) {
             basePlanLayerData = response;
 
             layer.addData(basePlanLayerData);
-            layer.addLayer(labels);//.addTo(map);
-            layer.bringToBack();
+            layer.addLayer(labels);
         });
     } else {
         layer.addData(basePlanLayerData);
-        layer.bringToBack();
+        layer.addLayer(labels);
     }
 
 
