@@ -43,18 +43,21 @@
             </div>
             <div ng-init="user='{{ user }}'"></div>
         </div>
-        <div    ng-repeat="post in tree">
+        <div ng-repeat="post in tree">
             <div ng-class="{'media':true,
                             'media-list':true,
                             'dotedline':post.parent==null,
                             'main-post':post.parent==null,
                             'child-post':post.parent!=null}">
-                <div ng-include="'tree_item_renderer.html'"></div>
+                <div ng-include="'tree_item_renderer.html'">
+
+                </div>
             </div>
+            <!--
             <div ng-if="$last && !endTree" ng-class="{'dotedline':post.parent==null}">
                 <span class="nextPost">
                     <button ng-click="addMorePosts(post,tree)" class="btn btn-xs">Następne komentarze</button>
                 </span>
-            </div>
+            </div> -->
         </div>
 </div>
