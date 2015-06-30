@@ -224,6 +224,7 @@ function map_init() {
 
         map.on('popupopen', function(e) {
             var px = map.project(e.popup._latlng);
+            px.x -= - e.popup.options.maxWidth / 4 + 100;
             px.y -= e.popup._container.clientHeight / 5 * 3;
             map.panTo(map.unproject(px),{animate: true});
         });
