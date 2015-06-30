@@ -2,6 +2,11 @@
 /* Toolbars
 /* ================================================================== */
 
+.leaflet-container .leaflet-draw {
+	margin-left: 13px;
+	margin-top: 12px;
+}
+
 .leaflet-draw-section {
 	position: relative;
 }
@@ -23,13 +28,8 @@
 }
 
 .leaflet-draw-toolbar a {
-	background-image: url('/static/images/spritesheet.png');
+	background-image: url('images/spritesheet.png');
 	background-repeat: no-repeat;
-}
-
-.leaflet-retina .leaflet-draw-toolbar a {
-	background-image: url('/static/images/spritesheet-2x.png');
-	background-size: 210px 30px;
 }
 
 .leaflet-draw a {
@@ -52,13 +52,8 @@
 	top: 0;
 }
 
-.leaflet-right .leaflet-draw-actions {
-	right:26px;
-	left:auto;
-}
-
 .leaflet-draw-actions li {
-	display: inline-block;
+	float: left;
 }
 
 .leaflet-draw-actions li:first-child a {
@@ -70,16 +65,6 @@
 	        border-radius: 0 4px 4px 0;
 }
 
-.leaflet-right .leaflet-draw-actions li:last-child a {
-	-webkit-border-radius: 0;
-	        border-radius: 0;
-}
-
-.leaflet-right .leaflet-draw-actions li:first-child a {
-	-webkit-border-radius: 4px 0 0 4px;
-	        border-radius: 4px 0 0 4px;
-}
-
 .leaflet-draw-actions a {
 	background-color: #919187;
 	border-left: 1px solid #AAA;
@@ -87,19 +72,16 @@
 	font: 11px/19px "Helvetica Neue", Arial, Helvetica, sans-serif;
 	line-height: 28px;
 	text-decoration: none;
-	padding-left: 10px;
-	padding-right: 10px;
+	width: 50px;
 	height: 28px;
 }
 
 .leaflet-draw-actions-bottom {
 	margin-top: 0;
-	white-space: nowrap;
 }
 
 .leaflet-draw-actions-top {
 	margin-top: 1px;
-	white-space: nowrap;
 }
 
 .leaflet-draw-actions-top a,
@@ -151,14 +133,6 @@
 
 .leaflet-draw-toolbar .leaflet-draw-edit-remove {
 	background-position: -182px -2px;
-}
-
-.leaflet-draw-toolbar .leaflet-draw-edit-edit.leaflet-disabled {
-	background-position: -212px -2px;
-}
-
-.leaflet-draw-toolbar .leaflet-draw-edit-remove.leaflet-disabled {
-	background-position: -242px -2px;
 }
 
 /* ================================================================== */
