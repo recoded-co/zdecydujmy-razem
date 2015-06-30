@@ -8,11 +8,12 @@
         font-weight: bold;
         color: #ffffff;
         text-shadow:
-        -1px -1px 0 #000,
-        1px -1px 0 #000,
-        -1px 1px 0 #000,
-        1px 1px 0 #000;
+            -1px -1px 0 #000,
+            1px -1px 0 #000,
+            -1px 1px 0 #000,
+            1px 1px 0 #000;
         z-index: -1;
+        left: -20px;
 
     }
 </style>
@@ -31,6 +32,7 @@ var PLAN_POPUPS_VISIBILITY = false;
 mapObjects = {};
 basePlanLayerData = null;
 layerControl = null;
+
 
 function geolocate(address) {
 
@@ -347,11 +349,11 @@ function map_init() {
             });
 
         } else {
+
             var popup_location = null;
 
             if (type === 'marker') {
                 tracker('UDP');
-
                 layer.bindPopup(popup);
                 popup_location = e.layer._latlng;
 
@@ -505,6 +507,9 @@ function createBasePlanLayer(options) {
     var labels = L.layerGroup()
     var defaults = {
         clickable: false,
+        weight: 1,
+        fillOpacity: 0.5,
+        opacity: 1,
         style: function(feature) {
             return {
                 color: feature.properties.color
