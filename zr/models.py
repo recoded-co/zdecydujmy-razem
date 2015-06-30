@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.utils.translation import ugettext as _
@@ -9,6 +10,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.db import connection
+from django import forms
 from datetime import datetime
 from zr import index
 
@@ -21,8 +23,69 @@ else:
 
 
 class Profile(models.Model):
+    SOURCES = (
+        ('media', u'Z mediów'),
+        ('ulotka_poczta', u'Z ulotki przesłanej pocztą'),
+        ('facebook', u'Z facebooka'),
+        ('ulotka_bezp', u'Z bezpośrednio otrzymanej ulotki'),
+        ('znajomi', u'Od znajomych'),
+        ('inne', u'Z innego źródła')
+    )
+    GENDER = (
+        ('k', u'Kobieta'),
+        ('m', u'Mężczyzna')
+    )
+    EDUCATION = (
+        ('podstawowe', u'Podstawowe'),
+        ('gimnazjalne', u'Gimnazjalne'),
+        ('zawodowe', u'Zasadnicze zawodowe'),
+        ('srednie', u'Średnie'),
+        ('wyzsze', u'Wyższe')
+    )
+    JOB = (
+        ('uczen', u'Uczeń'),
+        ('student', u'Student'),
+        ('administracja', u'Pracownik administracji publicznej'),
+        ('etat', u'Zatrudniony w prywatnej firmie'),
+        ('przedsiebiorca', u'Przedsiębiorca/ właściciel firmy'),
+        ('wolny', u'Wolny zawód'),
+        ('emeryt', u'Emeryt/ rencista'),
+        ('bezrobotny', u'Nie pracujący'),
+        ('inne', u'Inne zajęcie')
+    )
+    YESNO = (
+        ('tak', _('Tak')),
+        ('nie', _('Nie'))
+    )
+
+    first_login = models.BooleanField(default=True)
+
     user = models.OneToOneField(User)
-    zipcode = models.CharField(max_length=6, null=True, blank=True)
+
+    zipcode = models.CharField(u'Kod pocztowy',
+                               max_length=6, null=True, blank=True)
+
+    source = models.CharField(u'Skąd dowiedział się Pan(i) o konsultacjach?',
+                              max_length=13, choices=SOURCES, null=True, blank=True)
+
+    gender = models.CharField(u'Płeć',
+                              max_length=1, choices=GENDER, null=True, blank=True)
+
+    age = models.IntegerField(u'Wiek', blank=True, null=True)
+
+    education = models.CharField(u'Wykształcenie',
+                                 max_length=11, choices=EDUCATION, null=True, blank=True)
+
+    job = models.CharField(u'Aktualnie wykonywane zajęcie',
+                           max_length=13, choices=JOB, null=True, blank=True)
+
+    gis_portals = models.CharField(
+        u'Czy korzysta Pan(i) z portali mapowych (np. Google Maps, OpenStreetMap, zumi.pl)?',
+        max_length=13, choices=YESNO, null=True, blank=True)
+
+    social_portals = models.CharField(
+        u'Czy korzysta Pan(i) z portali społecznościowych (np. Facebook, nk.pl)?',
+        max_length=13, choices=YESNO, null=True, blank=True)
 
 
 class Geometry(models.Model):
