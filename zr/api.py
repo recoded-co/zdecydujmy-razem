@@ -116,6 +116,7 @@ class PostSerializer(ModelSerializer):
 
         return False
 
+
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -525,6 +526,7 @@ class PostSubscriptionViewSet(viewsets.ModelViewSet):
 class EventSerializer(ModelSerializer):
     class Meta:
         model = Event
+
 
 class EventViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = Event.objects.all()

@@ -5,7 +5,6 @@
 <div ng-class="{'tab-post':true}">
     <ul>
         <li> <!-- start here -->
-
             <img ng-if="!post.userAdded" style="position:absolute;"
                         src="{[{ post.avatar_url }]}" alt="{[{ post.avatar_alt }]}" width="40px" height="40px" class="img-circle">
             <div class="img-circle40" style="position: absolute;" ng-if="post.userAdded">{% avatar user 40 %}</div>
@@ -88,34 +87,37 @@
                 </div>
               </li>
         </ul>
-    </div>
+</div>
 
-           <div ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)" class="add_comment">
-                    <textarea ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
-                              ng-model="post.text"
-                              class="form-control"
-                              rows="5" autofocus>
-                    </textarea>
-                    <input type="hidden" ng-model="post.plan" value=""/>
-                    <div class="allign_right">
-                        <div class="fileinput fileinput-new" data-provides="fileinput" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)">
-                            <button type="button" class="btn btn-xs btn-file btnwhite btngrey"><div class="mr-clip">&nbsp;</div><input name="..." type="file" value="{[{ post.id }]}" multiple file-change /></button>
-                        </div>
-                        <button type="button" class="btn btn-sm-n btnblue" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
-                              ng-click="delete(post)"> {% trans 'usuń' %}
-                        </button>
-                        <button type="button" class="btn btn-sm-n btnred" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
-                              ng-click="addDown(post)">{% trans 'publikuj' %}
-                        </button>
-                    </div>
-    </div>
-    <div ng-if="post.nodes.length>0" class="tab_border" ng-hide="!(post.rozwin!=undefined && post.rozwin==true)" >
-        <div ng-repeat="post in post.nodes ">
-            <div ng-include="'tree_item_renderer.html'" ></div>
-            <div ng-if="$last && !post.endTree" ng-class="{'dotedline':post.parent==null}">
-                <span class="nextPostNested">
-                    <button ng-click="addMorePosts(post,$parent.$parent.$parent.$parent.post)" class="btn btn-xs">Następne komentarze</button>
-                </span>
+<div ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)" class="add_comment">
+        <textarea ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
+                  ng-model="post.text"
+                  class="form-control"
+                  rows="5" autofocus>
+        </textarea>
+        <input type="hidden" ng-model="post.plan" value=""/>
+        <div class="allign_right">
+            <div class="fileinput fileinput-new" data-provides="fileinput" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)">
+                <button type="button" class="btn btn-xs btn-file btnwhite btngrey"><div class="mr-clip">&nbsp;</div><input name="..." type="file" value="{[{ post.id }]}" multiple file-change /></button>
             </div>
+            <button type="button" class="btn btn-sm-n btnblue" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
+                  ng-click="delete(post)"> {% trans 'usuń' %}
+            </button>
+            <button type="button" class="btn btn-sm-n btnred" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
+                  ng-click="addDown(post)">{% trans 'publikuj' %}
+            </button>
         </div>
+</div>
+
+<div ng-if="post.nodes.length>0" class="tab_border" ng-hide="!(post.rozwin!=undefined && post.rozwin==true)" >
+    <div ng-repeat="post in post.nodes ">
+        <div ng-include="'tree_item_renderer.html'" ></div>
+        <!--
+        <div ng-if="$last && !post.endTree" ng-class="{'dotedline':post.parent==null}">
+            <span class="nextPostNested">
+                <button ng-click="addMorePosts(post,$parent.$parent.$parent.$parent.post)" class="btn btn-xs">Następne komentarze</button>
+            </span>
+        </div>
+        -->
     </div>
+</div>

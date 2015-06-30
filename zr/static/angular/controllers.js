@@ -88,10 +88,10 @@ zdControllers.controller('apiList',
                 // nested comments are out of text or data search
                 if(parent_id != 'None' && nestedHandler != undefined ){
                     //nested
-                    LIMIT=50;
+                    LIMIT=5000;
                     tempServHandler = nestedHandler;
                 } else {
-                    LIMIT=25
+                    LIMIT=2500
                     tempServHandler = servHandler;
                 }
                 tempServHandler.query({
