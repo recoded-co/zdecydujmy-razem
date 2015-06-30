@@ -17,9 +17,9 @@ L.drawLocal = {
                         buttons: {
                                 polyline: 'Narysuj polilinie',
                                 polygon: 'Narysuj wielokąt',
-                                rectangle: 'Szukaj',
+                                rectangle: 'Wyszukaj z mapy',
                                 circle: 'Narysuj okrąg',
-                                marker: 'Umieść znacznik'
+                                marker: 'Umieść punkt'
                         }
                 },
                 handlers: {

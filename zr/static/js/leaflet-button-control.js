@@ -64,28 +64,32 @@ _update: function () {
 },
 
 _makeButton: function (button) {
-    var newButton = L.DomUtil.create('div', 'leaflet-buttons-control-button', this._container);
+    var link = L.DomUtil.create('a', 'leaflet-control-info', this._container);
+        link.href = '#';
+        link.title = 'Szczegóły o MPZP';
+
     if(button.toggleStatus)
-    L.DomUtil.addClass(newButton,'leaflet-buttons-control-toggleon');
-    //var image = L.DomUtil.create('img', 'leaflet-buttons-control-img', newButton);
-    //image.setAttribute('src',button.iconUrl);
-    /*if(button.text !== ''){
-
-        L.DomUtil.create('br','',newButton); //there must be a better way
-
-        var span = L.DomUtil.create('span', 'leaflet-buttons-control-text', newButton);
-        var text = document.createTextNode(button.text); //is there an L.DomUtil for this?
-        span.appendChild(text);
-        if(button.hideText)
-        L.DomUtil.addClass(span,'leaflet-buttons-control-text-hide');
-    }*/
+        L.DomUtil.addClass(link,'leaflet-buttons-control-toggleon');
 
     L.DomEvent
-    .addListener(newButton, 'click', L.DomEvent.stop)
-    .addListener(newButton, 'click', button.onClick,this)
-    .addListener(newButton, 'click', this._clicked,this);
-    L.DomEvent.disableClickPropagation(newButton);
-    return newButton;
+        .on(link, 'click', L.DomEvent.stopPropagation)
+        .on(link, 'click', L.DomEvent.preventDefault)
+        .on(link, 'click', button.onClick, this)
+        .on(link, 'click', this._clicked, this)
+        .on(link, 'dblclick', L.DomEvent.stopPropagation);
+
+    return link;
+
+    // var newButton = L.DomUtil.create('div', 'leaflet-buttons-control-button', this._container);
+    // if(button.toggleStatus)
+    // L.DomUtil.addClass(newButton,'leaflet-buttons-control-toggleon');
+
+    // L.DomEvent
+    // .addListener(newButton, 'click', L.DomEvent.stop)
+    // .addListener(newButton, 'click', button.onClick,this)
+    // .addListener(newButton, 'click', this._clicked,this);
+    // L.DomEvent.disableClickPropagation(newButton);
+    // return newButton;
 
 },
 _clicked: function () { //'this' refers to button
@@ -115,7 +119,7 @@ initialize: function (options) {
 
 onAdd: function (map) {
     this._map = map;
-    var container = L.DomUtil.create('div', 'leaflet-control-button');
+    var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
     this._container = container;
     this._update();
     return this._container;
@@ -167,29 +171,17 @@ _update: function () {
 },
 
 _makeButton: function (button) {
-    var newButton = L.DomUtil.create('div', 'leaflet-buttons-control-help', this._container);
-    if(button.toggleStatus)
-    L.DomUtil.addClass(newButton,'leaflet-buttons-control-toggleon');
-    //var image = L.DomUtil.create('img', 'leaflet-buttons-control-img', newButton);
-    //image.setAttribute('src',button.iconUrl);
-    /*if(button.text !== ''){
-
-        L.DomUtil.create('br','',newButton); //there must be a better way
-
-        var span = L.DomUtil.create('span', 'leaflet-buttons-control-text', newButton);
-        var text = document.createTextNode(button.text); //is there an L.DomUtil for this?
-        span.appendChild(text);
-        if(button.hideText)
-        L.DomUtil.addClass(span,'leaflet-buttons-control-text-hide');
-    }*/
+    var link = L.DomUtil.create('a', 'leaflet-control-help', this._container);
+        link.href = '#';
+        link.title = 'Pomoc';
 
     L.DomEvent
-    .addListener(newButton, 'click', L.DomEvent.stop)
-    .addListener(newButton, 'click', button.onClick,this)
-    .addListener(newButton, 'click', this._clicked,this);
-    L.DomEvent.disableClickPropagation(newButton);
-    return newButton;
+        .on(link, 'click', L.DomEvent.stopPropagation)
+        .on(link, 'click', L.DomEvent.preventDefault)
+        .on(link, 'click', button.onClick,this)
+        .on(link, 'dblclick', L.DomEvent.stopPropagation);
 
+    return link;
 },
 _clicked: function () { //'this' refers to button
     if(this._button.doToggle){
@@ -218,7 +210,7 @@ initialize: function (options) {
 
 onAdd: function (map) {
     this._map = map;
-    var container = L.DomUtil.create('div', 'leaflet-control-button');
+    var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
     this._container = container;
     this._update();
     return this._container;
@@ -270,29 +262,17 @@ _update: function () {
 },
 
 _makeButton: function (button) {
-    var newButton = L.DomUtil.create('div', 'leaflet-buttons-control-doc', this._container);
-    if(button.toggleStatus)
-    L.DomUtil.addClass(newButton,'leaflet-buttons-control-toggleon');
-    //var image = L.DomUtil.create('img', 'leaflet-buttons-control-img', newButton);
-    //image.setAttribute('src',button.iconUrl);
-    /*if(button.text !== ''){
-
-        L.DomUtil.create('br','',newButton); //there must be a better way
-
-        var span = L.DomUtil.create('span', 'leaflet-buttons-control-text', newButton);
-        var text = document.createTextNode(button.text); //is there an L.DomUtil for this?
-        span.appendChild(text);
-        if(button.hideText)
-        L.DomUtil.addClass(span,'leaflet-buttons-control-text-hide');
-    }*/
+    var link = L.DomUtil.create('a', 'leaflet-control-doc', this._container);
+        link.href = '#';
+        link.title = 'Dokumentacja';
 
     L.DomEvent
-    .addListener(newButton, 'click', L.DomEvent.stop)
-    .addListener(newButton, 'click', button.onClick,this)
-    .addListener(newButton, 'click', this._clicked,this);
-    L.DomEvent.disableClickPropagation(newButton);
-    return newButton;
+        .on(link, 'click', L.DomEvent.stopPropagation)
+        .on(link, 'click', L.DomEvent.preventDefault)
+        .on(link, 'click', button.onClick,this)
+        .on(link, 'dblclick', L.DomEvent.stopPropagation);
 
+    return link;
 },
 _clicked: function () { //'this' refers to button
     if(this._button.doToggle){
