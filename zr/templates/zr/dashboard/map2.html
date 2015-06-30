@@ -448,6 +448,26 @@ function map_init() {
     });
 
     addGeometry(function(markers) {});
+
+    var helpControl = new L.Control.Help({
+        'onClick': function() {
+            $('#help-modal').modal('show');
+        },
+        'doToggle': false,
+        'toggleStatus': false,
+        'toggle': false,
+        'text': 'Pomoc',
+    }).addTo(map);
+
+    var docControl = new L.Control.Doc({
+        'onClick': function() {
+            $('#doc-modal').modal('show');
+        },
+        'doToggle': false,
+        'toggleStatus': false,
+        'toggle': false,
+        'text': 'Pomoc',
+    }).addTo(map);
 } // function map_init()
 
 function setVectorStyle(name, color) {

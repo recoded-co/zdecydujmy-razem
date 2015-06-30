@@ -1616,6 +1616,52 @@ div.leaflet-buttons-control-button:hover
   border: none;
 }
 
+div.leaflet-buttons-control-help{
+    background-image: url('/static/images/ap8_ikonki-38.png');
+    background-size: 40px 40px;
+    background-position: 0px;
+    background-color: rgba(0,0,0,0.6);
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: 0px;
+    top: 310px;
+    border-bottom: 1px solid #ccc;
+}
+div.leaflet-buttons-control-help:hover
+{
+
+  background-image: url('/static/images/ap8_ikonki-38.png'),url('/static/images/planuj-11.png');
+  background-size: 40px 40px, 47px 40px;
+  background-position: 7px 0px,0px 0px;
+  width: 47px;
+  background-color: transparent;
+  border: none;
+}
+
+div.leaflet-buttons-control-doc{
+    background-image: url('/static/images/ap8_ikonki-37.png');
+    background-size: 40px 40px;
+    background-position: 0px;
+    background-color: rgba(0,0,0,0.6);
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: 0px;
+    top: 340px;
+    border-bottom: 1px solid #ccc;
+}
+div.leaflet-buttons-control-doc:hover
+{
+
+  background-image: url('/static/images/ap8_ikonki-37.png'),url('/static/images/planuj-11.png');
+  background-size: 40px 40px, 47px 40px;
+  background-position: 7px 0px,0px 0px;
+  width: 47px;
+  background-color: transparent;
+  border: none;
+}
+
 .leaflet-measure-tooltip-total {
   font-size: 15px;
 }
