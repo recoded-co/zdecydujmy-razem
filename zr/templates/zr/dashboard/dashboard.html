@@ -58,10 +58,19 @@
             });
 
            $('a[data-toggle="tab"]').on('click', function (e) {
-               if ($(e.target).attr('href') != '#details') {
+               var target = $(e.target).attr('href');
+               if (target != '#details') {
                    $('.leaflet-draw-section').hide();
                } else {
                    $('.leaflet-draw-section').show();
+               }
+
+               if (target == '#details') {
+                  $("#div_apiList").scope().tracker('ZSZ');
+               } else if (target == '#subscriptions') {
+                  $("#div_apiList").scope().tracker('ZSL');
+               } else if (target == '#all') {
+                  $("#div_apiList").scope().tracker('ZCA');
                }
            });
         });

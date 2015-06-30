@@ -9,13 +9,13 @@
                 ng-show="showallpoints"
                 type="button"
                 class="btn btn-xs btn-danger"
-                ng-click="showDiscussion()|trackEvent:'Rozwiń wszystkie':'Button clicked':user:'':'' ">
+                ng-click="showDiscussion()">
                 <span>{% trans 'Pokaż dyskusję' %}</span>
             </button>
 
             <button id="date_button" class="btn btn-xs"
                   ng-int="rev_d=true;"
-                  ng-click="reverse=rev_d; rev_d=!rev_d;data_arrow= !data_arrow;setDateSorting(rev_d) |trackEvent:'button Data':'Button clicked':user:'':'' ">
+                  ng-click="reverse=rev_d; rev_d=!rev_d;data_arrow= !data_arrow;setDateSorting(rev_d)">
               {% trans 'Data' %}
                 <span class="fa fa-caret-down fa-lg" ng-hide="data_arrow"></span>
                 <span class="fa fa-caret-up fa-lg" ng-show="data_arrow"></span>
@@ -23,7 +23,7 @@
 
             <button class="btn btn-xs"
                       ng-int="rev_nc=true;numcom_arrow=true;"
-                      ng-click=" reverse=!rev_nc; rev_nc=!rev_nc;numcom_arrow=!numcom_arrow;setCommentsSorting(rev_nc)  | trackEvent:'Ilość komentarzy':'Button clicked':user ">
+                      ng-click=" reverse=!rev_nc; rev_nc=!rev_nc;numcom_arrow=!numcom_arrow;setCommentsSorting(rev_nc)">
                   {% trans 'Ilość komentarzy' %}
                     <span class="fa fa-caret-down fa-lg" ng-hide="numcom_arrow"></span>
                     <span class="fa fa-caret-up fa-lg" ng-show="numcom_arrow"></span>

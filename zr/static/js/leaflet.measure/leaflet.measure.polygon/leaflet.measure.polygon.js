@@ -34,7 +34,7 @@ L.Control.MeasurePolygon = L.Control.extend({
         this._map.remoteControlSwitchOff();
 
         if(this._measuring) {
-
+            $("#div_apiList").scope().tracker('UFPP');
             //arm remote switcher
             this._map.setRemoteControlSwitch(this,function(){
                 L.DomUtil.removeClass(this._container, 'leaflet-control-measure-on');
@@ -71,7 +71,7 @@ L.Control.MeasurePolygon = L.Control.extend({
 			//.on(document, 'keydown', this._onKeyDown, this);
 
 		if(!this._layerPaint) {
-			this._layerPaint = L.layerGroup().addTo(this._map);	
+			this._layerPaint = L.layerGroup().addTo(this._map);
 		}
 	},
 
@@ -90,7 +90,7 @@ L.Control.MeasurePolygon = L.Control.extend({
 		if(this._layerPaint) {
 			this._layerPaint.clearLayers();
 		}
-		
+
 		this._restartPath();
 	},
 
@@ -98,9 +98,9 @@ L.Control.MeasurePolygon = L.Control.extend({
 		if(!e.latlng || !this._lastPoint) {
 			return;
 		}
-		
+
 		if(!this._layerPaintPathTemp) {
-			this._layerPaintPathTemp = L.polyline([this._lastPoint, e.latlng], { 
+			this._layerPaintPathTemp = L.polyline([this._lastPoint, e.latlng], {
 				color: 'black',
 				weight: 1.5,
 				clickable: false,
@@ -146,16 +146,16 @@ L.Control.MeasurePolygon = L.Control.extend({
 			this._layerPaint.removeLayer(this._lastCircle);
 		}
 
-		this._lastCircle = new L.CircleMarker(e.latlng, { 
-			color: 'black', 
-			opacity: 1, 
-			weight: 1, 
-			fill: true, 
+		this._lastCircle = new L.CircleMarker(e.latlng, {
+			color: 'black',
+			opacity: 1,
+			weight: 1,
+			fill: true,
 			fillOpacity: 1,
 			radius:2,
 			clickable:true
 		}).addTo(this._layerPaint);
-		
+
 		this._lastCircle.on('click', function() { this._finishPath(); }, this);
 
 		// Save current location as last location
@@ -189,7 +189,7 @@ L.Control.MeasurePolygon = L.Control.extend({
         this._lastPositionAdded = undefined;
         this._areaPoints = new Array();;
 	},
-	
+
 	_createTooltip: function(position) {
         if(position === undefined){
             position = this._lastPositionAdded;
@@ -198,7 +198,7 @@ L.Control.MeasurePolygon = L.Control.extend({
 			className: 'leaflet-measure-tooltip',
 			iconAnchor: [-5, -5]
 		});
-		this._tooltip = L.marker(position, { 
+		this._tooltip = L.marker(position, {
 			icon: icon,
 			clickable: false
 		}).addTo(this._layerPaint);

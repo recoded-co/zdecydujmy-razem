@@ -240,6 +240,7 @@ class Event(models.Model):
     ACTION_POM = 'POM'
     ACTION_WFPP = 'WFPP'
     ACTION_DWDC = 'DWDC'
+    ACTION_PCD = 'PCD'
 
     ACTION_CHOICES = (
         (ACTION_UKO, _('UKO')),
@@ -281,6 +282,7 @@ class Event(models.Model):
         (ACTION_POM, _('POM')),
         (ACTION_WFPP, _('WFPP')),
         (ACTION_DWDC, _('DWDC')),
+        (ACTION_PCD, _('PCD')),
     )
 
     action = models.CharField(max_length=16, choices=ACTION_CHOICES)

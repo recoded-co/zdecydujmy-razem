@@ -7,14 +7,14 @@
         <span class="left">
             <button id="date_button" class="btn btn-xs"
                   ng-int="rev_d=true;"
-                  ng-click="predicate = 'date'; reverse=rev_d; rev_d=!rev_d;data_arrow= !data_arrow |trackEvent:'button Data':'Button clicked':user:'':'' ">
+                  ng-click="predicate = 'date'; reverse=rev_d; rev_d=!rev_d;data_arrow= !data_arrow">
               {% trans 'Data' %}
                 <span class="glyphicon glyphicon-arrow-down" ng-hide="data_arrow"></span>
                 <span class="glyphicon glyphicon-arrow-up" ng-show="data_arrow"></span>
             </button>
             <button class="btn btn-xs"
                       ng-int="rev_nc=true;numcom_arrow=true;"
-                      ng-click="predicate = 'numcom'; reverse=!rev_nc; rev_nc=!rev_nc;numcom_arrow=!numcom_arrow  | trackEvent:'Ilość komentarzy':'Button clicked':user ">
+                      ng-click="predicate = 'numcom'; reverse=!rev_nc; rev_nc=!rev_nc;numcom_arrow=!numcom_arrow">
                 {% trans 'Ilość komentarzy' %}
                     <span class="glyphicon glyphicon-arrow-down" ng-hide="numcom_arrow"></span>
                     <span class="glyphicon glyphicon-arrow-up" ng-show="numcom_arrow"></span>
@@ -49,32 +49,32 @@
 
 
     <!--
-        <button type="button" class="btn btn-xs"  ng-click="addBasePost = true  | trackEvent:'Dodaj komentarz':'Button clicked':user ">
+        <button type="button" class="btn btn-xs"  ng-click="addBasePost = true">
             {% trans 'Dodaj komentarz' %}
         </button>
-        <button type="button" ng-class="{'btn':true, 'btn-xs':true, 'btn-default':!search_box}" ng-init="search_box=true;" ng-click="search_box = !search_box  | trackEvent:'Szukaj':'Button clicked':user:'':''  "  >
+        <button type="button" ng-class="{'btn':true, 'btn-xs':true, 'btn-default':!search_box}" ng-init="search_box=true;" ng-click="search_box = !search_box">
             {% trans 'Szukaj' %}
         </button>
-        <button type="button" class="btn btn-xs"  ng-click="showAll()  | trackEvent:'Rozwiń wszystkie':'Button clicked':user ">
+        <button type="button" class="btn btn-xs"  ng-click="showAll()">
             {% trans 'Rozwiń wszystkie' %}
         </button>
         <button class="btn btn-danger btn-xs"
                       ng-int="rev_d=true;"
-                      ng-click="predicate = 'date'; reverse=rev_d; rev_d=!rev_d;data_arrow= !data_arrow  | trackEvent:'Data':'Button clicked':user ">
+                      ng-click="predicate = 'date'; reverse=rev_d; rev_d=!rev_d;data_arrow= !data_arrow">
                   {% trans 'Data' %}
                     <span class="glyphicon glyphicon-arrow-down" ng-hide="data_arrow"></span>
                     <span class="glyphicon glyphicon-arrow-up" ng-show="data_arrow"></span>
         </button>
         <button class="btn btn-warning  btn-xs"
                       ng-int="rev_sc=true;score_arrow=true;"
-                      ng-click="predicate = 'score'; reverse=!rev_sc; rev_sc=!rev_sc;score_arrow=!score_arrow  | trackEvent:'Ocena':'Button clicked':user ">
+                      ng-click="predicate = 'score'; reverse=!rev_sc; rev_sc=!rev_sc;score_arrow=!score_arrow">
                   {% trans 'Ocena' %}
                     <span class="glyphicon glyphicon-arrow-down" ng-hide="score_arrow"></span>
                     <span class="glyphicon glyphicon-arrow-up" ng-show="score_arrow"></span>
         </button>
         <button class="btn btn-primary btn-xs"
                       ng-int="rev_nc=true;numcom_arrow=true;"
-                      ng-click="predicate = 'numcom'; reverse=!rev_nc; rev_nc=!rev_nc;numcom_arrow=!numcom_arrow  | trackEvent:'Ilość komentarzy':'Button clicked':user ">
+                      ng-click="predicate = 'numcom'; reverse=!rev_nc; rev_nc=!rev_nc;numcom_arrow=!numcom_arrow">
                   {% trans 'Ilość komentarzy' %}
                     <span class="glyphicon glyphicon-arrow-down" ng-hide="numcom_arrow"></span>
                     <span class="glyphicon glyphicon-arrow-up" ng-show="numcom_arrow"></span>
@@ -108,21 +108,21 @@
                       <input name="..." type="file" value="{[{ post.id }]}" multiple file-change /></button>
                 </div>
                 <button    type="button" class="btn btn-xs btnblue"
-                              ng-click="deleteBP(base_post);addBasePost = false  | trackEvent:'Usuń':'Button clicked':user ">
+                              ng-click="deleteBP(base_post);addBasePost = false">
                     {% trans 'usuń' %}
                 </button>
                 <button type="button" class="btn btn-xs btnred"
-                        ng-click="addVertical(base_post);addBasePost = false  | trackEvent:'Zapisz':'Button clicked':user ">
+                        ng-click="addVertical(base_post);addBasePost = false">
                      {% trans 'publikuj' %}
                 </button>
             </div>
             <!--
             <div style="float:right">
-                  <button type="button" class="btn btn-xs"  ng-click="addVertical(base_post);addBasePost = false  | trackEvent:'Zapisz':'Button clicked':user ">
+                  <button type="button" class="btn btn-xs"  ng-click="addVertical(base_post);addBasePost = false">
                         {% trans 'Zapisz' %}
                   </button>
 
-                  <button type="button" class="btn btn-xs"  ng-click="deleteBP(base_post);addBasePost = false  | trackEvent:'Usuń':'Button clicked':user ">
+                  <button type="button" class="btn btn-xs"  ng-click="deleteBP(base_post);addBasePost = false">
                        {% trans 'Usuń' %}
                   </button>
             </div>-->

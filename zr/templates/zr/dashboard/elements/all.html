@@ -5,7 +5,7 @@
     <div class="post-list">
     <div class="toolbox">
         <span class="left">
-               <button type="button" class="btn btn-xs"  ng-click="addBasePost = true  | trackEvent:'Dodaj komentarz':'Button clicked':user ">
+               <button type="button" class="btn btn-xs"  ng-click="addBasePost = true  | tracker:'DWDC'">
                 <span class="glyphicon glyphicon-comment"></span>{% trans ' dodaj' %}
             </button>
         </span>
@@ -22,21 +22,21 @@
                   <button type="button" class="btn btn-xs btn-file btnwhite btngrey" ng-show="post.is_owned"><span class="glyphicon glyphicon-paperclip"></span><input name="..." type="file" value="{[{ post.id }]}" multiple file-change /></button>
                 </div>
                 <button    type="button" class="btn btn-xs btnblue"
-                              ng-click="deleteBP(base_post);addBasePost = false  | trackEvent:'Usuń':'Button clicked':user ">
+                              ng-click="deleteBP(base_post);addBasePost = false">
                     {% trans 'usuń' %}
                 </button>
                 <button type="button" class="btn btn-xs btnred"
-                        ng-click="addVertical(base_post);addBasePost = false  | trackEvent:'Zapisz':'Button clicked':user ">
+                        ng-click="addVertical(base_post);addBasePost = false">
                      {% trans 'publikuj' %}
                 </button>
             </div>
             <!--
             <div style="float:right">
-                  <button type="button" class="btn btn-xs"  ng-click="addVertical(base_post);addBasePost = false  | trackEvent:'Zapisz':'Button clicked':user ">
+                  <button type="button" class="btn btn-xs"  ng-click="addVertical(base_post);addBasePost = false">
                         {% trans 'Zapisz' %}
                   </button>
 
-                  <button type="button" class="btn btn-xs"  ng-click="deleteBP(base_post);addBasePost = false  | trackEvent:'Usuń':'Button clicked':user ">
+                  <button type="button" class="btn btn-xs"  ng-click="deleteBP(base_post);addBasePost = false">
                        {% trans 'Usuń' %}
                   </button>-->
                 <br/>

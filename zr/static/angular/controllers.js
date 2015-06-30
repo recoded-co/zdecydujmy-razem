@@ -16,6 +16,7 @@ zdControllers.controller('apiList',
     'Angularytics',
     'postFactory',
     'pulsePointBuf',
+    'Analytics',
     function($scope,
              $http,
              $cookies,
@@ -24,7 +25,8 @@ zdControllers.controller('apiList',
              uploadService,
              Angularytics,
              postFactory,
-             pulsePointBuf
+             pulsePointBuf,
+             Analytics
     ) {
 
 
@@ -162,13 +164,15 @@ zdControllers.controller('apiList',
                 mon: x.getMonth()+1,
                 day: x.getDate()
             }
-            tree.getPostListParams('None',params,function(data){
+            tree.getPostListParams('None', params, function(data){
                 $scope.tree = data;
             });
 
             $scope.endTree = tree.postReachEnd('None');
 
             $scope.showallpoints = true;
+
+            $scope.tracker('UWD', x);
         }
     });
 
@@ -176,11 +180,14 @@ zdControllers.controller('apiList',
         if($scope.url=='/all'){
             tree = postHandler(postFactory.newPostAll,undefined,configuration.getPlanId());
             tree.setGeoParam('None');
+            // Analytics.track('ZCA');
         } else if($scope.url=='/details'){
             tree = postHandler(postFactory.newPostAll,undefined,configuration.getPlanId());
             tree.setGeoParam('notNone');
+            // Analytics.track('ZSZ');
         } else if($scope.url=='/subscriptions'){
             tree = postHandler(postFactory.newSubscribedPosts,undefined,configuration.getPlanId());
+            // Analytics.track('ZSL');
         }
         tree.getPostList('None',function(data){
                $scope.tree = data;
@@ -213,6 +220,7 @@ zdControllers.controller('apiList',
         tree.setDirection(temp);
         tree.getPostList('None',function(data){
             $scope.tree = data;
+            $scope.tracker('USD', temp == true ? 'ASC' : 'DESC');
         });
         $scope.endTree = tree.postReachEnd('None');
     };
@@ -222,6 +230,7 @@ zdControllers.controller('apiList',
         tree.setDirection(temp);
         tree.getPostList('None',function(data){
             $scope.tree = data;
+            $scope.tracker('USK', temp == true ? 'ASC' : 'DESC');
         });
         $scope.endTree = tree.postReachEnd('None');
     };
@@ -315,6 +324,7 @@ zdControllers.controller('apiList',
                 temp['userAdded']=true;
                 data.nodes.unshift(temp);
                 data.numcom++;
+                $scope.track('UDOA', data.id);
             });
             data.text = "";
             data.zmiennac=false ;
@@ -379,6 +389,11 @@ zdControllers.controller('apiList',
             active: !subscribed // TODO add variable which says what to do, activate | deactivate
         }
         sendCSRFPost('/zr/api/subscriptions/',$http, $cookies, temp);
+
+        if (!subscribed)
+            $scope.tracker('UFSA', data.id);
+        else
+            $scope.tracker('UFSD', data.id);
     };
 
     $scope.openModal = function(post) {
@@ -388,8 +403,8 @@ zdControllers.controller('apiList',
     };
     $scope.deletePost = function() {
         if (typeof $scope.current_post != 'undefined') {
-            console.log({id: $scope.current_post.id});
             sendCSRFPost('/zr/api/posts/remove/', $http, $cookies, {id: $scope.current_post.id});
+            $scope.tracker('MI', $scope.current_post.id);
         }
 
         $('#post-delete-modal').modal('hide');
@@ -452,6 +467,8 @@ zdControllers.controller('apiList',
     };
 
     $scope.search = function(text){
+        $scope.tracker('UST', text);
+
         if(text && text.length>=1){
             tree = postHandler(postFactory.textSearch,postFactory.newPostAll,configuration.getPlanId());
             tree.setGeoParam('notNone');
@@ -486,10 +503,16 @@ zdControllers.controller('apiList',
         tree.setGeoParam('notNone');
         $scope.showallpoints = false;
 
+        $scope.tracker('PCD');
+
         tree.getPostList('None',function(data){
             $scope.tree = data;
         });
         $scope.endTree = tree.postReachEnd('None');
+    }
+
+    $scope.tracker = function(action, obj) {
+        Analytics.track(action, obj);
     }
 
     $scope.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction){
@@ -536,6 +559,7 @@ function sendTempToServer(data,$http,$cookies,callback){
         success(function (data, status, headers, config) {
                 callback(data);
                 thisdata = data;
+
             }).
         error(function (data, status, headers, config) {
                 console.log('Error ' + status);

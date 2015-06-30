@@ -2,7 +2,7 @@
 
 /* Directives */
 
-zdApp.directive('fileChange',['uploadService', function (uploadService) {
+zdApp.directive('fileChange',['uploadService', 'Analytics', function (uploadService, Analytics) {
 
     var linker = function ($scope, element, attributes) {
         element.bind('change', function (event) {
@@ -10,6 +10,7 @@ zdApp.directive('fileChange',['uploadService', function (uploadService) {
             for (var i = 0, length = files.length; i < length; i++) {
                 if(files[i].size < 5242880)
                     uploadService.send(files[i],$scope.$parent.post.id, function(data){
+                        Analytics.track('UDP', $scope.$parent.post.id);
                         var json_data = JSON.parse(data);
                         $scope.$parent.post.filep.push({name:json_data.name,
                             id:json_data.id,
@@ -29,7 +30,7 @@ zdApp.directive('fileChange',['uploadService', function (uploadService) {
     };
 }]);
 
-zdApp.directive('dropbox',['uploadService', function (uploadService) {
+zdApp.directive('dropbox',['uploadService', 'Analytics', function (uploadService, Analytics) {
     var linker = function ($scope, element, attributes) {
         element[0].ondragover = function(evt) {
             evt.stopPropagation();
@@ -52,6 +53,7 @@ zdApp.directive('dropbox',['uploadService', function (uploadService) {
             for (var i = 0, length = files.length; i < length; i++) {
                 if(files[i].size < 5242880)
                     uploadService.send(files[i],$scope.$parent.post.id, function(data){
+                        Analytics.track('UDP', $scope.$parent.post.id);
                         var json_data = JSON.parse(data);
                         $scope.$parent.post.filep.push({name:json_data.name,
                             id:json_data.id,

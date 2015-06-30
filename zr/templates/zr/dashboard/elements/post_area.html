@@ -22,7 +22,7 @@
                             <div class="post-content-flist">
                                 <ul class="fileList">
                                     <li ng-repeat="item in post.filep">
-                                        <a class="filePL" href="{[{ item.file }]}"  target="_blank">
+                                        <a class="filePL" href="{[{ item.file }]}"  target="_blank" ng-click="post|tracker:'UPP':post.id">
                                             <i class="fa fa-cloud-download"></i>&nbsp;&nbsp;{[{ item.name }]}
                                         </a>
                                     </li>
@@ -31,13 +31,13 @@
                         </span>
                         <span class="right">
                             <button ng-hide="post.parent || !post.geometry" type="button" class="btn btn-xs btnwhite btngrey"
-                                ng-click="zoom_chase(post) | trackEvent:'wyśrodkuj':'Button clicked':user:post.id " title="{% trans 'Pokaż na mapie' %}">
+                                ng-click="zoom_chase(post) | tracker:'ULO':post.id" title="{% trans 'Pokaż na mapie' %}">
                                 <i class="fa fa-dot-circle-o"></i> {% trans 'Pokaż na mapie' %}
                             </button>
                             <button title="{% trans 'Śledź' %}"
                                 ng-hide="post.parent"
                                 ng-class="{'btn':true, 'btn-xs':true, 'btnwhite':true, 'btngrey':true}"
-                                ng-click="subscribe(post, post.is_subscribed);post.is_subscribed=!post.is_subscribed | trackEvent:'Subskrybuj':'Button clicked':user ">
+                                ng-click="subscribe(post, post.is_subscribed);post.is_subscribed=!post.is_subscribed">
                                     <div ng-hide="post.parent==null && !post.is_subscribed" class="fa fa-envelope" title="{% trans 'Subskrybuj wątek' %}"></div>
                                     <span ng-hide="post.parent==null && post.is_subscribed" class="fa fa-envelope-o" title="{% trans 'Subskrybuj wątek' %}"></span>
                             </button>
@@ -47,7 +47,7 @@
                     <div style="display: inline-block; width: 100%;">
                         <div ng-class="{'left':true, 'margin-left':post.parent==null}">
                             <button type="button" class="btn btn-xs btnwhite btngrey"  ng-if="post.numcom>0"
-                                    ng-click="showOneDown(post)  | trackEvent:'Rozwiń':'Button clicked':user ">
+                                    ng-click="showOneDown(post)">
 
                                 <!-- Ten fragment prawdopodobmnie jest do usunięcia, blokuje rozwijanie komentarzy
                                 ng-disabled="!showallposts">-->
@@ -69,15 +69,15 @@
                          </button>
                             <button  class="btn btn-xs btngrey btnwhite"
                                 ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
-                                ng-click="scoreUp(post) | trackEvent:'score-up':'Button clicked':user ">
+                                ng-click="scoreUp(post) | tracker:'UAO':post.id">
                                 <div class="mr-handup">&nbsp;</div><b>{[{ post.positive_rate || 0 }]}</b> {% trans 'za' %}
                             </button>
                             <button  class="btn btn-xs btngrey btnwhite"
                                  ng-hide="'{{ user }}'=='AnonymousUser'" ng-disabled="post.sub_rates"
-                                 ng-click="scoreDown(post) | trackEvent:'score-down':'Button clicked':user ">
+                                 ng-click="scoreDown(post) | tracker:'UDO':post.id">
                                  <div class="mr-handdown">&nbsp;</div><b> {[{ post.negative_rate || 0 }]}</b> {% trans 'przeciw' %}
                             </button>
-                            <button ng-hide="'{{ user }}'=='AnonymousUser'" class="btn btn-xs btnsea btnwhite" ng-click="comment(post) | trackEvent:'Dodaj Komentarz':'Button clicked':user:'':''">
+                            <button ng-hide="'{{ user }}'=='AnonymousUser'" class="btn btn-xs btnsea btnwhite" ng-click="comment(post)">
                                 <i class="fa fa-comment"></i>&nbsp;<span class="fontBold btnsea">{% trans 'skomentuj' %}</span>
                             </button>
                         </div>
@@ -102,10 +102,10 @@
                             <button type="button" class="btn btn-xs btn-file btnwhite btngrey"><div class="mr-clip">&nbsp;</div><input name="..." type="file" value="{[{ post.id }]}" multiple file-change /></button>
                         </div>
                         <button type="button" class="btn btn-sm-n btnblue" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
-                              ng-click="delete(post) | trackEvent:'Usuń':'Button clicked':user "> {% trans 'usuń' %}
+                              ng-click="delete(post)"> {% trans 'usuń' %}
                         </button>
                         <button type="button" class="btn btn-sm-n btnred" ng-hide="!(post.zmiennac!=undefined && post.zmiennac==true)"
-                              ng-click="addDown(post) | trackEvent:'Zapisz':'Button clicked':user ">{% trans 'publikuj' %}
+                              ng-click="addDown(post)">{% trans 'publikuj' %}
                         </button>
                     </div>
     </div>

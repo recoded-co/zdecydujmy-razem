@@ -40,6 +40,7 @@ function geolocate(address) {
 $("#map-search-button").click(function() {
     var address = $("#map-search-input").val();
     geolocate(address);
+    tracker('WAPM');
 })
 
 $("#map-search-input").val(scope + ', ');
@@ -140,6 +141,29 @@ function map_init() {
     L.control.layers(baseMaps, overlayMaps, {
         'collapsed': false
     }).addTo(map);
+
+    map.on('baselayerchange', function(l) {
+        if (l.name == 'Mapa')
+            $("#div_apiList").scope().tracker('MPMA');
+        else if (l.name == 'Zdjęcia satelitarne')
+            $("#div_apiList").scope().tracker('MPZS');
+    });
+
+    map.on('overlayadd', function(l) {
+        if (l.name == 'MPZP')
+            $("#div_apiList").scope().tracker('MPZPZ');
+        else if (l.name == 'Studium')
+            $("#div_apiList").scope().tracker('STUDZ');
+
+    });
+
+    map.on('overlayremove', function(l) {
+        if (l.name == 'MPZP')
+            $("#div_apiList").scope().tracker('MPZPO');
+        else if (l.name == 'Studium')
+            $("#div_apiList").scope().tracker('STUDO');
+    });
+
     var drawnItems = new L.FeatureGroup();
     layerWaitingRoom = new Array();
     map.addLayer(drawnItems);
@@ -173,12 +197,17 @@ function map_init() {
     }
     map.invalidateSize();
 
+    map.on('zoomend', function() {
+        $("#div_apiList").scope().tracker('ZZOM');
+    });
+
     function planPopupV() {
         PLAN_POPUPS_VISIBILITY = !PLAN_POPUPS_VISIBILITY;
 
         map.removeLayer(basePlanLayer)
         basePlanLayer = createBasePlanLayer({clickable: PLAN_POPUPS_VISIBILITY});
         map.addLayer(basePlanLayer);
+        tracker('IOMP');
     }
 
     //extra button for specified layer popup appearance
@@ -291,12 +320,13 @@ function map_init() {
 
             searchItems.addLayer(layer);
             layer.on('click', function(e) {
-                trackEvent('search rectangle', 'clicked', user, '', '');
                 searchItems.removeLayer(layer);
                 addPostFilter(null);
             });
 
             geoSearch(wkt_string, plan_id, function(data, textStatus, jqXHR) {
+                tracker('WWPO');
+
                 // TODO search results callback
                 if (data.length > 0) {
                     addPostFilter(data);
@@ -311,7 +341,8 @@ function map_init() {
             var popup_location = null;
 
             if (type === 'marker') {
-                trackEvent('marker create', 'clicked', user, '', '');
+                tracker('UDP');
+
                 layer.bindPopup(popup);
                 popup_location = e.layer._latlng;
 
@@ -319,12 +350,12 @@ function map_init() {
                 wkt.fromObject(point);
 
             } else if (type === 'polygon') {
-                trackEvent('polygon create', 'clicked', user, '', '');
+                tracker('UDO');
                 popup_location = e.layer._latlngs[0];
                 wkt.fromObject(L.polygon(e.layer._latlngs));
 
             } else if (type === 'polyline') {
-                trackEvent('polyline create', 'clicked', user, '', '');
+                tracker('UDL');
                 popup_location = e.layer._latlngs[0];
                 wkt.fromObject(L.polyline(e.layer._latlngs));
             }
@@ -587,13 +618,11 @@ function addMarkers(data, callback) {
     });
 
     map.on("click", function(e) {
-        trackEvent('map area', 'clicked', user, '', '');
         addPostFilter(undefined);
     });
 
     $.each(data, function(key, value) {
         var wkt = new Wkt.Wkt();
-        //console.log(value);
         wkt.read(value.geoelement);
         var components = wkt.components[0];
 
@@ -634,14 +663,14 @@ function addMarkers(data, callback) {
             });
 
             marker.on("click", function(e) {
-                trackEvent('polygon', 'marker clicked', '', '', '');
+                tracker('WOZM', value.geo_id);
                 addPointPulse(e.target._icon.classList)
                 addPostFilter([{
                     geometry: value.id
                 }]);
             });
             polygon.on('click', function(e) {
-                trackEvent('polygon', 'clicked', user, '', '');
+                tracker('WOZM', value.geo_id);
                 addPostFilter([{
                     geometry: value.id
                 }]);
@@ -673,6 +702,7 @@ function addMarkers(data, callback) {
                     });
                 });
                 marker.on('click', function(e) {
+                    tracker('WOZM', value.geo_id);
                     //e.target._icon.classList.add('pulseit');
                     addPointPulse(e.target._icon.classList)
                     addPostFilter([{
@@ -733,7 +763,7 @@ function addMarkers(data, callback) {
                 });
 
                 marker.on("click", function(e) {
-                    trackEvent('polyline', 'marker clicked', '', '', '');
+                    tracker('WOZM', value.geo_id);
                     addPointPulse(e.target._icon.classList)
                         //e.target._icon.classList.add('pulseit');
                     addPostFilter([{
@@ -741,7 +771,7 @@ function addMarkers(data, callback) {
                     }]);
                 });
                 polyline.on('click', function(e) {
-                    trackEvent('polyline', 'clicked', user, '', '');
+                    tracker('WOZM', value.geo_id);
                     addPostFilter([{
                         geometry: value.id
                     }]);
@@ -767,7 +797,6 @@ function addMarkers(data, callback) {
 }
 
 function clearGeoSearchFilter() {
-    trackEvent('search rectangle', 'clicked', user, '', '');
     if (search_filter_layer) {
         search_filter_layer.clearLayers();
     }
@@ -857,7 +886,13 @@ function addPopup(data) {
                 'X-CSRFToken': $.cookie('csrftoken')
             },
             success: function(data, textStatus, jqXHR) {
-                trackEvent('post added', 'clicked', user, '', '');
+                if (temp_geometry.indexOf('POINT') != -1)
+                    tracker('UDPA', data.id);
+                else if (temp_geometry.indexOf('POLYGON') != -1)
+                    tracker('UDOA', data.id);
+                else if (temp_geometry.indexOf('LINESTRING') != -1)
+                    tracker('UDLA', data.id);
+
                 addComentToGeoElement(data, comment);
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -875,6 +910,13 @@ function addComentToGeoElement(data, comment) {
     pushCommentIntoScope(data, comment);
     $("#div_apiList").scope().$apply();
 }
+
+function tracker(action, obj) {
+    var track = $("#div_apiList").scope().tracker;
+    track(action, obj);
+    $("#div_apiList").scope().$apply();
+}
+
 
 function trackEvent(category, action, opt_label, opt_value, opt_noninteraction) {
     var track = $("#div_apiList").scope().trackEvent;

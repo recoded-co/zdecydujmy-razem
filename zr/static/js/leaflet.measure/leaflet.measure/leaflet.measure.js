@@ -32,6 +32,7 @@ L.Control.Measure = L.Control.extend({
         this._map.remoteControlSwitchOff();
 
         if(this._measuring) {
+        	$("#div_apiList").scope().tracker('UFPO');
             //arm remote switcher
             this._map.setRemoteControlSwitch(this,function(){
                 L.DomUtil.removeClass(this._container, 'leaflet-control-measure-on');
@@ -65,7 +66,7 @@ L.Control.Measure = L.Control.extend({
 			.on(document, 'keydown', this._onKeyDown, this);
 
 		if(!this._layerPaint) {
-			this._layerPaint = L.layerGroup().addTo(this._map);	
+			this._layerPaint = L.layerGroup().addTo(this._map);
 		}
 
 		if(!this._points) {
@@ -89,7 +90,7 @@ L.Control.Measure = L.Control.extend({
 		if(this._layerPaint) {
 			this._layerPaint.clearLayers();
 		}
-		
+
 		this._restartPath();
 	},
 
@@ -97,9 +98,9 @@ L.Control.Measure = L.Control.extend({
 		if(!e.latlng || !this._lastPoint) {
 			return;
 		}
-		
+
 		if(!this._layerPaintPathTemp) {
-			this._layerPaintPathTemp = L.polyline([this._lastPoint, e.latlng], { 
+			this._layerPaintPathTemp = L.polyline([this._lastPoint, e.latlng], {
 				color: 'black',
 				weight: 1.5,
 				clickable: false,
@@ -141,11 +142,11 @@ L.Control.Measure = L.Control.extend({
 			this._distance += distance;
 		}
 		this._createTooltip(e.latlng);
-		
+
 
 		// If this is already the second click, add the location to the fix path (create one first if we don't have one)
 		if(this._lastPoint && !this._layerPaintPath) {
-			this._layerPaintPath = L.polyline([this._lastPoint], { 
+			this._layerPaintPath = L.polyline([this._lastPoint], {
 				color: 'black',
 				weight: 2,
 				clickable: false
@@ -161,16 +162,16 @@ L.Control.Measure = L.Control.extend({
 			this._layerPaint.removeLayer(this._lastCircle);
 		}
 
-		this._lastCircle = new L.CircleMarker(e.latlng, { 
-			color: 'black', 
-			opacity: 1, 
-			weight: 1, 
-			fill: true, 
+		this._lastCircle = new L.CircleMarker(e.latlng, {
+			color: 'black',
+			opacity: 1,
+			weight: 1,
+			fill: true,
 			fillOpacity: 1,
 			radius:2,
 			clickable: this._lastCircle ? true : false
 		}).addTo(this._layerPaint);
-		
+
 		this._lastCircle.on('click', function() { this._finishPath(); }, this);
 
 		// Save current location as last location
@@ -201,7 +202,7 @@ L.Control.Measure = L.Control.extend({
 		this._layerPaintPath = undefined;
 		this._layerPaintPathTemp = undefined;
 	},
-	
+
 	_createTooltip: function(position) {
         if(this._tooltip){
             var text = this._tooltip._icon.innerHTML.split('<div class="leaflet-measure-tooltip-message">')[0];
@@ -211,7 +212,7 @@ L.Control.Measure = L.Control.extend({
 			className: 'leaflet-measure-tooltip',
 			iconAnchor: [-5, -5]
 		});
-		this._tooltip = L.marker(position, { 
+		this._tooltip = L.marker(position, {
 			icon: icon,
 			clickable: false
 		}).addTo(this._layerPaint);
