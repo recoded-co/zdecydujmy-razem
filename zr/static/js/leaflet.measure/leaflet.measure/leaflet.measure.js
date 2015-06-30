@@ -37,7 +37,6 @@ L.Control.Measure = L.Control.extend({
             this._map.setRemoteControlSwitch(this,function(){
                 L.DomUtil.removeClass(this._container, 'leaflet-control-measure-on');
 			    this._stopMeasuring();
-                this._measuring = !this._measuring;
             });
 
             L.DomUtil.addClass(this._container, 'leaflet-control-measure-on');
