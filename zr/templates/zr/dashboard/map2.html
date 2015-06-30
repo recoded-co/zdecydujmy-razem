@@ -70,7 +70,7 @@ function map_init() {
     var osm =
         L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution: 'Map data © OpenStreetMap contributors',
-            maxZoom: 19,
+            maxZoom: 17,
             minZoom: 0,
             legend: LEGEND
         });
@@ -78,14 +78,14 @@ function map_init() {
     var lmap =
         L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-            maxZoom: 18,
+            maxZoom: 17,
             legend: LEGEND
         });
 
     var mbmap =
         L.tileLayer('http://a.tiles.mapbox.com/v4/mlodkowski.md8a1plk/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWxvZGtvd3NraSIsImEiOiJWdS12NEIwIn0.NZYF1jP4GghCdtCGw1iOcg', {
             attribution: "<a href='http://mapbox.com/about/maps' target='_blank'>Terms & Feedback</a>",
-            maxZoom: 18,
+            maxZoom: 17,
             legend: LEGEND,
             openLegendOnLoad: true
         });
@@ -98,11 +98,11 @@ function map_init() {
     var mpzp =
         L.tileLayer('http://{s}.tile.cloudmade.com/133079e21d8949fb8df55013e541c5d9/997/256/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-            maxZoom: 18
+            maxZoom: 17
         });
-    var studium = L.tileLayer('http://a.tiles.mapbox.com/v4/2michal3.mj58f47c/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiMm1pY2hhbDMiLCJhIjoiY05hVjcwVSJ9.iucQBOvRJ6-bc95HVbw0lA', {
+    var studium = L.tileLayer('http://a.tiles.mapbox.com/v4/2michal3.mja5ngad/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiMm1pY2hhbDMiLCJhIjoiY05hVjcwVSJ9.iucQBOvRJ6-bc95HVbw0lA', {
         attribution: 'Studium',
-        maxZoom: 18
+        maxZoom: 17
     });
     var basePlanLayer = createBasePlanLayer();
 
