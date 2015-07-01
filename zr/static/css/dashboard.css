@@ -1649,7 +1649,7 @@ div.leaflet-buttons-control-button:hover
     height: 40px;
     position: absolute;
     right: 0px;
-    top: 300px;
+    top: 340px;
     border-bottom: 1px solid #ccc;
 }
 .leaflet-control-help:hover
@@ -1672,7 +1672,7 @@ div.leaflet-buttons-control-button:hover
     height: 40px;
     position: absolute;
     right: 0px;
-    top: 330px;
+    top: 370px;
     border-bottom: 1px solid #ccc;
 }
 .leaflet-control-doc:hover
