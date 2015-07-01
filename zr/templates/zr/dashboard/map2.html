@@ -403,7 +403,7 @@ function map_init() {
         console.log('draw:drawstart');
         var type = e.layerType;
 
-        // map.remoteControlSwitchOff();
+        //map.remoteControlSwitchOff();
 
         if (type === 'rectangle') {
             clearGeoSearchFilter();
@@ -438,6 +438,7 @@ function map_init() {
     }).on('draw:drawstop', function(e) {
         var type = e.layerType;
         console.log('draw:drawstop');
+
         if (type === 'rectangle') {
             L.DomUtil.removeClass(e.target._container, 'leaflet-control-rectangle-on');
         } else if (type === 'marker') {
