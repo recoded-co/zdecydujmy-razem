@@ -12,34 +12,38 @@ class PostSubscriptionForm(ModelForm):
 
 
 class ProfileForm(ModelForm):
+    zipcode = forms.RegexField( max_length=6,
+                               regex=r'^\d{2}-\d{3}$',
+                               widget=forms.TextInput(),
+                               label=_(u'Kod pocztowy *'),
+                               required=True)
+    source = forms.CharField(label=u'Skąd dowiedział się Pan(i) o konsultacjach? *',
+                              widget=forms.RadioSelect(choices=Profile.SOURCES),
+                              required=True)
 
-    source = forms.CharField(label=u'Skąd dowiedział się Pan(i) o konsultacjach?',
-                              widget=forms.RadioSelect(choices=Profile.SOURCES))
-
-    gender = forms.CharField(label=u"Płec", widget=forms.RadioSelect(choices=Profile.GENDER))
-
-
+    gender = forms.CharField(label=u"Płec", widget=forms.RadioSelect(choices=Profile.GENDER), required=False)
 
     education = forms.CharField(label=u'Wykształcenie',
-                                 widget=forms.RadioSelect(choices=Profile.EDUCATION))
+                                 widget=forms.RadioSelect(choices=Profile.EDUCATION), required=False)
 
-    job = forms.CharField(label=u'Aktualnie wykonywane zajęcie', widget=forms.RadioSelect(choices=Profile.JOB))
+    job = forms.CharField(label=u'Aktualnie wykonywane zajęcie', widget=forms.RadioSelect(choices=Profile.JOB), required=False)
 
     gis_portals = forms.CharField(
         label=u'Czy korzysta Pan(i) z portali mapowych (np. Google Maps, OpenStreetMap, zumi.pl)?',
-        widget=forms.RadioSelect(choices=Profile.YESNO))
+        widget=forms.RadioSelect(choices=Profile.YESNO), required=False)
 
     social_portals = forms.CharField(
         label=u'Czy korzysta Pan(i) z portali społecznościowych (np. Facebook, nk.pl)?',
-        widget=forms.RadioSelect(choices=Profile.YESNO))
+        widget=forms.RadioSelect(choices=Profile.YESNO), required=False)
 
     class Meta:
         model = Profile
-        fields = ('zipcode', 'gender', 'age', 'education', 'job', 'gis_portals', 'social_portals')
+        fields = ('zipcode', 'source', 'gender', 'age', 'education', 'job', 'gis_portals', 'social_portals')
         exclude = ('first_login', 'user', )
 
 
 class ZipCodeForm(forms.Form):
+
     zipcode = forms.RegexField(max_length=6,
                                regex=r'^\d{2}-\d{3}$',
                                widget=forms.TextInput(),

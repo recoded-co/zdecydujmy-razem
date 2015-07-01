@@ -66,7 +66,7 @@ class Profile(models.Model):
                                max_length=6, null=True, blank=True)
 
     source = models.CharField(u'Skąd dowiedział się Pan(i) o konsultacjach?',
-                              max_length=13, choices=SOURCES, null=True, blank=True)
+                              max_length=13, choices=SOURCES)
 
     gender = models.CharField(u'Płeć',
                               max_length=1, choices=GENDER, null=True, blank=True)

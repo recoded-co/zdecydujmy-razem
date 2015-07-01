@@ -32,10 +32,10 @@ class LoginForm(UserCreationForm):
     last_name = forms.CharField(max_length=30,
                                widget=forms.TextInput(),
                                label=_(u'last name'), required=False)
-    zipcode = forms.RegexField(max_length=30,
-                              regex=r'^\d{2}-\d{3}$',
-                               widget=forms.TextInput(),
-                               label=_(u'zip code'), required=True)
+    #zipcode = forms.RegexField(max_length=30,
+    #                          regex=r'^\d{2}-\d{3}$',
+    #                           widget=forms.TextInput(),
+    #                           label=_(u'zip code'), required=True)
 
 
 class HomePageView(TemplateView):
@@ -89,9 +89,10 @@ class UserCreationPageView(TemplateView):
             user.last_name = form.cleaned_data['last_name']
             user.save()
 
-            profile = user.profile
-            profile.zipcode = form.cleaned_data['zipcode']
-            profile.save()
+
+            #profile = user.profile
+            #profile.zipcode = form.cleaned_data['zipcode']
+            #profile.save()
 
             user.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, user)
@@ -132,7 +133,7 @@ class ZipcodeCheckView(View):
 
     def post(self, request):
         profile = request.user.profile
-        form = ZipCodeForm(request.POST)
+        form = ProfileForm(request.POST)
         if form.is_valid():
             profile.zipcode = form.cleaned_data['zipcode']
             profile.user = request.user
