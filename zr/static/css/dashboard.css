@@ -1689,3 +1689,27 @@ div.leaflet-buttons-control-button:hover
 .leaflet-measure-tooltip-total {
   font-size: 15px;
 }
+
+/* Avoiding too long strings problem in nav-tabs*/
+.longString{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display:block;
+}
+
+.longStringParent{
+  display:flex;
+  justify-content:center;
+}
+
+.longStringParent img{
+   float:left;
+   min-width:20px;
+   margin: 0 6px 0 0;
+}
+
+.longStringImgWrapper{
+    margin-left:6px;
+    margin-right: 12px;
+}
