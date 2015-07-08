@@ -15,7 +15,7 @@ DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['127.0.0.1', ]
+ALLOWED_HOSTS = ['127.0.0.1',]
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -48,6 +48,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'maintenancemode.middleware.MaintenanceModeMiddleware',
+    'zdecydujmyrazem.middleware.SocialAuthExceptionMiddleware',
+    'zdecydujmyrazem.middleware.SocialAuthExceptionMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -66,7 +68,11 @@ ROOT_URLCONF = 'zdecydujmyrazem.urls'
 
 WSGI_APPLICATION = 'zdecydujmyrazem.wsgi.application'
 
-DATABASES = {}
+DATABASES = {
+
+}
+
+IDX_DIR = "IDX_DIR"
 
 LANGUAGE_CODE = 'pl'
 
@@ -87,6 +93,7 @@ USE_L10N = True
 USE_TZ = True
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 MEDIA_URL = '/media/'
 
@@ -146,9 +153,15 @@ SOCIAL_AUTH_ENABLED_BACKENDS = ('google', 'facebook')
 
 SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
 
+FACEBOOK_APP_ID =  ''
+
+FACEBOOK_API_SECRET = ''
+
 INDEX_LAST_UPDATE = date.min
 
 AUTH_PROFILE_MODULE = 'zr.Profile'
+
+GOOGLE_ANALYTICS_KEY=''
 
 try:
     execfile(os.path.join(os.path.dirname(__file__), 'local.py'))
