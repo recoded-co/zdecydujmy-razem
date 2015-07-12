@@ -1693,3 +1693,17 @@ div.leaflet-buttons-control-button:hover
 .modal-backdrop {
   background: rgba(0,0,0,0.6);
 }
+
+
+.modal-lg {
+    min-width: 700px;
+    max-width: 800px;
+    width: 80%; /* respsonsive width */
+}
+
+#welcome-modal .modal-body {
+  text-align: center;
+}
+#welcome-modal img {
+  width: 100%;
+}
