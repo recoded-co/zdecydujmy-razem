@@ -9,6 +9,7 @@ class PostSubscriptionForm(ModelForm):
 
     class Meta:
         model = PostSubscription
+        exclude = ()
 
 
 class ProfileForm(ModelForm):
