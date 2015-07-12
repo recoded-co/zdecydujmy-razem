@@ -74,7 +74,7 @@ class Profile(models.Model):
     age = models.IntegerField(u'Wiek', blank=True, null=True)
 
     education = models.CharField(u'Wykształcenie',
-                                 max_length=11, choices=EDUCATION, null=True, blank=True)
+                                 max_length=63, choices=EDUCATION, null=True, blank=True)
 
     job = models.CharField(u'Aktualnie wykonywane zajęcie',
                            max_length=13, choices=JOB, null=True, blank=True)
