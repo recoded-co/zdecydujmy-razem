@@ -1689,3 +1689,7 @@ div.leaflet-buttons-control-button:hover
 .leaflet-measure-tooltip-total {
   font-size: 15px;
 }
+
+.modal-backdrop {
+  background: rgba(0,0,0,0.6);
+}
