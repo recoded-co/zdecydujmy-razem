@@ -77,7 +77,7 @@ class Profile(models.Model):
                                  max_length=63, choices=EDUCATION, null=True, blank=True)
 
     job = models.CharField(u'Aktualnie wykonywane zajęcie',
-                           max_length=13, choices=JOB, null=True, blank=True)
+                           max_length=14, choices=JOB, null=True, blank=True)
 
     gis_portals = models.CharField(
         u'Czy korzysta Pan(i) z portali mapowych (np. Google Maps, OpenStreetMap, zumi.pl)?',
