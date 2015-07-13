@@ -15,11 +15,11 @@ L.drawLocal = {
                                 text: 'Usuń ostatni punkt'
                         },
                         buttons: {
-                                polyline: 'Narysuj polilinie',
-                                polygon: 'Narysuj wielokąt',
+                                polyline: 'Narysuj linię na mapie i dodaj nowy komentarz ',
+                                polygon: 'Narysuj obszar na mapie i dodaj nowy komentarz',
                                 rectangle: 'Wyszukaj z mapy',
                                 circle: 'Narysuj okrąg',
-                                marker: 'Umieść punkt'
+                                marker: 'Umieść punkt na mapie i dodaj nowy komentarz'
                         }
                 },
                 handlers: {

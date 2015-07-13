@@ -1050,14 +1050,15 @@ button:focus {
     position: absolute;
     display: block;
     right: 47px;
-    width: 120px;
+    width: auto;
     text-align: center;
     color: black;
     padding-top: 6px;
-    padding-right: 6px;
-    padding-left: 5px;
+    padding-right: 12px;
+    padding-left: 12px;
     border-radius: 8px;
-    background-image: url('/static/images/arrow_right_wide.png');
+    background: #fff;
+    line-height: 30px;
  }
 .leaflet-control a[title]:hover:after
  {
@@ -1067,15 +1068,16 @@ button:focus {
     position: absolute;
     display: block;
     right: 47px;
-    width: 120px;
+    width: auto;
     text-align: center;
     text-size: small;
     color: black;
     padding-top: 6px;
-    padding-right: 6px;
-    padding-left: 5px;
+    padding-right: 12px;
+    padding-left: 12px;
     border-radius: 8px;
-    background-image: url('/static/images/arrow_right_wide.png');
+    background: #fff;
+    line-height: 30px;
  }
 div.leaflet-bar a.leaflet-draw-draw-polygon
 {
