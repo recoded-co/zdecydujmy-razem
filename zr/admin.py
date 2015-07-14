@@ -1,16 +1,59 @@
 from django.contrib.gis import admin
 from django.contrib.auth.admin import UserAdmin
 from zr.models import *
+from django.http import HttpResponse
+from rest_framework import serializers
+import json
 
 admin.site.register(Geometry, admin.OSMGeoAdmin)
 admin.site.register(Plan, admin.OSMGeoAdmin)
 admin.site.register(Configuration)
 
+class GeometrySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Geometry
+        fields = ('id', 'name', 'poly', 'point', 'line')
+
+class UserSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        return instance.username
+
+
+class PostSerializer(serializers.ModelSerializer):
+
+    author = UserSerializer()
+    subscriptions = serializers.StringRelatedField(many=True)
+    geometry = GeometrySerializer()
+
+    def to_representation(self, obj):
+        self.fields['comments'] = PostSerializer(obj, many=True)
+        return super(PostSerializer, self).to_representation(obj)
+
+    class Meta:
+        model = Post
+        fields = ('author', 'plan', 'content', 'geometry', 'date', 'is_removed', 'subscriptions')
+
+def export_to_json(modeladmin, request, queryset):
+
+    data = PostSerializer(queryset, many=True)
+
+    result = data.data
+
+    response = HttpResponse(json.dumps(result), content_type='application/json')
+    response['Content-Disposition'] = 'attachment; filename="objects.json"'
+
+    return response
+
+export_to_json.short_description = "Export selected posts to JSON file"
 
 class PostAdmin(admin.ModelAdmin):
+
     list_display = ('author', 'date', 'is_removed')
     list_filter = ('is_removed',)
     search_fields = ('content',)
+    actions = [export_to_json]
 
 admin.site.register(Post, PostAdmin)
 
@@ -76,3 +119,7 @@ class EventAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Event, EventAdmin)
+
+
+
+
