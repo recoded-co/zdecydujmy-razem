@@ -4,10 +4,19 @@ from zr.models import *
 from django.http import HttpResponse
 from rest_framework import serializers
 import json
+import csv
+from django.contrib.gis.geos import WKTWriter
 
 admin.site.register(Geometry, admin.OSMGeoAdmin)
 admin.site.register(Plan, admin.OSMGeoAdmin)
 admin.site.register(Configuration)
+
+
+
+class GeometryCSVSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        return instance.geoElement()
 
 class GeometrySerializer(serializers.ModelSerializer):
 
@@ -19,7 +28,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         return instance.username
-
 
 class PostSerializer(serializers.ModelSerializer):
 
@@ -35,6 +43,16 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ('author', 'plan', 'content', 'geometry', 'date', 'is_removed', 'subscriptions')
 
+class PostCSVSerializer(serializers.ModelSerializer):
+
+    author = UserSerializer()
+    subscriptions = serializers.StringRelatedField(many=True)
+    geometry = GeometryCSVSerializer()
+
+    class Meta:
+        model = Post
+        fields = ('id', 'parent', 'comments', 'author', 'plan', 'content', 'geometry', 'date', 'is_removed', 'subscriptions')
+
 def export_to_json(modeladmin, request, queryset):
 
     data = PostSerializer(queryset, many=True)
@@ -48,12 +66,26 @@ def export_to_json(modeladmin, request, queryset):
 
 export_to_json.short_description = "Export selected posts to JSON file"
 
+def export_to_csv(modeladmin, request, queryset):
+
+    data = PostCSVSerializer(queryset, many=True)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="posts.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(list(data.data[0].keys()))
+    for row in data.data:
+        print list(row.values())
+        writer.writerow(row.values())
+    return response
+
 class PostAdmin(admin.ModelAdmin):
 
     list_display = ('author', 'date', 'is_removed')
     list_filter = ('is_removed',)
     search_fields = ('content',)
-    actions = [export_to_json]
+    actions = [export_to_json, export_to_csv]
 
 admin.site.register(Post, PostAdmin)
 
