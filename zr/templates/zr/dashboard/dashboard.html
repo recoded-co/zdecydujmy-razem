@@ -75,10 +75,7 @@
                }
            });
 
-           if (!$.cookie('welcome-modal')) {
-              $('#welcome-modal').modal('show');
-              $.cookie('welcome-modal', true);
-           }
+           $('#welcome-modal').modal('show');
         });
     </script>
 {% endblock %}
