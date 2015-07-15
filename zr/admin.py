@@ -5,13 +5,16 @@ from django.http import HttpResponse
 from rest_framework import serializers
 import json
 import csv
-from django.contrib.gis.geos import WKTWriter
+
 
 admin.site.register(Geometry, admin.OSMGeoAdmin)
 admin.site.register(Plan, admin.OSMGeoAdmin)
 admin.site.register(Configuration)
 
+class SubsCSVSerializer(serializers.ModelSerializer):
 
+    def to_representation(self, instance):
+        return instance.username.encode('utf-8')
 
 class GeometryCSVSerializer(serializers.ModelSerializer):
 
@@ -46,7 +49,7 @@ class PostSerializer(serializers.ModelSerializer):
 class PostCSVSerializer(serializers.ModelSerializer):
 
     author = UserSerializer()
-    subscriptions = serializers.StringRelatedField(many=True)
+    subscriptions = SubsCSVSerializer(many=True)
     geometry = GeometryCSVSerializer()
 
     class Meta:
@@ -64,7 +67,7 @@ def export_to_json(modeladmin, request, queryset):
 
     return response
 
-export_to_json.short_description = "Export selected posts to JSON file"
+export_to_json.short_description = "Zapisz jako JSON"
 
 def export_to_csv(modeladmin, request, queryset):
 
@@ -76,9 +79,10 @@ def export_to_csv(modeladmin, request, queryset):
     writer = csv.writer(response)
     writer.writerow(list(data.data[0].keys()))
     for row in data.data:
-        print list(row.values())
         writer.writerow(row.values())
     return response
+
+export_to_csv.short_description = "Zapisz jako CSV"
 
 class PostAdmin(admin.ModelAdmin):
 
