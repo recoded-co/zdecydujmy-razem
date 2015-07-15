@@ -1699,8 +1699,15 @@ div.leaflet-buttons-control-button:hover
 }
 
 .longStringParent{
-  display:flex;
+  display:flex !important;
   justify-content:center;
+}
+
+.longStringParent i{
+  float: left;
+  margin-left: 10px;
+  margin-right: 10px;
+  min-width: 20px;
 }
 
 .longStringParent img{
