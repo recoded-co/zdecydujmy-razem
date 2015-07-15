@@ -6,3 +6,6 @@
 /zdecydujmyrazem/local.py
 /zr_index/
 /zr/static/angular/bower_components/
+.gitignore
+/dep
+/IDX_DIR
