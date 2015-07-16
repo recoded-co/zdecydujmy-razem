@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from rest_framework import serializers
 import json
 import csv
+from zr.api import EventSerializer
 
 
 admin.site.register(Geometry, admin.OSMGeoAdmin)
@@ -56,7 +57,7 @@ class PostCSVSerializer(serializers.ModelSerializer):
         model = Post
         fields = ('id', 'parent', 'comments', 'author', 'plan', 'content', 'geometry', 'date', 'is_removed', 'subscriptions')
 
-def export_to_json(modeladmin, request, queryset):
+def post_export_to_json(modeladmin, request, queryset):
 
     data = PostSerializer(queryset, many=True)
 
@@ -67,9 +68,9 @@ def export_to_json(modeladmin, request, queryset):
 
     return response
 
-export_to_json.short_description = "Zapisz jako JSON"
+post_export_to_json.short_description = "Zapisz jako JSON"
 
-def export_to_csv(modeladmin, request, queryset):
+def post_export_to_csv(modeladmin, request, queryset):
 
     data = PostCSVSerializer(queryset, many=True)
 
@@ -82,14 +83,14 @@ def export_to_csv(modeladmin, request, queryset):
         writer.writerow(row.values())
     return response
 
-export_to_csv.short_description = "Zapisz jako CSV"
+post_export_to_csv.short_description = "Zapisz jako CSV"
 
 class PostAdmin(admin.ModelAdmin):
 
     list_display = ('author', 'date', 'is_removed')
     list_filter = ('is_removed',)
     search_fields = ('content',)
-    actions = [export_to_json, export_to_csv]
+    actions = [post_export_to_json, post_export_to_csv]
 
 admin.site.register(Post, PostAdmin)
 
@@ -147,12 +148,24 @@ class EventDecoration(admin.ModelAdmin):
 admin.site.register(TrackEvents, EventDecoration)
 
 
+def event_export_to_csv(modeladmin, request, queryset):
+    data = EventSerializer(queryset, many=True)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="posts.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(('id','action', 'object', 'created_at', 'user'))
+    for row in data.data:
+        writer.writerow(row.values())
+    return response
+
 class EventAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     list_display = ('action', 'user', 'obj', 'created_at')
     list_filter = ('action', 'user')
     search_fields = ['action', 'user', 'obj']
-
+    actions = [event_export_to_csv]
 
 admin.site.register(Event, EventAdmin)
 
