@@ -1720,3 +1720,8 @@ div.leaflet-buttons-control-button:hover
     margin-left:6px;
     margin-right: 12px;
 }
+
+#togglelink {
+  background: transparent !important;
+}
+*/
