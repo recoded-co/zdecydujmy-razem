@@ -70,18 +70,28 @@ def post_export_to_json(modeladmin, request, queryset):
 
 post_export_to_json.short_description = "Zapisz jako JSON"
 
-def post_export_to_csv(modeladmin, request, queryset):
-
-    data = PostCSVSerializer(queryset, many=True)
+def to_csv(fields, data):
 
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="posts.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(('id', 'parent', 'comments', 'author', 'plan', 'content', 'geometry', 'date', 'is_removed', 'subscriptions'))#list(data.data[0].keys()))
+    writer.writerow(fields)
     for row in data.data:
         writer.writerow(row.values())
     return response
+
+def event_export_to_csv(modeladmin, request, queryset):
+
+    data = EventSerializer(queryset, many=True)
+    fields = ('id', 'action', 'object', 'created_at', 'user')
+    return to_csv(fields, data)
+
+def post_export_to_csv(modeladmin, request, queryset):
+
+    data = PostCSVSerializer(queryset, many=True)
+    fields = ('id', 'parent', 'comments', 'author', 'plan', 'content', 'geometry', 'date', 'is_removed', 'subscriptions')
+    return to_csv(fields, data)
 
 post_export_to_csv.short_description = "Zapisz jako CSV"
 
@@ -147,18 +157,6 @@ class EventDecoration(admin.ModelAdmin):
 
 admin.site.register(TrackEvents, EventDecoration)
 
-
-def event_export_to_csv(modeladmin, request, queryset):
-    data = EventSerializer(queryset, many=True)
-
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="posts.csv"'
-
-    writer = csv.writer(response)
-    writer.writerow(('id','action', 'object', 'created_at', 'user'))
-    for row in data.data:
-        writer.writerow(row.values())
-    return response
 
 class EventAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
