@@ -77,7 +77,7 @@ def export_to_csv(modeladmin, request, queryset):
     response['Content-Disposition'] = 'attachment; filename="posts.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(list(data.data[0].keys()))
+    writer.writerow(('id', 'parent', 'comments', 'author', 'plan', 'content', 'geometry', 'date', 'is_removed', 'subscriptions'))#list(data.data[0].keys()))
     for row in data.data:
         writer.writerow(row.values())
     return response
