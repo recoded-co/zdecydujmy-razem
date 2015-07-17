@@ -1,0 +1,25 @@
+[
+	{
+		"model": "zr.plan",
+		"pk": 1,
+		"fields":{
+			"name": "demo",
+			"center": "0101000020E6100000DEE6F55FD8E330403173F960B5324A40",
+			"zoom_level": 14,
+			"after_search_zoom": 16,
+			"geocoding_scope": ""
+		}	
+	},
+	{
+		"model": "zr.configuration", 
+		"pk": 1,
+		"fields": {
+			"side": "L",
+			"max": 50,
+			"min": 30,
+			"default": 50,
+			"plan": 1
+		}
+	}
+	
+]
