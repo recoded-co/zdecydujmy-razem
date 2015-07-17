@@ -6,6 +6,7 @@ from zr.api import router
 from zr.api import RateListView, PostsListView, geo_search, date_search, keyword_search, SubjectFeatList, SubscriptionDetail, NPost, NSubscribed
 from zr.api import SubscriptionList as ApiSubscriptionList
 from zr.views import change2
+from zr.admin import  event_export_to_csv_all
 
 urlpatterns = patterns('',
     #url(r'^test', TestView.as_view(), name="home"),
@@ -33,6 +34,7 @@ urlpatterns = patterns('',
     url(r'^settings/zipcode_check', ZipcodeCheckView.as_view(), name='zipcode_check'),
     url(r'^api/postfilter', PostsListView.as_view()),
     url(r'^changeavatar/$', change2, name='avatar_change2'),
+    url(r'^event_export', event_export_to_csv_all, name='event_export'),
     url(r'^avatar/', include('avatar.urls')),
     url(r'^$', HomePageView.as_view(), name="home"),
 )

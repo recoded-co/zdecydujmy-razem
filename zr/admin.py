@@ -6,6 +6,7 @@ from rest_framework import serializers
 import json
 import csv
 from zr.api import EventSerializer
+from django.contrib.auth.decorators import permission_required
 
 
 admin.site.register(Geometry, admin.OSMGeoAdmin)
@@ -84,6 +85,13 @@ def to_csv(fields, data):
 def event_export_to_csv(modeladmin, request, queryset):
 
     data = EventSerializer(queryset, many=True)
+    fields = ('id', 'action', 'object', 'created_at', 'user')
+    return to_csv(fields, data)
+
+@permission_required('is_staff')
+def event_export_to_csv_all(request):
+    print request.user
+    data = EventSerializer(Event.objects.all(), many=True)
     fields = ('id', 'action', 'object', 'created_at', 'user')
     return to_csv(fields, data)
 
