@@ -13,6 +13,8 @@ SECRET_KEY = ''
 
 DEBUG = False
 
+FIXTURE_DIRS = os.path.join(BASE_DIR, 'fixtures')
+
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = ['127.0.0.1',]
