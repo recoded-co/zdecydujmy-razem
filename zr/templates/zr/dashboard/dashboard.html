@@ -206,9 +206,9 @@
             </div>
             <div class="modal-body">
               {% if user.is_anonymous %}
-                <img src="{% static "images/welcome_modal_anonymous.png" %}" alt="Witaj">
+                <img src='{% static "images/welcome_modal_anonymous.png" %}?v=0.01' alt="Witaj">
               {% else %}
-                <img src="{% static "images/welcome_modal_registered.png" %}" alt="Witaj">
+                <img src='{% static "images/welcome_modal_registered.png" %}?v=0.01' alt="Witaj">
               {% endif %}
             </div>
           </div><!-- /.modal-content -->
