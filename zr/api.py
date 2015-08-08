@@ -257,7 +257,7 @@ class NSubscribed(generics.ListAPIView):
 
         cursor.execute(sql, params)
         row = cursor.fetchall()
-        paginator = Paginator(row, 25);
+        paginator = Paginator(row, 8);
 
         try:
             actuall_item_list = paginator.page(round).object_list
@@ -312,11 +312,11 @@ class NPost(generics.ListAPIView):
         params = []
 
         if parent != 'None':
-            LIMIT=50
+            LIMIT=8
             sql += 'where parent_id = %s '
             params.append(parent)
         else :
-            LIMIT=25
+            LIMIT=8
             sql += 'where parent_id is null '
 
         if plan_id == 'None':
